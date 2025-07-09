@@ -3,287 +3,602 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Udacity - Student Attendance</title>
+    <title>Web Development Portfolio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
         }
-        
-        .container {
+
+        /* Header & Navigation */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        
-        .header {
-            background: linear-gradient(135deg, #001f3f 0%, #003366 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        nav li {
             position: relative;
         }
-        
-        .header::before {
+
+        nav a {
+            text-decoration: none;
+            color: #555;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        nav a:hover::before {
+            left: 0;
+        }
+
+        nav a:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #555;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            font-weight: 300;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        /* Practicals Grid */
+        .practicals-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .practicals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .practical-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .practical-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="20" cy="80" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
         }
-        
-        .header-content {
-            position: relative;
-            z-index: 1;
+
+        .practical-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
         }
-        
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+
+        .practical-icon {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-        
-        .subtitle {
-            font-size: 1.2em;
-            opacity: 0.9;
-            font-weight: 300;
+
+        .practical-card h3 {
+            color: white;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
         }
-        
-        .info-banner {
-            background: #f8f9fa;
-            padding: 20px;
-            border-left: 5px solid #001f3f;
-            margin: 0;
-        }
-        
-        .info-banner h2 {
-            color: #001f3f;
-            margin-bottom: 10px;
-            font-size: 1.3em;
-        }
-        
-        .info-banner p {
-            color: #666;
+
+        .practical-card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
             line-height: 1.6;
         }
-        
-        .spreadsheet-container {
-            padding: 0;
-            background: #f8f9fa;
+
+        .practical-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
-        
-        .sheet-wrapper {
-            position: relative;
-            width: 100%;
-            height: 600px;
-            border: none;
+
+        .practical-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
-        
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
-        }
-        
-        .footer {
-            background: #001f3f;
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
             color: white;
             text-align: center;
-            padding: 20px;
-            font-size: 0.9em;
+            padding: 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        .footer a {
-            color: #66b3ff;
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
+            transition: color 0.3s ease;
         }
-        
-        .footer a:hover {
-            text-decoration: underline;
+
+        .footer-links a:hover {
+            color: white;
         }
-        
-        /* Loading spinner */
-        .loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
+
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.9rem;
         }
-        
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #001f3f;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
+
         /* Responsive Design */
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
+            .mobile-menu-btn {
+                display: block;
             }
-            
-            .container {
-                border-radius: 10px;
+
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 1rem;
+                border-radius: 0 0 15px 15px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             }
-            
-            .header {
-                padding: 20px 15px;
+
+            nav ul.active {
+                display: flex;
             }
-            
-            h1 {
-                font-size: 2em;
+
+            .hero {
+                padding: 2rem 1rem;
             }
-            
-            .subtitle {
-                font-size: 1em;
+
+            .hero h1 {
+                font-size: 2.5rem;
             }
-            
-            .info-banner {
-                padding: 15px;
+
+            .hero-content {
+                padding: 2rem;
             }
-            
-            .sheet-wrapper {
-                height: 500px;
+
+            .practicals-section {
+                padding: 2rem 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .practicals-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
             }
         }
-        
+
         @media (max-width: 480px) {
-            h1 {
-                font-size: 1.8em;
+            .header-container {
+                padding: 1rem;
             }
-            
-            .sheet-wrapper {
-                height: 400px;
+
+            .hero h1 {
+                font-size: 2rem;
             }
-            
-            .info-banner h2 {
-                font-size: 1.1em;
+
+            .hero-subtitle {
+                font-size: 1.1rem;
             }
-        }
-        
-        /* Print styles */
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-            
-            .container {
-                box-shadow: none;
-                border-radius: 0;
-            }
-            
-            .header {
-                background: #001f3f !important;
-                color: white !important;
-            }
-            
-            .sheet-wrapper {
-                height: auto;
-                min-height: 500px;
+
+            .practical-card {
+                padding: 1.5rem;
             }
         }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .fade-in:nth-child(1) { animation-delay: 0.1s; }
+        .fade-in:nth-child(2) { animation-delay: 0.2s; }
+        .fade-in:nth-child(3) { animation-delay: 0.3s; }
+        .fade-in:nth-child(4) { animation-delay: 0.4s; }
+        .fade-in:nth-child(5) { animation-delay: 0.5s; }
+        .fade-in:nth-child(6) { animation-delay: 0.6s; }
+        .fade-in:nth-child(7) { animation-delay: 0.7s; }
+        .fade-in:nth-child(8) { animation-delay: 0.8s; }
+        .fade-in:nth-child(9) { animation-delay: 0.9s; }
+        .fade-in:nth-child(10) { animation-delay: 1.0s; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <div class="header-content">
-                <h1>📚 Attendance</h1>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-code"></i> DevPortfolio
             </div>
-        </header>
-        
-        <div class="info-banner">
-            <h2>📊 AI Attendance</h2>
-            <p>
-                ODD-2025
-            </p>
+            <nav>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul id="nav-menu">
+                    <li><a href="practical1.html"><i class="fas fa-play-circle"></i> Practical 1</a></li>
+                    <li><a href="practical2.html"><i class="fas fa-play-circle"></i> Practical 2</a></li>
+                    <li><a href="practical3.html"><i class="fas fa-play-circle"></i> Practical 3</a></li>
+                    <li><a href="practical4.html"><i class="fas fa-play-circle"></i> Practical 4</a></li>
+                    <li><a href="practical5.html"><i class="fas fa-play-circle"></i> Practical 5</a></li>
+                    <li><a href="practical6.html"><i class="fas fa-play-circle"></i> Practical 6</a></li>
+                    <li><a href="practical7.html"><i class="fas fa-play-circle"></i> Practical 7</a></li>
+                    <li><a href="practical8.html"><i class="fas fa-play-circle"></i> Practical 8</a></li>
+                    <li><a href="practical9.html"><i class="fas fa-play-circle"></i> Practical 9</a></li>
+                    <li><a href="practical10.html"><i class="fas fa-play-circle"></i> Practical 10</a></li>
+                </ul>
+            </nav>
         </div>
-        
-        <div class="spreadsheet-container">
-            <div class="sheet-wrapper">
-                <div class="loading" id="loading">
-                    <div class="spinner"></div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Welcome to My Portfolio</h1>
+                <p class="hero-subtitle">Web Development Journey & Practical Exercises</p>
+                <p class="hero-description">
+                    Explore my collection of web development practicals, featuring modern HTML, CSS, and JavaScript projects. 
+                    Each practical demonstrates different concepts and techniques in web development.
+                </p>
+            </div>
+        </section>
+
+        <section class="practicals-section">
+            <h2 class="section-title">My Practicals</h2>
+            <div class="practicals-grid">
+                <div class="practical-card fade-in">
+                    <div class="practical-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Practical 1</h3>
+                    <p>Introduction to HTML fundamentals and basic structure</p>
+                    <a href="practical1.html" class="practical-link">
+                        View Project <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
-                <iframe 
-                    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQp5pgSSJpjcmSiV8aOlySZV13_ufedcs1RM_QKzjhSmn9SLkXFXQ1t3IAsdMAK_g/pubhtml?gid=596432330&single=true&widget=true&headers=false"
-                    onload="document.getElementById('loading').style.display='none'"
-                    title="Student Attendance Spreadsheet">
-                </iframe>
+
+                <div class="practical-card fade-in">
+                    <div class="practical-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3>Practical 2</h3>
+                    <p>CSS Styling and layout techniques</p>
+                    <a href="practical2.html" class="practical-link">
+                        View Project <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="practical-card fade-in">
+                    <div class="practical-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Practical 3</h3>
+                    <p>Responsive design and mobile-first approach</p>
+                    <a href="practical3.html" class="practical-link">
+                        View Project <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="practical-card fade-in">
+                    <div class="practical-icon">
+                        <i class="fab fa-js-square"></i>
+                    </div>
+                    <h3>Practical 4</h3>
+                    <p>JavaScript fundamentals and DOM manipulation</p>
+                    <a href="practical4.html" class="practical-link">
+                        View Project <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="practical-card fade-in">
+                    <div class="practical-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Practical 5</h3>
+                    <p>CSS animations and transitions</p>
+                    <a href="practical5.html" class="practical-link">
+                        View Project <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="practical-card fade-in">
+                    <div class="practical-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>Practical 6</h3>
+                    <p>Forms and data handling</p>
+                    <a href="practical6.html" class="practical-link">
+                        View Project <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="practical-card fade-in">
+                    <div class="practical-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Practical 7</h3>
+                    <p>Advanced JavaScript and APIs</p>
+                    <a href="practical7.html" class="practical-link">
+                        View Project <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="practical-card fade-in">
+                    <div class="practical-icon">
+                        <i class="fab fa-bootstrap"></i>
+                    </div>
+                    <h3>Practical 8</h3>
+                    <p>CSS Frameworks and Grid Systems</p>
+                    <a href="practical8.html" class="practical-link">
+                        View Project <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="practical-card fade-in">
+                    <div class="practical-icon">
+                        <i class="fab fa-react"></i>
+                    </div>
+                    <h3>Practical 9</h3>
+                    <p>Modern JavaScript frameworks introduction</p>
+                    <a href="practical9.html" class="practical-link">
+                        View Project <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="practical-card fade-in">
+                    <div class="practical-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Practical 10</h3>
+                    <p>Final project and deployment</p>
+                    <a href="practical10.html" class="practical-link">
+                        View Project <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                <a href="#"><i class="fas fa-envelope"></i> Contact</a>
+                <a href="#"><i class="fas fa-file-pdf"></i> Resume</a>
+            </div>
+            <p class="copyright">&copy; 2025 My Development Portfolio. All rights reserved.</p>
         </div>
-        
-        <footer class="footer">
-            <p>
-                📅 Last Updated: <span id="lastUpdated"></span> | 
-                🎓 <strong>Udacity</strong> | 
-                📧 Contact: <a href="mailto:instructor@udacity.com">instructor@udacity.com</a>
-            </p>
-        </footer>
-    </div>
+    </footer>
 
     <script>
-        // Set last updated date
-        document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
+        function toggleMobileMenu() {
+            const navMenu = document.getElementById('nav-menu');
+            navMenu.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const navMenu = document.getElementById('nav-menu');
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (!navMenu.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+                navMenu.classList.remove('active');
+            }
         });
 
-        // Handle iframe loading
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('loading').style.display = 'none';
-            }, 2000);
-        });
-        
-        // Add some interactive features
-        document.addEventListener('DOMContentLoaded', function() {
-            // Smooth scroll for any anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-            
-            // Add keyboard shortcuts
-            document.addEventListener('keydown', function(e) {
-                // Press 'R' to refresh the iframe
-                if (e.key === 'r' || e.key === 'R') {
-                    if (e.ctrlKey || e.metaKey) return; // Don't override browser refresh
-                    const iframe = document.querySelector('iframe');
-                    iframe.src = iframe.src;
-                    document.getElementById('loading').style.display = 'block';
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                 }
             });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
         });
+
+        // Smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add dynamic year to copyright
+        document.querySelector('.copyright').innerHTML = 
+            `&copy; ${new Date().getFullYear()} My Development Portfolio. All rights reserved.`;
     </script>
 </body>
 </html>
