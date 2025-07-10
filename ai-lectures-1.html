@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI History: From Dreams to Winters to Revolution</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh;
+            color: #1E293B;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Base slide styling */
+        .slide {
+            background: #FEF7ED;
+            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            min-height: 500px;
+            page-break-after: always;
+        }
+
+        .slide:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Layout 1: Title Slide */
+        .title-slide {
+            background: #1E293B;
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-left: 5px solid #EA580C;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .title-slide .subtitle {
+            font-size: 1.6em;
+            opacity: 0.9;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .title-slide .author {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        /* Layout 2: Title and Content */
+        .title-content h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-area {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .content-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        .content-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #EA580C;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Layout 3: Section Header */
+        .section-header {
+            background: linear-gradient(135deg, #059669, #EA580C);
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section-header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section-header .section-subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+        }
+
+        /* Layout 4: Two Content */
+        .two-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .two-content h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-column {
+            padding: 20px;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: 10px;
+        }
+
+        .content-column h3 {
+            font-size: 1.6em;
+            color: #059669;
+            margin-bottom: 15px;
+        }
+
+        /* Layout 5: Comparison */
+        .comparison h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+            text-align: center;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .comparison-item {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(234, 88, 12, 0.1);
+        }
+
+        .comparison-item h3 {
+            font-size: 1.8em;
+            color: #EA580C;
+            margin-bottom: 20px;
+        }
+
+        .vs-divider {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .comparison {
+            position: relative;
+        }
+
+        /* Layout 6: Title Only */
+        .title-only {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-only h1 {
+            font-size: 3em;
+            color: #1E293B;
+            margin-bottom: 20px;
+        }
+
+        .title-only .subtitle {
+            font-size: 1.4em;
+            color: #059669;
+            font-style: italic;
+        }
+
+        /* Special Elements */
+        .highlight-box {
+            background: #059669;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .accent-box {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .emphasis {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .year-badge {
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .slide {
+                padding: 20px;
+                min-height: 400px;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5em;
+            }
+
+            .two-content,
+            .comparison-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .vs-divider {
+                display: none;
+            }
+        }
+
+        /* Navigation */
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Title Slide -->
+        <div class="slide title-slide">
+            <h1>The History of AI</h1>
+            <p class="subtitle">From Dreams to Winters to Revolution (1940s-1990s)</p>
+            <p class="author">Professor Claude • AI History 101 • Your Journey into Understanding</p>
+        </div>
+
+        <!-- Introduction -->
+        <div class="slide title-content">
+            <h2>Welcome to AI History 101! 🎓</h2>
+            <div class="content-area">
+                <p>Hello, my eager student! Today we're going on a fascinating journey through the early history of Artificial Intelligence. Think of it like a rollercoaster ride with incredible highs and dramatic lows!</p>
+                
+                <div class="highlight-box">
+                    What You'll Learn Today:
+                </div>
+                
+                <ul class="content-list">
+                    <li>How AI was born from a simple question: "Can machines think?"</li>
+                    <li>The brilliant pioneers who dared to dream of intelligent machines</li>
+                    <li>Why AI went through not one, but TWO "winters" (spoiler: it wasn't the weather!)</li>
+                    <li>How overpromising and underdelivering nearly killed the field</li>
+                    <li>Why understanding this history helps us appreciate today's AI revolution</li>
+                </ul>
+                
+                <p>Ready? Let's time travel back to when computers were room-sized and the future seemed limitless!</p>
+            </div>
+        </div>
+
+        <!-- Section Header: Early Days -->
+        <div class="slide section-header">
+            <h1>The Early Days</h1>
+            <p class="section-subtitle">When Computers Were Born (1940s-1950s)</p>
+        </div>
+
+        <!-- Early Developments -->
+        <div class="slide title-content">
+            <h2>The Foundation: ENIAC and Early Computing</h2>
+            <div class="content-area">
+                <p><span class="year-badge">1940s</span> Picture this: The world's first electronic computer, ENIAC, filled an entire room and weighed 30 tons! It was like having a smartphone the size of a warehouse.</p>
+                
+                <div class="accent-box">
+                    Fun Fact: ENIAC was originally built to calculate artillery firing tables for the U.S. Army. From day one, military applications drove AI development!
+                </div>
+                
+                <p>This massive machine could do calculations faster than any human, but it was basically a very expensive calculator. The dream of true intelligence was still just that - a dream.</p>
+                
+                <div class="highlight-box">
+                    Key Insight: Even from the beginning, defense and military needs have been major drivers of AI progress and funding. This pattern continues today!
+                </div>
+                
+                <p>But here's what's amazing - some visionaries looked at these room-sized calculators and asked: "What if we could make them think like humans?" That question would change everything.</p>
+            </div>
+        </div>
+
+        <!-- Turing's Contribution -->
+        <div class="slide title-content">
+            <h2>Alan Turing: The Father of Computer Science</h2>
+            <div class="content-area">
+                <p><span class="year-badge">1950</span> Meet Alan Turing - imagine Einstein, but for computers! This brilliant British mathematician asked the question that started it all:</p>
+                
+                <div class="highlight-box">
+                    "Can machines think?"
+                </div>
+                
+                <p>But Turing was clever. He realized this question was too philosophical, so he created something practical: <span class="emphasis">The Turing Test</span></p>
+                
+                <div class="accent-box">
+                    The Turing Test in Simple Terms: If you're chatting with something and can't tell if it's human or machine, then for all practical purposes, it's intelligent!
+                </div>
+                
+                <ul class="content-list">
+                    <li>It's like a blind conversation test</li>
+                    <li>No looking - just talking through text</li>
+                    <li>If the machine fools you into thinking it's human, it passes!</li>
+                    <li>This test is STILL used today to measure AI capabilities</li>
+                </ul>
+                
+                <p>Think about it - every time you use ChatGPT or talk to Siri, you're essentially experiencing a modern version of what Turing envisioned over 70 years ago!</p>
+            </div>
+        </div>
+
+        <!-- Section Header: Birth of AI -->
+        <div class="slide section-header">
+            <h1>The Birth of AI</h1>
+            <p class="section-subtitle">Dartmouth Workshop 1956: Where It All Began</p>
+        </div>
+
+        <!-- Dartmouth Workshop -->
+        <div class="slide title-content">
+            <h2>The Historic Dartmouth Workshop</h2>
+            <div class="content-area">
+                <p><span class="year-badge">1956</span> Imagine the most important summer camp in history! For two months at Dartmouth College, four brilliant minds gathered to officially create the field of Artificial Intelligence.</p>
+                
+                <div style="text-align: center; margin: 20px 0;">
+                    <img src="https://substackcdn.com/image/fetch/$s_!uJSP!,w_1456,c_limit,f_webp,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fee96f936-6c9f-42cf-ae0c-ab8bc0db3a29_1000x632.png" alt="The Four Founding Fathers of AI" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                </div>
+                
+                <div class="highlight-box">
+                    The Four Founding Fathers of AI:
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>John McCarthy</strong> - Coined the term "Artificial Intelligence" (thanks, John!)</li>
+                    <li><strong>Alan Newell</strong> - Logic and reasoning expert</li>
+                    <li><strong>Herbert Simon</strong> - Problem-solving pioneer</li>
+                    <li><strong>Marvin Minsky</strong> - Neural network visionary (more on him later!)</li>
+                </ul>
+                
+                <div class="accent-box">
+                    Historical Moment: This is when "Artificial Intelligence" got its name! Before this, people just called it "thinking machines" or "electronic brains."
+                </div>
+                
+                <p>These four visionaries believed they could create machines that could learn, reason, and solve problems just like humans. Their optimism was infectious - and perhaps a bit too ambitious, as we'll see...</p>
+                
+                <p>This workshop wasn't just a meeting; it was the birth certificate of an entire field of study that would revolutionize the world!</p>
+            </div>
+        </div>
+
+        <!-- Section Header: Early Progress -->
+        <div class="slide section-header">
+            <h1>Early Progress</h1>
+            <p class="section-subtitle">The First Wave of AI Innovation (1960s-1970s)</p>
+        </div>
+
+        <!-- Early Achievements -->
+        <div class="slide two-content">
+            <h2>The First AI Stars</h2>
+            
+            <div class="content-column">
+                <h3>ELIZA (1964) 💬</h3>
+                <div style="text-align: center; margin: 15px 0;">
+                    <img src="https://bostonglobalforum.org/aiwsin/wp-content/uploads/sites/18/2025/05/History-3.jpg" alt="ELIZA - The First Chatbot" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.2);">
+                </div>
+                <p><span class="year-badge">1964</span> Meet the world's first chatbot! ELIZA was like a very primitive therapist.</p>
+                <ul class="content-list">
+                    <li>Could hold simple conversations</li>
+                    <li>Mostly just repeated what you said as questions</li>
+                    <li>People got surprisingly attached to it!</li>
+                    <li>Think of it as the great-great-grandmother of ChatGPT</li>
+                </ul>
+                <div class="accent-box">
+                    Example: You: "I'm sad." ELIZA: "Why are you sad?" 
+                </div>
+            </div>
+            
+            <div class="content-column">
+                <h3>Shakey the Robot (1969) 🤖</h3>
+                <div style="text-align: center; margin: 15px 0;">
+                    <img src="https://www.therobotreport.com/wp-content/uploads/2023/12/shakey-the-robot.jpeg" alt="Shakey the Robot - First General Purpose Mobile Robot" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.2);">
+                </div>
+                <p><span class="year-badge">1969</span> The first general-purpose mobile robot - a true pioneer!</p>
+                <ul class="content-list">
+                    <li>Could move around and navigate</li>
+                    <li>Made decisions about its environment</li>
+                    <li>Led to the A* algorithm (still used today!)</li>
+                    <li>Think of it as the ancestor of modern robots</li>
+                </ul>
+                <div class="highlight-box">
+                    Fun Fact: The A* algorithm developed for Shakey is still used in Google Maps to find your route!
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Header: First AI Winter -->
+        <div class="slide section-header">
+            <h1>The First AI Winter</h1>
+            <p class="section-subtitle">When the Dream Hit Reality (1974-1980)</p>
+        </div>
+
+        <!-- First AI Winter -->
+        <div class="slide title-content">
+            <h2>The First Cold Snap: What Went Wrong?</h2>
+            <div class="content-area">
+                <p><span class="year-badge">1974-1980</span> After all the excitement, reality hit like a cold splash of water. The field entered what we now call the "First AI Winter" - and no, it wasn't about the weather!</p>
+                
+                <div class="accent-box">
+                    What is an "AI Winter"? It's a period when interest, funding, and confidence in AI research dramatically declined. Think of it like a recession, but for AI research!
+                </div>
+                
+                <div class="highlight-box">
+                    Three Major Problems That Caused the Freeze:
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Machine Translation Failures:</strong> Computers couldn't translate languages properly. The famous example: "The spirit is willing but the flesh is weak" became "The vodka is good but the meat is rotten"!</li>
+                    <li><strong>Marvin Minsky's Neural Network Criticism:</strong> One of AI's founding fathers said neural networks couldn't even solve simple XOR problems (like figuring out "different" vs "same")</li>
+                    <li><strong>Speech Understanding Disappointments:</strong> Computers still couldn't understand human speech reliably</li>
+                </ul>
+                
+                <p>The lesson? <span class="emphasis">Promising too much too soon can really backfire!</span> Researchers had to learn to be more realistic about what AI could actually achieve.</p>
+            </div>
+        </div>
+
+        <!-- Section Header: Expert Systems -->
+        <div class="slide section-header">
+            <h1>The Expert Systems Era</h1>
+            <p class="section-subtitle">AI's Brief Comeback</p>
+        </div>
+
+        <!-- Expert Systems Rise and Fall -->
+        <div class="slide two-content">
+            <h2>Expert Systems: The Comeback Kid</h2>
+            
+            <div class="content-column">
+                <h3>The Rise 📈</h3>
+                <p>After the winter, AI found new hope in "Expert Systems" - computer programs that could capture human expertise!</p>
+                <ul class="content-list">
+                    <li>Encoded human knowledge into logical rules</li>
+                    <li>Could make decisions like human experts</li>
+                    <li>Used in medical diagnosis, business decisions</li>
+                    <li>Became a half-billion-dollar industry!</li>
+                </ul>
+                <div class="highlight-box">
+                    Think of it like having a digital doctor or lawyer who knew all the rules and could make expert recommendations!
+                </div>
+            </div>
+            
+            <div class="content-column">
+                <h3>The Fall 📉</h3>
+                <p>But success was short-lived. The expert systems boom quickly went bust...</p>
+                <ul class="content-list">
+                    <li>Too rigid - couldn't handle unexpected situations</li>
+                    <li>Expensive and hard to maintain</li>
+                    <li>Couldn't learn or adapt</li>
+                    <li>Over-hyped by researchers making grand promises again</li>
+                </ul>
+                <div class="accent-box">
+                    Pattern Alert: Notice how overpromising became a recurring theme in early AI history!
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Header: Second AI Winter -->
+        <div class="slide section-header">
+            <h1>The Second AI Winter</h1>
+            <p class="section-subtitle">When AI Became a "Dirty Word"</p>
+        </div>
+
+        <!-- Second AI Winter Impact -->
+        <div class="slide title-content">
+            <h2>The Great Credibility Crisis</h2>
+            <div class="content-area">
+                <p><span class="year-badge">Late 1980s-1990s</span> The second AI Winter was even worse than the first. This time, AI didn't just lose funding - it lost respectability!</p>
+                
+                <div class="accent-box">
+                    The Root Problem: AI researchers kept making grand promises about "solving intelligence" and achieving "human-level capabilities" that they simply couldn't deliver.
+                </div>
+                
+                <div class="highlight-box">
+                    How Bad Was It? AI Became Toxic!
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Theoretical computer scientists:</strong> "AI lacks mathematical rigor - it's not real science!"</li>
+                    <li><strong>Practical engineers:</strong> "AI solutions don't actually work in the real world!"</li>
+                    <li><strong>Funding agencies:</strong> "We've been burned too many times - no more AI grants!"</li>
+                    <li><strong>Conferences:</strong> AAAI attendance dropped from 5,000 to under 1,000!</li>
+                </ul>
+                
+                <div class="accent-box">
+                    The Great Escape: Sub-fields like computer vision, natural language processing, and machine learning started avoiding the "AI" label entirely! They rebranded themselves to escape AI's bad reputation.
+                </div>
+                
+                <p>Imagine being so associated with failure that your own children change their last name - that's essentially what happened to AI!</p>
+            </div>
+        </div>
+
+        <!-- Key Lessons -->
+        <div class="slide title-content">
+            <h2>Key Lessons from the AI Winters ❄️</h2>
+            <div class="content-area">
+                <p>As your professor, I want you to understand why these winters happened and what we can learn from them:</p>
+                
+                <div class="highlight-box">
+                    Lesson #1: Manage Expectations
+                </div>
+                <p>Both winters were caused by <span class="emphasis">overpromising and underdelivering</span>. Researchers got so excited about possibilities that they forgot about practical limitations.</p>
+                
+                <div class="highlight-box">
+                    Lesson #2: Technology Needs Time to Mature
+                </div>
+                <p>Many ideas from the early days (like neural networks) were actually good - they just needed more powerful computers and better algorithms to work properly.</p>
+                
+                <div class="highlight-box">
+                    Lesson #3: Credibility Is Fragile
+                </div>
+                <p>It takes years to build trust and only a few failed promises to destroy it. The AI community learned this the hard way - twice!</p>
+                
+                <div class="accent-box">
+                    Modern Connection: This is why today's AI researchers are generally more careful about their claims. They remember the winters!
+                </div>
+                
+                <p>The story doesn't end here though - those sub-fields that distanced themselves from AI? They kept working and eventually created the AI revolution we see today!</p>
+            </div>
+        </div>
+
+        <!-- The Comeback Preview -->
+        <div class="slide title-content">
+            <h2>The Plot Twist: The Great Comeback! 🚀</h2>
+            <div class="content-area">
+                <p>Here's the amazing ending to our story: Remember those conferences that saw attendance drop to under 1,000? Well, the video mentions that modern AI conferences like NeurIPS now see massive growth!</p>
+                
+                <div class="highlight-box">
+                    The Irony: The "failed" sub-fields that ran away from the AI label are exactly what brought AI back to life!
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Machine Learning:</strong> Became incredibly powerful with big data</li>
+                    <li><strong>Computer Vision:</strong> Now recognizes images better than humans</li>
+                    <li><strong>Natural Language Processing:</strong> Gave us ChatGPT and modern AI assistants</li>
+                    <li><strong>Neural Networks:</strong> The thing Minsky criticized? They're now the foundation of modern AI!</li>
+                </ul>
+                
+                <div class="accent-box">
+                    Student Insight: Sometimes the best way to save something is to temporarily distance yourself from it, keep working on the fundamentals, and come back stronger!
+                </div>
+                
+                <p>The researchers who survived the winters learned valuable lessons about realistic expectations, solid engineering, and gradual progress - lessons that fuel today's AI success!</p>
+            </div>
+        </div>
+
+        <!-- Conclusion -->
+        <div class="slide title-content">
+            <h2>What This Means for You Today 🎯</h2>
+            <div class="content-area">
+                <p>My dear student, understanding this history isn't just academic trivia - it's crucial for understanding today's AI landscape!</p>
+                
+                <div class="highlight-box">
+                    Why This History Matters Now:
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Pattern Recognition:</strong> You can spot overhyped AI claims by remembering the winter patterns</li>
+                    <li><strong>Appreciation:</strong> Today's AI didn't happen overnight - it's built on decades of learning from failures</li>
+                    <li><strong>Perspective:</strong> Even when AI seems unstoppable now, remember it survived near-death experiences twice</li>
+                    <li><strong>Critical Thinking:</strong> Question bold AI promises with the wisdom of someone who knows the history</li>
+                </ul>
+                
+                <div class="accent-box">
+                    Professor's Final Thought: The AI winters teach us that progress isn't always linear. Sometimes you need to step back, learn from failures, and approach problems differently. The field's resilience and ability to reinvent itself is truly remarkable!
+                </div>
+                
+                <p>Next time you use AI, remember: you're experiencing the culmination of nearly 80 years of dreams, failures, comebacks, and persistent human curiosity about making machines think!</p>
+            </div>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-only">
+            <h1>Questions & Discussion</h1>
+            <p class="subtitle">What fascinating aspect of AI history would you like to explore further? 🤔</p>
+        </div>
+
+    </div>
+
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        Slide 1 of 15
+    </div>
+
+    <script>
+        // Update slide counter on scroll
+        function updateSlideCounter() {
+            const slides = document.querySelectorAll('.slide');
+            const slideCounter = document.querySelector('.slide-counter');
+            
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    slideCounter.textContent = `Slide ${index + 1} of ${slides.length}`;
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateSlideCounter);
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            // Find current slide
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentSlide = index;
+                }
+            });
+            
+            // Navigate with arrow keys
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (currentSlide < slides.length - 1) {
+                    slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                if (currentSlide > 0) {
+                    slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
