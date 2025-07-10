@@ -3,9 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DUP teaching Learning content</title>
+    <title>DUP Teaching Learning Content</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --dark-slate: #1E293B;
+            --vibrant-orange: #EA580C;
+            --warm-cream: #FEF7ED;
+            --emerald-green: #059669;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,591 +20,549 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Georgia', serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark-slate);
+            background: linear-gradient(135deg, var(--warm-cream) 0%, var(--dark-slate) 100%);
             min-height: 100vh;
         }
 
-        /* Header & Navigation */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
         header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        nav li {
-            position: relative;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: #555;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
-        }
-
-        nav a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            transition: left 0.3s ease;
-            z-index: -1;
-        }
-
-        nav a:hover::before {
-            left: 0;
-        }
-
-        nav a:hover {
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        /* Mobile Menu Button */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: #555;
-            cursor: pointer;
-        }
-
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 4rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .hero-content {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 3rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            animation: fadeInUp 1s ease;
-        }
-
-        .hero-subtitle {
-            font-size: 1.3rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 2rem;
-            font-weight: 300;
-            animation: fadeInUp 1s ease 0.2s both;
-        }
-
-        .hero-description {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.8);
-            max-width: 600px;
-            margin: 0 auto 2rem;
-            animation: fadeInUp 1s ease 0.4s both;
-        }
-
-        /* Practicals Grid */
-        .practicals-section {
-            padding: 4rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 3rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .practicals-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .practical-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: var(--dark-slate);
+            color: var(--warm-cream);
+            padding: 60px 40px;
             border-radius: 15px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .practical-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-        }
-
-        .practical-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .practical-icon {
-            font-size: 2.5rem;
-            color: #667eea;
-            margin-bottom: 1rem;
-            background: rgba(255, 255, 255, 0.9);
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .practical-card h3 {
-            color: white;
-            font-size: 1.4rem;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .practical-card p {
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .practical-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            padding: 0.75rem 1.5rem;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-
-        .practical-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        /* Footer */
-        footer {
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            color: white;
             text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--vibrant-orange);
         }
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
+        .subtitle {
+            font-size: 1.6em;
+            color: var(--emerald-green);
+            font-weight: 400;
+            font-style: italic;
         }
 
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: color 0.3s ease;
+        .subjects-section {
+            margin-bottom: 40px;
         }
 
-        .footer-links a:hover {
-            color: white;
+        .section-header {
+            font-size: 2.2em;
+            color: var(--dark-slate);
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 3px solid var(--vibrant-orange);
+            padding-bottom: 10px;
+            font-weight: 700;
         }
 
-        .copyright {
-            opacity: 0.7;
-            font-size: 0.9rem;
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
         }
 
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
+        .subject-card {
+            background: var(--warm-cream);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--vibrant-orange);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.6s ease forwards;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes slideIn {
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
+        .subject-header {
+            background: var(--dark-slate);
+            color: var(--warm-cream);
+            padding: 25px 20px;
+            text-align: center;
+            font-size: 1.6em;
+            font-weight: 600;
+        }
+
+        .subject-header i {
+            color: var(--vibrant-orange);
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+
+        .subject-content {
+            padding: 30px 25px;
+        }
+
+        .content-section {
+            margin-bottom: 25px;
+        }
+
+        .content-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .content-section h4 {
+            font-size: 1.6em;
+            color: var(--emerald-green);
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-section h4 i {
+            color: var(--vibrant-orange);
+            width: 20px;
+        }
+
+        .content-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .content-links a {
+            background: var(--vibrant-orange);
+            color: var(--warm-cream);
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(234, 88, 12, 0.2);
+        }
+
+        .content-links a:hover {
+            background: #DC2626;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(234, 88, 12, 0.3);
+        }
+
+        .lecture-link {
+            background: var(--emerald-green) !important;
+            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.2) !important;
+        }
+
+        .lecture-link:hover {
+            background: #047857 !important;
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3) !important;
+        }
+
+        .attendance-link {
+            background: linear-gradient(135deg, var(--vibrant-orange), var(--emerald-green)) !important;
+            font-style: italic !important;
+            box-shadow: 0 4px 15px rgba(234, 88, 12, 0.2) !important;
+        }
+
+        .attendance-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(234, 88, 12, 0.3) !important;
+        }
+
+        .key-highlight {
+            display: inline-block;
+            background: var(--vibrant-orange);
+            color: var(--warm-cream);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .info-box {
+            background: var(--emerald-green);
+            color: var(--warm-cream);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        footer {
+            background: var(--warm-cream);
+            color: var(--dark-slate);
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--vibrant-orange);
+            font-weight: 600;
+        }
+
+        footer i {
+            color: var(--vibrant-orange);
+            margin-right: 8px;
+        }
+
+        .academic-intro {
+            background: var(--warm-cream);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--vibrant-orange);
+            text-align: center;
+        }
+
+        .academic-intro p {
+            font-size: 1.2em;
+            color: var(--dark-slate);
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
-            .mobile-menu-btn {
-                display: block;
+            .container {
+                padding: 15px;
             }
-
-            nav ul {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: rgba(255, 255, 255, 0.95);
-                backdrop-filter: blur(10px);
-                flex-direction: column;
-                padding: 1rem;
-                border-radius: 0 0 15px 15px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            
+            header {
+                padding: 40px 20px;
             }
-
-            nav ul.active {
-                display: flex;
+            
+            h1 {
+                font-size: 2.8em;
             }
-
-            .hero {
-                padding: 2rem 1rem;
+            
+            .subtitle {
+                font-size: 1.3em;
             }
-
-            .hero h1 {
-                font-size: 2.5rem;
+            
+            .section-header {
+                font-size: 1.8em;
             }
-
-            .hero-content {
-                padding: 2rem;
-            }
-
-            .practicals-section {
-                padding: 2rem 1rem;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .practicals-grid {
+            
+            .subjects-grid {
                 grid-template-columns: 1fr;
-                gap: 1.5rem;
+                gap: 20px;
             }
-
-            .footer-links {
-                flex-direction: column;
-                gap: 1rem;
+            
+            .subject-header {
+                padding: 20px 15px;
+                font-size: 1.4em;
+            }
+            
+            .subject-content {
+                padding: 25px 20px;
+            }
+            
+            .content-section h4 {
+                font-size: 1.4em;
+            }
+            
+            .content-links {
+                grid-template-columns: 1fr;
+                gap: 10px;
             }
         }
 
         @media (max-width: 480px) {
-            .header-container {
-                padding: 1rem;
+            h1 {
+                font-size: 2.2em;
             }
-
-            .hero h1 {
-                font-size: 2rem;
+            
+            .subtitle {
+                font-size: 1.1em;
             }
-
-            .hero-subtitle {
-                font-size: 1.1rem;
+            
+            .section-header {
+                font-size: 1.6em;
             }
-
-            .practical-card {
-                padding: 1.5rem;
+            
+            .subject-header {
+                padding: 18px 12px;
+                font-size: 1.2em;
+            }
+            
+            .subject-content {
+                padding: 20px 15px;
             }
         }
 
-        /* Scroll animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 0.8s ease forwards;
-        }
-
-        .fade-in:nth-child(1) { animation-delay: 0.1s; }
-        .fade-in:nth-child(2) { animation-delay: 0.2s; }
-        .fade-in:nth-child(3) { animation-delay: 0.3s; }
-        .fade-in:nth-child(4) { animation-delay: 0.4s; }
-        .fade-in:nth-child(5) { animation-delay: 0.5s; }
-        .fade-in:nth-child(6) { animation-delay: 0.6s; }
-        .fade-in:nth-child(7) { animation-delay: 0.7s; }
-        .fade-in:nth-child(8) { animation-delay: 0.8s; }
-        .fade-in:nth-child(9) { animation-delay: 0.9s; }
-        .fade-in:nth-child(10) { animation-delay: 1.0s; }
+        /* Staggered animation delays */
+        .subject-card:nth-child(1) { animation-delay: 0.1s; }
+        .subject-card:nth-child(2) { animation-delay: 0.2s; }
+        .subject-card:nth-child(3) { animation-delay: 0.3s; }
+        .subject-card:nth-child(4) { animation-delay: 0.4s; }
+        .subject-card:nth-child(5) { animation-delay: 0.5s; }
+        .subject-card:nth-child(6) { animation-delay: 0.6s; }
+        .subject-card:nth-child(7) { animation-delay: 0.7s; }
+        .subject-card:nth-child(8) { animation-delay: 0.8s; }
+        .subject-card:nth-child(9) { animation-delay: 0.9s; }
+        .subject-card:nth-child(10) { animation-delay: 1.0s; }
     </style>
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <div class="logo">
-                <i class="fas fa-code"></i> DUP teaching Learning content
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-graduation-cap"></i> DUP Teaching Learning Content</h1>
+            <p class="subtitle">Subject-wise Learning Materials & Resources</p>
+        </header>
+
+        <div class="academic-intro">
+            <p>Welcome to our comprehensive academic portal featuring <span class="key-highlight">cutting-edge curricula</span> designed for modern educational excellence.</p>
+            <div class="info-box">
+                Access all course materials, practical exercises, and attendance records in one centralized location
             </div>
-            <nav>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <ul id="nav-menu">
-                    <li><a href="AI-attendance-odd-2025.html"><i class="fas fa-play-circle"></i> AI Attendance</a></li>
-                    <li><a href="practical2.html"><i class="fas fa-play-circle"></i> Practical 2</a></li>
-                    <li><a href="practical3.html"><i class="fas fa-play-circle"></i> Practical 3</a></li>
-                    <li><a href="practical4.html"><i class="fas fa-play-circle"></i> Practical 4</a></li>
-                    <li><a href="practical5.html"><i class="fas fa-play-circle"></i> Practical 5</a></li>
-                    <li><a href="practical6.html"><i class="fas fa-play-circle"></i> Practical 6</a></li>
-                    <li><a href="practical7.html"><i class="fas fa-play-circle"></i> Practical 7</a></li>
-                    <li><a href="practical8.html"><i class="fas fa-play-circle"></i> Practical 8</a></li>
-                    <li><a href="practical9.html"><i class="fas fa-play-circle"></i> Practical 9</a></li>
-                    <li><a href="practical10.html"><i class="fas fa-play-circle"></i> Practical 10</a></li>
-                </ul>
-            </nav>
         </div>
-    </header>
 
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h1>GEC Bharuch</h1>
-                <p class="hero-subtitle">Teaching Material and attendance</p>
-                <p class="hero-description"> 
-                    AI,ML,POM.
-                </p>
-            </div>
-        </section>
-
-        <section class="practicals-section">
-            <h2 class="section-title">Content</h2>
-            <div class="practicals-grid">
-                <div class="practical-card fade-in">
-                    <div class="practical-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3>AI Attendance</h3>
-                    <p>AI attendance</p>
-                    <a href="practical1.html" class="practical-link">
-                        View Project <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="practical-card fade-in">
-                    <div class="practical-icon">
-                        <i class="fas fa-paint-brush"></i>
-                    </div>
-                    <h3>Practical 2</h3>
-                    <p>CSS Styling and layout techniques</p>
-                    <a href="practical2.html" class="practical-link">
-                        View Project <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="practical-card fade-in">
-                    <div class="practical-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>Practical 3</h3>
-                    <p>Responsive design and mobile-first approach</p>
-                    <a href="practical3.html" class="practical-link">
-                        View Project <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="practical-card fade-in">
-                    <div class="practical-icon">
-                        <i class="fab fa-js-square"></i>
-                    </div>
-                    <h3>Practical 4</h3>
-                    <p>JavaScript fundamentals and DOM manipulation</p>
-                    <a href="practical4.html" class="practical-link">
-                        View Project <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="practical-card fade-in">
-                    <div class="practical-icon">
-                        <i class="fas fa-magic"></i>
-                    </div>
-                    <h3>Practical 5</h3>
-                    <p>CSS animations and transitions</p>
-                    <a href="practical5.html" class="practical-link">
-                        View Project <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="practical-card fade-in">
-                    <div class="practical-icon">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <h3>Practical 6</h3>
-                    <p>Forms and data handling</p>
-                    <a href="practical6.html" class="practical-link">
-                        View Project <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="practical-card fade-in">
-                    <div class="practical-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Practical 7</h3>
-                    <p>Advanced JavaScript and APIs</p>
-                    <a href="practical7.html" class="practical-link">
-                        View Project <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="practical-card fade-in">
-                    <div class="practical-icon">
-                        <i class="fab fa-bootstrap"></i>
-                    </div>
-                    <h3>Practical 8</h3>
-                    <p>CSS Frameworks and Grid Systems</p>
-                    <a href="practical8.html" class="practical-link">
-                        View Project <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="practical-card fade-in">
-                    <div class="practical-icon">
-                        <i class="fab fa-react"></i>
-                    </div>
-                    <h3>Practical 9</h3>
-                    <p>Modern JavaScript frameworks introduction</p>
-                    <a href="practical9.html" class="practical-link">
-                        View Project <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="practical-card fade-in">
-                    <div class="practical-icon">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <h3>Practical 10</h3>
-                    <p>Final project and deployment</p>
-                    <a href="practical10.html" class="practical-link">
-                        View Project <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="#"><i class="fab fa-github"></i> GitHub</a>
-                <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                <a href="#"><i class="fas fa-envelope"></i> Contact</a>
-                <a href="#"><i class="fas fa-file-pdf"></i> Resume</a>
-            </div>
-            <p class="copyright">&copy; 2025 My Development Portfolio. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script>
-        function toggleMobileMenu() {
-            const navMenu = document.getElementById('nav-menu');
-            navMenu.classList.toggle('active');
-        }
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const navMenu = document.getElementById('nav-menu');
-            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        <main class="subjects-section">
+            <h2 class="section-header">Academic Subjects</h2>
             
-            if (!navMenu.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
-                navMenu.classList.remove('active');
-            }
-        });
+            <div class="subjects-grid">
+                <!-- AI Subject -->
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <i class="fas fa-robot"></i> Artificial Intelligence (AI)
+                    </div>
+                    <div class="subject-content">
+                        <div class="content-section">
+                            <h4><i class="fas fa-book-open"></i> Lecture Materials</h4>
+                            <div class="content-links">
+                                <a href="ai-lectures.html" class="lecture-link">
+                                    <i class="fas fa-play-circle"></i> View Lectures
+                                </a>
+                                <a href="ai-notes.html" class="lecture-link">
+                                    <i class="fas fa-sticky-note"></i> Class Notes
+                                </a>
+                            </div>
+                        </div>
+                        <div class="content-section">
+                            <h4><i class="fas fa-code"></i> Practicals</h4>
+                            <div class="content-links">
+                                <a href="ai-practical1.html">
+                                    <i class="fas fa-laptop-code"></i> Practical 1
+                                </a>
+                                <a href="ai-practical2.html">
+                                    <i class="fas fa-laptop-code"></i> Practical 2
+                                </a>
+                                <a href="ai-practical3.html">
+                                    <i class="fas fa-laptop-code"></i> Practical 3
+                                </a>
+                            </div>
+                        </div>
+                        <div class="content-section">
+                            <h4><i class="fas fa-chart-bar"></i> Attendance</h4>
+                            <div class="content-links">
+                                <a href="AI-attendance-odd-2025.html" class="attendance-link">
+                                    <i class="fas fa-users"></i> View Attendance
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        // Intersection Observer for scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+                <!-- ML Subject -->
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <i class="fas fa-brain"></i> Machine Learning (ML)
+                    </div>
+                    <div class="subject-content">
+                        <div class="content-section">
+                            <h4><i class="fas fa-book-open"></i> Lecture Materials</h4>
+                            <div class="content-links">
+                                <a href="ml-lectures.html" class="lecture-link">
+                                    <i class="fas fa-play-circle"></i> View Lectures
+                                </a>
+                                <a href="ml-notes.html" class="lecture-link">
+                                    <i class="fas fa-sticky-note"></i> Class Notes
+                                </a>
+                            </div>
+                        </div>
+                        <div class="content-section">
+                            <h4><i class="fas fa-code"></i> Practicals</h4>
+                            <div class="content-links">
+                                <a href="ml-practical1.html">
+                                    <i class="fas fa-laptop-code"></i> Practical 1
+                                </a>
+                                <a href="ml-practical2.html">
+                                    <i class="fas fa-laptop-code"></i> Practical 2
+                                </a>
+                                <a href="ml-practical3.html">
+                                    <i class="fas fa-laptop-code"></i> Practical 3
+                                </a>
+                            </div>
+                        </div>
+                        <div class="content-section">
+                            <h4><i class="fas fa-chart-bar"></i> Attendance</h4>
+                            <div class="content-links">
+                                <a href="ML-attendance-odd-2025.html" class="attendance-link">
+                                    <i class="fas fa-users"></i> View Attendance
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
+                <!-- POM Subject -->
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <i class="fas fa-chart-line"></i> Principles of Management (POM)
+                    </div>
+                    <div class="subject-content">
+                        <div class="content-section">
+                            <h4><i class="fas fa-book-open"></i> Lecture Materials</h4>
+                            <div class="content-links">
+                                <a href="pom-lectures.html" class="lecture-link">
+                                    <i class="fas fa-play-circle"></i> View Lectures
+                                </a>
+                                <a href="pom-notes.html" class="lecture-link">
+                                    <i class="fas fa-sticky-note"></i> Class Notes
+                                </a>
+                            </div>
+                        </div>
+                        <div class="content-section">
+                            <h4><i class="fas fa-code"></i> Practicals</h4>
+                            <div class="content-links">
+                                <a href="pom-practical1.html">
+                                    <i class="fas fa-laptop-code"></i> Practical 1
+                                </a>
+                                <a href="pom-practical2.html">
+                                    <i class="fas fa-laptop-code"></i> Practical 2
+                                </a>
+                                <a href="pom-practical3.html">
+                                    <i class="fas fa-laptop-code"></i> Practical 3
+                                </a>
+                            </div>
+                        </div>
+                        <div class="content-section">
+                            <h4><i class="fas fa-chart-bar"></i> Attendance</h4>
+                            <div class="content-links">
+                                <a href="POM-attendance-odd-2025.html" class="attendance-link">
+                                    <i class="fas fa-users"></i> View Attendance
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        // Observe all fade-in elements
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
-        });
+                <!-- DFW Subject -->
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <i class="fas fa-globe"></i> Dynamic Frontend Web (DFW)
+                    </div>
+                    <div class="subject-content">
+                        <div class="content-section">
+                            <h4><i class="fas fa-book-open"></i> Lecture Materials</h4>
+                            <div class="content-links">
+                                <a href="dfw-lectures.html" class="lecture-link">
+                                    <i class="fas fa-play-circle"></i> View Lectures
+                                </a>
+                                <a href="dfw-notes.html" class="lecture-link">
+                                    <i class="fas fa-sticky-note"></i> Class Notes
+                                </a>
+                            </div>
+                        </div>
+                        <div class="content-section">
+                            <h4><i class="fas fa-code"></i> Practicals</h4>
+                            <div class="content-links">
+                                <a href="dfw-practical1.html">
+                                    <i class="fas fa-laptop-code"></i> Practical 1
+                                </a>
+                                <a href="dfw-practical2.html">
+                                    <i class="fas fa-laptop-code"></i> Practical 2
+                                </a>
+                                <a href="dfw-practical3.html">
+                                    <i class="fas fa-laptop-code"></i> Practical 3
+                                </a>
+                            </div>
+                        </div>
+                        <div class="content-section">
+                            <h4><i class="fas fa-chart-bar"></i> Attendance</h4>
+                            <div class="content-links">
+                                <a href="DFW-attendance-odd-2025.html" class="attendance-link">
+                                    <i class="fas fa-users"></i> View Attendance
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        // Smooth scroll for internal links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
+                <!-- DE-2A Subject -->
+                <div class="subject-card">
+                    <div class="subject-header">
+                        <i class="fas fa-microchip"></i> Digital Electronics 2A (DE-2A)
+                    </div>
+                    <div class="subject-content">
+                        <div class="content-section">
+                            <h4><i class="fas fa-book-open"></i> Lecture Materials</h4>
+                            <div class="content-links">
+                                <a href="de2a-lectures.html" class="lecture-link">
+                                    <i class="fas fa-play-circle"></i> View Lectures
+                                </a>
+                                <a href="de2a-notes.html" class="lecture-link">
+                                    <i class="fas fa-sticky-note"></i> Class Notes
+                                </a>
+                            </div>
+                        </div>
+                        <div class="content-section">
+                            <h4><i class="fas fa-code"></i> Practicals</h4>
+                            <div class="content-links">
+                                <a href="de2a-practical1.html">
+                                    <i class="fas fa-laptop-code"></i> Practical 1
+                                </a>
+                                <a href="de2a-practical2.html">
+                                    <i class="fas fa-laptop-code"></i> Practical 2
+                                </a>
+                                <a href="de2a-practical3.html">
+                                    <i class="fas fa-laptop-code"></i> Practical 3
+                                </a>
+                            </div>
+                        </div>
+                        <div class="content-section">
+                            <h4><i class="fas fa-chart-bar"></i> Attendance</h4>
+                            <div class="content-links">
+                                <a href="DE2A-attendance-odd-2025.html" class="attendance-link">
+                                    <i class="fas fa-users"></i> View Attendance
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
 
-        // Add dynamic year to copyright
-        document.querySelector('.copyright').innerHTML = 
-            `&copy; ${new Date().getFullYear()} My Development Portfolio. All rights reserved.`;
-    </script>
+        <footer>
+            <p><i class="fas fa-copyright"></i> 2025 DUP Teaching Learning Content - All Subjects</p>
+        </footer>
+    </div>
 </body>
 </html>
