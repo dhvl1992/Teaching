@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Electrical Symbols Learning Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh;
+            color: #1E293B;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #FEF7ED;
+            border-radius: 15px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        /* Header Slide */
+        .header {
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.6em;
+            opacity: 0.9;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 300px;
+            height: 8px;
+            background: rgba(254, 247, 237, 0.3);
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #059669, #EA580C);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Section Header */
+        .section-header {
+            background: linear-gradient(135deg, #059669, #EA580C);
+            color: #FEF7ED;
+            text-align: center;
+            padding: 30px;
+            margin: 0;
+        }
+
+        .section-header h2 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section-header .section-subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Symbols Grid */
+        .symbols-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 40px;
+            background: #FEF7ED;
+        }
+
+        .symbol-card {
+            background: #FEF7ED;
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            min-height: 400px;
+        }
+
+        .symbol-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+
+        .symbol-card.active {
+            border-left-color: #059669;
+            background: rgba(5, 150, 105, 0.05);
+        }
+
+        .symbol-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #EA580C;
+        }
+
+        .symbol-number {
+            background: #EA580C;
+            color: #FEF7ED;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-right: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .symbol-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1E293B;
+        }
+
+        .symbol-visual {
+            background: rgba(30, 41, 59, 0.05);
+            border: 2px dashed #1E293B;
+            border-radius: 15px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .symbol-description {
+            color: #1E293B;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .symbol-details {
+            background: rgba(5, 150, 105, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #059669;
+            font-size: 0.95em;
+        }
+
+        .symbol-details strong {
+            color: #059669;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .current-flow {
+            width: 10px;
+            height: 10px;
+            background: #EA580C;
+            border-radius: 50%;
+            position: absolute;
+            opacity: 0;
+            animation: flowAnimation 2s infinite;
+            box-shadow: 0 0 10px rgba(234, 88, 12, 0.5);
+        }
+
+        @keyframes flowAnimation {
+            0% { opacity: 1; transform: translateX(-30px); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: translateX(30px); }
+        }
+
+        /* Symbol-specific styles with presentation theme */
+        .wire-symbol {
+            width: 120px;
+            height: 4px;
+            background: #1E293B;
+            position: relative;
+            border-radius: 2px;
+        }
+
+        .connected-wires {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .wire-horizontal, .wire-vertical {
+            background: #1E293B;
+            position: absolute;
+            border-radius: 2px;
+        }
+
+        .wire-horizontal {
+            width: 100px;
+            height: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .wire-vertical {
+            width: 4px;
+            height: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .connection-dot {
+            width: 16px;
+            height: 16px;
+            background: #EA580C;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 8px rgba(234, 88, 12, 0.4);
+        }
+
+        .not-connected-wires {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .wire-1, .wire-2 {
+            background: #1E293B;
+            position: absolute;
+            width: 4px;
+            height: 40px;
+            border-radius: 2px;
+        }
+
+        .wire-1 {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .wire-2 {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .wire-cross {
+            background: #1E293B;
+            width: 100px;
+            height: 4px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 2px;
+        }
+
+        .switch-base {
+            width: 80px;
+            height: 4px;
+            background: #1E293B;
+            position: relative;
+            border-radius: 2px;
+        }
+
+        .switch-contact {
+            width: 40px;
+            height: 4px;
+            background: #EA580C;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transform-origin: left;
+            transition: transform 0.3s ease;
+            border-radius: 2px;
+            box-shadow: 0 0 8px rgba(234, 88, 12, 0.4);
+        }
+
+        .switch-contact.open {
+            transform: rotate(-30deg);
+            background: #059669;
+            box-shadow: 0 0 8px rgba(5, 150, 105, 0.4);
+        }
+
+        .spdt-switch {
+            position: relative;
+            width: 100px;
+            height: 80px;
+        }
+
+        .spdt-input {
+            width: 50px;
+            height: 4px;
+            background: #1E293B;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 2px;
+        }
+
+        .spdt-output1, .spdt-output2 {
+            width: 50px;
+            height: 4px;
+            background: #1E293B;
+            position: absolute;
+            right: 0;
+            border-radius: 2px;
+        }
+
+        .spdt-output1 {
+            top: 25%;
+        }
+
+        .spdt-output2 {
+            bottom: 25%;
+        }
+
+        .spdt-contact {
+            width: 30px;
+            height: 4px;
+            background: #EA580C;
+            position: absolute;
+            left: 35px;
+            top: 50%;
+            transform-origin: left;
+            transform: translateY(-50%) rotate(-25deg);
+            transition: transform 0.3s ease;
+            border-radius: 2px;
+            box-shadow: 0 0 8px rgba(234, 88, 12, 0.4);
+        }
+
+        .spdt-contact.position2 {
+            transform: translateY(-50%) rotate(25deg);
+            background: #059669;
+            box-shadow: 0 0 8px rgba(5, 150, 105, 0.4);
+        }
+
+        .interactive-controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .control-btn {
+            background: #EA580C;
+            color: #FEF7ED;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 0 8px;
+            font-size: 1em;
+            font-family: Georgia, serif;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);
+        }
+
+        .control-btn:hover {
+            background: #1E293B;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 41, 59, 0.3);
+        }
+
+        .control-btn.active {
+            background: #059669;
+            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+        }
+
+        /* Teaching Section */
+        .quiz-section {
+            background: #FEF7ED;
+            padding: 40px;
+            margin: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .symbols-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .symbol-card {
+                padding: 20px;
+                min-height: 350px;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+            }
+
+            .header p {
+                font-size: 1.2em;
+            }
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            box-shadow: 0 4px 15px rgba(30, 41, 59, 0.3);
+            font-family: Georgia, serif;
+        }
+
+        /* Emphasis elements */
+        .emphasis {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .highlight-box {
+            background: #059669;
+            color: #FEF7ED;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+      /* Push Button Styles */
+.push-button {
+    position: relative;
+    width: 100px;
+    height: 80px;
+}
+
+.button-terminals {
+    position: absolute;
+    width: 100%;
+    top: 0;
+}
+
+.terminal-label {
+    position: absolute;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #EA580C;
+}
+
+.terminal-label.left {
+    left: 0;
+}
+
+.terminal-label.right {
+    right: 0;
+}
+
+.button-contacts {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    height: 40px;
+}
+
+.contact-line {
+    width: 35px;
+    height: 4px;
+    background: #1E293B;
+    position: absolute;
+    top: 50%;
+    border-radius: 2px;
+}
+
+.contact-line.left {
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.contact-line.right {
+    right: 0;
+    transform: translateY(-50%);
+}
+
+.button-actuator {
+    width: 20px;
+    height: 20px;
+    background: #EA580C;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.button-actuator.pressed {
+    background: #059669;
+    transform: translate(-50%, -50%) scale(0.8);
+}
+
+.button-contacts.closed .contact-line.left {
+    width: 45px;
+}
+
+.button-contacts.closed .contact-line.right {
+    width: 45px;
+}
+
+/* Relay Styles */
+.relay-spst, .relay-spdt {
+    position: relative;
+    width: 100px;
+    height: 80px;
+}
+
+.relay-coil {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.coil-symbol {
+    width: 25px;
+    height: 25px;
+    border: 3px solid #1E293B;
+    border-radius: 3px;
+    position: relative;
+}
+
+.coil-symbol::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 15px;
+    height: 15px;
+    background: 
+        linear-gradient(45deg, transparent 40%, #1E293B 40%, #1E293B 60%, transparent 60%),
+        linear-gradient(-45deg, transparent 40%, #1E293B 40%, #1E293B 60%, transparent 60%);
+}
+
+.coil-terminals {
+    position: absolute;
+    top: 50%;
+    left: -8px;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 2px;
+    background: #1E293B;
+}
+
+.coil-terminals::after {
+    content: '';
+    position: absolute;
+    right: -8px;
+    top: 0;
+    width: 40px;
+    height: 2px;
+    background: #1E293B;
+}
+
+/* SPST Relay Contacts */
+.relay-contacts {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    width: 50px;
+    height: 40px;
+}
+
+.contact-fixed {
+    width: 25px;
+    height: 3px;
+    background: #1E293B;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.contact-movable {
+    width: 20px;
+    height: 3px;
+    background: #EA580C;
+    position: absolute;
+    top: 0;
+    right: 5px;
+    transform-origin: right;
+    transition: transform 0.3s ease;
+}
+
+.contact-gap {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 15px;
+    border-left: 2px dashed #EA580C;
+}
+
+.relay-contacts.energized .contact-movable {
+    transform: rotate(25deg);
+    background: #059669;
+}
+
+.relay-contacts.energized .contact-gap {
+    display: none;
+}
+
+/* SPDT Relay Contacts */
+.relay-contacts-spdt {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 50px;
+    height: 60px;
+}
+
+.contact-common {
+    width: 20px;
+    height: 3px;
+    background: #EA580C;
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform-origin: right;
+    transform: translateY(-50%) rotate(-15deg);
+    transition: transform 0.3s ease;
+}
+
+.contact-no {
+    width: 25px;
+    height: 3px;
+    background: #1E293B;
+    position: absolute;
+    top: 5px;
+    right: 0;
+}
+
+.contact-nc {
+    width: 25px;
+    height: 3px;
+    background: #1E293B;
+    position: absolute;
+    bottom: 5px;
+    right: 0;
+}
+
+.contact-arm {
+    position: absolute;
+    top: 50%;
+    right: 25px;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 1px;
+    background: #EA580C;
+}
+
+.relay-contacts-spdt.energized .contact-common {
+    transform: translateY(-50%) rotate(15deg);
+    background: #059669;
+}
+
+/* Ground Symbols */
+.earth-ground, .chassis-ground {
+    position: relative;
+    width: 60px;
+    height: 80px;
+}
+
+.ground-connection, .chassis-connection {
+    width: 3px;
+    height: 40px;
+    background: #1E293B;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.ground-lines, .chassis-lines {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.ground-line {
+    height: 3px;
+    background: #1E293B;
+    margin-bottom: 4px;
+    border-radius: 1px;
+}
+
+.ground-line.line-1 {
+    width: 40px;
+}
+
+.ground-line.line-2 {
+    width: 25px;
+    margin-left: 7.5px;
+}
+
+.ground-line.line-3 {
+    width: 15px;
+    margin-left: 12.5px;
+}
+
+.chassis-line {
+    height: 2px;
+    background: #1E293B;
+    margin-bottom: 3px;
+    position: relative;
+}
+
+.chassis-line.line-1 {
+    width: 30px;
+    transform: rotate(-30deg);
+}
+
+.chassis-line.line-2 {
+    width: 25px;
+    transform: rotate(-30deg);
+    margin-left: 3px;
+}
+
+.chassis-line.line-3 {
+    width: 20px;
+    transform: rotate(-30deg);
+    margin-left: 6px;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Title Slide -->
+        <div class="header">
+            <h1>⚡ Electrical Symbols</h1>
+            <p>Interactive Learning Tool for Circuit Fundamentals</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- Section Header -->
+        <div class="section-header">
+            <h2>Basic Circuit Symbols</h2>
+            <p class="section-subtitle">Foundation Elements Every Student Must Know</p>
+        </div>
+
+        <!-- Symbols Grid -->
+        <div class="symbols-grid">
+            <!-- Symbol 1: Electrical Wire -->
+            <div class="symbol-card" data-symbol="1">
+                <div class="symbol-header">
+                    <div class="symbol-number">1</div>
+                    <div class="symbol-title">Electrical Wire</div>
+                </div>
+                <div class="symbol-visual">
+                    <div class="wire-symbol">
+                        <div class="current-flow" style="animation-delay: 0s;"></div>
+                        <div class="current-flow" style="animation-delay: 0.5s;"></div>
+                        <div class="current-flow" style="animation-delay: 1s;"></div>
+                    </div>
+                </div>
+                <div class="symbol-description">
+                    A conducting path that carries electrical current from one point to another with minimal resistance.
+                </div>
+                <div class="symbol-details">
+                    <strong>Essential Concepts:</strong>
+                    • Represented by a straight line<br>
+                    • Current flows through this path<br>
+                    • Foundation of all circuit connections<br>
+                    • Real-world: Any wire or cable
+                </div>
+            </div>
+
+            <!-- Symbol 2: Connected Wires -->
+            <div class="symbol-card" data-symbol="2">
+                <div class="symbol-header">
+                    <div class="symbol-number">2</div>
+                    <div class="symbol-title">Connected Wires</div>
+                </div>
+                <div class="symbol-visual">
+                    <div class="connected-wires">
+                        <div class="wire-horizontal"></div>
+                        <div class="wire-vertical"></div>
+                        <div class="connection-dot"></div>
+                    </div>
+                </div>
+                <div class="symbol-description">
+                    Shows that two or more wires are electrically connected at the intersection point.
+                </div>
+                <div class="symbol-details">
+                    <strong>Critical Points:</strong>
+                    • The <span class="emphasis">dot (•)</span> indicates electrical connection<br>
+                    • Current can flow between wires<br>
+                    • Used for wire junctions and solder joints<br>
+                    • Real-world: Terminal blocks, wire nuts
+                </div>
+            </div>
+
+            <!-- Symbol 3: Not Connected Wires -->
+            <div class="symbol-card" data-symbol="3">
+                <div class="symbol-header">
+                    <div class="symbol-number">3</div>
+                    <div class="symbol-title">Not Connected Wires</div>
+                </div>
+                <div class="symbol-visual">
+                    <div class="not-connected-wires">
+                        <div class="wire-cross"></div>
+                        <div class="wire-1"></div>
+                        <div class="wire-2"></div>
+                    </div>
+                </div>
+                <div class="symbol-description">
+                    Shows wires crossing but <strong>NOT</strong> electrically connected - no current flows between them.
+                </div>
+                <div class="symbol-details">
+                    <strong>Important Distinction:</strong>
+                    • <span class="emphasis">No dot = no connection</span><br>
+                    • Wires cross but don't touch electrically<br>
+                    • Common student mistake: confusing with connected wires<br>
+                    • Real-world: Insulated wire crossings
+                </div>
+            </div>
+
+            <!-- Symbol 4: SPST Switch -->
+            <div class="symbol-card" data-symbol="4">
+                <div class="symbol-header">
+                    <div class="symbol-number">4</div>
+                    <div class="symbol-title">SPST Toggle Switch</div>
+                </div>
+                <div class="symbol-visual">
+                    <div class="switch-base">
+                        <div class="switch-contact" id="spstContact"></div>
+                    </div>
+                </div>
+                <div class="symbol-description">
+                    Single Pole, Single Throw switch - controls current flow in one circuit path (ON/OFF only).
+                </div>
+                <div class="symbol-details">
+                    <strong>Key Characteristics:</strong>
+                    • Single Pole = controls one circuit<br>
+                    • Single Throw = two positions only<br>
+                    • Simple ON/OFF control<br>
+                    • Real-world: Light switches, power buttons
+                </div>
+                <div class="interactive-controls">
+                    <button class="control-btn" onclick="toggleSPST()">Toggle Switch</button>
+                </div>
+            </div>
+
+            <!-- Symbol 5: SPDT Switch -->
+            <div class="symbol-card" data-symbol="5">
+                <div class="symbol-header">
+                    <div class="symbol-number">5</div>
+                    <div class="symbol-title">SPDT Toggle Switch</div>
+                </div>
+                <div class="symbol-visual">
+                    <div class="spdt-switch">
+                        <div class="spdt-input"></div>
+                        <div class="spdt-output1"></div>
+                        <div class="spdt-output2"></div>
+                        <div class="spdt-contact" id="spdtContact"></div>
+                    </div>
+                </div>
+                <div class="symbol-description">
+                    Single Pole, Double Throw switch - directs current from one input to either of two outputs.
+                </div>
+                <div class="symbol-details">
+                    <strong>Advanced Features:</strong>
+                    • Can switch between two circuit paths<br>
+                    • Always connects to one output or the other<br>
+                    • Never both, never neither<br>
+                    • Real-world: Three-way light switches, selectors
+                </div>
+                <div class="interactive-controls">
+                    <button class="control-btn" onclick="toggleSPDT()">Switch Position</button>
+                </div>
+            </div>
+            <!-- Symbol 6: Push Button -->
+<div class="symbol-card" data-symbol="6">
+    <div class="symbol-header">
+        <div class="symbol-number">6</div>
+        <div class="symbol-title">Push Button</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="push-button">
+            <div class="button-terminals">
+                <span class="terminal-label left">13</span>
+                <span class="terminal-label right">14</span>
+            </div>
+            <div class="button-contacts" id="pushButtonContacts">
+                <div class="contact-line left"></div>
+                <div class="contact-line right"></div>
+                <div class="button-actuator" id="buttonActuator"></div>
+            </div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A momentary switch that closes contacts only while pressed, returning to open when released.
+    </div>
+    <div class="symbol-details">
+        <strong>Key Features:</strong>
+        • <span class="emphasis">Normally Open (NO)</span> contacts<br>
+        • Spring-loaded return mechanism<br>
+        • Momentary action only<br>
+        • Real-world: Doorbells, start buttons, reset switches
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onmousedown="pressPushButton()" onmouseup="releasePushButton()" ontouchstart="pressPushButton()" ontouchend="releasePushButton()">Press & Hold</button>
+    </div>
+</div>
+
+<!-- Symbol 7: SPST Relay -->
+<div class="symbol-card" data-symbol="7">
+    <div class="symbol-header">
+        <div class="symbol-number">7</div>
+        <div class="symbol-title">SPST Relay</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="relay-spst">
+            <div class="relay-coil">
+                <div class="coil-symbol"></div>
+                <div class="coil-terminals"></div>
+            </div>
+            <div class="relay-contacts" id="spstRelayContacts">
+                <div class="contact-fixed"></div>
+                <div class="contact-movable"></div>
+                <div class="contact-gap"></div>
+            </div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        An electrically operated switch with a coil that controls normally open contacts.
+    </div>
+    <div class="symbol-details">
+        <strong>Operation Principle:</strong>
+        • Electromagnetic coil creates magnetic field<br>
+        • Magnetic force closes normally open contacts<br>
+        • Electrical isolation between coil and contacts<br>
+        • Real-world: Control circuits, automation, safety systems
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="toggleSPSTRelay()">Energize Coil</button>
+    </div>
+</div>
+
+<!-- Symbol 8: SPDT Relay -->
+<div class="symbol-card" data-symbol="8">
+    <div class="symbol-header">
+        <div class="symbol-number">8</div>
+        <div class="symbol-title">SPDT Relay</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="relay-spdt">
+            <div class="relay-coil">
+                <div class="coil-symbol"></div>
+                <div class="coil-terminals"></div>
+            </div>
+            <div class="relay-contacts-spdt" id="spdtRelayContacts">
+                <div class="contact-common"></div>
+                <div class="contact-no"></div>
+                <div class="contact-nc"></div>
+                <div class="contact-arm"></div>
+            </div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A relay with one coil controlling a single pole, double throw contact arrangement.
+    </div>
+    <div class="symbol-details">
+        <strong>Contact Configuration:</strong>
+        • Common (C), Normally Open (NO), Normally Closed (NC)<br>
+        • Switches between two different circuits<br>
+        • Form C contact arrangement<br>
+        • Real-world: Changeover switches, signal routing
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="toggleSPDTRelay()">Energize Coil</button>
+    </div>
+</div>
+
+<!-- Symbol 9: Earth Ground -->
+<div class="symbol-card" data-symbol="9">
+    <div class="symbol-header">
+        <div class="symbol-number">9</div>
+        <div class="symbol-title">Earth Ground</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="earth-ground">
+            <div class="ground-connection"></div>
+            <div class="ground-lines">
+                <div class="ground-line line-1"></div>
+                <div class="ground-line line-2"></div>
+                <div class="ground-line line-3"></div>
+            </div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        Connection to earth ground providing zero potential reference and electrical shock protection.
+    </div>
+    <div class="symbol-details">
+        <strong>Safety Functions:</strong>
+        • <span class="emphasis">Zero potential reference</span><br>
+        • Electrical shock protection<br>
+        • Fault current path to earth<br>
+        • Real-world: Building ground rods, equipment grounding
+    </div>
+</div>
+
+<!-- Symbol 10: Chassis Ground -->
+<div class="symbol-card" data-symbol="10">
+    <div class="symbol-header">
+        <div class="symbol-number">10</div>
+        <div class="symbol-title">Chassis Ground</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="chassis-ground">
+            <div class="chassis-connection"></div>
+            <div class="chassis-lines">
+                <div class="chassis-line line-1"></div>
+                <div class="chassis-line line-2"></div>
+                <div class="chassis-line line-3"></div>
+            </div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        Connection to the metal chassis or frame of equipment, providing a common reference point.
+    </div>
+    <div class="symbol-details">
+        <strong>Applications:</strong>
+        • Common reference point in circuits<br>
+        • Connected to equipment chassis/frame<br>
+        • May or may not connect to earth ground<br>
+        • Real-world: Car chassis, equipment frames, PCB ground planes
+    </div>
+</div>
+        </div>
+
+        <!-- Teaching Tips Section -->
+        <div class="quiz-section">
+            <div class="highlight-box">
+                💡 <strong>Teaching Tip:</strong> Have students practice drawing these symbols and identifying them in real circuits. Physical examples greatly enhance understanding!
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        Progress: 0 of 5 symbols explored
+    </div>
+
+    <script>
+        let currentProgress = 0;
+        let spstState = false;
+        let spdtState = false;
+
+        // Track symbol understanding
+        function trackProgress() {
+            const cards = document.querySelectorAll('.symbol-card');
+            cards.forEach((card, index) => {
+                card.addEventListener('click', () => {
+                    if (!card.classList.contains('active')) {
+                        card.classList.add('active');
+                        updateProgress();
+                    }
+                });
+            });
+        }
+
+        function updateProgress() {
+            const activeCards = document.querySelectorAll('.symbol-card.active').length;
+            const totalCards = document.querySelectorAll('.symbol-card').length;
+            const progressPercent = (activeCards / totalCards) * 100;
+            
+            document.getElementById('progressFill').style.width = progressPercent + '%';
+            document.querySelector('.slide-counter').textContent = 
+                `Progress: ${activeCards} of ${totalCards} symbols explored`;
+        }
+
+        // SPST Switch Toggle
+        function toggleSPST() {
+            const contact = document.getElementById('spstContact');
+            spstState = !spstState;
+            
+            if (spstState) {
+                contact.classList.remove('open');
+                contact.style.background = '#059669';
+                contact.style.boxShadow = '0 0 8px rgba(5, 150, 105, 0.4)';
+            } else {
+                contact.classList.add('open');
+                contact.style.background = '#EA580C';
+                contact.style.boxShadow = '0 0 8px rgba(234, 88, 12, 0.4)';
+            }
+        }
+
+        // SPDT Switch Toggle
+        function toggleSPDT() {
+            const contact = document.getElementById('spdtContact');
+            spdtState = !spdtState;
+            
+            if (spdtState) {
+                contact.classList.add('position2');
+                contact.style.background = '#059669';
+                contact.style.boxShadow = '0 0 8px rgba(5, 150, 105, 0.4)';
+            } else {
+                contact.classList.remove('position2');
+                contact.style.background = '#EA580C';
+                contact.style.boxShadow = '0 0 8px rgba(234, 88, 12, 0.4)';
+            }
+        }
+        // Push Button Variables
+let pushButtonPressed = false;
+
+// Relay Variables  
+let spstRelayEnergized = false;
+let spdtRelayEnergized = false;
+
+// Push Button Functions
+function pressPushButton() {
+    pushButtonPressed = true;
+    const actuator = document.getElementById('buttonActuator');
+    const contacts = document.getElementById('pushButtonContacts');
+    
+    if (actuator && contacts) {
+        actuator.classList.add('pressed');
+        contacts.classList.add('closed');
+    }
+}
+
+function releasePushButton() {
+    pushButtonPressed = false;
+    const actuator = document.getElementById('buttonActuator');
+    const contacts = document.getElementById('pushButtonContacts');
+    
+    if (actuator && contacts) {
+        actuator.classList.remove('pressed');
+        contacts.classList.remove('closed');
+    }
+}
+
+// SPST Relay Functions
+function toggleSPSTRelay() {
+    const contacts = document.getElementById('spstRelayContacts');
+    spstRelayEnergized = !spstRelayEnergized;
+    
+    if (contacts) {
+        if (spstRelayEnergized) {
+            contacts.classList.add('energized');
+        } else {
+            contacts.classList.remove('energized');
+        }
+    }
+}
+
+// SPDT Relay Functions  
+function toggleSPDTRelay() {
+    const contacts = document.getElementById('spdtRelayContacts');
+    spdtRelayEnergized = !spdtRelayEnergized;
+    
+    if (contacts) {
+        if (spdtRelayEnergized) {
+            contacts.classList.add('energized');
+        } else {
+            contacts.classList.remove('energized');
+        }
+    }
+}
+      
+        // Enhanced interactivity
+        document.addEventListener('DOMContentLoaded', () => {
+            trackProgress();
+            
+            // Add educational hover effects
+            const cards = document.querySelectorAll('.symbol-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.transform = 'translateY(-8px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = '';
+                });
+            });
+
+            // Keyboard navigation for accessibility
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Space') {
+                    e.preventDefault();
+                    const activeCard = document.querySelector('.symbol-card:hover');
+                    if (activeCard) {
+                        activeCard.click();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
