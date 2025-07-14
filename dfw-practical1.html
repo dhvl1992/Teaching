@@ -1174,6 +1174,1579 @@
     0%, 100% { transform: scale(1); opacity: 0.8; }
     50% { transform: scale(1.3); opacity: 1; }
 }
+        /* LED Styles */
+.led {
+    position: relative;
+    width: 80px;
+    height: 60px;
+}
+
+.light-arrows {
+    position: absolute;
+    top: 20%;
+    right: 10%;
+}
+
+.light-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 8px solid #FFD700;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.light-arrow.arrow1 {
+    top: 0;
+    right: 0;
+}
+
+.light-arrow.arrow2 {
+    top: 8px;
+    right: 8px;
+}
+
+.light-arrow.active {
+    opacity: 1;
+    animation: lightEmit 0.8s ease infinite;
+}
+
+.led-glow {
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background: #FFD700;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.led-glow.glowing {
+    opacity: 0.6;
+    box-shadow: 0 0 15px #FFD700;
+}
+
+@keyframes lightEmit {
+    0% { transform: translateX(0) scale(1); opacity: 1; }
+    100% { transform: translateX(15px) scale(0.5); opacity: 0; }
+}
+
+/* Photodiode Styles */
+.photodiode {
+    position: relative;
+    width: 80px;
+    height: 60px;
+}
+
+.light-incoming {
+    position: absolute;
+    top: 20%;
+    left: 10%;
+}
+
+.incoming-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-right: 8px solid #FFD700;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.incoming-arrow.arrow1 {
+    top: 0;
+    left: 0;
+}
+
+.incoming-arrow.arrow2 {
+    top: 8px;
+    left: 8px;
+}
+
+.incoming-arrow.illuminated {
+    opacity: 1;
+    animation: lightIncoming 0.8s ease infinite;
+}
+
+.photo-current {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    width: 8px;
+    height: 8px;
+    background: #059669;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.photo-current.generated {
+    opacity: 1;
+    left: 65%;
+}
+
+@keyframes lightIncoming {
+    0% { transform: translateX(0) scale(0.5); opacity: 0; }
+    100% { transform: translateX(15px) scale(1); opacity: 1; }
+}
+
+/* Capacitor Styles */
+.capacitor, .variable-capacitor {
+    position: relative;
+    width: 80px;
+    height: 60px;
+}
+
+.capacitor-plate {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 30px;
+    background: #1E293B;
+}
+
+.capacitor-plate.plate1 {
+    left: 35%;
+}
+
+.capacitor-plate.plate2 {
+    right: 35%;
+}
+
+.capacitor-terminals {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #1E293B;
+    transform: translateY(-50%);
+}
+
+.charge-indicator {
+    position: absolute;
+    top: 30%;
+    left: 42%;
+    font-size: 0.8em;
+    color: #EA580C;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.charge-indicator.charged::before {
+    content: '+';
+}
+
+.charge-indicator.charged::after {
+    content: '−';
+    position: absolute;
+    left: 20px;
+}
+
+.charge-indicator.charged {
+    opacity: 1;
+}
+
+.variable-charge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: #059669;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.variable-charge.active {
+    opacity: 1;
+    animation: capacitanceChange 1s ease infinite;
+}
+
+@keyframes capacitanceChange {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.5); }
+}
+
+/* Source Styles */
+.voltage-source, .current-source, .ac-voltage-source {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.source-circle {
+    width: 50px;
+    height: 50px;
+    border: 3px solid #1E293B;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FEF7ED;
+}
+
+.voltage-label, .current-label {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #1E293B;
+}
+
+.polarity-plus, .polarity-minus {
+    position: absolute;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #EA580C;
+}
+
+.polarity-plus {
+    top: 5px;
+    right: 8px;
+}
+
+.polarity-minus {
+    bottom: 5px;
+    left: 8px;
+}
+
+.current-arrow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid #1E293B;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+}
+
+.source-terminals {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #1E293B;
+    transform: translateY(-50%);
+}
+
+.voltage-flow, .current-flow-indicator {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    width: 6px;
+    height: 6px;
+    background: #EA580C;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.voltage-flow.active, .current-flow-indicator.active {
+    opacity: 1;
+    animation: sourceFlow 1s ease infinite;
+}
+
+.ac-flow {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    width: 6px;
+    height: 6px;
+    background: #059669;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.ac-flow.active {
+    opacity: 1;
+    animation: acWaveFlow 2s ease infinite;
+}
+
+@keyframes sourceFlow {
+    0% { left: 20%; }
+    100% { left: 70%; }
+}
+
+@keyframes acWaveFlow {
+    0% { left: 20%; background: #059669; }
+    25% { left: 35%; background: #EA580C; }
+    50% { left: 50%; background: #059669; }
+    75% { left: 65%; background: #EA580C; }
+    100% { left: 70%; background: #059669; }
+}
+
+/* Battery Styles */
+.battery {
+    position: relative;
+    width: 80px;
+    height: 60px;
+}
+
+.battery-cells {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    gap: 3px;
+}
+
+.battery-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cell-positive {
+    width: 3px;
+    height: 20px;
+    background: #1E293B;
+}
+
+.cell-negative {
+    width: 3px;
+    height: 15px;
+    background: #1E293B;
+    margin-top: 2px;
+}
+
+.battery-terminals {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #1E293B;
+    transform: translateY(-50%);
+}
+
+.battery-energy {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    width: 6px;
+    height: 6px;
+    background: #EA580C;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.battery-energy.flowing {
+    opacity: 1;
+    animation: batteryFlow 1.5s ease infinite;
+}
+
+@keyframes batteryFlow {
+    0% { left: 20%; transform: translateY(-50%) scale(1); }
+    50% { left: 45%; transform: translateY(-50%) scale(1.2); }
+    100% { left: 70%; transform: translateY(-50%) scale(1); }
+}
+
+/* Meter Styles */
+.voltmeter, .ammeter {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.meter-circle {
+    width: 50px;
+    height: 50px;
+    border: 3px solid #1E293B;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FEF7ED;
+}
+
+.meter-label {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #1E293B;
+    margin-bottom: 5px;
+}
+
+.meter-needle {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: bottom center;
+    transform: translateX(-50%) rotate(-45deg);
+    width: 2px;
+    height: 15px;
+    background: #EA580C;
+    transition: transform 0.5s ease;
+}
+
+.meter-needle.reading {
+    transform: translateX(-50%) rotate(0deg);
+}
+
+.meter-scale {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 2px;
+    background: #1E293B;
+}
+
+.meter-terminals {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #1E293B;
+    transform: translateY(-50%);
+}
+
+.current-path {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    width: 6px;
+    height: 6px;
+    background: #059669;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.current-path.measuring {
+    opacity: 1;
+    animation: currentMeasurement 1s ease infinite;
+}
+
+@keyframes currentMeasurement {
+    0% { left: 20%; }
+    50% { left: 45%; }
+    100% { left: 70%; }
+}
+        /* Ohmmeter Styles */
+.ohmmeter {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.resistance-test {
+    position: absolute;
+    top: 30%;
+    left: 20%;
+    width: 6px;
+    height: 6px;
+    background: #059669;
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.resistance-test.testing {
+    opacity: 1;
+    animation: resistanceTest 1.5s ease infinite;
+}
+
+@keyframes resistanceTest {
+    0% { left: 20%; background: #059669; }
+    50% { left: 45%; background: #EA580C; }
+    100% { left: 70%; background: #059669; }
+}
+
+/* Wattmeter Styles */
+.wattmeter {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.power-indicator {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background: #EA580C;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.power-indicator.measuring {
+    opacity: 1;
+    animation: powerMeasurement 1s ease infinite;
+}
+
+@keyframes powerMeasurement {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.5); }
+}
+
+/* Transistor Styles */
+.npn-transistor, .pnp-transistor {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.transistor-base {
+    position: absolute;
+    top: 30%;
+    left: 30%;
+    width: 3px;
+    height: 40%;
+    background: #1E293B;
+}
+
+.transistor-emitter {
+    position: absolute;
+    top: 60%;
+    left: 35%;
+    width: 30px;
+    height: 2px;
+    background: #1E293B;
+}
+
+.transistor-collector {
+    position: absolute;
+    top: 35%;
+    left: 35%;
+    width: 30px;
+    height: 2px;
+    background: #1E293B;
+}
+
+.emitter-arrow {
+    position: absolute;
+    top: 58%;
+    right: 25%;
+    width: 0;
+    height: 0;
+    border-left: 8px solid #EA580C;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+}
+
+.emitter-arrow-pnp {
+    position: absolute;
+    top: 58%;
+    left: 35%;
+    width: 0;
+    height: 0;
+    border-right: 8px solid #EA580C;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+}
+
+.terminal-labels {
+    position: absolute;
+    font-size: 0.7em;
+    font-weight: bold;
+    color: #EA580C;
+}
+
+.terminal-labels .label-c {
+    position: absolute;
+    top: 25%;
+    right: 15%;
+}
+
+.terminal-labels .label-b {
+    position: absolute;
+    top: 50%;
+    left: 15%;
+}
+
+.terminal-labels .label-e {
+    position: absolute;
+    bottom: 25%;
+    right: 15%;
+}
+
+.current-amplification {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: #059669;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.current-amplification.active {
+    opacity: 1;
+    animation: amplification 0.8s ease infinite;
+}
+
+@keyframes amplification {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.8); }
+}
+
+/* Buzzer Styles */
+.buzzer {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.buzzer-body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 30px;
+}
+
+.buzzer-dome {
+    width: 40px;
+    height: 20px;
+    background: #1E293B;
+    border-radius: 40px 40px 0 0;
+}
+
+.buzzer-base {
+    width: 40px;
+    height: 10px;
+    background: #1E293B;
+    margin-top: -2px;
+}
+
+.buzzer-terminals {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #1E293B;
+    transform: translateY(-50%);
+}
+
+.sound-waves {
+    position: absolute;
+    top: 30%;
+    right: 10%;
+}
+
+.sound-wave {
+    position: absolute;
+    border: 2px solid #EA580C;
+    border-radius: 50%;
+    opacity: 0;
+}
+
+.sound-wave.wave1 {
+    width: 20px;
+    height: 20px;
+    top: 0;
+    left: 0;
+}
+
+.sound-wave.wave2 {
+    width: 30px;
+    height: 30px;
+    top: -5px;
+    left: -5px;
+}
+
+.sound-wave.wave3 {
+    width: 40px;
+    height: 40px;
+    top: -10px;
+    left: -10px;
+}
+
+.sound-waves.active .sound-wave {
+    opacity: 1;
+    animation: soundWave 0.8s ease infinite;
+}
+
+.sound-waves.active .sound-wave.wave2 {
+    animation-delay: 0.2s;
+}
+
+.sound-waves.active .sound-wave.wave3 {
+    animation-delay: 0.4s;
+}
+
+@keyframes soundWave {
+    0% { opacity: 1; transform: scale(0.5); }
+    100% { opacity: 0; transform: scale(1.5); }
+}
+
+/* Electric Bell Styles */
+.electric-bell {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.bell-dome {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 25px;
+    background: #1E293B;
+    border-radius: 30px 30px 0 0;
+}
+
+.bell-clapper {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 15px;
+    background: #EA580C;
+    border-radius: 0 0 50% 50%;
+    transition: transform 0.2s ease;
+}
+
+.bell-clapper.ringing {
+    animation: clapper 0.3s ease infinite alternate;
+}
+
+.bell-base {
+    position: absolute;
+    bottom: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 35px;
+    height: 8px;
+    background: #1E293B;
+}
+
+.bell-terminals {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #1E293B;
+    transform: translateY(-50%);
+}
+
+.ring-indicator {
+    position: absolute;
+    top: 15%;
+    right: 10%;
+    width: 6px;
+    height: 6px;
+    background: #FFD700;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.ring-indicator.ringing {
+    opacity: 1;
+    animation: ringFlash 0.3s ease infinite;
+}
+
+@keyframes clapper {
+    0% { transform: translateX(-50%) rotate(-10deg); }
+    100% { transform: translateX(-50%) rotate(10deg); }
+}
+
+@keyframes ringFlash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Fuse Styles */
+.fuse {
+    position: relative;
+    width: 80px;
+    height: 60px;
+}
+
+.fuse-body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 20px;
+    border: 2px solid #1E293B;
+    border-radius: 10px;
+    background: #FEF7ED;
+}
+
+.fuse-wire {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    transform: translateY(-50%);
+    width: 80%;
+    height: 2px;
+    background: #EA580C;
+    transition: all 0.3s ease;
+}
+
+.fuse-wire.blown {
+    background: transparent;
+    border: 1px dashed #DC2626;
+}
+
+.fuse-terminals {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #1E293B;
+    transform: translateY(-50%);
+}
+
+.overcurrent-indicator {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background: #DC2626;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.overcurrent-indicator.active {
+    opacity: 1;
+    animation: overcurrent 0.5s ease infinite;
+}
+
+@keyframes overcurrent {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.5); }
+}
+
+/* Loudspeaker Styles */
+.loudspeaker {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.speaker-cone {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+}
+
+.speaker-center {
+    width: 15px;
+    height: 15px;
+    background: #1E293B;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.speaker-outer {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #1E293B;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.speaker-terminals {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #1E293B;
+    transform: translateY(-50%);
+}
+
+.audio-waves {
+    position: absolute;
+    top: 30%;
+    right: 5%;
+}
+
+.audio-wave {
+    position: absolute;
+    border: 2px solid #059669;
+    border-radius: 50%;
+    opacity: 0;
+}
+
+.audio-wave.wave1 {
+    width: 25px;
+    height: 25px;
+    top: 0;
+    left: 0;
+}
+
+.audio-wave.wave2 {
+    width: 35px;
+    height: 35px;
+    top: -5px;
+    left: -5px;
+}
+
+.audio-wave.wave3 {
+    width: 45px;
+    height: 45px;
+    top: -10px;
+    left: -10px;
+}
+
+.audio-waves.playing .audio-wave {
+    opacity: 1;
+    animation: audioWave 1s ease infinite;
+}
+
+.audio-waves.playing .audio-wave.wave2 {
+    animation-delay: 0.3s;
+}
+
+.audio-waves.playing .audio-wave.wave3 {
+    animation-delay: 0.6s;
+}
+
+@keyframes audioWave {
+    0% { opacity: 1; transform: scale(0.3); }
+    100% { opacity: 0; transform: scale(1.2); }
+}
+
+/* Microphone Styles */
+.microphone {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.mic-body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 25px;
+    height: 35px;
+}
+
+.mic-diaphragm {
+    width: 25px;
+    height: 25px;
+    background: #1E293B;
+    border-radius: 50%;
+}
+
+.mic-capsule {
+    width: 25px;
+    height: 10px;
+    background: #1E293B;
+    border-radius: 0 0 15px 15px;
+    margin-top: -2px;
+}
+
+.mic-terminals {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #1E293B;
+    transform: translateY(-50%);
+}
+
+.sound-input {
+    position: absolute;
+    top: 30%;
+    left: 5%;
+}
+
+.input-wave {
+    position: absolute;
+    border: 2px solid #EA580C;
+    border-radius: 50%;
+    opacity: 0;
+}
+
+.input-wave.wave1 {
+    width: 20px;
+    height: 20px;
+    top: 0;
+    left: 0;
+}
+
+.input-wave.wave2 {
+    width: 30px;
+    height: 30px;
+    top: -5px;
+    left: -5px;
+}
+
+.input-wave.wave3 {
+    width: 40px;
+    height: 40px;
+    top: -10px;
+    left: -10px;
+}
+
+.sound-input.capturing .input-wave {
+    opacity: 1;
+    animation: inputWave 1s ease infinite reverse;
+}
+
+.sound-input.capturing .input-wave.wave2 {
+    animation-delay: 0.2s;
+}
+
+.sound-input.capturing .input-wave.wave3 {
+    animation-delay: 0.4s;
+}
+
+@keyframes inputWave {
+    0% { opacity: 0; transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(0.3); }
+}
+
+/* Light Bulb Styles */
+.light-bulb {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.bulb-glass {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 35px;
+    border: 2px solid #1E293B;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.bulb-filament {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 15px;
+    height: 15px;
+    background: 
+        linear-gradient(45deg, transparent 40%, #1E293B 40%, #1E293B 60%, transparent 60%),
+        linear-gradient(-45deg, transparent 40%, #1E293B 40%, #1E293B 60%, transparent 60%);
+    transition: background 0.3s ease;
+}
+
+.bulb-filament.glowing {
+    background: 
+        linear-gradient(45deg, transparent 40%, #FFD700 40%, #FFD700 60%, transparent 60%),
+        linear-gradient(-45deg, transparent 40%, #FFD700 40%, #FFD700 60%, transparent 60%);
+}
+
+.bulb-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 35px;
+    height: 35px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.bulb-glow.illuminated {
+    opacity: 1;
+}
+
+.bulb-base {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 15px;
+    background: #1E293B;
+    border-radius: 0 0 5px 5px;
+}
+
+.bulb-terminals {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #1E293B;
+    transform: translateY(-50%);
+}
+
+.light-rays {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.light-ray {
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background: #FFD700;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.light-ray.ray1 {
+    top: -1px;
+    left: 20px;
+    transform: rotate(0deg);
+}
+
+.light-ray.ray2 {
+    top: 12px;
+    left: 12px;
+    transform: rotate(45deg);
+}
+
+.light-ray.ray3 {
+    top: -1px;
+    left: -40px;
+    transform: rotate(0deg);
+}
+
+.light-ray.ray4 {
+    top: -18px;
+    left: 12px;
+    transform: rotate(-45deg);
+}
+
+.light-rays.shining .light-ray {
+    opacity: 1;
+    animation: lightRay 1s ease infinite;
+}
+
+@keyframes lightRay {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.2); }
+}
+        /* NOT Gate Styles */
+.not-gate {
+    position: relative;
+    width: 80px;
+    height: 60px;
+}
+
+.gate-triangle {
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 25px solid #1E293B;
+}
+
+.gate-bubble {
+    position: absolute;
+    top: 50%;
+    right: 20%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border: 2px solid #1E293B;
+    border-radius: 50%;
+    background: #FEF7ED;
+}
+
+.gate-input {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 2px;
+    background: #1E293B;
+}
+
+.gate-output {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 2px;
+    background: #1E293B;
+}
+
+.input-label, .output-label {
+    position: absolute;
+    font-size: 0.7em;
+    font-weight: bold;
+    color: #EA580C;
+    top: -15px;
+    left: 0;
+}
+
+.logic-flow {
+    position: absolute;
+    top: 50%;
+    left: 15%;
+    width: 6px;
+    height: 6px;
+    background: #EA580C;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.logic-flow.active {
+    opacity: 1;
+    animation: logicFlow 1s ease infinite;
+}
+
+@keyframes logicFlow {
+    0% { left: 15%; background: #EA580C; }
+    50% { left: 45%; background: #059669; }
+    100% { left: 70%; background: #EA580C; }
+}
+
+/* AND Gate Styles */
+.and-gate {
+    position: relative;
+    width: 80px;
+    height: 60px;
+}
+
+.gate-body {
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 30px;
+    background: #FEF7ED;
+    border: 2px solid #1E293B;
+    border-radius: 0 15px 15px 0;
+    border-left: none;
+}
+
+.gate-body::before {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top: 0;
+    width: 2px;
+    height: 30px;
+    background: #1E293B;
+}
+
+.gate-inputs {
+    position: absolute;
+    left: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.input-line {
+    width: 20px;
+    height: 2px;
+    background: #1E293B;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.input-line.input-a {
+    margin-top: -5px;
+}
+
+.input-line.input-b {
+    margin-top: 5px;
+}
+
+/* OR Gate Styles */
+.or-gate {
+    position: relative;
+    width: 80px;
+    height: 60px;
+}
+
+.gate-body-or {
+    position: absolute;
+    top: 50%;
+    left: 30%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 30px;
+    background: #FEF7ED;
+    border: 2px solid #1E293B;
+    border-radius: 50% 50% 50% 50% / 100% 100% 0% 0%;
+    border-bottom: none;
+}
+
+.gate-body-or::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 25px;
+    height: 15px;
+    background: #FEF7ED;
+    border: 2px solid #1E293B;
+    border-radius: 50% 50% 50% 50% / 0% 0% 100% 100%;
+    border-top: none;
+}
+
+/* Amplifier Styles */
+.amplifier {
+    position: relative;
+    width: 80px;
+    height: 60px;
+}
+
+.amp-triangle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent;
+    border-left: 35px solid #1E293B;
+}
+
+.amp-input {
+    position: absolute;
+    top: 50%;
+    left: 5%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 2px;
+    background: #1E293B;
+}
+
+.amp-output {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 2px;
+    background: #1E293B;
+}
+
+.input-signal, .output-signal {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 16px;
+    background: #EA580C;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.input-signal.active {
+    opacity: 1;
+    animation: inputSignal 0.8s ease infinite;
+}
+
+.output-signal.active {
+    opacity: 1;
+    animation: outputSignal 0.8s ease infinite;
+}
+
+.gain-indicator {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 8px;
+    background: #059669;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gain-indicator.active {
+    opacity: 1;
+    animation: gainPulse 0.8s ease infinite;
+}
+
+@keyframes inputSignal {
+    0%, 100% { height: 16px; }
+    50% { height: 8px; }
+}
+
+@keyframes outputSignal {
+    0%, 100% { height: 24px; }
+    50% { height: 12px; }
+}
+
+@keyframes gainPulse {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.5); }
+}
+
+/* Op-Amp Styles */
+.op-amp {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.opamp-triangle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-top: 25px solid transparent;
+    border-bottom: 25px solid transparent;
+    border-left: 40px solid #1E293B;
+}
+
+.opamp-inputs {
+    position: absolute;
+    left: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.non-inverting-input, .inverting-input {
+    position: relative;
+    width: 25px;
+    height: 2px;
+    background: #1E293B;
+    margin-bottom: 15px;
+}
+
+.non-inverting-input {
+    margin-top: -7px;
+}
+
+.inverting-input {
+    margin-top: 7px;
+}
+
+.input-symbol {
+    position: absolute;
+    right: -15px;
+    top: -8px;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #EA580C;
+}
+
+.input-label {
+    position: absolute;
+    left: -50px;
+    top: -8px;
+    font-size: 0.6em;
+    color: #059669;
+    white-space: nowrap;
+}
+
+.opamp-output {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 2px;
+    background: #1E293B;
+}
+
+.opamp-output .output-label {
+    position: absolute;
+    right: -35px;
+    top: -8px;
+    font-size: 0.6em;
+    color: #059669;
+}
+
+.differential-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: #EA580C;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.differential-indicator.active {
+    opacity: 1;
+    animation: differentialPulse 1s ease infinite;
+}
+
+@keyframes differentialPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.3); }
+}
+
+/* Logic Gate State Indicators */
+.input-line.high {
+    background: #059669;
+    box-shadow: 0 0 5px rgba(5, 150, 105, 0.5);
+}
+
+.input-line.low {
+    background: #DC2626;
+    box-shadow: 0 0 5px rgba(220, 38, 38, 0.5);
+}
+
+.gate-output.high {
+    background: #059669;
+    box-shadow: 0 0 5px rgba(5, 150, 105, 0.5);
+}
+
+.gate-output.low {
+    background: #DC2626;
+    box-shadow: 0 0 5px rgba(220, 38, 38, 0.5);
+}
     </style>
 </head>
 <body>
@@ -1789,6 +3362,851 @@
         <button class="control-btn" onclick="triggerZenerBreakdown()">Trigger Breakdown</button>
     </div>
 </div>
+        <!-- Symbol 21: Light Emitting Diode -->
+<div class="symbol-card" data-symbol="21">
+    <div class="symbol-header">
+        <div class="symbol-number">21</div>
+        <div class="symbol-title">Light Emitting Diode (LED)</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="led">
+            <div class="diode-triangle"></div>
+            <div class="diode-line"></div>
+            <div class="diode-terminals"></div>
+            <div class="light-arrows">
+                <div class="light-arrow arrow1" id="lightArrow1"></div>
+                <div class="light-arrow arrow2" id="lightArrow2"></div>
+            </div>
+            <div class="led-glow" id="ledGlow"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A specialized diode that emits light when current flows through it in the forward direction.
+    </div>
+    <div class="symbol-details">
+        <strong>Light Emission:</strong>
+        • <span class="emphasis">Electrical energy → Light energy</span><br>
+        • Forward current produces photons<br>
+        • Various colors available (Red, Green, Blue, etc.)<br>
+        • Real-world: Indicators, displays, lighting, optical communication
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="toggleLED()">Turn On/Off LED</button>
+    </div>
+</div>
+
+<!-- Symbol 22: Photodiode -->
+<div class="symbol-card" data-symbol="22">
+    <div class="symbol-header">
+        <div class="symbol-number">22</div>
+        <div class="symbol-title">Photodiode</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="photodiode">
+            <div class="diode-triangle"></div>
+            <div class="diode-line"></div>
+            <div class="diode-terminals"></div>
+            <div class="light-incoming">
+                <div class="incoming-arrow arrow1" id="incomingLight1"></div>
+                <div class="incoming-arrow arrow2" id="incomingLight2"></div>
+            </div>
+            <div class="photo-current" id="photoCurrent"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A semiconductor device that converts light energy into electrical current when exposed to light.
+    </div>
+    <div class="symbol-details">
+        <strong>Photo-Electric Effect:</strong>
+        • <span class="emphasis">Light energy → Electrical current</span><br>
+        • Generates current proportional to light intensity<br>
+        • Works in reverse-bias for best sensitivity<br>
+        • Real-world: Light sensors, optical communication, cameras
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="illuminatePhotodiode()">Expose to Light</button>
+    </div>
+</div>
+
+<!-- Symbol 23: Capacitor -->
+<div class="symbol-card" data-symbol="23">
+    <div class="symbol-header">
+        <div class="symbol-number">23</div>
+        <div class="symbol-title">Capacitor</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="capacitor">
+            <div class="capacitor-plate plate1"></div>
+            <div class="capacitor-plate plate2"></div>
+            <div class="capacitor-terminals"></div>
+            <div class="charge-indicator" id="capacitorCharge"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A component that stores electrical charge and energy in an electric field between two conducting plates.
+    </div>
+    <div class="symbol-details">
+        <strong>Energy Storage:</strong>
+        • <span class="emphasis">Stores energy in electric field</span><br>
+        • Acts as short circuit to AC, open to DC<br>
+        • Measured in Farads (F)<br>
+        • Real-world: Filtering, timing circuits, energy storage, decoupling
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="chargeCapacitor()">Charge/Discharge</button>
+    </div>
+</div>
+
+<!-- Symbol 24: Variable Capacitor -->
+<div class="symbol-card" data-symbol="24">
+    <div class="symbol-header">
+        <div class="symbol-number">24</div>
+        <div class="symbol-title">Variable Capacitor</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="variable-capacitor">
+            <div class="capacitor-plate plate1"></div>
+            <div class="capacitor-plate plate2"></div>
+            <div class="capacitor-terminals"></div>
+            <div class="adjustment-arrow" id="capAdjustment"></div>
+            <div class="variable-charge" id="variableCharge"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        An adjustable capacitor whose capacitance can be varied mechanically by changing plate separation or area.
+    </div>
+    <div class="symbol-details">
+        <strong>Adjustable Capacitance:</strong>
+        • <span class="emphasis">Mechanically adjustable capacitance</span><br>
+        • Variable plate separation or overlap area<br>
+        • Used for tuning and trimming circuits<br>
+        • Real-world: Radio tuning, oscillator adjustment, impedance matching
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="adjustVariableCapacitor()">Adjust Capacitance</button>
+    </div>
+</div>
+
+<!-- Symbol 25: Voltage Source -->
+<div class="symbol-card" data-symbol="25">
+    <div class="symbol-header">
+        <div class="symbol-number">25</div>
+        <div class="symbol-title">DC Voltage Source</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="voltage-source">
+            <div class="source-circle">
+                <div class="voltage-label">V</div>
+                <div class="polarity-plus">+</div>
+                <div class="polarity-minus">−</div>
+            </div>
+            <div class="source-terminals"></div>
+            <div class="voltage-flow" id="voltageFlow"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A source that provides constant voltage regardless of the current drawn from it (ideal voltage source).
+    </div>
+    <div class="symbol-details">
+        <strong>Constant Voltage:</strong>
+        • <span class="emphasis">Maintains constant voltage output</span><br>
+        • Internal resistance = 0 (ideal case)<br>
+        • Voltage independent of load current<br>
+        • Real-world: Batteries, power supplies, voltage references
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="activateVoltageSource()">Show Voltage</button>
+    </div>
+</div>
+
+<!-- Symbol 26: Current Source -->
+<div class="symbol-card" data-symbol="26">
+    <div class="symbol-header">
+        <div class="symbol-number">26</div>
+        <div class="symbol-title">Current Source</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="current-source">
+            <div class="source-circle">
+                <div class="current-label">I</div>
+                <div class="current-arrow"></div>
+            </div>
+            <div class="source-terminals"></div>
+            <div class="current-flow-indicator" id="currentFlowIndicator"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A source that provides constant current regardless of the voltage across it (ideal current source).
+    </div>
+    <div class="symbol-details">
+        <strong>Constant Current:</strong>
+        • <span class="emphasis">Maintains constant current output</span><br>
+        • Internal resistance = ∞ (ideal case)<br>
+        • Current independent of load voltage<br>
+        • Real-world: Current regulators, LED drivers, bias circuits
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="activateCurrentSource()">Show Current</button>
+    </div>
+</div>
+
+<!-- Symbol 27: AC Voltage Source -->
+<div class="symbol-card" data-symbol="27">
+    <div class="symbol-header">
+        <div class="symbol-number">27</div>
+        <div class="symbol-title">AC Voltage Source</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="ac-voltage-source">
+            <div class="source-circle">
+                <div class="sine-wave">
+                    <svg width="40" height="20" viewBox="0 0 40 20">
+                        <path d="M 2 10 Q 10 2, 18 10 T 38 10" stroke="#1E293B" stroke-width="2" fill="none"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="source-terminals"></div>
+            <div class="ac-flow" id="acFlow"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A source that provides alternating voltage that changes polarity and magnitude periodically.
+    </div>
+    <div class="symbol-details">
+        <strong>Alternating Voltage:</strong>
+        • <span class="emphasis">Sinusoidal voltage waveform</span><br>
+        • Periodically changing polarity<br>
+        • Characterized by frequency and amplitude<br>
+        • Real-world: Wall outlets, generators, signal sources
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="activateACSource()">Show AC Waveform</button>
+    </div>
+</div>
+
+<!-- Symbol 28: Battery -->
+<div class="symbol-card" data-symbol="28">
+    <div class="symbol-header">
+        <div class="symbol-number">28</div>
+        <div class="symbol-title">Battery</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="battery">
+            <div class="battery-cells">
+                <div class="battery-cell">
+                    <div class="cell-positive"></div>
+                    <div class="cell-negative"></div>
+                </div>
+                <div class="battery-cell">
+                    <div class="cell-positive"></div>
+                    <div class="cell-negative"></div>
+                </div>
+                <div class="battery-cell">
+                    <div class="cell-positive"></div>
+                    <div class="cell-negative"></div>
+                </div>
+            </div>
+            <div class="battery-terminals"></div>
+            <div class="battery-energy" id="batteryEnergy"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A combination of electrochemical cells that converts chemical energy into electrical energy.
+    </div>
+    <div class="symbol-details">
+        <strong>Electrochemical Energy:</strong>
+        • <span class="emphasis">Chemical energy → Electrical energy</span><br>
+        • Multiple cells in series for higher voltage<br>
+        • Portable DC power source<br>
+        • Real-world: Flashlights, phones, cars, backup power
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="activateBattery()">Show Energy Flow</button>
+    </div>
+</div>
+
+<!-- Symbol 29: Voltmeter -->
+<div class="symbol-card" data-symbol="29">
+    <div class="symbol-header">
+        <div class="symbol-number">29</div>
+        <div class="symbol-title">Voltmeter</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="voltmeter">
+            <div class="meter-circle">
+                <div class="meter-label">V</div>
+                <div class="meter-needle" id="voltmeterNeedle"></div>
+                <div class="meter-scale"></div>
+            </div>
+            <div class="meter-terminals"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        An instrument used to measure the voltage (potential difference) across components in a circuit.
+    </div>
+    <div class="symbol-details">
+        <strong>Voltage Measurement:</strong>
+        • <span class="emphasis">Measures potential difference</span><br>
+        • Connected in parallel across components<br>
+        • High internal resistance (ideally infinite)<br>
+        • Real-world: Multimeters, panel meters, digital displays
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="takeVoltageReading()">Take Reading</button>
+    </div>
+</div>
+
+<!-- Symbol 30: Ammeter -->
+<div class="symbol-card" data-symbol="30">
+    <div class="symbol-header">
+        <div class="symbol-number">30</div>
+        <div class="symbol-title">Ammeter</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="ammeter">
+            <div class="meter-circle">
+                <div class="meter-label">A</div>
+                <div class="meter-needle" id="ammeterNeedle"></div>
+                <div class="meter-scale"></div>
+            </div>
+            <div class="meter-terminals"></div>
+            <div class="current-path" id="currentPath"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        An instrument used to measure the electric current flowing through a circuit or component.
+    </div>
+    <div class="symbol-details">
+        <strong>Current Measurement:</strong>
+        • <span class="emphasis">Measures current flow</span><br>
+        • Connected in series with circuit<br>
+        • Low internal resistance (ideally zero)<br>
+        • Real-world: Multimeters, clamp meters, panel meters
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="takeCurrentReading()">Take Reading</button>
+    </div>
+</div>
+        <!-- Symbol 31: Ohmmeter -->
+<div class="symbol-card" data-symbol="31">
+    <div class="symbol-header">
+        <div class="symbol-number">31</div>
+        <div class="symbol-title">Ohmmeter</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="ohmmeter">
+            <div class="meter-circle">
+                <div class="meter-label">Ω</div>
+                <div class="meter-needle" id="ohmmeterNeedle"></div>
+                <div class="meter-scale"></div>
+            </div>
+            <div class="meter-terminals"></div>
+            <div class="resistance-test" id="resistanceTest"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        An instrument used to measure the resistance value of components or circuits.
+    </div>
+    <div class="symbol-details">
+        <strong>Resistance Measurement:</strong>
+        • <span class="emphasis">Measures resistance in Ohms (Ω)</span><br>
+        • Must be used on de-energized circuits<br>
+        • Applies small test current to measure voltage drop<br>
+        • Real-world: Multimeters, component testing, troubleshooting
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="measureResistance()">Measure Resistance</button>
+    </div>
+</div>
+
+<!-- Symbol 32: Wattmeter -->
+<div class="symbol-card" data-symbol="32">
+    <div class="symbol-header">
+        <div class="symbol-number">32</div>
+        <div class="symbol-title">Wattmeter</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="wattmeter">
+            <div class="meter-circle">
+                <div class="meter-label">W</div>
+                <div class="meter-needle" id="wattmeterNeedle"></div>
+                <div class="meter-scale"></div>
+            </div>
+            <div class="meter-terminals"></div>
+            <div class="power-indicator" id="powerIndicator"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        An instrument that measures electrical power consumption (watts) in a circuit.
+    </div>
+    <div class="symbol-details">
+        <strong>Power Measurement:</strong>
+        • <span class="emphasis">Measures power consumption in Watts</span><br>
+        • Calculates P = V × I (Voltage × Current)<br>
+        • Shows real power consumption<br>
+        • Real-world: Energy meters, power monitoring, efficiency testing
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="measurePower()">Measure Power</button>
+    </div>
+</div>
+
+<!-- Symbol 33: NPN Bipolar Transistor -->
+<div class="symbol-card" data-symbol="33">
+    <div class="symbol-header">
+        <div class="symbol-number">33</div>
+        <div class="symbol-title">NPN Bipolar Transistor</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="npn-transistor">
+            <div class="transistor-base"></div>
+            <div class="transistor-emitter"></div>
+            <div class="transistor-collector"></div>
+            <div class="emitter-arrow"></div>
+            <div class="terminal-labels">
+                <span class="label-c">C</span>
+                <span class="label-b">B</span>
+                <span class="label-e">E</span>
+            </div>
+            <div class="current-amplification" id="npnAmplification"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A three-terminal semiconductor device that can amplify current when base current controls collector current.
+    </div>
+    <div class="symbol-details">
+        <strong>Current Control:</strong>
+        • <span class="emphasis">Small base current controls large collector current</span><br>
+        • Arrow points outward from emitter<br>
+        • Used for switching and amplification<br>
+        • Real-world: Amplifiers, switches, digital logic, motor drivers
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="activateNPNTransistor()">Apply Base Current</button>
+    </div>
+</div>
+
+<!-- Symbol 34: PNP Bipolar Transistor -->
+<div class="symbol-card" data-symbol="34">
+    <div class="symbol-header">
+        <div class="symbol-number">34</div>
+        <div class="symbol-title">PNP Bipolar Transistor</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="pnp-transistor">
+            <div class="transistor-base"></div>
+            <div class="transistor-emitter"></div>
+            <div class="transistor-collector"></div>
+            <div class="emitter-arrow-pnp"></div>
+            <div class="terminal-labels">
+                <span class="label-e">E</span>
+                <span class="label-b">B</span>
+                <span class="label-c">C</span>
+            </div>
+            <div class="current-amplification" id="pnpAmplification"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A complementary transistor to NPN, where arrow points inward to the base terminal.
+    </div>
+    <div class="symbol-details">
+        <strong>Complementary Operation:</strong>
+        • <span class="emphasis">Arrow points inward to base</span><br>
+        • Opposite polarity to NPN transistor<br>
+        • Used in complementary circuits<br>
+        • Real-world: Push-pull amplifiers, CMOS logic, audio output stages
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="activatePNPTransistor()">Apply Base Current</button>
+    </div>
+</div>
+
+<!-- Symbol 35: Buzzer -->
+<div class="symbol-card" data-symbol="35">
+    <div class="symbol-header">
+        <div class="symbol-number">35</div>
+        <div class="symbol-title">Buzzer</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="buzzer">
+            <div class="buzzer-body">
+                <div class="buzzer-dome"></div>
+                <div class="buzzer-base"></div>
+            </div>
+            <div class="buzzer-terminals"></div>
+            <div class="sound-waves" id="buzzerWaves">
+                <div class="sound-wave wave1"></div>
+                <div class="sound-wave wave2"></div>
+                <div class="sound-wave wave3"></div>
+            </div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        An electronic component that produces a buzzing sound when current flows through it.
+    </div>
+    <div class="symbol-details">
+        <strong>Audio Alert:</strong>
+        • <span class="emphasis">Electrical signal → Sound waves</span><br>
+        • Built-in oscillator for tone generation<br>
+        • Simple two-wire connection<br>
+        • Real-world: Alarms, timers, notifications, error indicators
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="activateBuzzer()">Sound Buzzer</button>
+    </div>
+</div>
+
+<!-- Symbol 36: Electric Bell -->
+<div class="symbol-card" data-symbol="36">
+    <div class="symbol-header">
+        <div class="symbol-number">36</div>
+        <div class="symbol-title">Electric Bell</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="electric-bell">
+            <div class="bell-dome"></div>
+            <div class="bell-clapper" id="bellClapper"></div>
+            <div class="bell-base"></div>
+            <div class="bell-terminals"></div>
+            <div class="ring-indicator" id="ringIndicator"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        An electromagnetic device that rings when activated by electrical current through its coil.
+    </div>
+    <div class="symbol-details">
+        <strong>Electromagnetic Ringing:</strong>
+        • <span class="emphasis">Electromagnetic coil moves clapper</span><br>
+        • Mechanical striking produces sound<br>
+        • Self-interrupting action creates ringing<br>
+        • Real-world: Doorbells, fire alarms, school bells, notifications
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="ringBell()">Ring Bell</button>
+    </div>
+</div>
+
+<!-- Symbol 37: Fuse -->
+<div class="symbol-card" data-symbol="37">
+    <div class="symbol-header">
+        <div class="symbol-number">37</div>
+        <div class="symbol-title">Fuse</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="fuse">
+            <div class="fuse-body">
+                <div class="fuse-wire" id="fuseWire"></div>
+                <div class="fuse-terminals"></div>
+            </div>
+            <div class="overcurrent-indicator" id="overcurrentIndicator"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A protective device that disconnects when current exceeds its rated threshold, protecting circuits from damage.
+    </div>
+    <div class="symbol-details">
+        <strong>Overcurrent Protection:</strong>
+        • <span class="emphasis">Melts when current exceeds rating</span><br>
+        • Single-use protection device<br>
+        • Prevents fire and equipment damage<br>
+        • Real-world: Electrical panels, automotive, electronics protection
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="blowFuse()">Simulate Overcurrent</button>
+    </div>
+</div>
+
+<!-- Symbol 38: Loudspeaker -->
+<div class="symbol-card" data-symbol="38">
+    <div class="symbol-header">
+        <div class="symbol-number">38</div>
+        <div class="symbol-title">Loudspeaker</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="loudspeaker">
+            <div class="speaker-cone">
+                <div class="speaker-center"></div>
+                <div class="speaker-outer"></div>
+            </div>
+            <div class="speaker-terminals"></div>
+            <div class="audio-waves" id="audioWaves">
+                <div class="audio-wave wave1"></div>
+                <div class="audio-wave wave2"></div>
+                <div class="audio-wave wave3"></div>
+            </div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A transducer that converts electrical audio signals into sound waves through electromagnetic principles.
+    </div>
+    <div class="symbol-details">
+        <strong>Audio Conversion:</strong>
+        • <span class="emphasis">Electrical signals → Sound waves</span><br>
+        • Electromagnetic coil moves diaphragm<br>
+        • Frequency response determines audio quality<br>
+        • Real-world: Audio systems, phones, computers, public address
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="playSpeaker()">Play Audio</button>
+    </div>
+</div>
+
+<!-- Symbol 39: Microphone -->
+<div class="symbol-card" data-symbol="39">
+    <div class="symbol-header">
+        <div class="symbol-number">39</div>
+        <div class="symbol-title">Microphone</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="microphone">
+            <div class="mic-body">
+                <div class="mic-diaphragm"></div>
+                <div class="mic-capsule"></div>
+            </div>
+            <div class="mic-terminals"></div>
+            <div class="sound-input" id="soundInput">
+                <div class="input-wave wave1"></div>
+                <div class="input-wave wave2"></div>
+                <div class="input-wave wave3"></div>
+            </div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A transducer that converts sound waves into electrical signals for recording or amplification.
+    </div>
+    <div class="symbol-details">
+        <strong>Sound Conversion:</strong>
+        • <span class="emphasis">Sound waves → Electrical signals</span><br>
+        • Diaphragm movement generates electrical output<br>
+        • Sensitive to pressure variations<br>
+        • Real-world: Recording, communication, sound systems, phones
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="activateMicrophone()">Capture Sound</button>
+    </div>
+</div>
+
+<!-- Symbol 40: Incandescent Light Bulb -->
+<div class="symbol-card" data-symbol="40">
+    <div class="symbol-header">
+        <div class="symbol-number">40</div>
+        <div class="symbol-title">Incandescent Light Bulb</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="light-bulb">
+            <div class="bulb-glass">
+                <div class="bulb-filament" id="bulbFilament"></div>
+                <div class="bulb-glow" id="bulbGlow"></div>
+            </div>
+            <div class="bulb-base"></div>
+            <div class="bulb-terminals"></div>
+            <div class="light-rays" id="lightRays">
+                <div class="light-ray ray1"></div>
+                <div class="light-ray ray2"></div>
+                <div class="light-ray ray3"></div>
+                <div class="light-ray ray4"></div>
+            </div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A type of electric light that produces light by heating a wire filament until it glows.
+    </div>
+    <div class="symbol-details">
+        <strong>Incandescent Lighting:</strong>
+        • <span class="emphasis">Electrical energy → Heat → Light</span><br>
+        • Tungsten filament heated to incandescence<br>
+        • Produces warm, continuous spectrum light<br>
+        • Real-world: General lighting, decorative, heat applications
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="illuminateBulb()">Turn On/Off</button>
+    </div>
+</div>
+        <!-- Symbol 41: NOT Gate -->
+<div class="symbol-card" data-symbol="41">
+    <div class="symbol-header">
+        <div class="symbol-number">41</div>
+        <div class="symbol-title">NOT Gate</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="not-gate">
+            <div class="gate-triangle"></div>
+            <div class="gate-bubble"></div>
+            <div class="gate-input">
+                <span class="input-label">A</span>
+            </div>
+            <div class="gate-output">
+                <span class="output-label">out</span>
+            </div>
+            <div class="logic-flow" id="notGateFlow"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A digital logic gate that outputs 1 when input is 0, and outputs 0 when input is 1 (inversion).
+    </div>
+    <div class="symbol-details">
+        <strong>Logic Inversion:</strong>
+        • <span class="emphasis">Output = NOT Input (Ā)</span><br>
+        • Truth table: A=0 → out=1, A=1 → out=0<br>
+        • Also called inverter gate<br>
+        • Real-world: Digital circuits, signal inversion, logic control
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="toggleNOTGate()">Toggle Input A</button>
+    </div>
+</div>
+
+<!-- Symbol 42: AND Gate -->
+<div class="symbol-card" data-symbol="42">
+    <div class="symbol-header">
+        <div class="symbol-number">42</div>
+        <div class="symbol-title">AND Gate</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="and-gate">
+            <div class="gate-body"></div>
+            <div class="gate-inputs">
+                <div class="input-line input-a">
+                    <span class="input-label">A</span>
+                </div>
+                <div class="input-line input-b">
+                    <span class="input-label">B</span>
+                </div>
+            </div>
+            <div class="gate-output">
+                <span class="output-label">Y</span>
+            </div>
+            <div class="logic-flow" id="andGateFlow"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A digital logic gate that outputs 1 only when both inputs A and B are 1.
+    </div>
+    <div class="symbol-details">
+        <strong>Logical AND Operation:</strong>
+        • <span class="emphasis">Output = A AND B (A•B)</span><br>
+        • Truth table: Y=1 only when A=1 AND B=1<br>
+        • Used for conditional logic<br>
+        • Real-world: Safety interlocks, enable signals, decision making
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="toggleANDInputA()">Toggle A</button>
+        <button class="control-btn" onclick="toggleANDInputB()">Toggle B</button>
+    </div>
+</div>
+
+<!-- Symbol 43: OR Gate -->
+<div class="symbol-card" data-symbol="43">
+    <div class="symbol-header">
+        <div class="symbol-number">43</div>
+        <div class="symbol-title">OR Gate</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="or-gate">
+            <div class="gate-body-or"></div>
+            <div class="gate-inputs">
+                <div class="input-line input-a">
+                    <span class="input-label">A</span>
+                </div>
+                <div class="input-line input-b">
+                    <span class="input-label">B</span>
+                </div>
+            </div>
+            <div class="gate-output">
+                <span class="output-label">Y</span>
+            </div>
+            <div class="logic-flow" id="orGateFlow"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A digital logic gate that outputs 1 when any input (A or B or both) is 1.
+    </div>
+    <div class="symbol-details">
+        <strong>Logical OR Operation:</strong>
+        • <span class="emphasis">Output = A OR B (A+B)</span><br>
+        • Truth table: Y=1 when A=1 OR B=1 OR both=1<br>
+        • Used for alternative conditions<br>
+        • Real-world: Multiple trigger sources, alarm systems, selection logic
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="toggleORInputA()">Toggle A</button>
+        <button class="control-btn" onclick="toggleORInputB()">Toggle B</button>
+    </div>
+</div>
+
+<!-- Symbol 44: Amplifier -->
+<div class="symbol-card" data-symbol="44">
+    <div class="symbol-header">
+        <div class="symbol-number">44</div>
+        <div class="symbol-title">Amplifier</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="amplifier">
+            <div class="amp-triangle"></div>
+            <div class="amp-input">
+                <div class="input-signal" id="ampInput"></div>
+            </div>
+            <div class="amp-output">
+                <div class="output-signal" id="ampOutput"></div>
+            </div>
+            <div class="gain-indicator" id="gainIndicator"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        An electronic device that increases the magnitude (amplitude) of electrical signals.
+    </div>
+    <div class="symbol-details">
+        <strong>Signal Amplification:</strong>
+        • <span class="emphasis">Increases signal magnitude</span><br>
+        • Provides power gain to weak signals<br>
+        • Maintains signal shape and frequency<br>
+        • Real-world: Audio systems, radio receivers, sensor conditioning
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="amplifySignal()">Apply Input Signal</button>
+    </div>
+</div>
+
+<!-- Symbol 45: Operational Amplifier (Op-Amp) -->
+<div class="symbol-card" data-symbol="45">
+    <div class="symbol-header">
+        <div class="symbol-number">45</div>
+        <div class="symbol-title">Operational Amplifier</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="op-amp">
+            <div class="opamp-triangle"></div>
+            <div class="opamp-inputs">
+                <div class="non-inverting-input">
+                    <span class="input-symbol">+</span>
+                    <span class="input-label">Non-inverting</span>
+                </div>
+                <div class="inverting-input">
+                    <span class="input-symbol">−</span>
+                    <span class="input-label">Inverting</span>
+                </div>
+            </div>
+            <div class="opamp-output">
+                <span class="output-label">Output</span>
+                <div class="output-signal" id="opampOutput"></div>
+            </div>
+            <div class="differential-indicator" id="diffIndicator"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A high-gain differential amplifier with very high input impedance and low output impedance.
+    </div>
+    <div class="symbol-details">
+        <strong>Differential Amplification:</strong>
+        • <span class="emphasis">Amplifies difference between inputs</span><br>
+        • Very high gain (typically 100,000+)<br>
+        • Used with negative feedback for stability<br>
+        • Real-world: Filters, comparators, mathematical operations, instrumentation
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="toggleOpAmpInputs()">Apply Differential Input</button>
+    </div>
+</div>
         </div>
 
         <!-- Teaching Tips Section -->
@@ -1847,7 +4265,355 @@
                 contact.style.boxShadow = '0 0 8px rgba(234, 88, 12, 0.4)';
             }
         }
+// Meter Variables
+let ohmmeterMeasuring = false;
+let wattmeterMeasuring = false;
 
+// Transistor Variables
+let npnTransistorActive = false;
+let pnpTransistorActive = false;
+
+// Audio Device Variables
+let buzzerActive = false;
+let bellActive = false;
+let speakerActive = false;
+let microphoneActive = false;
+
+// Fuse Variables
+let fuseBlown = false;
+
+// Light Bulb Variables
+let bulbOn = false;
+
+// Ohmmeter Functions
+function measureResistance() {
+    const needle = document.getElementById('ohmmeterNeedle');
+    const test = document.getElementById('resistanceTest');
+    ohmmeterMeasuring = !ohmmeterMeasuring;
+    
+    if (needle && test) {
+        if (ohmmeterMeasuring) {
+            needle.classList.add('reading');
+            test.classList.add('testing');
+        } else {
+            needle.classList.remove('reading');
+            test.classList.remove('testing');
+        }
+    }
+}
+
+// Wattmeter Functions
+function measurePower() {
+    const needle = document.getElementById('wattmeterNeedle');
+    const indicator = document.getElementById('powerIndicator');
+    wattmeterMeasuring = !wattmeterMeasuring;
+    
+    if (needle && indicator) {
+        if (wattmeterMeasuring) {
+            needle.classList.add('reading');
+            indicator.classList.add('measuring');
+        } else {
+            needle.classList.remove('reading');
+            indicator.classList.remove('measuring');
+        }
+    }
+}
+
+// NPN Transistor Functions
+function activateNPNTransistor() {
+    const amplification = document.getElementById('npnAmplification');
+    npnTransistorActive = !npnTransistorActive;
+    
+    if (amplification) {
+        if (npnTransistorActive) {
+            amplification.classList.add('active');
+        } else {
+            amplification.classList.remove('active');
+        }
+    }
+}
+
+// PNP Transistor Functions
+function activatePNPTransistor() {
+    const amplification = document.getElementById('pnpAmplification');
+    pnpTransistorActive = !pnpTransistorActive;
+    
+    if (amplification) {
+        if (pnpTransistorActive) {
+            amplification.classList.add('active');
+        } else {
+            amplification.classList.remove('active');
+        }
+    }
+}
+
+// Buzzer Functions
+function activateBuzzer() {
+    const waves = document.getElementById('buzzerWaves');
+    buzzerActive = !buzzerActive;
+    
+    if (waves) {
+        if (buzzerActive) {
+            waves.classList.add('active');
+        } else {
+            waves.classList.remove('active');
+        }
+    }
+}
+
+// Bell Functions
+function ringBell() {
+    const clapper = document.getElementById('bellClapper');
+    const indicator = document.getElementById('ringIndicator');
+    
+    if (clapper && indicator) {
+        clapper.classList.add('ringing');
+        indicator.classList.add('ringing');
+        
+        setTimeout(() => {
+            clapper.classList.remove('ringing');
+            indicator.classList.remove('ringing');
+        }, 1500);
+    }
+}
+
+// Fuse Functions
+function blowFuse() {
+    const wire = document.getElementById('fuseWire');
+    const indicator = document.getElementById('overcurrentIndicator');
+    fuseBlown = !fuseBlown;
+    
+    if (wire && indicator) {
+        if (fuseBlown) {
+            wire.classList.add('blown');
+            indicator.classList.add('active');
+        } else {
+            wire.classList.remove('blown');
+            indicator.classList.remove('active');
+        }
+    }
+}
+
+// Speaker Functions
+function playSpeaker() {
+    const waves = document.getElementById('audioWaves');
+    speakerActive = !speakerActive;
+    
+    if (waves) {
+        if (speakerActive) {
+            waves.classList.add('playing');
+        } else {
+            waves.classList.remove('playing');
+        }
+    }
+}
+
+// Microphone Functions
+function activateMicrophone() {
+    const input = document.getElementById('soundInput');
+    
+    if (input) {
+        input.classList.add('capturing');
+        setTimeout(() => {
+            input.classList.remove('capturing');
+        }, 2000);
+    }
+}
+
+// Light Bulb Functions
+function illuminateBulb() {
+    const filament = document.getElementById('bulbFilament');
+    const glow = document.getElementById('bulbGlow');
+    const rays = document.getElementById('lightRays');
+    bulbOn = !bulbOn;
+    
+    if (filament && glow && rays) {
+        if (bulbOn) {
+            filament.classList.add('glowing');
+            glow.classList.add('illuminated');
+            rays.classList.add('shining');
+        } else {
+            filament.classList.remove('glowing');
+            glow.classList.remove('illuminated');
+            rays.classList.remove('shining');
+        }
+    }
+}
+        // Logic Gate Variables
+let notGateInputA = false;
+let andGateInputA = false;
+let andGateInputB = false;
+let orGateInputA = false;
+let orGateInputB = false;
+
+// Amplifier Variables
+let amplifierActive = false;
+let opAmpActive = false;
+
+// NOT Gate Functions
+function toggleNOTGate() {
+    notGateInputA = !notGateInputA;
+    const flow = document.getElementById('notGateFlow');
+    const inputLine = document.querySelector('[data-symbol="41"] .gate-input');
+    const outputLine = document.querySelector('[data-symbol="41"] .gate-output');
+    
+    if (inputLine && outputLine && flow) {
+        // Update input visual
+        if (notGateInputA) {
+            inputLine.classList.add('high');
+            inputLine.classList.remove('low');
+            outputLine.classList.add('low');
+            outputLine.classList.remove('high');
+        } else {
+            inputLine.classList.add('low');
+            inputLine.classList.remove('high');
+            outputLine.classList.add('high');
+            outputLine.classList.remove('low');
+        }
+        
+        flow.classList.add('active');
+        setTimeout(() => flow.classList.remove('active'), 1000);
+    }
+}
+
+// AND Gate Functions
+function toggleANDInputA() {
+    andGateInputA = !andGateInputA;
+    updateANDGate();
+}
+
+function toggleANDInputB() {
+    andGateInputB = !andGateInputB;
+    updateANDGate();
+}
+
+function updateANDGate() {
+    const flow = document.getElementById('andGateFlow');
+    const inputA = document.querySelector('[data-symbol="42"] .input-a');
+    const inputB = document.querySelector('[data-symbol="42"] .input-b');
+    const output = document.querySelector('[data-symbol="42"] .gate-output');
+    
+    if (inputA && inputB && output && flow) {
+        // Update input A visual
+        if (andGateInputA) {
+            inputA.classList.add('high');
+            inputA.classList.remove('low');
+        } else {
+            inputA.classList.add('low');
+            inputA.classList.remove('high');
+        }
+        
+        // Update input B visual
+        if (andGateInputB) {
+            inputB.classList.add('high');
+            inputB.classList.remove('low');
+        } else {
+            inputB.classList.add('low');
+            inputB.classList.remove('high');
+        }
+        
+        // Update output (AND logic: both inputs must be high)
+        if (andGateInputA && andGateInputB) {
+            output.classList.add('high');
+            output.classList.remove('low');
+        } else {
+            output.classList.add('low');
+            output.classList.remove('high');
+        }
+        
+        flow.classList.add('active');
+        setTimeout(() => flow.classList.remove('active'), 1000);
+    }
+}
+
+// OR Gate Functions
+function toggleORInputA() {
+    orGateInputA = !orGateInputA;
+    updateORGate();
+}
+
+function toggleORInputB() {
+    orGateInputB = !orGateInputB;
+    updateORGate();
+}
+
+function updateORGate() {
+    const flow = document.getElementById('orGateFlow');
+    const inputA = document.querySelector('[data-symbol="43"] .input-a');
+    const inputB = document.querySelector('[data-symbol="43"] .input-b');
+    const output = document.querySelector('[data-symbol="43"] .gate-output');
+    
+    if (inputA && inputB && output && flow) {
+        // Update input A visual
+        if (orGateInputA) {
+            inputA.classList.add('high');
+            inputA.classList.remove('low');
+        } else {
+            inputA.classList.add('low');
+            inputA.classList.remove('high');
+        }
+        
+        // Update input B visual
+        if (orGateInputB) {
+            inputB.classList.add('high');
+            inputB.classList.remove('low');
+        } else {
+            inputB.classList.add('low');
+            inputB.classList.remove('high');
+        }
+        
+        // Update output (OR logic: at least one input must be high)
+        if (orGateInputA || orGateInputB) {
+            output.classList.add('high');
+            output.classList.remove('low');
+        } else {
+            output.classList.add('low');
+            output.classList.remove('high');
+        }
+        
+        flow.classList.add('active');
+        setTimeout(() => flow.classList.remove('active'), 1000);
+    }
+}
+
+// Amplifier Functions
+function amplifySignal() {
+    const inputSignal = document.getElementById('ampInput');
+    const outputSignal = document.getElementById('ampOutput');
+    const gainIndicator = document.getElementById('gainIndicator');
+    amplifierActive = !amplifierActive;
+    
+    if (inputSignal && outputSignal && gainIndicator) {
+        if (amplifierActive) {
+            inputSignal.classList.add('active');
+            setTimeout(() => {
+                outputSignal.classList.add('active');
+                gainIndicator.classList.add('active');
+            }, 200);
+        } else {
+            inputSignal.classList.remove('active');
+            outputSignal.classList.remove('active');
+            gainIndicator.classList.remove('active');
+        }
+    }
+}
+
+// Op-Amp Functions
+function toggleOpAmpInputs() {
+    const output = document.getElementById('opampOutput');
+    const indicator = document.getElementById('diffIndicator');
+    opAmpActive = !opAmpActive;
+    
+    if (output && indicator) {
+        if (opAmpActive) {
+            output.classList.add('active');
+            indicator.classList.add('active');
+        } else {
+            output.classList.remove('active');
+            indicator.classList.remove('active');
+        }
+    }
+}
         // SPDT Switch Toggle
         function toggleSPDT() {
             const contact = document.getElementById('spdtContact');
@@ -1863,6 +4629,188 @@
                 contact.style.boxShadow = '0 0 8px rgba(234, 88, 12, 0.4)';
             }
         }
+        // LED Variables
+let ledOn = false;
+
+// Photodiode Variables
+let photodiodeIlluminated = false;
+
+// Capacitor Variables
+let capacitorCharged = false;
+
+// Variable Capacitor Variables
+let variableCapacitorAdjusted = false;
+
+// Source Variables
+let voltageSourceActive = false;
+let currentSourceActive = false;
+let acSourceActive = false;
+
+// Battery Variables
+let batteryActive = false;
+
+// Meter Variables
+let voltmeterReading = false;
+let ammeterReading = false;
+
+// LED Functions
+function toggleLED() {
+    const glow = document.getElementById('ledGlow');
+    const arrows = document.querySelectorAll('#lightArrow1, #lightArrow2');
+    ledOn = !ledOn;
+    
+    if (glow) {
+        if (ledOn) {
+            glow.classList.add('glowing');
+            arrows.forEach(arrow => arrow.classList.add('active'));
+        } else {
+            glow.classList.remove('glowing');
+            arrows.forEach(arrow => arrow.classList.remove('active'));
+        }
+    }
+}
+
+// Photodiode Functions
+function illuminatePhotodiode() {
+    const current = document.getElementById('photoCurrent');
+    const incoming = document.querySelectorAll('#incomingLight1, #incomingLight2');
+    
+    // Show incoming light
+    incoming.forEach(arrow => arrow.classList.add('illuminated'));
+    
+    // Generate current after brief delay
+    setTimeout(() => {
+        if (current) {
+            current.classList.add('generated');
+        }
+    }, 300);
+    
+    // Reset after 2 seconds
+    setTimeout(() => {
+        incoming.forEach(arrow => arrow.classList.remove('illuminated'));
+        if (current) {
+            current.classList.remove('generated');
+        }
+    }, 2000);
+}
+
+// Capacitor Functions
+function chargeCapacitor() {
+    const charge = document.getElementById('capacitorCharge');
+    capacitorCharged = !capacitorCharged;
+    
+    if (charge) {
+        if (capacitorCharged) {
+            charge.classList.add('charged');
+        } else {
+            charge.classList.remove('charged');
+        }
+    }
+}
+
+// Variable Capacitor Functions
+function adjustVariableCapacitor() {
+    const adjustment = document.getElementById('capAdjustment');
+    const variable = document.getElementById('variableCharge');
+    variableCapacitorAdjusted = !variableCapacitorAdjusted;
+    
+    if (adjustment && variable) {
+        if (variableCapacitorAdjusted) {
+            adjustment.classList.add('adjusted');
+            variable.classList.add('active');
+        } else {
+            adjustment.classList.remove('adjusted');
+            variable.classList.remove('active');
+        }
+    }
+}
+
+// Voltage Source Functions
+function activateVoltageSource() {
+    const flow = document.getElementById('voltageFlow');
+    voltageSourceActive = !voltageSourceActive;
+    
+    if (flow) {
+        if (voltageSourceActive) {
+            flow.classList.add('active');
+        } else {
+            flow.classList.remove('active');
+        }
+    }
+}
+
+// Current Source Functions
+function activateCurrentSource() {
+    const flow = document.getElementById('currentFlowIndicator');
+    currentSourceActive = !currentSourceActive;
+    
+    if (flow) {
+        if (currentSourceActive) {
+            flow.classList.add('active');
+        } else {
+            flow.classList.remove('active');
+        }
+    }
+}
+
+// AC Source Functions
+function activateACSource() {
+    const flow = document.getElementById('acFlow');
+    acSourceActive = !acSourceActive;
+    
+    if (flow) {
+        if (acSourceActive) {
+            flow.classList.add('active');
+        } else {
+            flow.classList.remove('active');
+        }
+    }
+}
+
+// Battery Functions
+function activateBattery() {
+    const energy = document.getElementById('batteryEnergy');
+    batteryActive = !batteryActive;
+    
+    if (energy) {
+        if (batteryActive) {
+            energy.classList.add('flowing');
+        } else {
+            energy.classList.remove('flowing');
+        }
+    }
+}
+
+// Voltmeter Functions
+function takeVoltageReading() {
+    const needle = document.getElementById('voltmeterNeedle');
+    voltmeterReading = !voltmeterReading;
+    
+    if (needle) {
+        if (voltmeterReading) {
+            needle.classList.add('reading');
+        } else {
+            needle.classList.remove('reading');
+        }
+    }
+}
+
+// Ammeter Functions
+function takeCurrentReading() {
+    const needle = document.getElementById('ammeterNeedle');
+    const path = document.getElementById('currentPath');
+    ammeterReading = !ammeterReading;
+    
+    if (needle && path) {
+        if (ammeterReading) {
+            needle.classList.add('reading');
+            path.classList.add('measuring');
+        } else {
+            needle.classList.remove('reading');
+            path.classList.remove('measuring');
+        }
+    }
+}
         // Push Button Variables
 let pushButtonPressed = false;
 
