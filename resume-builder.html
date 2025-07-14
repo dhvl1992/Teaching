@@ -382,22 +382,32 @@
             margin-bottom: 15px;
         }
 
+        .job-header, .education-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
         .job-title, .degree {
             font-weight: 600;
             font-size: 14px;
             color: #1E293B;
+            margin: 0;
         }
 
         .company, .school {
             font-style: italic;
             color: #059669;
             font-size: 13px;
+            margin: 0;
         }
 
         .dates {
-            float: right;
             font-size: 12px;
             color: #EA580C;
+            white-space: nowrap;
+            margin-left: 20px;
         }
 
         .description {
@@ -674,7 +684,7 @@
                 <div class="resume-preview" id="resumePreview"></div>
                 <div style="text-align: center; margin-top: 30px;">
                     <button class="btn-secondary btn" onclick="prevStep()">Go Back</button>
-                    <button class="btn download-btn" onclick="downloadResume()">Download Resume</button>
+                    <button class="btn download-btn" onclick="downloadResume()">Download as PDF</button>
                 </div>
             </div>
         </div>
@@ -902,11 +912,13 @@
                     if (job.title || job.company) {
                         html += `
                             <div class="job-entry">
-                                <div style="overflow: hidden;">
-                                    <div class="job-title" style="float: left;">${job.title}</div>
+                                <div class="job-header">
+                                    <div>
+                                        <div class="job-title">${job.title}</div>
+                                        <div class="company">${job.company}</div>
+                                    </div>
                                     <div class="dates">${job.startDate} - ${job.endDate}</div>
                                 </div>
-                                <div class="company">${job.company}</div>
                                 ${job.description ? `<div class="description">${job.description}</div>` : ''}
                             </div>
                         `;
@@ -922,11 +934,13 @@
                     if (edu.degree || edu.school) {
                         html += `
                             <div class="education-entry">
-                                <div style="overflow: hidden;">
-                                    <div class="degree" style="float: left;">${edu.degree}</div>
+                                <div class="education-header">
+                                    <div>
+                                        <div class="degree">${edu.degree}</div>
+                                        <div class="school">${edu.school}</div>
+                                    </div>
                                     <div class="dates">${edu.year}</div>
                                 </div>
-                                <div class="school">${edu.school}</div>
                                 ${edu.gpa ? `<div style="font-size: 12px;">GPA: ${edu.gpa}</div>` : ''}
                             </div>
                         `;
@@ -958,7 +972,10 @@
         }
 
         function downloadResume() {
+            // Create a new window with the resume content
             const resumeContent = document.getElementById('resumePreview').innerHTML;
+            const printWindow = window.open('', '_blank');
+            
             const fullHTML = `
                 <!DOCTYPE html>
                 <html>
@@ -967,13 +984,33 @@
                     <title>${resumeData.personal.fullName} - Resume</title>
                     <style>
                         ${getTemplateStyles()}
-                        body { font-family: Georgia, serif; margin: 0; padding: 20px; background: #FEF7ED; color: #1E293B; }
+                        body { 
+                            font-family: Georgia, serif; 
+                            margin: 0; 
+                            padding: 20px; 
+                            background: #FEF7ED; 
+                            color: #1E293B;
+                            font-size: 14px;
+                        }
                         .job-entry, .education-entry { margin-bottom: 15px; }
-                        .job-title, .degree { font-weight: 600; font-size: 14px; color: #1E293B; }
-                        .company, .school { font-style: italic; color: #059669; font-size: 13px; }
-                        .dates { float: right; font-size: 12px; color: #EA580C; }
+                        .job-header, .education-header { 
+                            display: flex; 
+                            justify-content: space-between; 
+                            align-items: center; 
+                            margin-bottom: 5px; 
+                        }
+                        .job-title, .degree { font-weight: 600; font-size: 14px; color: #1E293B; margin: 0; }
+                        .company, .school { font-style: italic; color: #059669; font-size: 13px; margin: 0; }
+                        .dates { font-size: 12px; color: #EA580C; white-space: nowrap; margin-left: 20px; }
                         .description { font-size: 12px; margin-top: 5px; color: #1E293B; }
-                        @media print { body { padding: 0; background: #FEF7ED; } }
+                        @media print { 
+                            body { padding: 10px; background: white !important; } 
+                            * { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; }
+                        }
+                        @page {
+                            margin: 0.5in;
+                            size: A4;
+                        }
                     </style>
                 </head>
                 <body>
@@ -982,15 +1019,16 @@
                 </html>
             `;
 
-            const blob = new Blob([fullHTML], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${resumeData.personal.fullName.replace(/\s+/g, '_')}_Resume.html`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            printWindow.document.write(fullHTML);
+            printWindow.document.close();
+            
+            // Wait for content to load, then print
+            printWindow.onload = function() {
+                setTimeout(() => {
+                    printWindow.print();
+                    printWindow.close();
+                }, 500);
+            };
         }
 
         function getTemplateStyles() {
@@ -1022,6 +1060,11 @@
                 .minimal-template .contact-info { font-size: 14px; color: #059669; }
                 .minimal-template .section { padding: 25px 30px; }
                 .minimal-template .section h2 { font-size: 16px; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; color: #EA580C; }
+                
+                .job-header, .education-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+                .job-title, .degree { font-weight: 600; font-size: 14px; color: #1E293B; margin: 0; }
+                .company, .school { font-style: italic; color: #059669; font-size: 13px; margin: 0; }
+                .dates { font-size: 12px; color: #EA580C; white-space: nowrap; margin-left: 20px; }
             `;
         }
     </script>
