@@ -772,6 +772,408 @@
     transform: rotate(-30deg);
     margin-left: 6px;
 }
+        /* Digital Ground */
+.digital-ground {
+    position: relative;
+    width: 60px;
+    height: 80px;
+}
+
+.digital-connection {
+    width: 3px;
+    height: 40px;
+    background: #1E293B;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.digital-triangle {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 30px solid #1E293B;
+}
+
+/* Inductor Styles */
+.inductor, .iron-core-inductor {
+    position: relative;
+    width: 80px;
+    height: 60px;
+}
+
+.inductor-coils {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.coil-loop {
+    width: 12px;
+    height: 20px;
+    border: 2px solid #1E293B;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+    margin-right: -2px;
+}
+
+.inductor-terminals {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #1E293B;
+    transform: translateY(-50%);
+}
+
+.iron-core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 4px;
+    background: #EA580C;
+    margin-top: 8px;
+}
+
+.iron-core::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    width: 100%;
+    height: 4px;
+    background: #EA580C;
+}
+
+/* Motor Styles */
+.motor {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.motor-circle {
+    width: 60px;
+    height: 60px;
+    border: 3px solid #1E293B;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.motor-label {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #1E293B;
+}
+
+.rotation-indicator {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 8px;
+    height: 8px;
+    background: #EA580C;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.rotation-indicator.spinning {
+    opacity: 1;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.motor-terminals {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #1E293B;
+    transform: translateY(-50%);
+}
+
+/* Transformer Styles */
+.transformer {
+    position: relative;
+    width: 100px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.primary-winding, .secondary-winding {
+    position: relative;
+}
+
+.winding-coils {
+    display: flex;
+    flex-direction: column;
+}
+
+.winding-coils .coil-loop {
+    width: 20px;
+    height: 8px;
+    border: 2px solid #1E293B;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: -2px;
+}
+
+.transformer-core {
+    width: 4px;
+    height: 60px;
+    background: #EA580C;
+    margin: 0 5px;
+}
+
+.transformer-core::after {
+    content: '';
+    position: absolute;
+    left: 8px;
+    width: 4px;
+    height: 60px;
+    background: #EA580C;
+}
+
+.primary-terminals, .secondary-terminals {
+    position: absolute;
+    top: 50%;
+    width: 25px;
+    height: 2px;
+    background: #1E293B;
+    transform: translateY(-50%);
+}
+
+.primary-terminals {
+    right: 100%;
+}
+
+.secondary-terminals {
+    left: 100%;
+}
+
+/* Resistor Styles */
+.variable-resistor, .fixed-resistor, .potentiometer {
+    position: relative;
+    width: 80px;
+    height: 60px;
+}
+
+.resistor-zigzag {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 20px;
+}
+
+.zigzag-line {
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(45deg, 
+        transparent 25%, #1E293B 25%, #1E293B 30%, transparent 30%,
+        transparent 45%, #1E293B 45%, #1E293B 50%, transparent 50%,
+        transparent 65%, #1E293B 65%, #1E293B 70%, transparent 70%,
+        transparent 85%, #1E293B 85%, #1E293B 90%, transparent 90%);
+    background-size: 8px 8px;
+    border: 2px solid #1E293B;
+}
+
+.resistor-terminals {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #1E293B;
+    transform: translateY(-50%);
+}
+
+.adjustment-arrow {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 12px solid #EA580C;
+    transition: transform 0.3s ease;
+}
+
+.adjustment-arrow.adjusted {
+    transform: rotate(45deg);
+}
+
+.resistance-bands {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 3px;
+}
+
+.color-band {
+    width: 3px;
+    height: 20px;
+}
+
+.band1 { background: #8B4513; } /* Brown */
+.band2 { background: #000000; } /* Black */
+.band3 { background: #FF0000; } /* Red */
+.band4 { background: #FFD700; } /* Gold */
+
+/* Potentiometer specific */
+.wiper-arm {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 15px;
+    background: #EA580C;
+    transition: left 0.3s ease;
+}
+
+.wiper-arm.moved {
+    left: 65%;
+}
+
+.wiper-terminal {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 10px;
+    background: #1E293B;
+}
+
+/* Diode Styles */
+.diode, .zener-diode {
+    position: relative;
+    width: 80px;
+    height: 60px;
+}
+
+.diode-triangle {
+    position: absolute;
+    top: 50%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    width: 0;
+    height: 0;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-left: 15px solid #1E293B;
+}
+
+.diode-line {
+    position: absolute;
+    top: 50%;
+    right: 35%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 24px;
+    background: #1E293B;
+}
+
+.zener-line {
+    position: absolute;
+    top: 50%;
+    right: 35%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 24px;
+    background: #1E293B;
+}
+
+.zener-bend-top, .zener-bend-bottom {
+    position: absolute;
+    width: 8px;
+    height: 3px;
+    background: #1E293B;
+}
+
+.zener-bend-top {
+    top: -3px;
+    right: 0;
+}
+
+.zener-bend-bottom {
+    bottom: -3px;
+    left: 0;
+}
+
+.diode-terminals {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: #1E293B;
+    transform: translateY(-50%);
+}
+
+.current-flow-diode {
+    position: absolute;
+    top: 50%;
+    left: 20%;
+    width: 8px;
+    height: 8px;
+    background: #059669;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.current-flow-diode.flowing {
+    opacity: 1;
+    left: 65%;
+}
+
+.breakdown-indicator {
+    position: absolute;
+    top: 30%;
+    right: 20%;
+    width: 6px;
+    height: 6px;
+    background: #EA580C;
+    border-radius: 50%;
+    opacity: 0;
+    animation: breakdown 0.5s ease infinite;
+}
+
+.breakdown-indicator.active {
+    opacity: 1;
+}
+
+@keyframes breakdown {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.3); opacity: 1; }
+}
     </style>
 </head>
 <body>
@@ -1080,6 +1482,313 @@
         • Real-world: Car chassis, equipment frames, PCB ground planes
     </div>
 </div>
+        <!-- Symbol 11: Digital Ground -->
+<div class="symbol-card" data-symbol="11">
+    <div class="symbol-header">
+        <div class="symbol-number">11</div>
+        <div class="symbol-title">Digital Ground</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="digital-ground">
+            <div class="digital-connection"></div>
+            <div class="digital-triangle"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        Reference voltage point for digital circuits, typically 0V for digital logic systems.
+    </div>
+    <div class="symbol-details">
+        <strong>Digital Applications:</strong>
+        • <span class="emphasis">0V reference for digital logic</span><br>
+        • Common return path for digital signals<br>
+        • Separate from analog ground in mixed circuits<br>
+        • Real-world: Microcontrollers, digital ICs, logic circuits
+    </div>
+</div>
+
+<!-- Symbol 12: Inductor -->
+<div class="symbol-card" data-symbol="12">
+    <div class="symbol-header">
+        <div class="symbol-number">12</div>
+        <div class="symbol-title">Inductor</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="inductor">
+            <div class="inductor-coils">
+                <div class="coil-loop"></div>
+                <div class="coil-loop"></div>
+                <div class="coil-loop"></div>
+                <div class="coil-loop"></div>
+            </div>
+            <div class="inductor-terminals"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A coil or solenoid that generates a magnetic field and opposes changes in current.
+    </div>
+    <div class="symbol-details">
+        <strong>Key Properties:</strong>
+        • Stores energy in magnetic field<br>
+        • Opposes current changes (Lenz's Law)<br>
+        • Measured in Henries (H)<br>
+        • Real-world: Transformers, filters, motors, chokes
+    </div>
+</div>
+
+<!-- Symbol 13: Iron Core Inductor -->
+<div class="symbol-card" data-symbol="13">
+    <div class="symbol-header">
+        <div class="symbol-number">13</div>
+        <div class="symbol-title">Iron Core Inductor</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="iron-core-inductor">
+            <div class="inductor-coils">
+                <div class="coil-loop"></div>
+                <div class="coil-loop"></div>
+                <div class="coil-loop"></div>
+                <div class="coil-loop"></div>
+            </div>
+            <div class="iron-core"></div>
+            <div class="inductor-terminals"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        An inductor with an iron core that significantly increases inductance and magnetic field strength.
+    </div>
+    <div class="symbol-details">
+        <strong>Enhanced Features:</strong>
+        • <span class="emphasis">Iron core increases inductance</span><br>
+        • Higher magnetic permeability<br>
+        • More efficient energy storage<br>
+        • Real-world: Power transformers, motor windings, electromagnets
+    </div>
+</div>
+
+<!-- Symbol 14: Motor -->
+<div class="symbol-card" data-symbol="14">
+    <div class="symbol-header">
+        <div class="symbol-number">14</div>
+        <div class="symbol-title">Motor</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="motor">
+            <div class="motor-circle">
+                <div class="motor-label">M</div>
+                <div class="rotation-indicator" id="motorRotation"></div>
+            </div>
+            <div class="motor-terminals"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        Converts electrical energy into mechanical rotational energy through electromagnetic principles.
+    </div>
+    <div class="symbol-details">
+        <strong>Energy Conversion:</strong>
+        • Electrical energy → Kinetic energy<br>
+        • Uses electromagnetic fields for rotation<br>
+        • Various types: DC, AC, stepper, servo<br>
+        • Real-world: Fans, pumps, conveyors, robotics
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="toggleMotor()">Start/Stop Motor</button>
+    </div>
+</div>
+
+<!-- Symbol 15: AC Transformer -->
+<div class="symbol-card" data-symbol="15">
+    <div class="symbol-header">
+        <div class="symbol-number">15</div>
+        <div class="symbol-title">AC Transformer</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="transformer">
+            <div class="primary-winding">
+                <div class="winding-coils">
+                    <div class="coil-loop"></div>
+                    <div class="coil-loop"></div>
+                    <div class="coil-loop"></div>
+                </div>
+                <div class="primary-terminals"></div>
+            </div>
+            <div class="transformer-core"></div>
+            <div class="secondary-winding">
+                <div class="winding-coils">
+                    <div class="coil-loop"></div>
+                    <div class="coil-loop"></div>
+                    <div class="coil-loop"></div>
+                    <div class="coil-loop"></div>
+                    <div class="coil-loop"></div>
+                </div>
+                <div class="secondary-terminals"></div>
+            </div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        Changes AC voltage levels using electromagnetic induction between primary and secondary windings.
+    </div>
+    <div class="symbol-details">
+        <strong>Voltage Transformation:</strong>
+        • <span class="emphasis">Steps voltage up or down</span><br>
+        • Works only with AC (alternating current)<br>
+        • Turns ratio determines voltage ratio<br>
+        • Real-world: Power distribution, adapters, isolation
+    </div>
+</div>
+
+<!-- Symbol 16: Variable Resistance -->
+<div class="symbol-card" data-symbol="16">
+    <div class="symbol-header">
+        <div class="symbol-number">16</div>
+        <div class="symbol-title">Variable Resistor</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="variable-resistor">
+            <div class="resistor-zigzag">
+                <div class="zigzag-line"></div>
+            </div>
+            <div class="adjustment-arrow" id="variableArrow"></div>
+            <div class="resistor-terminals"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A two-terminal adjustable resistor that can vary its resistance value mechanically.
+    </div>
+    <div class="symbol-details">
+        <strong>Adjustable Features:</strong>
+        • <span class="emphasis">2 terminals, variable resistance</span><br>
+        • Mechanical adjustment (screw or slider)<br>
+        • Also called rheostat or variable resistor<br>
+        • Real-world: Dimmer switches, current limiters, heaters
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="adjustVariableResistor()">Adjust Resistance</button>
+    </div>
+</div>
+
+<!-- Symbol 17: Fixed Resistor -->
+<div class="symbol-card" data-symbol="17">
+    <div class="symbol-header">
+        <div class="symbol-number">17</div>
+        <div class="symbol-title">Fixed Resistor</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="fixed-resistor">
+            <div class="resistor-zigzag">
+                <div class="zigzag-line"></div>
+            </div>
+            <div class="resistor-terminals"></div>
+            <div class="resistance-bands">
+                <div class="color-band band1"></div>
+                <div class="color-band band2"></div>
+                <div class="color-band band3"></div>
+                <div class="color-band band4"></div>
+            </div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A component with fixed resistance value that limits current flow and drops voltage.
+    </div>
+    <div class="symbol-details">
+        <strong>Fundamental Properties:</strong>
+        • <span class="emphasis">Fixed resistance value</span><br>
+        • Follows Ohm's Law (V = I × R)<br>
+        • Measured in Ohms (Ω)<br>
+        • Real-world: Current limiting, voltage dividers, pull-up/down
+    </div>
+</div>
+
+<!-- Symbol 18: Potentiometer -->
+<div class="symbol-card" data-symbol="18">
+    <div class="symbol-header">
+        <div class="symbol-number">18</div>
+        <div class="symbol-title">Potentiometer</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="potentiometer">
+            <div class="resistor-zigzag">
+                <div class="zigzag-line"></div>
+            </div>
+            <div class="wiper-arm" id="potWiper"></div>
+            <div class="wiper-terminal"></div>
+            <div class="resistor-terminals"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A three-terminal adjustable resistor with a movable wiper that can vary output voltage.
+    </div>
+    <div class="symbol-details">
+        <strong>Three-Terminal Design:</strong>
+        • <span class="emphasis">3 terminals with adjustable wiper</span><br>
+        • Acts as voltage divider<br>
+        • Middle terminal is adjustable tap<br>
+        • Real-world: Volume controls, brightness adjusters, sensors
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="adjustPotentiometer()">Move Wiper</button>
+    </div>
+</div>
+
+<!-- Symbol 19: Diode -->
+<div class="symbol-card" data-symbol="19">
+    <div class="symbol-header">
+        <div class="symbol-number">19</div>
+        <div class="symbol-title">Diode</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="diode">
+            <div class="diode-triangle"></div>
+            <div class="diode-line"></div>
+            <div class="diode-terminals"></div>
+            <div class="current-flow-diode" id="diodeFlow"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A semiconductor device that allows current flow in only one direction (anode to cathode).
+    </div>
+    <div class="symbol-details">
+        <strong>One-Way Current:</strong>
+        • <span class="emphasis">Current flows anode → cathode only</span><br>
+        • Blocks reverse current (ideally)<br>
+        • Forward voltage drop (~0.7V for silicon)<br>
+        • Real-world: Rectifiers, protection circuits, LED backlighting
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="demonstrateDiode()">Show Current Flow</button>
+    </div>
+</div>
+
+<!-- Symbol 20: Zener Diode -->
+<div class="symbol-card" data-symbol="20">
+    <div class="symbol-header">
+        <div class="symbol-number">20</div>
+        <div class="symbol-title">Zener Diode</div>
+    </div>
+    <div class="symbol-visual">
+        <div class="zener-diode">
+            <div class="diode-triangle"></div>
+            <div class="zener-line">
+                <div class="zener-bend-top"></div>
+                <div class="zener-bend-bottom"></div>
+            </div>
+            <div class="diode-terminals"></div>
+            <div class="breakdown-indicator" id="zenerBreakdown"></div>
+        </div>
+    </div>
+    <div class="symbol-description">
+        A special diode that allows reverse current flow when voltage exceeds its breakdown voltage.
+    </div>
+    <div class="symbol-details">
+        <strong>Voltage Regulation:</strong>
+        • Forward conduction like normal diode<br>
+        • <span class="emphasis">Controlled reverse breakdown</span><br>
+        • Maintains constant voltage in reverse<br>
+        • Real-world: Voltage regulators, surge protection, references
+    </div>
+    <div class="interactive-controls">
+        <button class="control-btn" onclick="triggerZenerBreakdown()">Trigger Breakdown</button>
+    </div>
+</div>
         </div>
 
         <!-- Teaching Tips Section -->
@@ -1211,7 +1920,87 @@ function toggleSPDTRelay() {
         }
     }
 }
-      
+      // Motor Variables
+let motorRunning = false;
+
+// Variable Resistor Variables
+let variableResistorAdjusted = false;
+
+// Potentiometer Variables
+let potentiometerPosition = 0;
+
+// Diode Variables
+let diodeFlowing = false;
+
+// Zener Variables
+let zenerBreakdownActive = false;
+
+// Motor Functions
+function toggleMotor() {
+    const rotationIndicator = document.getElementById('motorRotation');
+    motorRunning = !motorRunning;
+    
+    if (rotationIndicator) {
+        if (motorRunning) {
+            rotationIndicator.classList.add('spinning');
+        } else {
+            rotationIndicator.classList.remove('spinning');
+        }
+    }
+}
+
+// Variable Resistor Functions
+function adjustVariableResistor() {
+    const arrow = document.getElementById('variableArrow');
+    variableResistorAdjusted = !variableResistorAdjusted;
+    
+    if (arrow) {
+        if (variableResistorAdjusted) {
+            arrow.classList.add('adjusted');
+        } else {
+            arrow.classList.remove('adjusted');
+        }
+    }
+}
+
+// Potentiometer Functions
+function adjustPotentiometer() {
+    const wiper = document.getElementById('potWiper');
+    potentiometerPosition = (potentiometerPosition + 1) % 3;
+    
+    if (wiper) {
+        wiper.classList.remove('moved');
+        if (potentiometerPosition === 1) {
+            wiper.classList.add('moved');
+        }
+    }
+}
+
+// Diode Functions
+function demonstrateDiode() {
+    const flow = document.getElementById('diodeFlow');
+    
+    if (flow) {
+        flow.classList.add('flowing');
+        setTimeout(() => {
+            flow.classList.remove('flowing');
+        }, 1000);
+    }
+}
+
+// Zener Diode Functions
+function triggerZenerBreakdown() {
+    const breakdown = document.getElementById('zenerBreakdown');
+    zenerBreakdownActive = !zenerBreakdownActive;
+    
+    if (breakdown) {
+        if (zenerBreakdownActive) {
+            breakdown.classList.add('active');
+        } else {
+            breakdown.classList.remove('active');
+        }
+    }
+}
         // Enhanced interactivity
         document.addEventListener('DOMContentLoaded', () => {
             trackProgress();
