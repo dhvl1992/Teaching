@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Principles - Lecture 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh;
+            color: #1E293B;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Base slide styling */
+        .slide {
+            background: #FEF7ED;
+            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            min-height: 500px;
+            page-break-after: always;
+        }
+
+        .slide:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Layout 1: Title Slide */
+        .title-slide {
+            background: #1E293B;
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-left: 5px solid #EA580C;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .title-slide .subtitle {
+            font-size: 1.6em;
+            opacity: 0.9;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .title-slide .author {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        /* Layout 2: Title and Content */
+        .title-content h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-area {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .content-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        .content-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #EA580C;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Layout 3: Section Header */
+        .section-header {
+            background: linear-gradient(135deg, #059669, #EA580C);
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section-header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section-header .section-subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+        }
+
+        /* Layout 4: Two Content */
+        .two-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .two-content h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-column {
+            padding: 20px;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: 10px;
+        }
+
+        .content-column h3 {
+            font-size: 1.6em;
+            color: #059669;
+            margin-bottom: 15px;
+        }
+
+        /* Layout 5: Comparison */
+        .comparison h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+            text-align: center;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .comparison-item {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(234, 88, 12, 0.1);
+        }
+
+        .comparison-item h3 {
+            font-size: 1.6em;
+            color: #EA580C;
+            margin-bottom: 20px;
+        }
+
+        /* Layout 6: Title Only */
+        .title-only {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-only h1 {
+            font-size: 3em;
+            color: #1E293B;
+            margin-bottom: 20px;
+        }
+
+        .title-only .subtitle {
+            font-size: 1.4em;
+            color: #059669;
+            font-style: italic;
+        }
+
+        /* Special Elements */
+        .highlight-box {
+            background: #059669;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .accent-box {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .emphasis {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .example-box {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #059669;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #1E293B;
+            color: #FEF7ED;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: rgba(5, 150, 105, 0.05);
+        }
+
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .role-card {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #059669;
+        }
+
+        .role-card h4 {
+            color: #EA580C;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .slide {
+                padding: 20px;
+                min-height: 400px;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5em;
+            }
+
+            .two-content,
+            .comparison-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        /* Navigation */
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Title Slide -->
+        <div class="slide title-slide">
+            <h1>Management Principles</h1>
+            <p class="subtitle">Lecture 2: Art, Science, Profession & Skills</p>
+            <p class="author">Dr. Dhaval Patel • 2025</p>
+        </div>
+
+        <!-- Today's Agenda -->
+        <div class="slide title-content">
+            <h2>Introduction 🎯</h2>
+            <div class="content-area">
+                <p>Today we'll explore the about management and develop practical skills for your future career!</p>
+                
+                <ul class="content-list">
+                    <li><strong>The Great Debate:</strong> Is Management an Art, Science, or Profession?</li>
+                    <li><strong>Essential Skills:</strong> Technical, Human, and Conceptual abilities</li>
+                    <li><strong>Manager Roles:</strong> What managers actually do in real life</li>
+                    <li><strong>Practical Examples:</strong> From companies to government initiatives</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Why This Matters:</strong> Whether you become a software developer, startup founder, or team lead - understanding these concepts will accelerate your career growth!
+                </div>
+            </div>
+        </div>
+
+        <!-- The Great Debate Section -->
+        <div class="slide section-header">
+            <h1>Management</h1>
+            <p class="section-subtitle">Art vs Science vs Profession</p>
+        </div>
+
+        <!-- Art vs Science vs Profession -->
+        <div class="slide comparison">
+            <h2>Management: Art, Science, or Profession? 🤔</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>🎨 Art</h3>
+                    <p><strong>"Getting things done through people"</strong></p>
+                    <ul class="content-list">
+                        <li>Creativity & Innovation</li>
+                        <li>Individual approach</li>
+                        <li>Requires talent & dedication</li>
+                        <li>Initiative & intelligence</li>
+                    </ul>
+                    <div class="example-box">
+                        <strong>Example:</strong> Shah Rukh Khan managing Red Chillies Entertainment - creative vision, individual style, emotional intelligence
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <h3>🔬 Science</h3>
+                    <p><strong>"Systematic & Universal Principles"</strong></p>
+                    <ul class="content-list">
+                        <li>Systematic decision-making</li>
+                        <li>Universal processes (POLC)</li>
+                        <li>Evidence-based outcomes</li>
+                        <li>Accepted principles</li>
+                    </ul>
+                    <div class="example-box">
+                        <strong>Example:</strong> TCS using data analytics for project management - systematic, measurable, repeatable processes
+                    </div>
+                </div>
+
+                <div class="comparison-item">
+                    <h3>👔 Profession</h3>
+                    <p><strong>"Specialized Knowledge & Ethics"</strong></p>
+                    <ul class="content-list">
+                        <li>❌ No mandatory degree</li>
+                        <li>❌ No licensing required</li>
+                        <li>❌ No standard code of ethics</li>
+                        <li>❌ Entry not restricted</li>
+                    </ul>
+                    <div class="accent-box">
+                        <strong>Conclusion:</strong> Management is NOT yet a full profession like medicine or law!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conclusion Art Science -->
+        <div class="slide title-content">
+            <h2>The Verdict: Management is Both Art & Science! 🎯</h2>
+            <div class="content-area">
+                <p>Modern managers need to be <span class="emphasis">"Scientific Artists"</span> - combining creativity with systematic approaches.</p>
+
+                <div class="highlight-box">
+                    <strong>Real Example: Sundar Pichai at Google</strong><br>
+                    <strong>Art:</strong> Creative vision for Android, individual leadership style, emotional intelligence<br>
+                    <strong>Science:</strong> Data-driven decisions, systematic product development, universal management principles
+                </div>
+
+                <ul class="content-list">
+                    <li><strong>The Science Discovers:</strong> What works and why (data, research, principles)</li>
+                    <li><strong>The Art Develops:</strong> How to apply it creatively in unique situations</li>
+                    <li><strong>Best Managers:</strong> Use scientific methods with artistic flair</li>
+                </ul>
+
+                <div class="example-box">
+                    <strong>Career Pov:</strong> As a EC/computer engineer, you'll use scientific programming principles (algorithms, data structures) with artistic problem-solving skills (user experience, creative solutions) to manage tech teams!
+                </div>
+            </div>
+        </div>
+
+        <!-- Management vs Administration -->
+        <div class="slide title-content">
+            <h2>Management vs Administration 🏢</h2>
+            <div class="content-area">
+                <p>Often confused, but they have different roles in organizations:</p>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Aspect</th>
+                                <th>Management</th>
+                                <th>Administration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Function</strong></td>
+                                <td>Execution & Implementation</td>
+                                <td>Policy Making & Planning</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Level</strong></td>
+                                <td>Middle & Lower levels</td>
+                                <td>Top level only</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nature</strong></td>
+                                <td>Doing function</td>
+                                <td>Thinking function</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Focus</strong></td>
+                                <td>Leading & Organizing</td>
+                                <td>Planning & Controlling</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="example-box">
+                    <strong>Example: Wipro</strong><br>
+                    <strong>Administration:</strong> Board decides to enter AI/ML services market<br>
+                    <strong>Management:</strong> Project managers execute AI projects, hire data scientists, deliver solutions to clients
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="slide section-header">
+            <h1>Essential Skills</h1>
+            <p class="section-subtitle">Building Your Management framework</p>
+        </div>
+
+        <!-- Three Core Skills -->
+        <div class="slide comparison">
+            <h2>The Three Essential Managerial Skills 🛠️</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>🔧 Technical Skills</h3>
+                    <p><strong>Job-specific expertise</strong></p>
+                    <ul class="content-list">
+                        <li>Specialized knowledge</li>
+                        <li>Tools & techniques</li>
+                        <li>Methods & procedures</li>
+                        <li>Most important for first-line managers</li>
+                    </ul>
+                    <div class="example-box">
+                        <strong>Example:</strong> A tech team lead knowing Python, AWS, DevOps - can guide developers effectively
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <h3>🤝 Human Skills</h3>
+                    <p><strong>Working with people</strong></p>
+                    <ul class="content-list">
+                        <li>Communication</li>
+                        <li>Motivation</li>
+                        <li>Team building</li>
+                        <li>Needed at ALL levels</li>
+                    </ul>
+                    <div class="example-box">
+                        <strong>Example:</strong> Satya Nadella's empathetic leadership transformed Microsoft's culture
+                    </div>
+                </div>
+
+                <div class="comparison-item">
+                    <h3>🔮 Conceptual Skills</h3>
+                    <p><strong>Big picture thinking</strong></p>
+                    <ul class="content-list">
+                        <li>Systems thinking</li>
+                        <li>Strategic planning</li>
+                        <li>Problem analysis</li>
+                        <li>Critical for top managers</li>
+                    </ul>
+                    <div class="example-box">
+                        <strong>Example:</strong> Mukesh Ambani envisioning Jio's impact on Digital India
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills by Level -->
+        <div class="slide title-content">
+            <h2>Skills by Management Level 📊</h2>
+            <div class="content-area">
+                <p>Different management levels require different skill emphasis:</p>
+
+                <div class="role-grid">
+                    <div class="role-card">
+                        <h4>First-Line Managers</h4>
+                        <p><strong>Heavy Technical Skills</strong></p>
+                        <ul class="content-list">
+                            <li>70% Technical</li>
+                            <li>25% Human</li>
+                            <li>5% Conceptual</li>
+                        </ul>
+                        <div class="example-box">
+                            <strong>Example:</strong> Software development team lead at Infosys
+                        </div>
+                    </div>
+
+                    <div class="role-card">
+                        <h4>Middle Managers</h4>
+                        <p><strong>Balanced Approach</strong></p>
+                        <ul class="content-list">
+                            <li>40% Technical</li>
+                            <li>40% Human</li>
+                            <li>20% Conceptual</li>
+                        </ul>
+                        <div class="example-box">
+                            <strong>Example:</strong> Product manager at Flipkart
+                        </div>
+                    </div>
+
+                    <div class="role-card">
+                        <h4>Top Managers</h4>
+                        <p><strong>Strategic Focus</strong></p>
+                        <ul class="content-list">
+                            <li>15% Technical</li>
+                            <li>35% Human</li>
+                            <li>50% Conceptual</li>
+                        </ul>
+                        <div class="example-box">
+                            <strong>Example:</strong> CEO of Paytm
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Career Insight:</strong> As you progress from developer → team lead → manager → director, you'll shift from technical coding skills to strategic thinking and people management!
+                </div>
+            </div>
+        </div>
+
+        <!-- Managerial Roles Section -->
+        <div class="slide section-header">
+            <h1>Managerial Roles</h1>
+            <p class="section-subtitle">What Managers Actually Do</p>
+        </div>
+
+        <!-- Mintzberg Roles Introduction -->
+        <div class="slide title-content">
+            <h2>Henry Mintzberg's Discovery 🔍</h2>
+            <div class="content-area">
+                <p>Mintzberg studied what managers actually do (not what they should do) and found <span class="emphasis">10 distinct roles</span> grouped into 3 categories:</p>
+
+                <ul class="content-list">
+                    <li><strong>🤝 Interpersonal Roles:</strong> Building relationships and connections</li>
+                    <li><strong>📢 Informational Roles:</strong> Gathering and sharing information</li>
+                    <li><strong>⚡ Decisional Roles:</strong> Making choices and taking action</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Think of it like this:</strong><br>
+                    Just like a cricket captain has multiple roles - motivating players (interpersonal), analyzing opponent strategies (informational), and deciding field positions (decisional)!
+                </div>
+
+                <div class="example-box">
+                    <strong>Real Example:</strong> Ritesh Agarwal (OYO founder) plays all these roles - networking with hotel owners, gathering market data, and making strategic decisions about expansion.
+                </div>
+            </div>
+        </div>
+
+        <!-- Interpersonal Roles -->
+        <div class="slide title-content">
+            <h2>🤝 Interpersonal Roles</h2>
+            <div class="content-area">
+                <p>These roles come from a manager's formal authority and involve building relationships:</p>
+
+                <div class="role-grid">
+                    <div class="role-card">
+                        <h4>1. Figurehead 👑</h4>
+                        <p>Performing ceremonial and symbolic duties</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> Narayana Murthy greeting new Infosys employees, presenting awards at company events, representing Infosys at industry conferences
+                        </div>
+                    </div>
+
+                    <div class="role-card">
+                        <h4>2. Leader 🎯</h4>
+                        <p>Motivating, training, and guiding team members</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> A tech team lead at TCS conducting daily standups, mentoring junior developers, setting team goals and motivating during challenging projects
+                        </div>
+                    </div>
+
+                    <div class="role-card">
+                        <h4>3. Liaison 🔗</h4>
+                        <p>Building networks inside and outside the organization</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> A product manager at Zomato coordinating with restaurant partners, government officials for licenses, and other teams within Zomato
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accent-box">
+                    As a engineer becoming a team lead, you'll transition from writing code to performing these interpersonal roles - representing your team in meetings, motivating developers, and networking with other departments!
+                </div>
+            </div>
+        </div>
+
+        <!-- Informational Roles -->
+        <div class="slide title-content">
+            <h2>📢 Informational Roles</h2>
+            <div class="content-area">
+                <p>Managers spend significant time gathering, processing, and sharing information:</p>
+
+                <div class="role-grid">
+                    <div class="role-card">
+                        <h4>4. Monitor 👁️</h4>
+                        <p>Scanning environment for relevant information</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> A startup founder in Bangalore monitoring competitor activities, tracking industry trends, reading tech blogs, analyzing user feedback on social media
+                        </div>
+                    </div>
+
+                    <div class="role-card">
+                        <h4>5. Disseminator 📤</h4>
+                        <p>Sharing information with team members</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> A project manager at Wipro sharing client requirements with developers, communicating policy changes from HR, updating team on project status
+                        </div>
+                    </div>
+
+                    <div class="role-card">
+                        <h4>6. Spokesperson 🎤</h4>
+                        <p>Representing organization to external stakeholders</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> Bhavish Aggarwal (Ola CEO) speaking to media about electric vehicles, presenting to investors, addressing government officials about transportation policies
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Digital Age Relevance:</strong> In today's information economy, these roles are even more critical - managers must filter through massive amounts of data, social media updates, and digital communications!
+                </div>
+            </div>
+        </div>
+
+        <!-- Decisional Roles -->
+        <div class="slide title-content">
+            <h2>⚡ Decisional Roles</h2>
+            <div class="content-area">
+                <p>The most critical roles - where managers examine alternatives and make choices:</p>
+
+                <div class="role-grid">
+                    <div class="role-card">
+                        <h4>7. Entrepreneur 🚀</h4>
+                        <p>Initiating change and innovation</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> Kunal Bahl (Snapdeal) constantly exploring new e-commerce opportunities, launching new features, initiating partnerships with logistics companies
+                        </div>
+                    </div>
+
+                    <div class="role-card">
+                        <h4>8. Disturbance Handler 🔥</h4>
+                        <p>Resolving unexpected problems and conflicts</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> During COVID-19, Zomato's management handled restaurant closures, delivery challenges, safety protocols, and customer concerns
+                        </div>
+                    </div>
+
+                    <div class="role-card">
+                        <h4>9. Resource Allocator 💰</h4>
+                        <p>Deciding how to distribute resources</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> A department head at Infosys deciding budget allocation for different projects, assigning experienced developers to critical modules, distributing training opportunities
+                        </div>
+                    </div>
+
+                    <div class="role-card">
+                        <h4>10. Negotiator 🤝</h4>
+                        <p>Representing organization in major negotiations</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> Tata Motors executives negotiating with suppliers for electric vehicle components, bargaining with unions for favorable working conditions
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practical Application -->
+        <div class="slide title-content">
+            <h2>Putting It All Together: A Day in a Manager's Life 📅</h2>
+            <div class="content-area">
+                <p>Let's follow <strong>Priya Sharma, IT Manager at a Pune-based fintech startup:</strong></p>
+
+                <div class="role-grid">
+                    <div class="role-card">
+                        <h4>9:00 AM - Team Standup</h4>
+                        <p><strong>Leader Role:</strong> Motivating team, setting daily goals</p>
+                        <p><strong>Monitor Role:</strong> Gathering project status updates</p>
+                    </div>
+
+                    <div class="role-card">
+                        <h4>10:30 AM - Client Meeting</h4>
+                        <p><strong>Spokesperson Role:</strong> Presenting project progress</p>
+                        <p><strong>Negotiator Role:</strong> Discussing timeline changes</p>
+                    </div>
+
+                    <div class="role-card">
+                        <h4>2:00 PM - Budget Review</h4>
+                        <p><strong>Resource Allocator Role:</strong> Deciding team training budget</p>
+                        <p><strong>Entrepreneur Role:</strong> Planning new AI feature</p>
+                    </div>
+
+                    <div class="role-card">
+                        <h4>4:00 PM - Crisis Management</h4>
+                        <p><strong>Disturbance Handler Role:</strong> Resolving server outage</p>
+                        <p><strong>Disseminator Role:</strong> Updating stakeholders</p>
+                    </div>
+                </div>
+
+                <div class="accent-box">
+                    <strong>Notice:</strong> In a single day, Priya played 8 out of 10 managerial roles! This shows how dynamic and varied management work really is.
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Takeaways -->
+        <div class="slide title-content">
+            <h2>Key Takeaways for Future Engineers 🎯</h2>
+            <div class="content-area">
+                <ul class="content-list">
+                    <li><strong>Management Evolution:</strong> You'll naturally transition from technical expert to people leader</li>
+                    <li><strong>Skill Development:</strong> Start building human and conceptual skills alongside technical skills</li>
+                    <li><strong>Role Awareness:</strong> Understand that management involves 10 different roles, not just "being the boss"</li>
+                    <li><strong>Indian Context:</strong> Local examples show these principles work across cultures and industries</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Action Items for This Week:</strong><br>
+                    1. Identify one manager you admire (could be from tech industry)<br>
+                    2. Observe which of the 10 roles they perform most often<br>
+                    3. Practice one human skill (like active listening in team discussions)<br>
+                    4. Think about how these concepts apply to your current projects
+                </div>
+
+                <div class="example-box">
+                    <strong>Remember:</strong> Every successful tech leader started as an engineer. The journey from writing code to leading organizations requires understanding these fundamental management principles!
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        Slide 1 of 12
+    </div>
+
+    <script>
+        // Update slide counter on scroll
+        function updateSlideCounter() {
+            const slides = document.querySelectorAll('.slide');
+            const slideCounter = document.querySelector('.slide-counter');
+            
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    slideCounter.textContent = `Slide ${index + 1} of ${slides.length}`;
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateSlideCounter);
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            // Find current slide
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentSlide = index;
+                }
+            });
+            
+            // Navigate with arrow keys
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (currentSlide < slides.length - 1) {
+                    slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                if (currentSlide > 0) {
+                    slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
