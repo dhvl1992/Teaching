@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Resources</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh;
+            color: #1E293B;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Slide */
+        .header-slide {
+            background: #1E293B;
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-left: 5px solid #EA580C;
+            margin-bottom: 30px;
+            padding: 60px 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            min-height: 300px;
+        }
+
+        .header-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header-slide .subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        /* Category Slides */
+        .category-slide {
+            background: #FEF7ED;
+            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            min-height: 400px;
+        }
+
+        .category-slide:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-slide h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .tool-item {
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 4px solid #059669;
+            transition: all 0.3s ease;
+        }
+
+        .tool-item:hover {
+            background: rgba(234, 88, 12, 0.1);
+            border-left-color: #EA580C;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .tool-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .tool-title {
+            font-size: 1.4em;
+            color: #1E293B;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .tool-description {
+            color: #1E293B;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .new-badge {
+            background: #EA580C;
+            color: #FEF7ED;
+            font-size: 0.7em;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        /* Footer */
+        .footer-slide {
+            background: #1E293B;
+            color: #FEF7ED;
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        /* Special Elements */
+        .highlight-box {
+            background: #059669;
+            color: #FEF7ED;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .accent-box {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .category-slide {
+                padding: 20px;
+                min-height: 300px;
+            }
+
+            .header-slide {
+                padding: 40px 20px;
+                min-height: 250px;
+            }
+
+            .header-slide h1 {
+                font-size: 2.5em;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .tool-item {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Header -->
+        <div class="header-slide">
+            <h1>Student Resources</h1>
+            <p class="subtitle">Essential tools to help you succeed in your academic journey</p>
+        </div>
+
+        <!-- Career Development Category -->
+        <div class="category-slide">
+            <h2>Career Development</h2>
+            
+            <div class="tools-grid">
+                <div class="tool-item">
+                    <a href="resume-builder.html" class="tool-link">
+                        <div class="tool-title">Resume Builder <span class="new-badge">NEW</span></div>
+                        <div class="tool-description">Create professional resumes with templates and guided assistance to showcase your skills and experience effectively.</div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                Build your professional profile.
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-slide">
+            <p>&copy; Dr. Dhaval Patel. 2025. Designed to empower student success.</p>
+        </div>
+
+    </div>
+</body>
+</html>
