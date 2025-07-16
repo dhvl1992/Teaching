@@ -681,6 +681,14 @@
             <!-- Step 1: Personal Information -->
             <div class="step active" id="step1">
                 <h2>Personal Information</h2>
+                <div class="form-group">
+                    <label>Profile Picture (optional)</label>
+                    <input type="file" id="profileImage" accept="image/*" style="margin-bottom: 10px;">
+                    <div id="imagePreview" style="display: none; margin-top: 10px;">
+                        <img id="previewImg" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 3px solid #EA580C;">
+                        <button type="button" onclick="removeImage()" style="display: block; margin-top: 10px; background: #e74c3c; color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer;">Remove Image</button>
+                    </div>
+                </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Full Name *</label>
@@ -1180,6 +1188,9 @@
             <h3 style="margin-bottom: 20px; color: #1E293B;">Live Preview</h3>
             <div class="live-preview" id="livePreview">
                 <div class="preview-header">
+                    <div id="previewProfileImage" style="display: none; margin-bottom: 15px;">
+                        <img id="previewProfileImg" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #EA580C;">
+                    </div>
                     <h3 id="previewName">Your Name</h3>
                     <div class="job-title" id="previewJobTitle">Your Job Title</div>
                     <div class="contact-info" id="previewContact">your.email@example.com • (555) 123-4567</div>
@@ -1214,6 +1225,9 @@
             document.getElementById('linkedin').addEventListener('input', updatePreview);
             document.getElementById('summary').addEventListener('input', updatePreview);
 
+            // Image upload handler
+            document.getElementById('profileImage').addEventListener('change', handleImageUpload);
+
             // Character counter for summary
             document.getElementById('summary').addEventListener('input', function() {
                 const counter = document.getElementById('summaryCounter');
@@ -1222,6 +1236,37 @@
 
             // Auto-save functionality
             document.addEventListener('input', debounce(saveToStorage, 1000));
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imagePreview = document.getElementById('imagePreview');
+                    const previewImg = document.getElementById('previewImg');
+                    
+                    previewImg.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                    
+                    // Store image data
+                    resumeData.profileImage = e.target.result;
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeImage() {
+            const imagePreview = document.getElementById('imagePreview');
+            const profileImageInput = document.getElementById('profileImage');
+            
+            imagePreview.style.display = 'none';
+            profileImageInput.value = '';
+            
+            // Remove image data
+            resumeData.profileImage = null;
+            updatePreview();
         }
 
         function nextStep() {
@@ -1547,6 +1592,17 @@
         function updatePreview() {
             const data = collectResumeData();
             
+            // Update profile image
+            const previewProfileImage = document.getElementById('previewProfileImage');
+            const previewProfileImg = document.getElementById('previewProfileImg');
+            
+            if (resumeData.profileImage) {
+                previewProfileImg.src = resumeData.profileImage;
+                previewProfileImage.style.display = 'block';
+            } else {
+                previewProfileImage.style.display = 'none';
+            }
+            
             // Update basic info
             document.getElementById('previewName').textContent = data.personal.fullName || 'Your Name';
             document.getElementById('previewJobTitle').textContent = data.personal.jobTitle || 'Your Job Title';
@@ -1716,7 +1772,8 @@
                     phone: document.getElementById('phone').value,
                     location: document.getElementById('location').value,
                     linkedin: document.getElementById('linkedin').value,
-                    summary: document.getElementById('summary').value
+                    summary: document.getElementById('summary').value,
+                    profileImage: resumeData.profileImage || null
                 },
                 experience: [],
                 education: [],
@@ -1921,11 +1978,15 @@
         }
 
         function generateBlueTemplate(data) {
+            const profileImageHtml = data.personal.profileImage ? 
+                `<img src="${data.personal.profileImage}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; display: block;">` :
+                `<div class="profile-img"></div>`;
+            
             return `
                 <div class="resume-container">
                     <div class="template-blue">
                         <div class="sidebar">
-                            <div class="profile-img"></div>
+                            ${profileImageHtml}
                             <div class="name">${data.personal.fullName}</div>
                             <div class="title">${data.personal.jobTitle}</div>
                             
@@ -1997,11 +2058,15 @@
         }
 
         function generateMinimalTemplate(data) {
+            const profileImageHtml = data.personal.profileImage ? 
+                `<img src="${data.personal.profileImage}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover;">` :
+                `<div class="profile-img"></div>`;
+            
             return `
                 <div class="resume-container">
                     <div class="template-minimal">
                         <div class="header-section">
-                            <div class="profile-img"></div>
+                            ${profileImageHtml}
                             <div>
                                 <div class="name">${data.personal.fullName}</div>
                                 <div class="title">${data.personal.jobTitle}</div>
@@ -2067,11 +2132,15 @@
         }
 
         function generateGreenTemplate(data) {
+            const profileImageHtml = data.personal.profileImage ? 
+                `<img src="${data.personal.profileImage}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin: 0 auto 20px auto; display: block;">` :
+                `<div class="profile-img"></div>`;
+            
             return `
                 <div class="resume-container">
                     <div class="template-green">
                         <div class="sidebar">
-                            <div class="profile-img"></div>
+                            ${profileImageHtml}
                             <div class="name">${data.personal.fullName}</div>
                             <div class="title">${data.personal.jobTitle}</div>
                             
@@ -2130,11 +2199,15 @@
         }
 
         function generateStudentTemplate(data) {
+            const profileImageHtml = data.personal.profileImage ? 
+                `<img src="${data.personal.profileImage}" style="width: 120px; height: 120px; border-radius: 8px; object-fit: cover;">` :
+                `<div class="profile-img"></div>`;
+            
             return `
                 <div class="resume-container">
                     <div class="template-student">
                         <div class="header-section">
-                            <div class="profile-img"></div>
+                            ${profileImageHtml}
                             <div>
                                 <div class="name">${data.personal.fullName}</div>
                                 <div class="title">${data.personal.jobTitle}</div>
