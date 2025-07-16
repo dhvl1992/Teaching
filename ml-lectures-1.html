@@ -1,1 +1,993 @@
-a
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning Fundamentals</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh;
+            color: #1E293B;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Base slide styling */
+        .slide {
+            background: #FEF7ED;
+            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            min-height: 500px;
+            page-break-after: always;
+        }
+
+        .slide:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Layout 1: Title Slide */
+        .title-slide {
+            background: #1E293B;
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-left: 5px solid #EA580C;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .title-slide .subtitle {
+            font-size: 1.6em;
+            opacity: 0.9;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .title-slide .author {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        /* Layout 2: Title and Content */
+        .title-content h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-area {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .content-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        .content-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #EA580C;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Layout 3: Section Header */
+        .section-header {
+            background: linear-gradient(135deg, #059669, #EA580C);
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section-header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section-header .section-subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+        }
+
+        /* Layout 4: Two Content */
+        .two-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .two-content h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-column {
+            padding: 20px;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: 10px;
+        }
+
+        .content-column h3 {
+            font-size: 1.6em;
+            color: #059669;
+            margin-bottom: 15px;
+        }
+
+        /* Layout 5: Comparison */
+        .comparison h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+            text-align: center;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .comparison-item {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(234, 88, 12, 0.1);
+        }
+
+        .comparison-item h3 {
+            font-size: 1.8em;
+            color: #EA580C;
+            margin-bottom: 20px;
+        }
+
+        .vs-divider {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .comparison {
+            position: relative;
+        }
+
+        /* Layout 6: Title Only */
+        .title-only {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-only h1 {
+            font-size: 3em;
+            color: #1E293B;
+            margin-bottom: 20px;
+        }
+
+        .title-only .subtitle {
+            font-size: 1.4em;
+            color: #059669;
+            font-style: italic;
+        }
+
+        /* Layout 7: Blank */
+        .blank-slide {
+            /* Intentionally minimal - just the base slide styling */
+        }
+
+        /* Layout 8: Content with Caption */
+        .content-caption {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 30px;
+        }
+
+        .content-caption h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .main-content-area {
+            background: linear-gradient(45deg, #059669, #EA580C);
+            border: 2px dashed #1E293B;
+            border-radius: 15px;
+            padding: 80px 40px;
+            text-align: center;
+            color: #FEF7ED;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .caption-area {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #059669;
+        }
+
+        /* Layout 9: Picture with Caption */
+        .picture-caption {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .picture-caption h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .picture-area {
+            background: rgba(5, 150, 105, 0.05);
+            border: 2px dashed #059669;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .caption-sidebar {
+            background: rgba(234, 88, 12, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 4px solid #EA580C;
+        }
+
+        .caption-sidebar h3 {
+            color: #EA580C;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        /* Special Elements */
+        .highlight-box {
+            background: #059669;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .accent-box {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .emphasis {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .formula {
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3em;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .slide {
+                padding: 20px;
+                min-height: 400px;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5em;
+            }
+
+            .two-content,
+            .comparison-grid,
+            .picture-caption {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .vs-divider {
+                display: none;
+            }
+        }
+
+        /* Navigation */
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Slide 1: Title Slide -->
+        <div class="slide title-slide">
+            <h1>Machine Learning Fundamentals</h1>
+            <p class="subtitle">Understanding AI, ML, and Deep Learning</p>
+            <p class="author">Your Professor • Interactive Learning Experience</p>
+        </div>
+
+        <!-- Slide 2: Course Overview -->
+        <div class="slide title-content">
+            <h2>What We'll Explore Together</h2>
+            <div class="content-area">
+                <p>Welcome to our journey through Machine Learning! Today we'll build a comprehensive understanding by exploring these interconnected concepts step by step.</p>
+                
+                <ul class="content-list">
+                    <li>The relationship between Artificial Intelligence, Machine Learning, and Deep Learning</li>
+                    <li>Tom Mitchell's formal definition that gives ML its mathematical foundation</li>
+                    <li>The essential components every learning algorithm must have</li>
+                    <li>Four distinct types of machine learning and when to use each</li>
+                    <li>Real-world applications that surround us daily</li>
+                    <li>Key terminology that will help you speak the language of ML</li>
+                </ul>
+                
+                <p>Think of this as building a house: we'll start with the foundation (basic concepts), add the framework (formal definitions), and then explore the different rooms (types of ML) before understanding how everything works together in practice.</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Section Header -->
+        <div class="slide section-header">
+            <h1>Foundation Concepts</h1>
+            <p class="section-subtitle">AI, Machine Learning, and Deep Learning</p>
+        </div>
+
+        <!-- Slide 4: The Big Picture -->
+        <div class="slide picture-caption">
+            <h2>Understanding the Relationship</h2>
+            
+            <div class="picture-area">
+                <img src="your-ai-ml-dl-venn-diagram.jpg" alt="Venn diagram showing AI as the largest circle, ML as a subset within AI, and Deep Learning as a subset within ML" style="max-width: 100%; height: auto; border-radius: 10px;">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>Think of it as Nested Circles</h3>
+                <p>Imagine three circles, one inside the other:</p>
+                <ul class="content-list">
+                    <li><strong>AI (Outer Circle):</strong> All attempts to make machines intelligent</li>
+                    <li><strong>ML (Middle Circle):</strong> AI systems that learn from data</li>
+                    <li><strong>DL (Inner Circle):</strong> ML using neural networks</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Key Insight:</strong> Every deep learning system is also machine learning, and every machine learning system is also artificial intelligence, but not vice versa!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Artificial Intelligence -->
+        <div class="slide title-content">
+            <h2>Artificial Intelligence: The Broader Vision</h2>
+            <div class="content-area">
+                <p>Artificial Intelligence represents humanity's ambitious goal of creating machines that can "think." The field began in the 1950s with a simple but profound question: Can machines exhibit intelligent behavior?</p>
+                
+                <div class="highlight-box">
+                    Modern Definition: "The study and design of intelligent agents, where an intelligent agent is a system that perceives its environment and takes actions that maximize its chances of success."
+                </div>
+                
+                <p>Here's what makes this interesting: AI doesn't necessarily require learning. For decades, the dominant approach was <span class="emphasis">symbolic AI</span>, where programmers explicitly wrote rules. Think of early chess programs that followed thousands of hand-coded strategies like "control the center" or "protect your king."</p>
+                
+                <p>This approach worked brilliantly for logical, rule-based problems like chess, but struggled with fuzzy, real-world challenges. How do you write explicit rules for recognizing your grandmother's face in a photo, or understanding sarcasm in speech? These limitations led us to seek a different approach.</p>
+                
+                <div class="accent-box">
+                    <strong>Reflection Question:</strong> Can you think of tasks that would be easy for a human but nearly impossible to program with explicit rules?
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Machine Learning Revolution -->
+        <div class="slide title-content">
+            <h2>Machine Learning: A Paradigm Shift</h2>
+            <div class="content-area">
+                <p>Machine Learning emerged as a revolutionary response to symbolic AI's limitations. Instead of programming explicit rules, we realized we could let machines discover patterns themselves.</p>
+                
+                <div class="highlight-box">
+                    Core Insight: Rather than telling computers HOW to solve problems, we show them examples of solved problems and let them figure out the patterns.
+                </div>
+                
+                <p>This represents a fundamental shift in thinking. Traditional programming follows this logic:</p>
+                <div class="formula">Data + Program → Output</div>
+                
+                <p>But machine learning flips this equation:</p>
+                <div class="formula">Data + Desired Output → Program (Model)</div>
+                
+                <p>This "program" we create is called a model, and it captures the learned patterns from our examples. Once trained, we can apply this model to new, unseen data to make predictions or decisions.</p>
+                
+                <p>Think of it like teaching a child to recognize animals. Instead of describing every possible feature of a cat, you show them hundreds of pictures labeled "cat" and "not cat." Eventually, they learn to recognize cats they've never seen before. Machine learning works similarly, but with mathematical precision.</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Deep Learning -->
+        <div class="slide title-content">
+            <h2>Deep Learning: The Neural Network Revolution</h2>
+            <div class="content-area">
+                <p>Deep Learning represents the most recent breakthrough in machine learning, inspired by how our brains process information through interconnected neurons.</p>
+                
+                <div class="highlight-box">
+                    Definition: A specialized approach within machine learning that uses multi-layered neural networks to automatically discover complex patterns in vast amounts of data.
+                </div>
+                
+                <p>What makes deep learning "deep" is the multiple layers of artificial neurons, each learning different levels of abstraction. The first layer might detect edges in an image, the second layer combines edges into shapes, the third layer combines shapes into objects, and so on.</p>
+                
+                <p>Three key factors enabled deep learning's recent success:</p>
+                
+                <ul class="content-list">
+                    <li><strong>Massive Datasets:</strong> The internet provided billions of labeled examples</li>
+                    <li><strong>Powerful Hardware:</strong> Graphics processors (GPUs) could handle the intense calculations</li>
+                    <li><strong>Algorithmic Improvements:</strong> Better techniques for training very deep networks</li>
+                </ul>
+                
+                <p>Deep learning has achieved remarkable success in areas like image recognition, language translation, and game playing, often surpassing human performance on specific tasks.</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Section Header -->
+        <div class="slide section-header">
+            <h1>The Mathematics of Learning</h1>
+            <p class="section-subtitle">Tom Mitchell's Formal Definition</p>
+        </div>
+
+        <!-- Slide 9: Mitchell's Definition -->
+        <div class="slide content-caption">
+            <h2>A Precise Framework for Learning</h2>
+            
+            <div class="main-content-area">
+                <div class="formula" style="background: transparent; color: #FEF7ED; margin: 0;">
+                    "A computer program is said to learn from<br>
+                    <strong>Experience E</strong> with respect to some<br>
+                    <strong>Class of Tasks T</strong> and<br>
+                    <strong>Performance Measure P</strong><br>
+                    if its performance at tasks in T, as measured by P,<br>
+                    improves with experience E."
+                </div>
+            </div>
+            
+            <div class="caption-area">
+                <strong>Why This Definition Matters:</strong> Tom Mitchell's definition gives us a mathematical framework to evaluate whether a system is truly "learning." Every machine learning algorithm must clearly specify these three components, making the field more rigorous and measurable.
+            </div>
+        </div>
+
+        <!-- Slide 10: The T-E-P Framework -->
+        <div class="slide two-content">
+            <h2>Breaking Down the Learning Components</h2>
+            
+            <div class="content-column">
+                <h3>Task (T) & Experience (E)</h3>
+                <p><strong>Task (T):</strong> The specific behavior or problem we want the system to improve at. This could be making predictions, classifying images, or choosing optimal actions.</p>
+                
+                <p><strong>Experience (E):</strong> The data or information the system uses to learn. This is your training material - the examples from which patterns will be discovered.</p>
+                
+                <div class="highlight-box">
+                    Example: If T is "identify cats in photos," then E might be "10,000 labeled photos of cats and non-cats."
+                </div>
+            </div>
+            
+            <div class="content-column">
+                <h3>Performance Measure (P)</h3>
+                <p><strong>Performance (P):</strong> How we quantify success. This must be measurable and objective, allowing us to track improvement over time.</p>
+                
+                <p>Different tasks require different performance measures:</p>
+                <ul class="content-list">
+                    <li>Classification: Accuracy percentage</li>
+                    <li>Regression: Mean squared error</li>
+                    <li>Games: Win rate or score</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Critical Point:</strong> Without a clear performance measure, we can't determine if learning is actually occurring!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Practical Example -->
+        <div class="slide title-content">
+            <h2>Applying the Framework: A Checkers Example</h2>
+            <div class="content-area">
+                <p>Let's make this concrete with a classic example: teaching a computer to play checkers better.</p>
+                
+                <div class="highlight-box">
+                    <strong>Task (T):</strong> Playing checkers - specifically, choosing the best move given any board position.
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Experience (E):</strong> Thousands of checkers games, including board positions and the outcomes of moves made from those positions.
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Performance (P):</strong> Percentage of games won against a variety of opponents.
+                </div>
+                
+                <p>Notice how this framework forces us to be specific. We can't just say "learn to play checkers better." We must define exactly what constitutes the task, what data we'll use for learning, and how we'll measure improvement.</p>
+                
+                <div class="accent-box">
+                    <strong>Thinking Exercise:</strong> Can you apply this T-E-P framework to a problem you'd like to solve with machine learning? Try defining each component clearly.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Section Header -->
+        <div class="slide section-header">
+            <h1>Building a Learning System</h1>
+            <p class="section-subtitle">The Four Essential Steps</p>
+        </div>
+
+        <!-- Slide 13: The Four Steps -->
+        <div class="slide title-content">
+            <h2>From Concept to Implementation</h2>
+            <div class="content-area">
+                <p>Creating any machine learning system requires making four crucial decisions. Think of these as the architectural choices that determine your system's capabilities and limitations.</p>
+                
+                <div class="highlight-box">
+                    <strong>Step 1: Choose the Training Experience</strong><br>
+                    What data will teach your system? This choice impacts everything else. The data should be representative, relevant, and expressed in useful features.
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Step 2: Choose the Target Function</strong><br>
+                    What exactly are you trying to learn? This is the ideal function that maps inputs to desired outputs - your "perfect solution."
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Step 3: Choose the Function Representation</strong><br>
+                    How will you approximate the target function? This is your hypothesis space - the class of functions your algorithm can consider.
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Step 4: Choose the Learning Algorithm</strong><br>
+                    How will you search through possible functions to find the best one? This algorithm explores your hypothesis space to find the function that best fits your training data.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Step-by-Step Example -->
+        <div class="slide picture-caption">
+            <h2>Designing a Learning System: Email Spam Detection</h2>
+            
+            <div class="picture-area">
+                <img src="your-email-classification-diagram.jpg" alt="Flowchart showing email features (sender, subject, content) flowing through a learning algorithm to produce spam/not spam classification" style="max-width: 100%; height: auto; border-radius: 10px;">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>Applying the Four Steps</h3>
+                <p><strong>Step 1 - Training Experience:</strong> 100,000 emails labeled as "spam" or "legitimate"</p>
+                
+                <p><strong>Step 2 - Target Function:</strong> A function that maps email features to spam probability</p>
+                
+                <p><strong>Step 3 - Representation:</strong> A mathematical model using word frequencies, sender patterns, and subject line characteristics</p>
+                
+                <p><strong>Step 4 - Algorithm:</strong> A process that adjusts the model's parameters to minimize classification errors on training data</p>
+                
+                <div class="accent-box">
+                    Notice how each decision constrains and influences the others!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Section Header -->
+        <div class="slide section-header">
+            <h1>Types of Machine Learning</h1>
+            <p class="section-subtitle">Four Distinct Approaches</p>
+        </div>
+
+        <!-- Slide 16: Learning Paradigms Overview -->
+        <div class="slide comparison">
+            <h2>Supervised vs Unsupervised Learning</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>Supervised Learning</h3>
+                    <p>Learning from examples with correct answers. Like studying for an exam with an answer key - you know what the right responses should be.</p>
+                    <div class="highlight-box">
+                        Has labeled training data (input-output pairs)
+                    </div>
+                    <p><strong>Goal:</strong> Learn to predict outputs for new inputs</p>
+                </div>
+                
+                <div class="comparison-item">
+                    <h3>Unsupervised Learning</h3>
+                    <p>Finding hidden patterns without knowing the "right" answers. Like exploring a new city without a map - you discover the structure as you go.</p>
+                    <div class="accent-box">
+                        Has only input data (no labels or target outputs)
+                    </div>
+                    <p><strong>Goal:</strong> Discover hidden structures or patterns in data</p>
+                </div>
+            </div>
+            
+            <div class="vs-divider">VS</div>
+        </div>
+
+        <!-- Slide 17: Supervised Learning Deep Dive -->
+        <div class="slide two-content">
+            <h2>Supervised Learning: Learning from Examples</h2>
+            
+            <div class="content-column">
+                <h3>Classification Tasks</h3>
+                <p>When your output is a category or discrete class. Think of it as sorting things into labeled boxes.</p>
+                
+                <div class="highlight-box">
+                    Examples:<br>
+                    • Email: Spam or Not Spam<br>
+                    • Medical: Disease or Healthy<br>
+                    • Finance: High Risk or Low Risk
+                </div>
+                
+                <p>The key insight: you're predicting which category something belongs to. The output has distinct, separate values with no meaningful order between them.</p>
+            </div>
+            
+            <div class="content-column">
+                <h3>Regression Tasks</h3>
+                <p>When your output is a continuous number. Think of it as predicting a position on a measuring stick.</p>
+                
+                <div class="accent-box">
+                    Examples:<br>
+                    • House prices in dollars<br>
+                    • Patient survival time in years<br>
+                    • Stock prices or temperature
+                </div>
+                
+                <p>The key insight: you're predicting a quantity that can take any value within a range. Small changes in input typically lead to small changes in output.</p>
+            </div>
+        </div>
+
+        <!-- Slide 18: Supervised Learning in Action -->
+        <div class="slide content-caption">
+            <h2>How Supervised Learning Works</h2>
+            
+            <div class="main-content-area">
+                <div style="color: #FEF7ED;">
+                    <strong>Training Phase:</strong><br>
+                    Input: Features + Labels → Algorithm learns patterns<br><br>
+                    <strong>Prediction Phase:</strong><br>
+                    Input: New Features → Trained Model → Predicted Label
+                </div>
+            </div>
+            
+            <div class="caption-area">
+                <strong>The Learning Process:</strong> During training, the algorithm examines thousands of examples, gradually adjusting its internal parameters to minimize the difference between its predictions and the true labels. This process is like a student learning from practice problems with answer keys, slowly improving their ability to solve similar problems correctly.
+            </div>
+        </div>
+
+        <!-- Slide 19: Unsupervised Learning Deep Dive -->
+        <div class="slide two-content">
+            <h2>Unsupervised Learning: Discovering Hidden Patterns</h2>
+            
+            <div class="content-column">
+                <h3>Clustering</h3>
+                <p>Finding natural groupings in your data. Imagine having a box of mixed objects and sorting them into piles based on similarity, without knowing ahead of time what groups should exist.</p>
+                
+                <div class="highlight-box">
+                    Example: Customer Segmentation<br>
+                    • Group customers by buying behavior<br>
+                    • Discover market segments<br>
+                    • Tailor marketing strategies
+                </div>
+                
+                <p>The algorithm discovers that some customers buy luxury items, others focus on discounts, and others prefer eco-friendly products - groups you might not have thought to look for.</p>
+            </div>
+            
+            <div class="content-column">
+                <h3>Association Rules</h3>
+                <p>Finding relationships between different items or events. Discovering "if this, then that" patterns in your data.</p>
+                
+                <div class="accent-box">
+                    Example: Market Basket Analysis<br>
+                    • "People who buy bread also buy butter"<br>
+                    • "Movie fans who like sci-fi also enjoy fantasy"<br>
+                    • "Patients with symptom A often have symptom B"
+                </div>
+                
+                <p>These discoveries help with recommendations, inventory management, and understanding complex relationships in your domain.</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: Reinforcement Learning -->
+        <div class="slide title-content">
+            <h2>Reinforcement Learning: Learning Through Interaction</h2>
+            <div class="content-area">
+                <p>Reinforcement Learning is fundamentally different from both supervised and unsupervised learning. Instead of learning from a fixed dataset, an agent learns by taking actions in an environment and receiving feedback.</p>
+                
+                <div class="highlight-box">
+                    Key Concept: An agent learns optimal behavior through trial and error, receiving rewards for good actions and penalties for poor ones.
+                </div>
+                
+                <p>Think of teaching a child to ride a bicycle. You don't give them a manual or show them thousands of examples. Instead, they try different actions (pedaling, steering, balancing), experience the consequences (staying upright or falling), and gradually learn what works.</p>
+                
+                <div class="formula">
+                    Agent → Action → Environment → Reward/Penalty → Learning
+                </div>
+                
+                <p>The agent's goal is to learn a policy - a strategy that tells it what action to take in any situation to maximize total rewards over time. This approach has achieved remarkable success in complex scenarios like game playing, robotics, and autonomous systems.</p>
+                
+                <div class="accent-box">
+                    <strong>Real-world Applications:</strong> Self-driving cars learning to navigate safely, AI systems mastering complex games like Go and poker, and robots learning to walk or manipulate objects.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 21: Semi-Supervised Learning -->
+        <div class="slide picture-caption">
+            <h2>Semi-Supervised Learning: The Best of Both Worlds</h2>
+            
+            <div class="picture-area">
+                <img src="your-semi-supervised-diagram.jpg" alt="Diagram showing a small amount of labeled data mixed with a large amount of unlabeled data being used together for learning" style="max-width: 100%; height: auto; border-radius: 10px;">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>Bridging the Gap</h3>
+                <p>Semi-supervised learning addresses a common real-world problem: you have lots of data, but only a small portion is labeled.</p>
+                
+                <div class="highlight-box">
+                    <strong>Why This Matters:</strong><br>
+                    • Labeling data is expensive<br>
+                    • Requires human experts<br>
+                    • Time-consuming process<br>
+                    • Unlabeled data is abundant
+                </div>
+                
+                <p><strong>Core Assumption:</strong> If two data points are close together in a high-density region, they likely have similar labels.</p>
+                
+                <div class="accent-box">
+                    Strategy: Use unsupervised learning to understand data structure, then use supervised learning to propagate labels through similar regions.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 22: Section Header -->
+        <div class="slide section-header">
+            <h1>Applications & Impact</h1>
+            <p class="section-subtitle">Machine Learning in the Real World</p>
+        </div>
+
+        <!-- Slide 23: Applications Overview -->
+        <div class="slide title-content">
+            <h2>Machine Learning Surrounds Us</h2>
+            <div class="content-area">
+                <p>Machine learning has quietly revolutionized nearly every aspect of modern life. Let's explore how these algorithms work behind the scenes to power the applications you interact with daily.</p>
+                
+                <div class="highlight-box">
+                    <strong>Medicine & Healthcare</strong><br>
+                    Diagnostic systems analyze symptoms, lab results, and genetic data to identify diseases earlier and more accurately than ever before. Treatment recommendation systems examine vast medical databases to suggest optimal therapies for individual patients.
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Computer Vision</strong><br>
+                    Your smartphone recognizes faces in photos, autonomous vehicles identify pedestrians and traffic signs, and medical imaging systems detect cancers that human radiologists might miss.
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Natural Language Processing</strong><br>
+                    Translation systems break down language barriers, voice assistants understand your commands, and sentiment analysis helps companies understand customer feedback at scale.
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Business Intelligence</strong><br>
+                    Recommendation engines suggest products you might like, fraud detection systems protect your financial transactions, and demand forecasting optimizes supply chains globally.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 24: Section Header -->
+        <div class="slide section-header">
+            <h1>Essential Terminology</h1>
+            <p class="section-subtitle">Speaking the Language of Machine Learning</p>
+        </div>
+
+        <!-- Slide 25: Key Terminology -->
+        <div class="slide two-content">
+            <h2>Building Your ML Vocabulary</h2>
+            
+            <div class="content-column">
+                <h3>Data & Representation</h3>
+                
+                <div class="highlight-box">
+                    <strong>Features:</strong> The measurable properties used to describe each data point. Like the ingredients list for a recipe - the essential characteristics that define each instance.
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Feature Vector:</strong> A mathematical representation where each data point becomes a list of numbers. Like converting a house description into [bedrooms: 3, bathrooms: 2, square_feet: 2000].
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Instance Space (X):</strong> The set of all possible objects you could describe with your chosen features. Your universe of possible inputs.
+                </div>
+            </div>
+            
+            <div class="content-column">
+                <h3>Learning Components</h3>
+                
+                <div class="accent-box">
+                    <strong>Example (x, y):</strong> A specific instance paired with its correct answer. Like a flashcard with a question on one side and the answer on the other.
+                </div>
+                
+                <div class="accent-box">
+                    <strong>Target Function (f):</strong> The perfect function we're trying to learn - it always gives the correct output for any input. Usually unknown and impossible to compute directly.
+                </div>
+                
+                <div class="accent-box">
+                    <strong>Hypothesis:</strong> Our learned model - our best approximation of the target function based on training data. This is what we actually use to make predictions.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 26: The Learning Process -->
+        <div class="slide content-caption">
+            <h2>Putting It All Together: The Complete Learning Pipeline</h2>
+            
+            <div class="main-content-area">
+                <div style="color: #FEF7ED; line-height: 1.4;">
+                    <strong>Training Phase:</strong><br>
+                    Raw Data → Feature Extraction → Learning Algorithm → Model (Hypothesis)<br><br>
+                    <strong>Prediction Phase:</strong><br>
+                    New Raw Data → Feature Extraction → Trained Model → Prediction
+                </div>
+            </div>
+            
+            <div class="caption-area">
+                <strong>The Complete Journey:</strong> Machine learning transforms raw, messy real-world data into actionable predictions through a systematic process. First, we extract meaningful features from our data. Then, during training, our algorithm examines thousands of examples to discover patterns and relationships. Finally, when we encounter new data, we extract the same features and apply our learned model to make predictions. This pipeline represents the fundamental pattern underlying all machine learning applications.
+            </div>
+        </div>
+
+        <!-- Slide 27: Conclusion -->
+        <div class="slide title-only">
+            <h1>Your Learning Journey Continues</h1>
+            <p class="subtitle">From Foundation to Mastery</p>
+        </div>
+
+        <!-- Slide 28: Next Steps -->
+        <div class="slide title-content">
+            <h2>Consolidating Your Understanding</h2>
+            <div class="content-area">
+                <p>Congratulations! You've built a solid foundation in machine learning concepts. Let's reflect on what you've mastered and consider how to deepen your understanding.</p>
+                
+                <div class="highlight-box">
+                    <strong>What You Now Understand:</strong><br>
+                    You can distinguish between AI, ML, and Deep Learning. You understand Mitchell's formal definition and can identify the Task, Experience, and Performance measure in any learning scenario. You know the four types of learning paradigms and can recognize when to apply each approach.
+                </div>
+                
+                <div class="accent-box">
+                    <strong>Thinking Questions for Deeper Learning:</strong><br>
+                    What type of machine learning would you use to solve a problem you care about? Can you identify the T-E-P components for that problem? What features would be most important for your application? What challenges might you encounter with data quality or representation?
+                </div>
+                
+                <p>Remember, machine learning is both an art and a science. The theoretical foundations you've learned today provide the framework, but practical experience with real data and actual problems will develop your intuition and expertise.</p>
+                
+                <p>Your journey in machine learning has just begun, and you now have the conceptual tools to explore more advanced topics with confidence and understanding.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        Slide 1 of 28
+    </div>
+
+    <script>
+        // Update slide counter on scroll
+        function updateSlideCounter() {
+            const slides = document.querySelectorAll('.slide');
+            const slideCounter = document.querySelector('.slide-counter');
+            
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    slideCounter.textContent = `Slide ${index + 1} of ${slides.length}`;
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateSlideCounter);
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            // Find current slide
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentSlide = index;
+                }
+            });
+            
+            // Navigate with arrow keys
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (currentSlide < slides.length - 1) {
+                    slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                if (currentSlide > 0) {
+                    slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
