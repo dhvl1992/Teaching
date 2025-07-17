@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Rule-Based System - Virtual Lab</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh;
+            color: #1E293B;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+            gap: 0;
+        }
+
+        /* Left Panel - Theory and Virtual Lab */
+        .left-panel {
+            background: #FEF7ED;
+            padding: 30px;
+            overflow-y: auto;
+            border-right: 3px solid #EA580C;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #1E293B;
+            color: #FEF7ED;
+            border-radius: 15px;
+            border-left: 5px solid #EA580C;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .theory-section {
+            background: rgba(5, 150, 105, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #059669;
+        }
+
+        .theory-section h2 {
+            color: #059669;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #059669;
+            padding-bottom: 10px;
+        }
+
+        .theory-section h3 {
+            color: #1E293B;
+            font-size: 1.3em;
+            margin: 20px 0 10px 0;
+        }
+
+        .theory-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .theory-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 10px;
+        }
+
+        .theory-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #EA580C;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .virtual-lab {
+            background: #FEF7ED;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .virtual-lab h2 {
+            color: #EA580C;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .question-container {
+            background: rgba(234, 88, 12, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1E293B;
+            margin-bottom: 15px;
+        }
+
+        .answer-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .answer-btn {
+            background: #059669;
+            color: #FEF7ED;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: Georgia, serif;
+        }
+
+        .answer-btn:hover {
+            background: #047857;
+            transform: translateY(-2px);
+        }
+
+        .answer-btn:disabled {
+            background: #9CA3AF;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .diagnosis-result {
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .diagnosis-result.show {
+            display: block;
+        }
+
+        .diagnosis-result h3 {
+            color: #EA580C;
+            margin-bottom: 10px;
+        }
+
+        .reset-btn {
+            background: #EA580C;
+            color: #FEF7ED;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-family: Georgia, serif;
+        }
+
+        .reset-btn:hover {
+            background: #C2410C;
+            transform: translateY(-2px);
+        }
+
+        /* Right Panel - Code Section */
+        .right-panel {
+            background: #1E293B;
+            padding: 30px;
+            overflow-y: auto;
+            color: #FEF7ED;
+        }
+
+        .code-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(234, 88, 12, 0.1);
+            border-radius: 15px;
+            border-left: 5px solid #EA580C;
+        }
+
+        .code-header h2 {
+            color: #EA580C;
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+
+        .code-section {
+            background: #0F172A;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #059669;
+            position: relative;
+        }
+
+        .code-section h3 {
+            color: #059669;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+
+        .code-block {
+            background: #000;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.4;
+            color: #FEF7ED;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #EA580C;
+            color: #FEF7ED;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #C2410C;
+        }
+
+        .copy-btn.copied {
+            background: #059669;
+        }
+
+        .highlight-box {
+            background: #059669;
+            color: #FEF7ED;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .accent-box {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr 1fr;
+            }
+            
+            .left-panel, .right-panel {
+                border-right: none;
+                border-bottom: 3px solid #EA580C;
+            }
+            
+            .right-panel {
+                border-bottom: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .left-panel, .right-panel {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .answer-buttons {
+                flex-direction: column;
+            }
+            
+            .answer-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Panel - Theory and Virtual Lab -->
+        <div class="left-panel">
+            <div class="header">
+                <h1>AI Rule-Based System</h1>
+                <p class="subtitle">Building a Simple Forward-Chaining Expert System</p>
+            </div>
+
+            <div class="theory-section">
+                <h2>🎯 Aim</h2>
+                <p><strong>To design and implement a simple rule-based expert system that demonstrates forward-chaining inference mechanism for problem diagnosis.</strong></p>
+                
+                <h3>Specific Objectives:</h3>
+                <ul class="theory-list">
+                    <li>Understand the fundamental concepts of production systems and rule-based reasoning</li>
+                    <li>Learn to represent domain knowledge using IF-THEN rules</li>
+                    <li>Implement forward-chaining inference for automated decision making</li>
+                    <li>Develop a working diagnostic system for real-world problem solving</li>
+                    <li>Gain hands-on experience with knowledge representation and inference engines</li>
+                </ul>
+            </div>
+
+            <div class="theory-section">
+                <h2>📚 Theory: Rule-Based Systems</h2>
+                
+                <h3>What is a Rule-Based System?</h3>
+                <p>A rule-based system (or production system) is a type of artificial intelligence system that uses a set of if-then rules to represent knowledge and make decisions. It's one of the earliest forms of AI and is still widely used today.</p>
+                
+                <h3>Key Components:</h3>
+                <ul class="theory-list">
+                    <li><strong>Knowledge Base:</strong> Collection of rules (IF-THEN statements)</li>
+                    <li><strong>Working Memory:</strong> Current facts and data</li>
+                    <li><strong>Inference Engine:</strong> Applies rules to derive new facts</li>
+                    <li><strong>User Interface:</strong> Interaction with the system</li>
+                </ul>
+                
+                <h3>Forward Chaining:</h3>
+                <p>A reasoning method that starts with known facts and applies rules to derive new facts until a goal is reached. It's data-driven and works from facts to conclusions.</p>
+                
+                <h3>Example Rules for Light Diagnosis:</h3>
+                <ul class="theory-list">
+                    <li>IF light_switch_on = False THEN cause = "Switch is off"</li>
+                    <li>IF light_switch_on = True AND bulb_working = False THEN cause = "Bulb is fused"</li>
+                    <li>IF light_switch_on = True AND bulb_working = True AND power_available = False THEN cause = "No power supply"</li>
+                </ul>
+            </div>
+
+            <div class="virtual-lab">
+                <h2>🔬 Virtual Lab: Light Diagnosis System</h2>
+                
+                <div class="question-container">
+                    <div class="question" id="question-text">Click 'Start Diagnosis' to begin the expert system!</div>
+                    <div class="answer-buttons" id="answer-buttons">
+                        <button class="answer-btn" onclick="startDiagnosis()">Start Diagnosis</button>
+                    </div>
+                </div>
+                
+                <div class="diagnosis-result" id="diagnosis-result">
+                    <h3>🔍 Diagnosis Complete!</h3>
+                    <p id="diagnosis-text"></p>
+                    <button class="reset-btn" onclick="resetDiagnosis()">Start New Diagnosis</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Code Section -->
+        <div class="right-panel">
+            <div class="code-header">
+                <h2>💻 Code</h2>
+            </div>
+
+            <div class="code-section">
+                <h3>Rule-Based System Implementation</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+<pre># Rule-Based System for Light Diagnosis
+
+print("=== Light Diagnosis Expert System ===")
+print("Answer the following questions to diagnose the light problem:")
+
+# Step 1: Create a dictionary to store facts (what we know)
+facts = {}
+
+# Step 2: Get user input and store facts
+switch_answer = input("Is the light switch turned on? (yes/no): ")
+if switch_answer.lower() == 'yes':
+    facts['light_switch_on'] = True
+else:
+    facts['light_switch_on'] = False
+
+# Step 3: Apply Rule 1 - Check if switch is off
+if facts['light_switch_on'] == False:
+    diagnosis = "Switch is off - Please turn on the light switch"
+    print(f"\n🔍 Diagnosis: {diagnosis}")
+    print(f"Rule applied: IF light_switch_on = False THEN cause = Switch is off")
+    print(f"Facts used: {facts}")
+else:
+    # Continue asking questions if switch is on
+    bulb_answer = input("Is the bulb working (not burnt out)? (yes/no): ")
+    if bulb_answer.lower() == 'yes':
+        facts['bulb_working'] = True
+    else:
+        facts['bulb_working'] = False
+    
+    # Step 4: Apply Rule 2 - Check if bulb is fused
+    if facts['light_switch_on'] == True and facts['bulb_working'] == False:
+        diagnosis = "Bulb is fused - Please replace the light bulb"
+        print(f"\n🔍 Diagnosis: {diagnosis}")
+        print(f"Rule applied: IF light_switch_on = True AND bulb_working = False THEN cause = Bulb is fused")
+        print(f"Facts used: {facts}")
+    else:
+        # Continue asking if bulb is working
+        power_answer = input("Is there power available (other lights working)? (yes/no): ")
+        if power_answer.lower() == 'yes':
+            facts['power_available'] = True
+        else:
+            facts['power_available'] = False
+        
+        # Step 5: Apply Rule 3 - Check power supply
+        if facts['light_switch_on'] == True and facts['bulb_working'] == True and facts['power_available'] == False:
+            diagnosis = "No power supply - Check circuit breaker or electrical connection"
+            print(f"\n🔍 Diagnosis: {diagnosis}")
+            print(f"Rule applied: IF light_switch_on = True AND bulb_working = True AND power_available = False THEN cause = No power supply")
+            print(f"Facts used: {facts}")
+        # Step 6: Apply Rule 4 - Everything else working
+        elif facts['light_switch_on'] == True and facts['bulb_working'] == True and facts['power_available'] == True:
+            diagnosis = "Light fixture problem - Check wiring or consult an electrician"
+            print(f"\n🔍 Diagnosis: {diagnosis}")
+            print(f"Rule applied: IF light_switch_on = True AND bulb_working = True AND power_available = True THEN cause = Light fixture problem")
+            print(f"Facts used: {facts}")
+        else:
+            print(f"\n🔍 No diagnosis found")
+            print(f"Facts used: {facts}")
+
+print("\n=== Diagnosis Complete ===")
+print("This is how a rule-based system works!")
+print("It uses IF-THEN rules to make decisions based on facts.")</pre>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>🚀 Quick Start:</strong> Copy the code above and paste it into a Python environment. Run it to see the expert system in action!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        let facts = {};
+        
+        const questions = [
+            {
+                question: "Is the light switch turned on?",
+                fact: "light_switch_on",
+                answers: ["Yes", "No"]
+            },
+            {
+                question: "Is the bulb working (not burnt out)?",
+                fact: "bulb_working",
+                answers: ["Yes", "No"],
+                condition: () => facts.light_switch_on === true
+            },
+            {
+                question: "Is there power available (other lights working)?",
+                fact: "power_available",
+                answers: ["Yes", "No"],
+                condition: () => facts.light_switch_on === true && facts.bulb_working === true
+            }
+        ];
+        
+        const rules = [
+            {
+                conditions: [['light_switch_on', false]],
+                conclusion: "Switch is off - Please turn on the light switch"
+            },
+            {
+                conditions: [['light_switch_on', true], ['bulb_working', false]],
+                conclusion: "Bulb is fused - Please replace the light bulb"
+            },
+            {
+                conditions: [['light_switch_on', true], ['bulb_working', true], ['power_available', false]],
+                conclusion: "No power supply - Check circuit breaker or electrical connection"
+            },
+            {
+                conditions: [['light_switch_on', true], ['bulb_working', true], ['power_available', true]],
+                conclusion: "Light fixture problem - Check wiring or consult an electrician"
+            }
+        ];
+        
+        function startDiagnosis() {
+            currentStep = 0;
+            facts = {};
+            document.getElementById('diagnosis-result').classList.remove('show');
+            showNextQuestion();
+        }
+        
+        function showNextQuestion() {
+            if (currentStep >= questions.length) {
+                performDiagnosis();
+                return;
+            }
+            
+            const question = questions[currentStep];
+            
+            // Check if question should be shown based on condition
+            if (question.condition && !question.condition()) {
+                currentStep++;
+                showNextQuestion();
+                return;
+            }
+            
+            document.getElementById('question-text').textContent = question.question;
+            
+            const buttonsContainer = document.getElementById('answer-buttons');
+            buttonsContainer.innerHTML = '';
+            
+            question.answers.forEach((answer, index) => {
+                const button = document.createElement('button');
+                button.className = 'answer-btn';
+                button.textContent = answer;
+                button.onclick = () => answerQuestion(answer === 'Yes', question.fact);
+                buttonsContainer.appendChild(button);
+            });
+        }
+        
+        function answerQuestion(answer, factName) {
+            facts[factName] = answer;
+            currentStep++;
+            showNextQuestion();
+        }
+        
+        function performDiagnosis() {
+            // Apply forward chaining
+            for (let rule of rules) {
+                if (checkConditions(rule.conditions)) {
+                    showDiagnosis(rule.conclusion);
+                    return;
+                }
+            }
+            
+            showDiagnosis("No diagnosis could be determined with the given information.");
+        }
+        
+        function checkConditions(conditions) {
+            for (let [fact, expectedValue] of conditions) {
+                if (facts[fact] !== expectedValue) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        function showDiagnosis(diagnosis) {
+            document.getElementById('question-text').textContent = "Diagnosis Complete!";
+            document.getElementById('answer-buttons').innerHTML = '';
+            document.getElementById('diagnosis-text').textContent = diagnosis;
+            document.getElementById('diagnosis-result').classList.add('show');
+        }
+        
+        function resetDiagnosis() {
+            currentStep = 0;
+            facts = {};
+            document.getElementById('diagnosis-result').classList.remove('show');
+            document.getElementById('question-text').textContent = "Click 'Start Diagnosis' to begin the expert system!";
+            document.getElementById('answer-buttons').innerHTML = '<button class="answer-btn" onclick="startDiagnosis()">Start Diagnosis</button>';
+        }
+        
+        function copyCode(button) {
+            const codeBlock = button.parentElement.querySelector('pre');
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
