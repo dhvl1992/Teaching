@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 DUP Teaching Learning Content - Student Attendance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #1E293B;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #FEF7ED;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            border-left: 5px solid #EA580C;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1E293B 0%, #059669 100%);
+            color: #FEF7ED;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="20" cy="80" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+            font-weight: 300;
+            font-style: italic;
+        }
+        
+        .info-banner {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 30px;
+            border-left: 4px solid #059669;
+            margin: 0;
+            border-bottom: 1px solid rgba(30, 41, 59, 0.1);
+        }
+        
+        .info-banner h2 {
+            color: #1E293B;
+            margin-bottom: 15px;
+            font-size: 1.6em;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #EA580C;
+            display: inline-block;
+        }
+        
+        .info-banner p {
+            color: #059669;
+            line-height: 1.8;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        .spreadsheet-container {
+            padding: 0;
+            background: #FEF7ED;
+        }
+        
+        .sheet-wrapper {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            border: none;
+            margin: 20px 0;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .footer {
+            background: linear-gradient(135deg, #1E293B, #EA580C);
+            color: #FEF7ED;
+            text-align: center;
+            padding: 25px;
+            font-size: 1em;
+        }
+        
+        .footer a {
+            color: #FEF7ED;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: background 0.3s ease;
+        }
+        
+        .footer a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            text-decoration: underline;
+        }
+        
+
+        
+        /* Accent elements */
+        .accent-badge {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+            margin: 0 10px;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(45deg, #059669, #EA580C);
+            color: #FEF7ED;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 25px 20px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+            }
+            
+            .info-banner {
+                padding: 20px;
+            }
+            
+            .info-banner h2 {
+                font-size: 1.3em;
+            }
+            
+            .sheet-wrapper {
+                height: 500px;
+            }
+            
+            .footer {
+                padding: 20px 15px;
+                font-size: 0.9em;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.9em;
+            }
+            
+            .sheet-wrapper {
+                height: 400px;
+            }
+            
+            .info-banner h2 {
+                font-size: 1.1em;
+            }
+            
+            .accent-badge {
+                font-size: 0.8em;
+                padding: 6px 12px;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            .header {
+                background: #1E293B !important;
+                color: #FEF7ED !important;
+            }
+            
+            .sheet-wrapper {
+                height: auto;
+                min-height: 500px;
+            }
+        }
+        
+        /* Enhanced animations */
+        .container {
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header-content {
+            animation: fadeIn 0.8s ease-out 0.2s both;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1>📚 Student Attendance</h1>
+                <p class="subtitle">2025 DUP Teaching Learning Content</p>
+            </div>
+        </header>
+        
+        <div class="info-banner">
+            <h2>📊 AI Attendance Dashboard</h2>
+            <p>
+                ODD-2025
+            </p>
+        </div>
+        
+        <div class="spreadsheet-container">
+            <div class="sheet-wrapper">
+                <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQFIWLnQpBYwlcj2heDyBaCitVjw-dSoc-VNUNbfoeojOIjDvucHv65fFPx_Bz130iUdjdDkg6U3kQh/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"
+                    title="Student Attendance Spreadsheet - 2025 DUP Teaching Learning Content">
+                </iframe>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            <p>
+                🎓 <strong>2025 DUP Teaching Learning Content</strong>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Add some interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scroll for any anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Press 'R' to refresh the iframe
+                if (e.key === 'r' || e.key === 'R') {
+                    if (e.ctrlKey || e.metaKey) return; // Don't override browser refresh
+                    const iframe = document.querySelector('iframe');
+                    if (iframe) {
+                        iframe.src = iframe.src;
+                    }
+                }
+                
+                // Press 'F' for fullscreen iframe
+                if (e.key === 'f' || e.key === 'F') {
+                    if (e.ctrlKey || e.metaKey) return;
+                    const iframe = document.querySelector('iframe');
+                    if (iframe) {
+                        if (iframe.requestFullscreen) {
+                            iframe.requestFullscreen();
+                        }
+                    }
+                }
+            });
+            
+            // Add hover effects to interactive elements
+            const interactiveElements = document.querySelectorAll('.accent-badge, .footer a');
+            interactiveElements.forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.transition = 'transform 0.2s ease';
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
