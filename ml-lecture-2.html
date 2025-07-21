@@ -248,11 +248,15 @@
             background: linear-gradient(45deg, #059669, #EA580C);
             border: 2px dashed #1E293B;
             border-radius: 15px;
-            padding: 80px 40px;
+            padding: 40px;
             text-align: center;
             color: #FEF7ED;
             font-weight: bold;
             font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
         }
 
         .caption-area {
@@ -293,8 +297,10 @@
 
         .picture-area img {
             max-width: 100%;
+            max-height: 400px;
             height: auto;
             border-radius: 10px;
+            object-fit: contain;
         }
 
         .caption-sidebar {
@@ -308,6 +314,23 @@
             color: #EA580C;
             margin-bottom: 15px;
             font-size: 1.4em;
+        }
+
+        /* Image styling for content columns */
+        .content-column img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 15px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .comparison-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 15px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         /* Special Elements */
@@ -418,7 +441,7 @@
             <h2>What Is Hypothesis Space?</h2>
             
             <div class="picture-area">
-                <image src="https://i.imgur.com/QDYKt1k.jpeg" alt="A vast library with countless books on shelves, representing the infinite possibilities in hypothesis space">
+                <img src="https://i.imgur.com/QDYKt1k.jpeg" alt="A vast library with countless books on shelves, representing the infinite possibilities in hypothesis space">
             </div>
             
             <div class="caption-sidebar">
@@ -443,7 +466,7 @@
             <h2>The Challenge of Infinite Possibilities</h2>
             
             <div class="main-content-area">
-                <image src="https://i.imgur.com/WTGBjd5.jpeg" alt="A mathematical visualization showing exponential growth, with numbers exploding from small to astronomically large">
+                <img src="https://i.imgur.com/WTGBjd5.jpeg" alt="A mathematical visualization showing exponential growth, with numbers exploding from small to astronomically large">
             </div>
             
             <div class="caption-area">
@@ -459,7 +482,7 @@
                 <h3>Simple Models</h3>
                 <p><strong>Linear Regression:</strong> Contains all possible straight lines or hyperplanes. Each line represents a different way to predict output from input features.</p>
                 
-                <image src="https://blog.minitab.com/hubfs/Imported_Blog_Media/scatter_constant_dift.png" alt="A graph showing multiple straight lines with different slopes and intercepts on a scatter plot">
+                <img src="https://blog.minitab.com/hubfs/Imported_Blog_Media/scatter_constant_dift.png" alt="A graph showing multiple straight lines with different slopes and intercepts on a scatter plot">
                 
                 <p><strong>Decision Trees:</strong> Contains all possible tree structures that can make yes/no decisions about your features.</p>
             </div>
@@ -468,7 +491,7 @@
                 <h3>Complex Models</h3>
                 <p><strong>Neural Networks:</strong> Contains an enormous variety of architectures with different numbers of layers, neurons, and connections.</p>
                 
-                <image src="https://ik.imagekit.io/upgrad1/abroad-images/imageCompo/images/different_types_of_neural_networkZD7FPL.jpg?pr-true" alt="A visualization of different neural network architectures, showing networks with varying depths and widths">
+                <img src="https://ik.imagekit.io/upgrad1/abroad-images/imageCompo/images/different_types_of_neural_networkZD7FPL.jpg?pr-true" alt="A visualization of different neural network architectures, showing networks with varying depths and widths">
                 
                 <p><strong>The Key Insight:</strong> More complex hypothesis spaces can capture more patterns but require more careful guidance to avoid overfitting.</p>
             </div>
@@ -485,7 +508,7 @@
             <h2>Why We Need Guidance in Learning</h2>
             
             <div class="picture-area">
-                <image src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXdHnt-bFwTwQCEdPzNeUEaqXT9W5yqXM3CaTKIhP4HZ7IEuLy3I4JqtUfqdabjByWNncQgpaOzjTSaLoHQXfXc5PrxXSRJeLZJeR4LytGyT74tWdn6p3BevQKC8nnNA5vnXd2afsiz5AVxP1EDmuzCdAug?key=YQADWZUoA45Zepy6YYJtyw" alt="A wise mentor or guide pointing the way through a complex maze, representing how inductive bias guides learning">
+                <img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXdHnt-bFwTwQCEdPzNeUEaqXT9W5yqXM3CaTKIhP4HZ7IEuLy3I4JqtUfqdabjByWNncQgpaOzjTSaLoHQXfXc5PrxXSRJeLZJeR4LytGyT74tWdn6p3BevQKC8nnNA5vnXd2afsiz5AVxP1EDmuzCdAug?key=YQADWZUoA45Zepy6YYJtyw" alt="A wise mentor or guide pointing the way through a complex maze, representing how inductive bias guides learning">
             </div>
             
             <div class="caption-sidebar">
@@ -514,7 +537,7 @@
                     <h3>Restrictive Bias</h3>
                     <p>Comes from the model's structure itself. When you choose linear regression, you're restricting the search to only linear relationships.</p>
                     
-                    <image src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Anscombe%27s_quartet_3.svg/960px-Anscombe%27s_quartet_3.svg.png" alt="A diagram showing how linear regression is restricted to linear functions only">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Anscombe%27s_quartet_3.svg/960px-Anscombe%27s_quartet_3.svg.png" alt="A diagram showing how linear regression is restricted to linear functions only">
                     
                     <div class="highlight-box">
                         Example: Linear models can only find straight-line patterns
@@ -525,7 +548,7 @@
                     <h3>Preference Bias</h3>
                     <p>Influences which solution the algorithm prefers among valid options. Like preferring simpler explanations over complex ones.</p>
                     
-                    <image src="https://miro.medium.com/max/848/1*TxzPx2UmUdhKieWruQ1prA.png" alt="A decision tree diagram showing preference for simpler, shorter trees over complex ones">
+                    <img src="https://miro.medium.com/max/848/1*TxzPx2UmUdhKieWruQ1prA.png" alt="A decision tree diagram showing preference for simpler, shorter trees over complex ones">
                     
                     <div class="accent-box">
                         Example: Decision trees preferring shorter, more interpretable structures
@@ -585,7 +608,7 @@
             <h2>Classification Metrics: The Confusion Matrix Foundation</h2>
             
             <div class="picture-area">
-                <image src="https://upload.wikimedia.org/wikipedia/commons/a/a1/ConfusionMatrixRedBlue.png" alt="A 2x2 confusion matrix diagram clearly labeled with True Positives, False Positives, True Negatives, and False Negatives">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a1/ConfusionMatrixRedBlue.png" alt="A 2x2 confusion matrix diagram clearly labeled with True Positives, False Positives, True Negatives, and False Negatives">
             </div>
             
             <div class="caption-sidebar">
@@ -609,7 +632,7 @@
                 <h3>Accuracy & Precision</h3>
                 <p><strong>Accuracy:</strong> Overall percentage of correct predictions. Works well for balanced datasets but can be misleading with imbalanced classes.</p>
                 
-                <image src="https://ars.els-cdn.com/content/image/3-s2.0-B9780123848642000056-f05-04-9780123848642.jpg" alt="A pie chart showing proportion of correct vs incorrect predictions for accuracy">
+                <img src="https://ars.els-cdn.com/content/image/3-s2.0-B9780123848642000056-f05-04-9780123848642.jpg" alt="A pie chart showing proportion of correct vs incorrect predictions for accuracy">
                 
                 <p><strong>Precision:</strong> Of all positive predictions, how many were actually correct? Critical when false positives are costly (like unnecessary medical treatments).</p>
             </div>
@@ -618,7 +641,7 @@
                 <h3>Recall & F1-Score</h3>
                 <p><strong>Recall:</strong> Of all actual positive cases, how many did we catch? Essential when missing positives is dangerous (like disease detection).</p>
                 
-                <image src="https://media.licdn.com/dms/image/v2/D4D12AQGr-gb0FEWGHg/article-inline_image-shrink_1500_2232/article-inline_image-shrink_1500_2232/0/1711751360819?e=1758758400&v=beta&t=w2nmvbGFHWbTVeWaQlBJOJ6Ftsa0qSKf3I3DFbOqTi0" alt="A visualization showing the trade-off between precision and recall">
+                <img src="https://media.licdn.com/dms/image/v2/D4D12AQGr-gb0FEWGHg/article-inline_image-shrink_1500_2232/article-inline_image-shrink_1500_2232/0/1711751360819?e=1758758400&v=beta&t=w2nmvbGFHWbTVeWaQlBJOJ6Ftsa0qSKf3I3DFbOqTi0" alt="A visualization showing the trade-off between precision and recall">
                 
                 <p><strong>F1-Score:</strong> Balances precision and recall through their harmonic mean. Perfect for imbalanced datasets where both false positives and false negatives matter.</p>
             </div>
@@ -653,7 +676,7 @@
             <h2>Why Multiple Tests Beat Single Tests</h2>
             
             <div class="picture-area">
-                <image src="https://i.imgur.com/zofgm1G.jpeg" alt="A teacher giving multiple different tests to students, representing how cross-validation uses multiple evaluation rounds">
+                <img src="https://i.imgur.com/zofgm1G.jpeg" alt="A teacher giving multiple different tests to students, representing how cross-validation uses multiple evaluation rounds">
             </div>
             
             <div class="caption-sidebar">
@@ -678,7 +701,7 @@
             <h2>K-Fold Cross-Validation: The Gold Standard</h2>
             
             <div class="main-content-area">
-                <image src="https://miro.medium.com/v2/resize:fit:720/format:webp/0*xj1-n0lyDajpgvMU.png" alt="A diagram showing dataset divided into 5 folds, with arrows indicating the rotation of training and validation sets across multiple rounds">
+                <img src="https://miro.medium.com/v2/resize:fit:720/format:webp/0*xj1-n0lyDajpgvMU.png" alt="A diagram showing dataset divided into 5 folds, with arrows indicating the rotation of training and validation sets across multiple rounds">
             </div>
             
             <div class="caption-area">
@@ -694,7 +717,7 @@
                 <h3>Hyperparameter Tuning</h3>
                 <p>When adjusting model settings, cross-validation prevents overfitting to a single train-test split. It helps find settings that work consistently across different data subsets.</p>
                 
-                <image src="https://i.imgur.com/IY1XHig.png" alt="A graph showing how different hyperparameter values perform across multiple CV folds">
+                <img src="https://i.imgur.com/IY1XHig.png" alt="A graph showing how different hyperparameter values perform across multiple CV folds">
                 
                 <div class="highlight-box">
                     Never tune hyperparameters on a single split - you might just get lucky!
@@ -705,7 +728,7 @@
                 <h3>Model Selection</h3>
                 <p>When choosing between different algorithms, cross-validation provides fair comparison by testing each model on the same multiple splits.</p>
                 
-                <image src="https://i.imgur.com/swGd7bZ.png" alt="A comparison chart showing how different models perform across cross-validation folds">
+                <img src="https://i.imgur.com/swGd7bZ.png" alt="A comparison chart showing how different models perform across cross-validation folds">
                 
                 <div class="accent-box">
                     Choose models that show consistent performance across all folds, not just high average performance.
@@ -723,84 +746,4 @@
                     <li><strong>Hypothesis Space</strong> defines what solutions are possible - the boundaries of your model's potential</li>
                     <li><strong>Inductive Bias</strong> guides the search through that space, focusing on reasonable solutions rather than getting lost in infinite possibilities</li>
                     <li><strong>Evaluation Metrics</strong> measure how well your chosen solution performs, but only if your evaluation method is sound</li>
-                    <li><strong>Cross-Validation</strong> ensures those measurements reflect true performance, not statistical accidents</li>
-                </ul>
-                
-                <div class="highlight-box">
-                    Success in machine learning requires thoughtful choices about hypothesis spaces, careful consideration of inductive biases, rigorous evaluation practices, and robust validation techniques.
-                </div>
-            </div>
-        </div>
-
-        <!-- Key Takeaways -->
-        <div class="slide title-content">
-            <h2>Essential Takeaways for Your ML Journey</h2>
-            <div class="content-area">
-                <p>As you continue developing machine learning expertise, these concepts provide both theoretical foundation and practical guidance:</p>
-                
-                <ul class="content-list">
-                    <li><strong>Design Thoughtfully:</strong> Your choice of algorithm and architecture sets fundamental limits on what can be learned</li>
-                    <li><strong>Embrace Useful Bias:</strong> The right inductive biases turn intractable problems into solvable ones</li>
-                    <li><strong>Evaluate Rigorously:</strong> Proper metrics and validation methods separate real progress from false hope</li>
-                    <li><strong>Think Systematically:</strong> Machine learning success comes from understanding how these elements work together, not just mastering each individually</li>
-                </ul>
-                
-                <div class="accent-box">
-                    Remember: Machine learning is not purely data-driven magic. Success requires the thoughtful combination of human insight, principled methodology, and systematic evaluation.
-                </div>
-            </div>
-        </div>
-
-        <!-- Conclusion -->
-        
-
-    </div>
-
-    <!-- Slide Counter -->
-    <div class="slide-counter">
-        Slide 1 of 17
-    </div>
-
-    <script>
-        // Update slide counter on scroll
-        function updateSlideCounter() {
-            const slides = document.querySelectorAll('.slide');
-            const slideCounter = document.querySelector('.slide-counter');
-            
-            slides.forEach((slide, index) => {
-                const rect = slide.getBoundingClientRect();
-                if (rect.top <= 100 && rect.bottom >= 100) {
-                    slideCounter.textContent = `Slide ${index + 1} of ${slides.length}`;
-                }
-            });
-        }
-
-        window.addEventListener('scroll', updateSlideCounter);
-        
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            const slides = document.querySelectorAll('.slide');
-            let currentSlide = 0;
-            
-            // Find current slide
-            slides.forEach((slide, index) => {
-                const rect = slide.getBoundingClientRect();
-                if (rect.top <= 100 && rect.bottom >= 100) {
-                    currentSlide = index;
-                }
-            });
-            
-            // Navigate with arrow keys
-            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-                if (currentSlide < slides.length - 1) {
-                    slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
-                }
-            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-                if (currentSlide > 0) {
-                    slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-        });
-    </script>
-</body>
-</html>
+                    <li><strong>Cross-Validation</strong> ensures those measurements reflect true
