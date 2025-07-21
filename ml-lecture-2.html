@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Machine Learning Fundamentals Presentation</title>
+    <title>Machine Learning Fundamentals: A Teaching Presentation</title>
     <style>
         * {
             margin: 0;
@@ -248,15 +248,11 @@
             background: linear-gradient(45deg, #059669, #EA580C);
             border: 2px dashed #1E293B;
             border-radius: 15px;
-            padding: 40px;
+            padding: 80px 40px;
             text-align: center;
             color: #FEF7ED;
             font-weight: bold;
             font-size: 1.2em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 300px;
         }
 
         .caption-area {
@@ -297,10 +293,8 @@
 
         .picture-area img {
             max-width: 100%;
-            max-height: 400px;
             height: auto;
             border-radius: 10px;
-            object-fit: contain;
         }
 
         .caption-sidebar {
@@ -314,23 +308,6 @@
             color: #EA580C;
             margin-bottom: 15px;
             font-size: 1.4em;
-        }
-
-        /* Image styling for content columns */
-        .content-column img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin: 15px 0;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .comparison-item img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin: 15px 0;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         /* Special Elements */
@@ -407,123 +384,127 @@
         <!-- Title Slide -->
         <div class="slide title-slide">
             <h1>Machine Learning Fundamentals</h1>
-            <p class="subtitle">Hypothesis Space, Inductive Bias, Evaluation, and Cross-Validation</p>
-            <p class="author">Dr. Dhaval Patel - 2025</p>
+            <p class="subtitle">Understanding Hypothesis Space, Inductive Bias, Evaluation & Cross-Validation</p>
+            <p class="author">Professor's Guide to Teaching ML Concepts • Interactive Learning Experience</p>
         </div>
 
-        <!-- Introduction Overview -->
+        <!-- Introduction -->
         <div class="slide title-content">
-            <h2>Understanding the Big Picture</h2>
+            <h2>What is Machine Learning Really About?</h2>
             <div class="content-area">
-                <p>Machine learning has four fundamental elements:</p>
+                <p>Think of machine learning like teaching a child to recognize different animals. Just as a child learns to distinguish between cats and dogs by seeing many examples, machine learning algorithms learn patterns from data to make predictions about new, unseen information.</p>
                 
-                <ul class="content-list">
-                    <li><strong>Hypothesis Space:</strong> The blueprint - what solutions are possible</li>
-                    <li><strong>Inductive Bias:</strong> The rules - how we guide the building process</li>
-                    <li><strong>Model Evaluation:</strong> Quality inspection - how we measure what we've built</li>
-                    <li><strong>Cross-Validation:</strong> Testing - ensuring our structure works in real conditions</li>
-                </ul>
-                
-                <div class="highlight-box">
-                    These concepts work together to transform raw data into reliable, intelligent systems that can make accurate predictions on new, unseen information.
+                <div class="picture-area" style="margin: 20px 0;">
+                    <img src="https://via.placeholder.com/400x200/059669/FFFFFF?text=Child+Learning+Animals" alt="Child learning to recognize different animals from picture books">
                 </div>
-            </div>
-        </div>
-
-        <!-- Section Header: Hypothesis Space -->
-        <div class="slide section-header">
-            <h1>Hypothesis Space</h1>
-            <p class="section-subtitle">The Universe of Possible Solutions</p>
-        </div>
-
-        <!-- Hypothesis Space: Library Analogy -->
-        <div class="slide picture-caption">
-            <h2>What Is Hypothesis Space?</h2>
-            
-            <div class="picture-area">
-                <img src="https://i.imgur.com/QDYKt1k.jpeg" alt="A vast library with countless books on shelves, representing the infinite possibilities in hypothesis space">
-            </div>
-            
-            <div class="caption-sidebar">
-                <h3>The Library Analogy</h3>
-                <p>Imagine a massive library where each book represents a different way to solve your problem. This is your hypothesis space.</p>
                 
                 <ul class="content-list">
-                    <li>Each book is a potential model</li>
-                    <li>Your algorithm searches for the best book</li>
-                    <li>You can only find what's in the library</li>
-                    <li>The library size determines complexity</li>
+                    <li>Computers learn from examples, just like humans do</li>
+                    <li>The goal is to find patterns that work on new, unseen data</li>
+                    <li>Success depends on making smart assumptions about the problem</li>
+                    <li>We must carefully test our models to ensure they truly understand</li>
                 </ul>
                 
                 <div class="accent-box">
-                    Note: Your algorithm can only learn what exists in its hypothesis space!
+                    The key challenge: How do we ensure our "digital student" truly understands the underlying patterns rather than just memorizing specific examples?
                 </div>
             </div>
         </div>
 
-        <!-- Hypothesis Space: The Size Problem -->
-        <div class="slide content-caption">
-            <h2>The Challenge of Infinite Possibilities</h2>
-            
-            <div class="picture-area">
-                <img src="https://i.imgur.com/WTGBjd5.jpeg" alt="A mathematical visualization showing exponential growth, with numbers exploding from small to astronomically large">
-            </div>
-            
-            <div class="caption-area">
-                <strong>The Scale Problem:</strong> For a problem with just a few dozen features, the number of possible functions could exceed the number of atoms in the universe. This means we cannot exhaustively search every possibility. We need smarter approaches to navigate this vast space efficiently and find meaningful solutions within reasonable time and computational limits.
+        <!-- Section Header 1 -->
+        <div class="slide section-header">
+            <h1>Chapter 1</h1>
+            <p class="section-subtitle">Hypothesis Space: The Universe of Possible Solutions</p>
+        </div>
+
+        <!-- Hypothesis Space Introduction -->
+        <div class="slide title-content">
+            <h2>What is Hypothesis Space?</h2>
+            <div class="content-area">
+                <p>Imagine you're looking for a house in a city. The <span class="emphasis">hypothesis space</span> is like all the possible houses that exist in that city - every single building that could potentially be your new home.</p>
+                
+                <div class="picture-area" style="margin: 20px 0;">
+                    <img src="https://via.placeholder.com/500x250/EA580C/FFFFFF?text=City+Map+with+All+Possible+Houses" alt="City map showing all possible houses representing hypothesis space">
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Hypothesis Space (H)</strong>: All possible models or functions our algorithm can consider</li>
+                    <li><strong>Each Hypothesis (h)</strong>: One specific way of mapping inputs to outputs</li>
+                    <li><strong>The Goal</strong>: Find the best hypothesis that fits our data and generalizes well</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    Think of it as your algorithm's "shopping catalog" of possible solutions!
+                </div>
             </div>
         </div>
 
         <!-- Hypothesis Space Examples -->
         <div class="slide two-content">
-            <h2>Hypothesis Spaces in Common Algorithms</h2>
+            <h2>Real-World Examples of Hypothesis Spaces</h2>
             
             <div class="content-column">
-                <h3>Simple Models</h3>
-                <p><strong>Linear Regression:</strong> Contains all possible straight lines or hyperplanes. Each line represents a different way to predict output from input features.</p>
-                
-                <img src="https://blog.minitab.com/hubfs/Imported_Blog_Media/scatter_constant_dift.png" alt="A graph showing multiple straight lines with different slopes and intercepts on a scatter plot">
-                
-                <p><strong>Decision Trees:</strong> Contains all possible tree structures that can make yes/no decisions about your features.</p>
+                <h3>Linear Regression</h3>
+                <div class="picture-area" style="margin: 15px 0;">
+                    <img src="https://via.placeholder.com/300x200/059669/FFFFFF?text=Multiple+Linear+Lines" alt="Graph showing multiple possible linear regression lines through data points">
+                </div>
+                <p><strong>Hypothesis Space:</strong> All possible straight lines (y = mx + b)</p>
+                <p><strong>Each Hypothesis:</strong> One specific line with particular slope and intercept</p>
+                <p><strong>Goal:</strong> Find the line that best fits our data points</p>
             </div>
             
             <div class="content-column">
-                <h3>Complex Models</h3>
-                <p><strong>Neural Networks:</strong> Contains an enormous variety of architectures with different numbers of layers, neurons, and connections.</p>
-                
-                <img src="https://ik.imagekit.io/upgrad1/abroad-images/imageCompo/images/different_types_of_neural_networkZD7FPL.jpg?pr-true" alt="A visualization of different neural network architectures, showing networks with varying depths and widths">
-                
-                <p><strong>The Key Insight:</strong> More complex hypothesis spaces can capture more patterns but require more careful guidance to avoid overfitting.</p>
+                <h3>Decision Trees</h3>
+                <div class="picture-area" style="margin: 15px 0;">
+                    <img src="https://via.placeholder.com/300x200/EA580C/FFFFFF?text=Multiple+Tree+Structures" alt="Multiple decision tree structures showing different ways to split data">
+                </div>
+                <p><strong>Hypothesis Space:</strong> All possible decision trees we can build</p>
+                <p><strong>Each Hypothesis:</strong> One specific tree structure with particular splits</p>
+                <p><strong>Goal:</strong> Find the tree that makes the most accurate predictions</p>
             </div>
         </div>
 
-        <!-- Section Header: Inductive Bias -->
+        <!-- The Challenge -->
+        <div class="slide content-caption">
+            <h2>The Mind-Bending Challenge</h2>
+            
+            <div class="main-content-area">
+                <h3>2^(2^10) = 2^1024 possible functions</h3>
+                <p>For just 10 yes/no features!</p>
+                <br>
+                <p style="font-size: 1.4em;">That's more than the number of atoms<br>in the observable universe!</p>
+            </div>
+            
+            <div class="caption-area">
+                <strong>Teaching Analogy:</strong> It's like trying to find the perfect recipe by testing every possible combination of ingredients and cooking methods. Without some guidance, you'd never finish! This is why we need smart ways to narrow down our search.
+            </div>
+        </div>
+
+        <!-- Section Header 2 -->
         <div class="slide section-header">
-            <h1>Inductive Bias</h1>
-            <p class="section-subtitle">The Wise Guide for Learning</p>
+            <h1>Chapter 2</h1>
+            <p class="section-subtitle">Inductive Bias: The Guiding Principles</p>
         </div>
 
-        <!-- Inductive Bias: The Guide Concept -->
-        <div class="slide picture-caption">
-            <h2>Why We Need Guidance in Learning</h2>
-            
-            <div class="picture-area">
-                <img src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXdHnt-bFwTwQCEdPzNeUEaqXT9W5yqXM3CaTKIhP4HZ7IEuLy3I4JqtUfqdabjByWNncQgpaOzjTSaLoHQXfXc5PrxXSRJeLZJeR4LytGyT74tWdn6p3BevQKC8nnNA5vnXd2afsiz5AVxP1EDmuzCdAug?key=YQADWZUoA45Zepy6YYJtyw" alt="A wise mentor or guide pointing the way through a complex maze, representing how inductive bias guides learning">
-            </div>
-            
-            <div class="caption-sidebar">
-                <h3>The Guiding Principle</h3>
-                <p>Without assumptions, learning from limited examples would be impossible. Inductive bias provides the educated guesses that make learning feasible.</p>
+        <!-- Inductive Bias Introduction -->
+        <div class="slide title-content">
+            <h2>What is Inductive Bias?</h2>
+            <div class="content-area">
+                <p><span class="emphasis">Inductive bias</span> is like having a wise mentor who gives you helpful assumptions and guidelines to narrow down your search.</p>
                 
+                <div class="picture-area" style="margin: 20px 0;">
+                    <img src="https://via.placeholder.com/400x250/059669/FFFFFF?text=Wise+Mentor+Guiding+Student" alt="Wise mentor guiding a student through choices">
+                </div>
+                
+                <p>Think of it as:</p>
                 <ul class="content-list">
-                    <li>Helps choose among infinite possibilities</li>
-                    <li>Embeds prior knowledge into algorithms</li>
-                    <li>Makes generalization possible</li>
-                    <li>Balances complexity and simplicity</li>
+                    <li><strong>The preferences</strong> our algorithm has before seeing any data</li>
+                    <li><strong>The assumptions</strong> built into our model's architecture</li>
+                    <li><strong>The constraints</strong> that help us avoid getting lost in the vast hypothesis space</li>
                 </ul>
                 
-                <div class="highlight-box">
-                    Think of it as the "common sense" built into your algorithm!
+                <div class="accent-box">
+                    Without inductive bias, learning from limited data would be impossible! An infinite number of hypotheses could perfectly fit any finite dataset.
                 </div>
             </div>
         </div>
@@ -535,115 +516,158 @@
             <div class="comparison-grid">
                 <div class="comparison-item">
                     <h3>Restrictive Bias</h3>
-                    <p>Comes from the model's structure itself. When you choose linear regression, you're restricting the search to only linear relationships.</p>
-                    
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Anscombe%27s_quartet_3.svg/960px-Anscombe%27s_quartet_3.svg.png" alt="A diagram showing how linear regression is restricted to linear functions only">
-                    
+                    <p><strong>Architectural Constraints</strong></p>
+                    <p>Like choosing to only look for houses in certain neighborhoods.</p>
                     <div class="highlight-box">
-                        Example: Linear models can only find straight-line patterns
+                        Example: Linear regression can ONLY learn straight-line relationships. It cannot discover curved patterns no matter how much data it sees.
                     </div>
+                    <ul class="content-list">
+                        <li>✅ Can learn: Price increases linearly with size</li>
+                        <li>❌ Cannot learn: Complex curved relationships</li>
+                    </ul>
                 </div>
                 
                 <div class="comparison-item">
                     <h3>Preference Bias</h3>
-                    <p>Influences which solution the algorithm prefers among valid options. Like preferring simpler explanations over complex ones.</p>
-                    
-                    <img src="https://miro.medium.com/max/848/1*TxzPx2UmUdhKieWruQ1prA.png" alt="A decision tree diagram showing preference for simpler, shorter trees over complex ones">
-                    
+                    <p><strong>Selection Criteria</strong></p>
+                    <p>Like preferring simpler, more elegant solutions.</p>
                     <div class="accent-box">
-                        Example: Decision trees preferring shorter, more interpretable structures
+                        Example: Decision trees prefer shorter, simpler trees (Occam's Razor). Given two equally accurate trees, choose the simpler one.
                     </div>
+                    <ul class="content-list">
+                        <li>Favors interpretable models</li>
+                        <li>Reduces overfitting risk</li>
+                        <li>Easier to understand and explain</li>
+                    </ul>
                 </div>
             </div>
             
             <div class="vs-divider">VS</div>
         </div>
 
-        <!-- Inductive Bias Examples -->
+        <!-- Common Inductive Biases -->
         <div class="slide title-content">
-            <h2>Common Inductive Biases in Practice</h2>
+            <h2>Inductive Biases in Popular Algorithms</h2>
             <div class="content-area">
-                <p>Different algorithms embody different assumptions about how the system works. Understanding these biases helps you choose the right tool for your problem:</p>
+                <p>Each machine learning algorithm has its own "personality" - its built-in assumptions about how the world works:</p>
                 
                 <ul class="content-list">
-                    <li><strong>K-Nearest Neighbors:</strong> Assumes similar inputs produce similar outputs (locality principle)</li>
-                    <li><strong>Support Vector Machines:</strong> Prefers decision boundaries with maximum margin between classes</li>
-                    <li><strong>Convolutional Neural Networks:</strong> Assumes spatial relationships matter in images</li>
+                    <li><strong>k-Nearest Neighbors:</strong> "Birds of a feather flock together" - similar things are near each other</li>
+                    <li><strong>Support Vector Machines:</strong> "The safest path between two cliffs is right down the middle" - maximum margin separation</li>
+                    <li><strong>Neural Networks:</strong> "Complex behaviors emerge from simple parts working together" - hierarchical feature learning</li>
+                    <li><strong>Naive Bayes:</strong> "Features are independent given the class" - conditional independence assumption</li>
                 </ul>
                 
-                <div class="accent-box">
-                    No single algorithm works best for all problems. The key is matching your algorithm's biases to your problem's characteristics.
+                <div class="highlight-box">
+                    <strong>The "No Free Lunch" Theorem:</strong> No algorithm works best for all problems. Success comes from matching the right bias to your specific problem!
                 </div>
             </div>
         </div>
 
-        <!-- Section Header: Model Evaluation -->
+        <!-- Relationship Between Concepts -->
+        <div class="slide content-caption">
+            <h2>How Hypothesis Space and Inductive Bias Work Together</h2>
+            
+            <div class="main-content-area">
+                <img src="https://via.placeholder.com/600x300/EA580C/FFFFFF?text=Library+with+Helpful+Librarian" alt="Large library with librarian helping someone find specific books" style="max-width: 100%; border-radius: 10px;">
+            </div>
+            
+            <div class="caption-area">
+                <strong>Perfect Analogy:</strong> Think of hypothesis space as a vast library containing all possible books (solutions), and inductive bias as a knowledgeable librarian who knows exactly which sections to guide you to. The librarian (bias) doesn't change what books exist (hypothesis space), but makes finding the right book (solution) actually possible!
+            </div>
+        </div>
+
+        <!-- Finding the Sweet Spot -->
+        <div class="slide picture-caption">
+            <h2>Finding the Sweet Spot: The Goldilocks Principle</h2>
+            
+            <div class="picture-area">
+                <img src="https://via.placeholder.com/500x300/059669/FFFFFF?text=Three+Bears+Representing+Model+Complexity" alt="Three bears representing underfitting, overfitting, and just right models">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>The Three Scenarios</h3>
+                <p><strong>Too Restrictive (Underfitting):</strong> Like only reading children's picture books when you need advanced mathematics. Model too simple to capture important patterns.</p>
+                
+                <p><strong>Too Flexible (Overfitting):</strong> Like memorizing every page without understanding. Model learns noise instead of true patterns.</p>
+                
+                <div class="accent-box">
+                    <strong>Just Right:</strong> Finding the perfect balance where your model captures true patterns and generalizes well to new data!
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Header 3 -->
         <div class="slide section-header">
-            <h1>Model Evaluation</h1>
-            <p class="section-subtitle">Measuring Success and Reliability</p>
+            <h1>Chapter 3</h1>
+            <p class="section-subtitle">Model Evaluation: How Do We Know If We're Doing Well?</p>
         </div>
 
         <!-- Why Evaluation Matters -->
         <div class="slide title-content">
-            <h2>Why Robust Evaluation Is Critical</h2>
+            <h2>Why Model Evaluation is Critical</h2>
             <div class="content-area">
-                <p>Building a model is only half the battle. Just as students might perform well on homework but poorly on exams, models might seem great during training but fail in real applications.</p>
+                <p>Imagine you're a teacher grading students. You wouldn't just look at homework performance; you'd give them tests on new problems to see if they truly understand the material.</p>
                 
-                <div class="highlight-box">
-                    Evaluation provides the objective measures needed to assess effectiveness, detect bias, and ensure real-world reliability.
+                <div class="picture-area" style="margin: 20px 0;">
+                    <img src="https://via.placeholder.com/400x250/EA580C/FFFFFF?text=Teacher+Testing+Students" alt="Teacher giving test to students to evaluate understanding">
                 </div>
                 
-                <p>Proper evaluation helps us:</p>
+                <p>Similarly, we need to test our ML models on new, unseen data to measure their real-world performance.</p>
+                
                 <ul class="content-list">
-                    <li>Improve model performance through informed tuning decisions</li>
-                    <li>Detect and prevent unfair bias in our systems</li>
-                    <li>Ensure models generalize beyond training data</li>
-                    <li>Build confidence in deployment decisions</li>
+                    <li>Prevents us from being fooled by "memorization" instead of true learning</li>
+                    <li>Identifies bias and fairness issues before deployment</li>
+                    <li>Helps us choose between different algorithms and approaches</li>
+                    <li>Provides confidence that our model will work in practice</li>
                 </ul>
+                
+                <div class="accent-box">
+                    Without proper evaluation, a model might seem brilliant in training but fail catastrophically in the real world!
+                </div>
             </div>
         </div>
 
         <!-- Classification Metrics -->
-        <div class="slide picture-caption">
+        <div class="slide content-caption">
             <h2>Classification Metrics: The Confusion Matrix Foundation</h2>
             
-            <div class="picture-area">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a1/ConfusionMatrixRedBlue.png" alt="A 2x2 confusion matrix diagram clearly labeled with True Positives, False Positives, True Negatives, and False Negatives">
+            <div class="main-content-area">
+                <img src="https://via.placeholder.com/500x400/059669/FFFFFF?text=Confusion+Matrix+with+Clear+Labels" alt="2x2 confusion matrix with clear labels and examples">
+                <p style="margin-top: 20px;">The foundation for understanding all classification metrics</p>
             </div>
             
-            <div class="caption-sidebar">
-                <h3>Understanding Predictions</h3>
-                <p>The confusion matrix shows how your model's predictions compare to reality, forming the foundation for all classification metrics.</p>
-                
-                <ul class="content-list">
-                    <li><strong>True Positives:</strong> Correctly identified positive cases</li>
-                    <li><strong>False Positives:</strong> Incorrectly predicted positive (Type I error)</li>
-                    <li><strong>True Negatives:</strong> Correctly identified negative cases</li>
-                    <li><strong>False Negatives:</strong> Missed positive cases (Type II error)</li>
-                </ul>
+            <div class="caption-area">
+                <strong>Think of it as a detailed report card:</strong> The confusion matrix shows exactly where your model succeeded and failed. It's the foundation for calculating accuracy, precision, recall, and F1-score. Every classification metric starts here!
             </div>
         </div>
 
-        <!-- Classification Metrics Deep Dive -->
+        <!-- Medical Diagnosis Example -->
         <div class="slide two-content">
-            <h2>Key Classification Metrics Explained</h2>
+            <h2>Understanding Metrics with Medical Diagnosis</h2>
             
             <div class="content-column">
-                <h3>Accuracy & Precision</h3>
-                <p><strong>Accuracy:</strong> Overall percentage of correct predictions. Works well for balanced datasets but can be misleading with imbalanced classes.</p>
-                
-                <img src="https://ars.els-cdn.com/content/image/3-s2.0-B9780123848642000056-f05-04-9780123848642.jpg" alt="A pie chart showing proportion of correct vs incorrect predictions for accuracy">
-                
-                <p><strong>Precision:</strong> Of all positive predictions, how many were actually correct? Critical when false positives are costly (like unnecessary medical treatments).</p>
+                <h3>When False Alarms are Costly</h3>
+                <div class="picture-area" style="margin: 15px 0;">
+                    <img src="https://via.placeholder.com/300x200/EA580C/FFFFFF?text=Precision+Focus" alt="Visual representation of precision in medical context">
+                </div>
+                <p><strong>Precision:</strong> "When we said someone has the disease, how often were we right?"</p>
+                <p>Critical when false positives lead to unnecessary surgery, anxiety, or treatments.</p>
+                <div class="highlight-box">
+                    High precision = Fewer false alarms
+                </div>
             </div>
             
             <div class="content-column">
-                <h3>Recall & F1-Score</h3>
-                <p><strong>Recall:</strong> Of all actual positive cases, how many did we catch? Essential when missing positives is dangerous (like disease detection).</p>
-                
-                <img src="https://media.licdn.com/dms/image/v2/D4D12AQGr-gb0FEWGHg/article-inline_image-shrink_1500_2232/article-inline_image-shrink_1500_2232/0/1711751360819?e=1758758400&v=beta&t=w2nmvbGFHWbTVeWaQlBJOJ6Ftsa0qSKf3I3DFbOqTi0" alt="A visualization showing the trade-off between precision and recall">
-                
-                <p><strong>F1-Score:</strong> Balances precision and recall through their harmonic mean. Perfect for imbalanced datasets where both false positives and false negatives matter.</p>
+                <h3>When Missing Cases is Dangerous</h3>
+                <div class="picture-area" style="margin: 15px 0;">
+                    <img src="https://via.placeholder.com/300x200/059669/FFFFFF?text=Recall+Focus" alt="Visual representation of recall in medical context">
+                </div>
+                <p><strong>Recall:</strong> "Of all people who actually have the disease, how many did we catch?"</p>
+                <p>Critical when missing a disease could be life-threatening.</p>
+                <div class="accent-box">
+                    High recall = Catch more true cases
+                </div>
             </div>
         </div>
 
@@ -651,99 +675,213 @@
         <div class="slide title-content">
             <h2>Regression Metrics: Measuring Continuous Predictions</h2>
             <div class="content-area">
-                <p>When predicting continuous values like prices or temperatures, we need different metrics that quantify the magnitude of prediction errors:</p>
+                <p>When predicting continuous values like house prices or temperatures, we need different metrics:</p>
                 
-                <ul class="content-list">
-                    <li><strong>Mean Absolute Error (MAE):</strong> Average magnitude of errors without considering direction. Easy to interpret - if MAE is $10,000 for house prices, predictions are typically off by about $10,000.</li>
-                    <li><strong>Root Mean Squared Error (RMSE):</strong> Penalizes large errors more heavily than small ones. Useful when big mistakes are disproportionately problematic.</li>
-                    <li><strong>R-squared:</strong> Proportion of variance explained by the model. An R² of 0.8 means the model explains 80% of the variation in the data.</li>
-                </ul>
-                
-                <div class="accent-box">
-                    Choose metrics that align with your real-world objectives. Ask yourself: What kinds of mistakes are most costly in my specific application?
+                <div class="picture-area" style="margin: 20px 0;">
+                    <img src="https://via.placeholder.com/500x300/059669/FFFFFF?text=Actual+vs+Predicted+Values+Graph" alt="Graph showing actual vs predicted values with error visualization">
                 </div>
-            </div>
-        </div>
-
-        <!-- Section Header: Cross-Validation -->
-        <div class="slide section-header">
-            <h1>Cross-Validation</h1>
-            <p class="section-subtitle">Testing True Performance</p>
-        </div>
-
-        <!-- Cross-Validation Concept -->
-        <div class="slide picture-caption">
-            <h2>Why Multiple Tests Beat Single Tests</h2>
-            
-            <div class="picture-area">
-                <img src="https://i.imgur.com/zofgm1G.jpeg" alt="A teacher giving multiple different tests to students, representing how cross-validation uses multiple evaluation rounds">
-            </div>
-            
-            <div class="caption-sidebar">
-                <h3>The Multiple Test Principle</h3>
-                <p>Just as teachers use multiple tests to fairly assess student knowledge, cross-validation uses multiple train-test splits to reliably measure model performance.</p>
                 
                 <ul class="content-list">
-                    <li>Reduces dependence on lucky/unlucky splits</li>
-                    <li>Provides more stable performance estimates</li>
-                    <li>Maximizes use of limited data</li>
-                    <li>Reveals consistency across different subsets</li>
+                    <li><strong>Mean Absolute Error (MAE):</strong> "On average, how far off are our predictions?" Easy to interpret, same units as target</li>
+                    <li><strong>Root Mean Squared Error (RMSE):</strong> "How far off are we, with extra penalty for big mistakes?" Penalizes large errors more heavily</li>
+                    <li><strong>R-squared (R²):</strong> "How much of the variation can our model explain?" Scale from 0 (explains nothing) to 1 (explains everything)</li>
                 </ul>
                 
                 <div class="highlight-box">
-                    Single splits can be misleading - cross-validation reveals the true story!
+                    Example: Predicting house prices with MAE of $15,000 means our average error is $15K, while R² of 0.85 means we explain 85% of price variation.
                 </div>
+            </div>
+        </div>
+
+        <!-- Section Header 4 -->
+        <div class="slide section-header">
+            <h1>Chapter 4</h1>
+            <p class="section-subtitle">Cross-Validation: The Ultimate Reality Check</p>
+        </div>
+
+        <!-- Problem with Simple Split -->
+        <div class="slide content-caption">
+            <h2>The Problem with Simple Train-Test Splits</h2>
+            
+            <div class="main-content-area">
+                <img src="https://via.placeholder.com/500x300/EA580C/FFFFFF?text=Student+Studying+Only+One+Practice+Test" alt="Student studying only one practice test vs varied preparation">
+                <p style="margin-top: 20px;">Studying only one practice test vs. comprehensive preparation</p>
+            </div>
+            
+            <div class="caption-area">
+                <strong>The Issue:</strong> Imagine preparing for a final exam by only studying one practice test. You might do great on similar questions but struggle with anything different. A single train-test split might not represent the true difficulty of real-world problems.
             </div>
         </div>
 
         <!-- K-Fold Cross-Validation -->
-        <div class="slide content-caption">
-            <h2>K-Fold Cross-Validation: The Gold Standard</h2>
+        <div class="slide picture-caption">
+            <h2>K-Fold Cross-Validation: The Comprehensive Approach</h2>
             
-            <div class="main-content-area">
-                <img src="https://miro.medium.com/v2/resize:fit:720/format:webp/0*xj1-n0lyDajpgvMU.png" alt="A diagram showing dataset divided into 5 folds, with arrows indicating the rotation of training and validation sets across multiple rounds">
+            <div class="picture-area">
+                <img src="https://via.placeholder.com/500x400/059669/FFFFFF?text=5-Fold+Cross-Validation+Process" alt="Visual representation of 5-fold cross-validation process">
             </div>
             
-            <div class="caption-area">
-                <strong>The Process:</strong> Divide your data into K equal parts (typically 5 or 10). Train on K-1 parts, test on the remaining part. Repeat K times until every part has been the test set once. Average all results for your final performance estimate. This approach provides much more reliable and stable performance measurements than single train-test splits.
+            <div class="caption-sidebar">
+                <h3>The Process (5-Fold Example)</h3>
+                <ul class="content-list">
+                    <li>Split data into 5 equal parts (folds)</li>
+                    <li>Round 1: Train on folds 1,2,3,4 → Test on fold 5</li>
+                    <li>Round 2: Train on folds 1,2,3,5 → Test on fold 4</li>
+                    <li>Continue for all combinations</li>
+                    <li>Average all test scores for final performance</li>
+                </ul>
+                
+                <div class="accent-box">
+                    Like taking multiple practice exams with different question sets!
+                </div>
             </div>
         </div>
 
-        <!-- Cross-Validation Benefits -->
+        <!-- Cross-Validation Comparison -->
+        <div class="slide comparison">
+            <h2>K-Fold vs Leave-One-Out Cross-Validation</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>K-Fold CV</h3>
+                    <p><strong>Process:</strong> Split data into k groups, test on each group once</p>
+                    <div class="highlight-box">
+                        <strong>Pros:</strong>
+                        <br>• Computationally efficient
+                        <br>• Good balance of bias and variance
+                        <br>• Works well for most datasets
+                    </div>
+                    <p><strong>Common choice:</strong> k = 5 or k = 10</p>
+                </div>
+                
+                <div class="comparison-item">
+                    <h3>Leave-One-Out CV</h3>
+                    <p><strong>Process:</strong> Test on each individual data point, train on all others</p>
+                    <div class="accent-box">
+                        <strong>Pros:</strong>
+                        <br>• Maximum use of data
+                        <br>• Very thorough testing
+                        <br>• Nearly unbiased estimate
+                    </div>
+                    <p><strong>Downside:</strong> Computationally expensive for large datasets</p>
+                </div>
+            </div>
+            
+            <div class="vs-divider">VS</div>
+        </div>
+
+        <!-- Practical Applications -->
         <div class="slide two-content">
-            <h2>Cross-Validation in Action</h2>
+            <h2>Cross-Validation in Practice</h2>
             
             <div class="content-column">
                 <h3>Hyperparameter Tuning</h3>
-                <p>When adjusting model settings, cross-validation prevents overfitting to a single train-test split. It helps find settings that work consistently across different data subsets.</p>
-                
-                <img src="https://i.imgur.com/IY1XHig.png" alt="A graph showing how different hyperparameter values perform across multiple CV folds">
-                
+                <p>Cross-validation helps us find the best settings (learning rate, tree depth, etc.) without overfitting to our test set.</p>
                 <div class="highlight-box">
-                    Never tune hyperparameters on a single split - you might just get lucky!
+                    Like adjusting your study schedule based on performance across multiple practice exams, not just one.
                 </div>
+                <p>Example: Testing different values of k in k-nearest neighbors to find the optimal number of neighbors to consider.</p>
             </div>
             
             <div class="content-column">
                 <h3>Model Selection</h3>
-                <p>When choosing between different algorithms, cross-validation provides fair comparison by testing each model on the same multiple splits.</p>
+                <p>When choosing between algorithms (linear regression vs decision trees vs neural networks), cross-validation gives reliable comparisons.</p>
+                <div class="accent-box">
+                    Like trying different study strategies across multiple subjects to see which works best overall.
+                </div>
+                <p>Example: Comparing average cross-validation scores to choose between Random Forest (87% accuracy) vs SVM (84% accuracy).</p>
+            </div>
+        </div>
+
+        <!-- Bringing It All Together -->
+        <div class="slide content-caption">
+            <h2>The Complete Machine Learning Development Cycle</h2>
+            
+            <div class="main-content-area">
+                <img src="https://via.placeholder.com/600x400/EA580C/FFFFFF?text=ML+Development+Cycle+Diagram" alt="Circular diagram showing the complete ML development process">
+            </div>
+            
+            <div class="caption-area">
+                <strong>The Iterative Process:</strong> 1) Define Hypothesis Space → 2) Embed Inductive Bias → 3) Train Models → 4) Evaluate Performance → 5) Validate with Cross-Validation → 6) Iterate and Improve. This cycle continues until we achieve reliable, generalizable models.
+            </div>
+        </div>
+
+        <!-- Key Takeaways -->
+        <div class="slide title-content">
+            <h2>Key Takeaways for Successful Machine Learning</h2>
+            <div class="content-area">
+                <p>Remember these essential principles as you develop your machine learning expertise:</p>
                 
-                <img src="https://i.imgur.com/swGd7bZ.png" alt="A comparison chart showing how different models perform across cross-validation folds">
+                <ul class="content-list">
+                    <li><strong>No Free Lunch:</strong> There's no universally best algorithm. Success comes from matching the right inductive bias to your specific problem</li>
+                    <li><strong>Think Like a Scientist:</strong> Always question your results. Use robust evaluation methods to ensure your model will work in the real world</li>
+                    <li><strong>Balance is Key:</strong> Navigate carefully between underfitting (too simple) and overfitting (too complex)</li>
+                    <li><strong>Human Expertise Matters:</strong> Your choices in hypothesis space, inductive bias, and evaluation fundamentally determine what your model can learn</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    Machine learning isn't purely automated magic. It's a collaborative dance between human insight and computational power!
+                </div>
                 
                 <div class="accent-box">
-                    Choose models that show consistent performance across all folds, not just high average performance.
+                    Master these four concepts - Hypothesis Space, Inductive Bias, Evaluation, and Cross-Validation - and you'll have the foundation to tackle any ML challenge with confidence.
                 </div>
             </div>
         </div>
 
-        <!-- How They Work Together -->
-        <div class="slide title-content">
-            <h2>How These Concepts Form an Integrated Framework</h2>
-            <div class="content-area">
-                <p>These four concepts work together like the essential components of a well-designed system. Understanding their interplay is crucial for machine learning success:</p>
-                
-                <ul class="content-list">
-                    <li><strong>Hypothesis Space</strong> defines what solutions are possible - the boundaries of your model's potential</li>
-                    <li><strong>Inductive Bias</strong> guides the search through that space, focusing on reasonable solutions rather than getting lost in infinite possibilities</li>
-                    <li><strong>Evaluation Metrics</strong> measure how well your chosen solution performs, but only if your evaluation method is sound</li>
-                    <li><strong>Cross-Validation</strong> ensures those measurements reflect true
+        <!-- Discussion -->
+        <div class="slide title-only">
+            <h1>Discussion & Questions</h1>
+            <p class="subtitle">Let's explore these concepts together!</p>
+        </div>
+
+    </div>
+
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        Slide 1 of 18
+    </div>
+
+    <script>
+        // Update slide counter on scroll
+        function updateSlideCounter() {
+            const slides = document.querySelectorAll('.slide');
+            const slideCounter = document.querySelector('.slide-counter');
+            
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    slideCounter.textContent = `Slide ${index + 1} of ${slides.length}`;
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateSlideCounter);
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            // Find current slide
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentSlide = index;
+                }
+            });
+            
+            // Navigate with arrow keys
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (currentSlide < slides.length - 1) {
+                    slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                if (currentSlide > 0) {
+                    slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
