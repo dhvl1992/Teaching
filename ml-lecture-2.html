@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning Fundamentals Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh;
+            color: #1E293B;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Base slide styling */
+        .slide {
+            background: #FEF7ED;
+            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            min-height: 500px;
+            page-break-after: always;
+        }
+
+        .slide:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Layout 1: Title Slide */
+        .title-slide {
+            background: #1E293B;
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-left: 5px solid #EA580C;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .title-slide .subtitle {
+            font-size: 1.6em;
+            opacity: 0.9;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .title-slide .author {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        /* Layout 2: Title and Content */
+        .title-content h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-area {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .content-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        .content-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #EA580C;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Layout 3: Section Header */
+        .section-header {
+            background: linear-gradient(135deg, #059669, #EA580C);
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section-header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section-header .section-subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+        }
+
+        /* Layout 4: Two Content */
+        .two-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .two-content h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-column {
+            padding: 20px;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: 10px;
+        }
+
+        .content-column h3 {
+            font-size: 1.6em;
+            color: #059669;
+            margin-bottom: 15px;
+        }
+
+        /* Layout 5: Comparison */
+        .comparison h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+            text-align: center;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .comparison-item {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(234, 88, 12, 0.1);
+        }
+
+        .comparison-item h3 {
+            font-size: 1.8em;
+            color: #EA580C;
+            margin-bottom: 20px;
+        }
+
+        .vs-divider {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .comparison {
+            position: relative;
+        }
+
+        /* Layout 6: Title Only */
+        .title-only {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-only h1 {
+            font-size: 3em;
+            color: #1E293B;
+            margin-bottom: 20px;
+        }
+
+        .title-only .subtitle {
+            font-size: 1.4em;
+            color: #059669;
+            font-style: italic;
+        }
+
+        /* Layout 7: Blank */
+        .blank-slide {
+            /* Intentionally minimal - just the base slide styling */
+        }
+
+        /* Layout 8: Content with Caption */
+        .content-caption {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 30px;
+        }
+
+        .content-caption h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .main-content-area {
+            background: linear-gradient(45deg, #059669, #EA580C);
+            border: 2px dashed #1E293B;
+            border-radius: 15px;
+            padding: 80px 40px;
+            text-align: center;
+            color: #FEF7ED;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .caption-area {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #059669;
+        }
+
+        /* Layout 9: Picture with Caption */
+        .picture-caption {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .picture-caption h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .picture-area {
+            background: rgba(5, 150, 105, 0.1);
+            border: 2px solid #059669;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .picture-area img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .caption-sidebar {
+            background: rgba(234, 88, 12, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 4px solid #EA580C;
+        }
+
+        .caption-sidebar h3 {
+            color: #EA580C;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        /* Special Elements */
+        .highlight-box {
+            background: #059669;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .accent-box {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .emphasis {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .slide {
+                padding: 20px;
+                min-height: 400px;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5em;
+            }
+
+            .two-content,
+            .comparison-grid,
+            .picture-caption {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .vs-divider {
+                display: none;
+            }
+        }
+
+        /* Navigation */
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Title Slide -->
+        <div class="slide title-slide">
+            <h1>Machine Learning Fundamentals</h1>
+            <p class="subtitle">Hypothesis Space, Inductive Bias, Evaluation, and Cross-Validation</p>
+            <p class="author">Dr. Dhaval Patel - 2025</p>
+        </div>
+
+        <!-- Introduction Overview -->
+        <div class="slide title-content">
+            <h2>Understanding the Big Picture</h2>
+            <div class="content-area">
+                <p>Machine learning has four fundamental elements:</p>
+                
+                <ul class="content-list">
+                    <li><strong>Hypothesis Space:</strong> The blueprint - what solutions are possible</li>
+                    <li><strong>Inductive Bias:</strong> The rules - how we guide the building process</li>
+                    <li><strong>Model Evaluation:</strong> Quality inspection - how we measure what we've built</li>
+                    <li><strong>Cross-Validation:</strong> Testing - ensuring our structure works in real conditions</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    These concepts work together to transform raw data into reliable, intelligent systems that can make accurate predictions on new, unseen information.
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Header: Hypothesis Space -->
+        <div class="slide section-header">
+            <h1>Hypothesis Space</h1>
+            <p class="section-subtitle">The Universe of Possible Solutions</p>
+        </div>
+
+        <!-- Hypothesis Space: Library Analogy -->
+        <div class="slide picture-caption">
+            <h2>What Is Hypothesis Space?</h2>
+            
+            <div class="picture-area">
+                <image src="https://i.imgur.com/QDYKt1k.jpeg" alt="A vast library with countless books on shelves, representing the infinite possibilities in hypothesis space">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>The Library Analogy</h3>
+                <p>Imagine a massive library where each book represents a different way to solve your problem. This is your hypothesis space.</p>
+                
+                <ul class="content-list">
+                    <li>Each book is a potential model</li>
+                    <li>Your algorithm searches for the best book</li>
+                    <li>You can only find what's in the library</li>
+                    <li>The library size determines complexity</li>
+                </ul>
+                
+                <div class="accent-box">
+                    Note: Your algorithm can only learn what exists in its hypothesis space!
+                </div>
+            </div>
+        </div>
+
+        <!-- Hypothesis Space: The Size Problem -->
+        <div class="slide content-caption">
+            <h2>The Challenge of Infinite Possibilities</h2>
+            
+            <div class="main-content-area">
+                <image src="https://i.imgur.com/WTGBjd5.jpeg" alt="A mathematical visualization showing exponential growth, with numbers exploding from small to astronomically large">
+            </div>
+            
+            <div class="caption-area">
+                <strong>The Scale Problem:</strong> For a problem with just a few dozen features, the number of possible functions could exceed the number of atoms in the universe. This means we cannot exhaustively search every possibility. We need smarter approaches to navigate this vast space efficiently and find meaningful solutions within reasonable time and computational limits.
+            </div>
+        </div>
+
+        <!-- Hypothesis Space Examples -->
+        <div class="slide two-content">
+            <h2>Hypothesis Spaces in Common Algorithms</h2>
+            
+            <div class="content-column">
+                <h3>Simple Models</h3>
+                <p><strong>Linear Regression:</strong> Contains all possible straight lines or hyperplanes. Each line represents a different way to predict output from input features.</p>
+                
+                <image src="https://blog.minitab.com/hubfs/Imported_Blog_Media/scatter_constant_dift.png" alt="A graph showing multiple straight lines with different slopes and intercepts on a scatter plot">
+                
+                <p><strong>Decision Trees:</strong> Contains all possible tree structures that can make yes/no decisions about your features.</p>
+            </div>
+            
+            <div class="content-column">
+                <h3>Complex Models</h3>
+                <p><strong>Neural Networks:</strong> Contains an enormous variety of architectures with different numbers of layers, neurons, and connections.</p>
+                
+                <image src="https://ik.imagekit.io/upgrad1/abroad-images/imageCompo/images/different_types_of_neural_networkZD7FPL.jpg?pr-true" alt="A visualization of different neural network architectures, showing networks with varying depths and widths">
+                
+                <p><strong>The Key Insight:</strong> More complex hypothesis spaces can capture more patterns but require more careful guidance to avoid overfitting.</p>
+            </div>
+        </div>
+
+        <!-- Section Header: Inductive Bias -->
+        <div class="slide section-header">
+            <h1>Inductive Bias</h1>
+            <p class="section-subtitle">The Wise Guide for Learning</p>
+        </div>
+
+        <!-- Inductive Bias: The Guide Concept -->
+        <div class="slide picture-caption">
+            <h2>Why We Need Guidance in Learning</h2>
+            
+            <div class="picture-area">
+                <image src="https://lh7-rt.googleusercontent.com/docsz/AD_4nXdHnt-bFwTwQCEdPzNeUEaqXT9W5yqXM3CaTKIhP4HZ7IEuLy3I4JqtUfqdabjByWNncQgpaOzjTSaLoHQXfXc5PrxXSRJeLZJeR4LytGyT74tWdn6p3BevQKC8nnNA5vnXd2afsiz5AVxP1EDmuzCdAug?key=YQADWZUoA45Zepy6YYJtyw" alt="A wise mentor or guide pointing the way through a complex maze, representing how inductive bias guides learning">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>The Guiding Principle</h3>
+                <p>Without assumptions, learning from limited examples would be impossible. Inductive bias provides the educated guesses that make learning feasible.</p>
+                
+                <ul class="content-list">
+                    <li>Helps choose among infinite possibilities</li>
+                    <li>Embeds prior knowledge into algorithms</li>
+                    <li>Makes generalization possible</li>
+                    <li>Balances complexity and simplicity</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    Think of it as the "common sense" built into your algorithm!
+                </div>
+            </div>
+        </div>
+
+        <!-- Types of Inductive Bias -->
+        <div class="slide comparison">
+            <h2>Two Types of Inductive Bias</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>Restrictive Bias</h3>
+                    <p>Comes from the model's structure itself. When you choose linear regression, you're restricting the search to only linear relationships.</p>
+                    
+                    <image src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Anscombe%27s_quartet_3.svg/960px-Anscombe%27s_quartet_3.svg.png" alt="A diagram showing how linear regression is restricted to linear functions only">
+                    
+                    <div class="highlight-box">
+                        Example: Linear models can only find straight-line patterns
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <h3>Preference Bias</h3>
+                    <p>Influences which solution the algorithm prefers among valid options. Like preferring simpler explanations over complex ones.</p>
+                    
+                    <image src="https://miro.medium.com/max/848/1*TxzPx2UmUdhKieWruQ1prA.png" alt="A decision tree diagram showing preference for simpler, shorter trees over complex ones">
+                    
+                    <div class="accent-box">
+                        Example: Decision trees preferring shorter, more interpretable structures
+                    </div>
+                </div>
+            </div>
+            
+            <div class="vs-divider">VS</div>
+        </div>
+
+        <!-- Inductive Bias Examples -->
+        <div class="slide title-content">
+            <h2>Common Inductive Biases in Practice</h2>
+            <div class="content-area">
+                <p>Different algorithms embody different assumptions about how the system works. Understanding these biases helps you choose the right tool for your problem:</p>
+                
+                <ul class="content-list">
+                    <li><strong>K-Nearest Neighbors:</strong> Assumes similar inputs produce similar outputs (locality principle)</li>
+                    <li><strong>Support Vector Machines:</strong> Prefers decision boundaries with maximum margin between classes</li>
+                    <li><strong>Convolutional Neural Networks:</strong> Assumes spatial relationships matter in images</li>
+                </ul>
+                
+                <div class="accent-box">
+                    No single algorithm works best for all problems. The key is matching your algorithm's biases to your problem's characteristics.
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Header: Model Evaluation -->
+        <div class="slide section-header">
+            <h1>Model Evaluation</h1>
+            <p class="section-subtitle">Measuring Success and Reliability</p>
+        </div>
+
+        <!-- Why Evaluation Matters -->
+        <div class="slide title-content">
+            <h2>Why Robust Evaluation Is Critical</h2>
+            <div class="content-area">
+                <p>Building a model is only half the battle. Just as students might perform well on homework but poorly on exams, models might seem great during training but fail in real applications.</p>
+                
+                <div class="highlight-box">
+                    Evaluation provides the objective measures needed to assess effectiveness, detect bias, and ensure real-world reliability.
+                </div>
+                
+                <p>Proper evaluation helps us:</p>
+                <ul class="content-list">
+                    <li>Improve model performance through informed tuning decisions</li>
+                    <li>Detect and prevent unfair bias in our systems</li>
+                    <li>Ensure models generalize beyond training data</li>
+                    <li>Build confidence in deployment decisions</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Classification Metrics -->
+        <div class="slide picture-caption">
+            <h2>Classification Metrics: The Confusion Matrix Foundation</h2>
+            
+            <div class="picture-area">
+                <image src="https://upload.wikimedia.org/wikipedia/commons/a/a1/ConfusionMatrixRedBlue.png" alt="A 2x2 confusion matrix diagram clearly labeled with True Positives, False Positives, True Negatives, and False Negatives">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>Understanding Predictions</h3>
+                <p>The confusion matrix shows how your model's predictions compare to reality, forming the foundation for all classification metrics.</p>
+                
+                <ul class="content-list">
+                    <li><strong>True Positives:</strong> Correctly identified positive cases</li>
+                    <li><strong>False Positives:</strong> Incorrectly predicted positive (Type I error)</li>
+                    <li><strong>True Negatives:</strong> Correctly identified negative cases</li>
+                    <li><strong>False Negatives:</strong> Missed positive cases (Type II error)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Classification Metrics Deep Dive -->
+        <div class="slide two-content">
+            <h2>Key Classification Metrics Explained</h2>
+            
+            <div class="content-column">
+                <h3>Accuracy & Precision</h3>
+                <p><strong>Accuracy:</strong> Overall percentage of correct predictions. Works well for balanced datasets but can be misleading with imbalanced classes.</p>
+                
+                <image src="https://ars.els-cdn.com/content/image/3-s2.0-B9780123848642000056-f05-04-9780123848642.jpg" alt="A pie chart showing proportion of correct vs incorrect predictions for accuracy">
+                
+                <p><strong>Precision:</strong> Of all positive predictions, how many were actually correct? Critical when false positives are costly (like unnecessary medical treatments).</p>
+            </div>
+            
+            <div class="content-column">
+                <h3>Recall & F1-Score</h3>
+                <p><strong>Recall:</strong> Of all actual positive cases, how many did we catch? Essential when missing positives is dangerous (like disease detection).</p>
+                
+                <image src="https://media.licdn.com/dms/image/v2/D4D12AQGr-gb0FEWGHg/article-inline_image-shrink_1500_2232/article-inline_image-shrink_1500_2232/0/1711751360819?e=1758758400&v=beta&t=w2nmvbGFHWbTVeWaQlBJOJ6Ftsa0qSKf3I3DFbOqTi0" alt="A visualization showing the trade-off between precision and recall">
+                
+                <p><strong>F1-Score:</strong> Balances precision and recall through their harmonic mean. Perfect for imbalanced datasets where both false positives and false negatives matter.</p>
+            </div>
+        </div>
+
+        <!-- Regression Metrics -->
+        <div class="slide title-content">
+            <h2>Regression Metrics: Measuring Continuous Predictions</h2>
+            <div class="content-area">
+                <p>When predicting continuous values like prices or temperatures, we need different metrics that quantify the magnitude of prediction errors:</p>
+                
+                <ul class="content-list">
+                    <li><strong>Mean Absolute Error (MAE):</strong> Average magnitude of errors without considering direction. Easy to interpret - if MAE is $10,000 for house prices, predictions are typically off by about $10,000.</li>
+                    <li><strong>Root Mean Squared Error (RMSE):</strong> Penalizes large errors more heavily than small ones. Useful when big mistakes are disproportionately problematic.</li>
+                    <li><strong>R-squared:</strong> Proportion of variance explained by the model. An R² of 0.8 means the model explains 80% of the variation in the data.</li>
+                </ul>
+                
+                <div class="accent-box">
+                    Choose metrics that align with your real-world objectives. Ask yourself: What kinds of mistakes are most costly in my specific application?
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Header: Cross-Validation -->
+        <div class="slide section-header">
+            <h1>Cross-Validation</h1>
+            <p class="section-subtitle">Testing True Performance</p>
+        </div>
+
+        <!-- Cross-Validation Concept -->
+        <div class="slide picture-caption">
+            <h2>Why Multiple Tests Beat Single Tests</h2>
+            
+            <div class="picture-area">
+                <image src="https://i.imgur.com/zofgm1G.jpeg" alt="A teacher giving multiple different tests to students, representing how cross-validation uses multiple evaluation rounds">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>The Multiple Test Principle</h3>
+                <p>Just as teachers use multiple tests to fairly assess student knowledge, cross-validation uses multiple train-test splits to reliably measure model performance.</p>
+                
+                <ul class="content-list">
+                    <li>Reduces dependence on lucky/unlucky splits</li>
+                    <li>Provides more stable performance estimates</li>
+                    <li>Maximizes use of limited data</li>
+                    <li>Reveals consistency across different subsets</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    Single splits can be misleading - cross-validation reveals the true story!
+                </div>
+            </div>
+        </div>
+
+        <!-- K-Fold Cross-Validation -->
+        <div class="slide content-caption">
+            <h2>K-Fold Cross-Validation: The Gold Standard</h2>
+            
+            <div class="main-content-area">
+                <image src="https://miro.medium.com/v2/resize:fit:720/format:webp/0*xj1-n0lyDajpgvMU.png" alt="A diagram showing dataset divided into 5 folds, with arrows indicating the rotation of training and validation sets across multiple rounds">
+            </div>
+            
+            <div class="caption-area">
+                <strong>The Process:</strong> Divide your data into K equal parts (typically 5 or 10). Train on K-1 parts, test on the remaining part. Repeat K times until every part has been the test set once. Average all results for your final performance estimate. This approach provides much more reliable and stable performance measurements than single train-test splits.
+            </div>
+        </div>
+
+        <!-- Cross-Validation Benefits -->
+        <div class="slide two-content">
+            <h2>Cross-Validation in Action</h2>
+            
+            <div class="content-column">
+                <h3>Hyperparameter Tuning</h3>
+                <p>When adjusting model settings, cross-validation prevents overfitting to a single train-test split. It helps find settings that work consistently across different data subsets.</p>
+                
+                <image src="https://i.imgur.com/IY1XHig.png" alt="A graph showing how different hyperparameter values perform across multiple CV folds">
+                
+                <div class="highlight-box">
+                    Never tune hyperparameters on a single split - you might just get lucky!
+                </div>
+            </div>
+            
+            <div class="content-column">
+                <h3>Model Selection</h3>
+                <p>When choosing between different algorithms, cross-validation provides fair comparison by testing each model on the same multiple splits.</p>
+                
+                <image src="https://i.imgur.com/swGd7bZ.png" alt="A comparison chart showing how different models perform across cross-validation folds">
+                
+                <div class="accent-box">
+                    Choose models that show consistent performance across all folds, not just high average performance.
+                </div>
+            </div>
+        </div>
+
+        <!-- How They Work Together -->
+        <div class="slide title-content">
+            <h2>How These Concepts Form an Integrated Framework</h2>
+            <div class="content-area">
+                <p>These four concepts work together like the essential components of a well-designed system. Understanding their interplay is crucial for machine learning success:</p>
+                
+                <ul class="content-list">
+                    <li><strong>Hypothesis Space</strong> defines what solutions are possible - the boundaries of your model's potential</li>
+                    <li><strong>Inductive Bias</strong> guides the search through that space, focusing on reasonable solutions rather than getting lost in infinite possibilities</li>
+                    <li><strong>Evaluation Metrics</strong> measure how well your chosen solution performs, but only if your evaluation method is sound</li>
+                    <li><strong>Cross-Validation</strong> ensures those measurements reflect true performance, not statistical accidents</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    Success in machine learning requires thoughtful choices about hypothesis spaces, careful consideration of inductive biases, rigorous evaluation practices, and robust validation techniques.
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Takeaways -->
+        <div class="slide title-content">
+            <h2>Essential Takeaways for Your ML Journey</h2>
+            <div class="content-area">
+                <p>As you continue developing machine learning expertise, these concepts provide both theoretical foundation and practical guidance:</p>
+                
+                <ul class="content-list">
+                    <li><strong>Design Thoughtfully:</strong> Your choice of algorithm and architecture sets fundamental limits on what can be learned</li>
+                    <li><strong>Embrace Useful Bias:</strong> The right inductive biases turn intractable problems into solvable ones</li>
+                    <li><strong>Evaluate Rigorously:</strong> Proper metrics and validation methods separate real progress from false hope</li>
+                    <li><strong>Think Systematically:</strong> Machine learning success comes from understanding how these elements work together, not just mastering each individually</li>
+                </ul>
+                
+                <div class="accent-box">
+                    Remember: Machine learning is not purely data-driven magic. Success requires the thoughtful combination of human insight, principled methodology, and systematic evaluation.
+                </div>
+            </div>
+        </div>
+
+        <!-- Conclusion -->
+        
+
+    </div>
+
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        Slide 1 of 17
+    </div>
+
+    <script>
+        // Update slide counter on scroll
+        function updateSlideCounter() {
+            const slides = document.querySelectorAll('.slide');
+            const slideCounter = document.querySelector('.slide-counter');
+            
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    slideCounter.textContent = `Slide ${index + 1} of ${slides.length}`;
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateSlideCounter);
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            // Find current slide
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentSlide = index;
+                }
+            });
+            
+            // Navigate with arrow keys
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (currentSlide < slides.length - 1) {
+                    slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                if (currentSlide > 0) {
+                    slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
