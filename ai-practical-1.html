@@ -393,68 +393,39 @@
                 <h3>Rule-Based System Implementation</h3>
                 <div class="code-block">
                     <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
-<pre># Rule-Based System for Light Diagnosis
+<pre>print("💡 Simple Light Diagnosis Expert System 💡")
+print("Answer the questions to find out why the light is not working.\n")
 
-print("=== Light Diagnosis Expert System ===")
-print("Answer the following questions to diagnose the light problem:")
+# Step 1: Ask user if the switch is ON
+switch = input("Is the switch ON? (yes/no): ")
 
-# Step 1: Create a dictionary to store facts (what we know)
-facts = {}
-
-# Step 2: Get user input and store facts
-switch_answer = input("Is the light switch turned on? (yes/no): ")
-if switch_answer.lower() == 'yes':
-    facts['light_switch_on'] = True
-else:
-    facts['light_switch_on'] = False
-
-# Step 3: Apply Rule 1 - Check if switch is off
-if facts['light_switch_on'] == False:
-    diagnosis = "Switch is off - Please turn on the light switch"
-    print(f"\n🔍 Diagnosis: {diagnosis}")
-    print(f"Rule applied: IF light_switch_on = False THEN cause = Switch is off")
-    print(f"Facts used: {facts}")
-else:
-    # Continue asking questions if switch is on
-    bulb_answer = input("Is the bulb working (not burnt out)? (yes/no): ")
-    if bulb_answer.lower() == 'yes':
-        facts['bulb_working'] = True
-    else:
-        facts['bulb_working'] = False
+if switch == "no":
+    print("\n🔍 Diagnosis: The switch is OFF. Turn it ON.")
+    print("Rule used: IF switch == 'no' THEN problem = switch is off")
     
-    # Step 4: Apply Rule 2 - Check if bulb is fused
-    if facts['light_switch_on'] == True and facts['bulb_working'] == False:
-        diagnosis = "Bulb is fused - Please replace the light bulb"
-        print(f"\n🔍 Diagnosis: {diagnosis}")
-        print(f"Rule applied: IF light_switch_on = True AND bulb_working = False THEN cause = Bulb is fused")
-        print(f"Facts used: {facts}")
+else:
+    # Step 2: Ask if the bulb is okay
+    bulb = input("Is the bulb working (not fused)? (yes/no): ")
+    
+    if bulb == "no":
+        print("\n🔍 Diagnosis: The bulb is fused. Replace it.")
+        print("Rule used: IF switch == 'yes' AND bulb == 'no' THEN problem = bulb is fused")
+    
     else:
-        # Continue asking if bulb is working
-        power_answer = input("Is there power available (other lights working)? (yes/no): ")
-        if power_answer.lower() == 'yes':
-            facts['power_available'] = True
-        else:
-            facts['power_available'] = False
+        # Step 3: Ask if there's power
+        power = input("Is there electricity/power? (yes/no): ")
         
-        # Step 5: Apply Rule 3 - Check power supply
-        if facts['light_switch_on'] == True and facts['bulb_working'] == True and facts['power_available'] == False:
-            diagnosis = "No power supply - Check circuit breaker or electrical connection"
-            print(f"\n🔍 Diagnosis: {diagnosis}")
-            print(f"Rule applied: IF light_switch_on = True AND bulb_working = True AND power_available = False THEN cause = No power supply")
-            print(f"Facts used: {facts}")
-        # Step 6: Apply Rule 4 - Everything else working
-        elif facts['light_switch_on'] == True and facts['bulb_working'] == True and facts['power_available'] == True:
-            diagnosis = "Light fixture problem - Check wiring or consult an electrician"
-            print(f"\n🔍 Diagnosis: {diagnosis}")
-            print(f"Rule applied: IF light_switch_on = True AND bulb_working = True AND power_available = True THEN cause = Light fixture problem")
-            print(f"Facts used: {facts}")
+        if power == "no":
+            print("\n🔍 Diagnosis: No power supply. Check your electric board.")
+            print("Rule used: IF switch == 'yes' AND bulb == 'yes' AND power == 'no' THEN problem = no power")
+        
         else:
-            print(f"\n🔍 No diagnosis found")
-            print(f"Facts used: {facts}")
+            # Step 4: All OK but still not working
+            print("\n🔍 Diagnosis: There may be a wiring or fixture issue. Call an electrician.")
+            print("Rule used: IF switch == 'yes' AND bulb == 'yes' AND power == 'yes' THEN problem = fixture issue")
 
-print("\n=== Diagnosis Complete ===")
-print("This is how a rule-based system works!")
-print("It uses IF-THEN rules to make decisions based on facts.")</pre>
+print("\n✅ Done! You just used a Rule-Based System with IF-THEN logic.")
+</pre>
                 </div>
             </div>
         </div>
