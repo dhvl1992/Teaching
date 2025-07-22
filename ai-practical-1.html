@@ -363,6 +363,43 @@
                     <li>IF light_switch_on = True AND bulb_working = False THEN cause = "Bulb is fused"</li>
                     <li>IF light_switch_on = True AND bulb_working = True AND power_available = False THEN cause = "No power supply"</li>
                 </ul>
+                <table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Step</th>
+      <th>Question Asked</th>
+      <th>Condition</th>
+      <th>Rule / Diagnosis</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Is the switch ON?</td>
+      <td><code>no</code></td>
+      <td>Switch is off</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Is the bulb OK?</td>
+      <td><code>no</code> and switch is <code>yes</code></td>
+      <td>Bulb is fused</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Is there power?</td>
+      <td><code>no</code> and above are <code>yes</code></td>
+      <td>No electricity</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>All answers are <code>yes</code></td>
+      <td></td>
+      <td>Problem with light fixture or wiring</td>
+    </tr>
+  </tbody>
+</table>
+
             </div>
 
             <div class="virtual-lab">
