@@ -527,233 +527,88 @@
         <!-- Right Panel - Code Section -->
         <div class="right-panel">
             <div class="code-header">
-                <h2>💻 Student-Friendly Code</h2>
+                <h2>💻  Code</h2>
             </div>
 
             <div class="code-section">
-                <h3>📂 Setting Up the File System</h3>
+                <h3>📂 DFs BFS in the File System</h3>
                 <div class="code-block">
                     <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
-<pre># Step 1: Create our computer's file system structure
-# Think of this like your actual computer folders!
-
+<pre># Simple folder structure as a dictionary
 file_system = {
-    "Root": {
-        "type": "folder",
-        "contains": {
-            "Documents": {
-                "type": "folder", 
-                "contains": {
-                    "resume.pdf": {"type": "file"},
-                    "project.docx": {"type": "file"},
-                    "College": {
-                        "type": "folder",
-                        "contains": {
-                            "notes.txt": {"type": "file"}
-                        }
-                    }
-                }
-            },
-            "Pictures": {
-                "type": "folder",
-                "contains": {
-                    "vacation.jpg": {"type": "file"},
-                    "party.png": {"type": "file"}
-                }
-            },
-            "Downloads": {
-                "type": "folder",
-                "contains": {
-                    "software.exe": {"type": "file"}
-                }
-            }
-        }
-    }
+    "C:": ["Users", "Program Files", "Games"],
+    "Users": ["Dhaval", "Guest"],
+    "Dhaval": ["Documents", "Pictures", "Resume.docx"],
+    "Guest": [],
+    "Documents": ["Notes.txt", "Project.pdf"],
+    "Pictures": ["Photo1.jpg", "Photo2.png"],
+    "Program Files": ["App1", "App2"],
+    "App1": ["Readme.txt"],
+    "App2": [],
+    "Games": ["Game1", "Game2"],
+    "Game1": [],
+    "Game2": [],
 }
 
-print("📂 File system created!")
-print("Now we can search for any file using BFS or DFS")
+# -----------------------------
+# Breadth First Search (BFS)
+# -----------------------------
+def bfs_search(start, target):
+    print("\n🔍 BFS Search Steps:")
+    queue = [[start]]
 
-# What file are we looking for?
-target_file = "vacation.jpg"
-print(f"🔍 Searching for: {target_file}")
+    while queue:
+        path = queue.pop(0)   # Get the first path
+        node = path[-1]       # Get the last folder in the path
+
+        print("➡️  Visiting:", node)
+
+        if node == target:
+            print("✅ Found file at path:", " > ".join(path))
+            return
+
+        for child in file_system.get(node, []):
+            new_path = path + [child]
+            queue.append(new_path)
+
+    print("❌ File not found using BFS")
+
+# -----------------------------
+# Depth First Search (DFS)
+# -----------------------------
+def dfs_search(start, target):
+    print("\n🔍 DFS Search Steps:")
+    stack = [[start]]
+
+    while stack:
+        path = stack.pop()    # Get the last path
+        node = path[-1]       # Get the last folder in the path
+
+        print("➡️  Visiting:", node)
+
+        if node == target:
+            print("✅ Found file at path:", " > ".join(path))
+            return
+
+        for child in file_system.get(node, [])[::-1]:  # Reverse for correct order
+            new_path = path + [child]
+            stack.append(new_path)
+
+    print("❌ File not found using DFS")
+
+
+# ---------------------------------------
+# 🔧 Run both searches to compare results
+# ---------------------------------------
+
+start_folder = "C:"
+file_to_find = "Resume.docx"
+
+bfs_search(start_folder, file_to_find)
+dfs_search(start_folder, file_to_find)
+
 </pre>
                 </div>
-            </div>
-
-            <div class="code-section">
-                <h3>🔍 BFS - Breadth First Search (Check All Folders at Each Level)</h3>
-                <div class="code-block">
-                    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
-<pre># BFS: Like checking all folders on desktop first, then diving deeper
-
-def search_file_with_bfs(file_system, target_file):
-    print("=== 🔍 BFS: Level by Level Search ===")
-    print("Strategy: Check all folders at current level before going deeper")
-    print()
-    
-    # Queue: "Remember to check these folders later"
-    folders_to_check = []  # This is our queue
-    folders_to_check.append(("Root", file_system["Root"], ["Root"]))
-    
-    steps_taken = 0
-    
-    while folders_to_check:
-        # Take the first folder from our queue (FIFO - First In, First Out)
-        current_name, current_folder, path = folders_to_check.pop(0)
-        steps_taken += 1
-        
-        print(f"Step {steps_taken}: 📂 Checking folder '{current_name}'")
-        print(f"Path: {' → '.join(path)}")
-        
-        # Look through everything in this folder
-        if "contains" in current_folder:
-            for item_name, item_data in current_folder["contains"].items():
-                
-                # Found a file!
-                if item_data["type"] == "file":
-                    print(f"   📄 Found file: {item_name}")
-                    
-                    # Is this the file we want?
-                    if item_name == target_file:
-                        final_path = path + [item_name]
-                        print(f"   ✅ SUCCESS! Found '{target_file}'!")
-                        print(f"   📍 Location: {' → '.join(final_path)}")
-                        print(f"   📊 Total folders checked: {steps_taken}")
-                        print(f"   🎯 BFS guarantees shortest folder path!")
-                        return final_path
-                
-                # Found another folder - add it to queue for later
-                elif item_data["type"] == "folder":
-                    new_path = path + [item_name]
-                    folders_to_check.append((item_name, item_data, new_path))
-                    print(f"   📂 Added '{item_name}' to queue for later checking")
-        
-        print()  # Empty line for readability
-    
-    print(f"❌ File '{target_file}' not found anywhere!")
-    print(f"📊 Total folders checked: {steps_taken}")
-    return None
-
-# Run the search!
-result = search_file_with_bfs(file_system, "vacation.jpg")
-</pre>
-                </div>
-            </div>
-
-            <div class="code-section">
-                <h3>🏃‍♂️ DFS - Depth First Search (Deep Dive Strategy)</h3>
-                <div class="code-block">
-                    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
-<pre># DFS: Like opening one folder and going as deep as possible
-
-def search_file_with_dfs(file_system, target_file):
-    print("=== 🏃‍♂️ DFS: Deep Dive Search ===")
-    print("Strategy: Go deep into one folder path before trying others")
-    print()
-    
-    # Stack: "Let me finish exploring this path first"
-    folders_to_check = []  # This is our stack
-    folders_to_check.append(("Root", file_system["Root"], ["Root"]))
-    
-    steps_taken = 0
-    
-    while folders_to_check:
-        # Take the last folder from our stack (LIFO - Last In, First Out)
-        current_name, current_folder, path = folders_to_check.pop()
-        steps_taken += 1
-        
-        print(f"Step {steps_taken}: 📂 Diving into folder '{current_name}'")
-        print(f"Path: {' → '.join(path)}")
-        
-        # Look through everything in this folder
-        if "contains" in current_folder:
-            # Process folders in reverse order for stack
-            items = list(current_folder["contains"].items())
-            
-            for item_name, item_data in items:
-                
-                # Found a file!
-                if item_data["type"] == "file":
-                    print(f"   📄 Found file: {item_name}")
-                    
-                    # Is this the file we want?
-                    if item_name == target_file:
-                        final_path = path + [item_name]
-                        print(f"   ✅ SUCCESS! Found '{target_file}'!")
-                        print(f"   📍 Location: {' → '.join(final_path)}")
-                        print(f"   📊 Total folders checked: {steps_taken}")
-                        print(f"   ⚠️  Path may not be shortest (DFS explores deep first)")
-                        return final_path
-            
-            # Add folders to stack (they'll be explored immediately)
-            for item_name, item_data in reversed(items):
-                if item_data["type"] == "folder":
-                    new_path = path + [item_name]
-                    folders_to_check.append((item_name, item_data, new_path))
-                    print(f"   📂 Will dive into '{item_name}' next (added to stack)")
-        
-        print()  # Empty line for readability
-    
-    print(f"❌ File '{target_file}' not found anywhere!")
-    print(f"📊 Total folders checked: {steps_taken}")
-    return None
-
-# Run the search!
-result = search_file_with_dfs(file_system, "vacation.jpg")
-</pre>
-                </div>
-            </div>
-
-            <div class="code-section">
-                <h3>🆚 Side-by-Side Comparison</h3>
-                <div class="code-block">
-                    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
-<pre># Compare BFS vs DFS - Which is better for finding files?
-
-print("=== 🆚 BFS vs DFS: Which Should You Use? ===")
-print()
-
-# Let's compare both methods
-print("🔍 BFS (Breadth First Search):")
-print("   📊 How it works: Queue (First In, First Out)")
-print("   🎯 Strategy: Check all folders at current level first")
-print("   ✅ Best for: Finding files in shallow folders (Desktop, Downloads)")
-print("   ✅ Guarantees: Shortest folder path to file")
-print("   ❌ Downside: Uses more memory (remembers many folders)")
-print()
-
-print("🏃‍♂️ DFS (Depth First Search):")
-print("   📊 How it works: Stack (Last In, First Out)")  
-print("   🎯 Strategy: Go as deep as possible in one path first")
-print("   ✅ Best for: When you remember roughly where file is")
-print("   ✅ Memory efficient: Only remembers current path")
-print("   ❌ Downside: Might not find shortest path")
-print()
-
-print("🧠 Real Life Examples:")
-print()
-print("Looking for a recent download?")
-print("   → Use BFS! It checks Downloads folder early")
-print()
-print("Looking for old school project deep in folders?")
-print("   → DFS might be faster if you remember the path")
-print()
-print("Limited computer memory?")
-print("   → DFS uses less memory")
-print()
-print("Want guaranteed shortest path?")
-print("   → BFS always finds minimum folder depth")
-
-print()
-print("💡 Pro Tip: Most file search tools use optimized versions")
-print("   that combine both strategies for best results!")
-</pre>
-                </div>
-            </div>
-
-            <div class="highlight-box">
-                <strong>🚀 Try This:</strong> Copy the code above and run it in Python! Change the target_file to search for different files like "resume.pdf" or "notes.txt" and see how the search paths differ!
             </div>
         </div>
     </div>
