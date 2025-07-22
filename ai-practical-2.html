@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uninformed Search - Maze Solving with BFS and DFS</title>
+    <title>Uninformed Search - Folder Search with BFS and DFS</title>
     <style>
         * {
             margin: 0;
@@ -112,7 +112,7 @@
             text-align: center;
         }
 
-        .maze-container {
+        .folder-container {
             background: rgba(234, 88, 12, 0.1);
             padding: 20px;
             border-radius: 10px;
@@ -120,105 +120,58 @@
             text-align: center;
         }
 
-        .maze-grid {
-            display: inline-grid;
-            grid-template-columns: repeat(4, 40px);
-            gap: 2px;
+        .folder-tree {
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            background: #F8FAFC;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #CBD5E1;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .folder-node {
+            padding: 3px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .folder-node:hover {
+            background-color: #E2E8F0;
+        }
+
+        .folder-node.highlight {
+            background-color: #FEF3C7;
+            font-weight: bold;
+            animation: pulse 0.5s;
+        }
+
+        .folder-node.found {
+            background-color: #DCFCE7;
+            color: #059669;
+            font-weight: bold;
+        }
+
+        @keyframes pulse {
+            0% { background-color: #FEF3C7; }
+            50% { background-color: #FDE047; }
+            100% { background-color: #FEF3C7; }
+        }
+
+        .search-controls {
             margin: 20px 0;
         }
 
-        .maze-cell {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 0.9em;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .maze-cell.path {
-            background: #F0F9FF;
-            border: 2px solid #0EA5E9;
-        }
-
-        .maze-cell.wall {
-            background: #374151;
-            border: 2px solid #1F2937;
-        }
-
-        .maze-cell.start {
-            background: #059669;
-            color: #FEF7ED;
-            border: 2px solid #047857;
-        }
-
-        .maze-cell.end {
-            background: #EA580C;
-            color: #FEF7ED;
-            border: 2px solid #C2410C;
-        }
-
-        .maze-cell.visited {
-            background: #DCFCE7;
-            border: 2px solid #16A34A;
-            color: #16A34A;
-            font-weight: bold;
-        }
-
-        .algorithm-info {
-            background: rgba(5, 150, 105, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            border-left: 4px solid #059669;
-        }
-
-        .algorithm-info h4 {
-            color: #059669;
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-
-        .algorithm-info p {
-            margin-bottom: 8px;
-        }
-
-        .step-info {
-            font-weight: bold;
-            color: #1E293B;
-            margin-top: 10px;
-            padding: 8px;
-            background: rgba(234, 88, 12, 0.1);
-            border-radius: 5px;
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid rgba(234, 88, 12, 0.3);
-        }
-
-        .step-info::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .step-info::-webkit-scrollbar-track {
-            background: rgba(234, 88, 12, 0.1);
-            border-radius: 4px;
-        }
-
-        .step-info::-webkit-scrollbar-thumb {
-            background: rgba(234, 88, 12, 0.5);
-            border-radius: 4px;
-        }
-
-        .step-info::-webkit-scrollbar-thumb:hover {
-            background: rgba(234, 88, 12, 0.7);
-        }
-
-        .maze-cell.solution {
-            background: #DCFCE7;
-            border: 2px solid #16A34A;
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #CBD5E1;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 15px;
         }
 
         .control-buttons {
@@ -260,6 +213,37 @@
             transform: none;
         }
 
+        .algorithm-info {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #059669;
+            display: none;
+        }
+
+        .algorithm-info h4 {
+            color: #059669;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .algorithm-info p {
+            margin-bottom: 8px;
+        }
+
+        .step-info {
+            font-weight: bold;
+            color: #1E293B;
+            margin-top: 10px;
+            padding: 8px;
+            background: rgba(234, 88, 12, 0.1);
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid rgba(234, 88, 12, 0.3);
+        }
+
         .result-display {
             background: #1E293B;
             color: #FEF7ED;
@@ -278,22 +262,26 @@
             margin-bottom: 10px;
         }
 
-        .reset-btn {
-            background: #EA580C;
-            color: #FEF7ED;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            margin-top: 15px;
-            transition: all 0.3s ease;
-            font-family: Georgia, serif;
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
         }
 
-        .reset-btn:hover {
-            background: #C2410C;
-            transform: translateY(-2px);
+        .comparison-table th,
+        .comparison-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #059669;
+        }
+
+        .comparison-table th {
+            background: #059669;
+            color: #FEF7ED;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: rgba(5, 150, 105, 0.1);
         }
 
         /* Right Panel - Code Section */
@@ -377,28 +365,6 @@
             font-weight: bold;
         }
 
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-        }
-
-        .comparison-table th,
-        .comparison-table td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #059669;
-        }
-
-        .comparison-table th {
-            background: #059669;
-            color: #FEF7ED;
-        }
-
-        .comparison-table tr:nth-child(even) {
-            background: rgba(5, 150, 105, 0.1);
-        }
-
         /* Responsive Design */
         @media (max-width: 1024px) {
             .container {
@@ -441,99 +407,119 @@
         <div class="left-panel">
             <div class="header">
                 <h1>Uninformed Search</h1>
-                <p class="subtitle">Maze Solving with BFS and DFS</p>
+                <p class="subtitle">Folder Search with BFS and DFS</p>
             </div>
 
             <div class="theory-section">
                 <h2>🎯 Aim</h2>
-                <p><strong>To implement and compare uninformed search algorithms (BFS and DFS) for pathfinding in a 2D maze environment.</strong></p>
+                <p><strong>To implement and compare uninformed search algorithms (BFS and DFS) for finding files in a computer's folder system.</strong></p>
                 
-                <h3>Specific Objectives:</h3>
+                <h3>Real-Life Scenario: Finding a File on Your Computer</h3>
                 <ul class="theory-list">
-                    <li>Understand the concepts of state-space search and problem representation</li>
-                    <li>Implement Breadth-First Search (BFS) algorithm for optimal pathfinding</li>
-                    <li>Implement Depth-First Search (DFS) algorithm for maze exploration</li>
-                    <li>Compare the performance and characteristics of both algorithms</li>
-                    <li>Visualize pathfinding algorithms on a simple grid maze</li>
+                    <li>Think of searching for a file in your computer's folders and subfolders</li>
+                    <li>Each folder is like a "node" and contains files or more subfolders</li>
+                    <li>BFS explores all folders at one level before diving deeper (like checking Desktop, Downloads, Documents first)</li>
+                    <li>DFS goes deep into one folder path before trying others (like diving into Documents → College → Projects → Final)</li>
+                    <li>Everyone can relate to this - we all search for files daily!</li>
                 </ul>
             </div>
 
             <div class="theory-section">
-                <h2>📚 Theory: Uninformed Search</h2>
+                <h2>📚 Theory: Search Algorithms in File Systems</h2>
                 
-                <h3>What is State-Space Search?</h3>
-                <p>State-space search is a problem-solving method where we define a problem in terms of states (possible configurations) and actions (transitions between states). The goal is to find a sequence of actions that leads from an initial state to a goal state.</p>
+                <h3>What is File System Search?</h3>
+                <p>When you search for a file on your computer, the system needs to look through folders systematically. This is exactly what BFS and DFS algorithms do - they provide different strategies for exploring the folder tree structure.</p>
                 
-                <h3>Breadth-First Search (BFS):</h3>
+                <h3>Breadth-First Search (BFS) - Level by Level:</h3>
                 <ul class="theory-list">
-                    <li><strong>Strategy:</strong> Explores all nodes at depth d before exploring nodes at depth d+1</li>
-                    <li><strong>Data Structure:</strong> Uses a queue (FIFO - First In, First Out)</li>
-                    <li><strong>Optimality:</strong> Guarantees the shortest path</li>
-                    <li><strong>Completeness:</strong> Will find a solution if one exists</li>
+                    <li><strong>Like checking all folders on your desktop first</strong>, then diving into each one</li>
+                    <li><strong>Uses a queue:</strong> "Remember to check these folders later"</li>
+                    <li><strong>Finds files faster</strong> if they're in shallow folders (not buried deep)</li>
+                    <li><strong>Systematic approach:</strong> Guarantees you'll find the file in minimum folder depth</li>
                 </ul>
                 
-                <h3>Depth-First Search (DFS):</h3>
+                <h3>Depth-First Search (DFS) - Deep Dive:</h3>
                 <ul class="theory-list">
-                    <li><strong>Strategy:</strong> Explores as far as possible along each branch before backtracking</li>
-                    <li><strong>Data Structure:</strong> Uses a stack (LIFO - Last In, First Out) or recursion</li>
-                    <li><strong>Optimality:</strong> Does not guarantee the shortest path</li>
-                    <li><strong>Completeness:</strong> May get stuck in infinite loops without cycle detection</li>
+                    <li><strong>Like opening one folder and going as deep as possible</strong> before trying another</li>
+                    <li><strong>Uses a stack:</strong> "Let me finish exploring this path first"</li>
+                    <li><strong>Memory efficient:</strong> Doesn't need to remember many folders at once</li>
+                    <li><strong>May find files quickly</strong> if you pick the right path first</li>
                 </ul>
 
-                <h3>Key Differences:</h3>
+                <h3>Real-World Comparison:</h3>
                 <table class="comparison-table">
                     <tr>
-                        <th>Aspect</th>
-                        <th>BFS</th>
-                        <th>DFS</th>
+                        <th>Scenario</th>
+                        <th>BFS (Level by Level)</th>
+                        <th>DFS (Deep Dive)</th>
                     </tr>
                     <tr>
-                        <td>Path Quality</td>
-                        <td>Optimal (shortest)</td>
-                        <td>May not be optimal</td>
+                        <td>Looking for recent downloads</td>
+                        <td>Perfect - checks Downloads folder first</td>
+                        <td>Might waste time in deep subfolders</td>
                     </tr>
                     <tr>
-                        <td>Memory Usage</td>
-                        <td>Higher</td>
-                        <td>Lower</td>
+                        <td>Finding old project files</td>
+                        <td>Takes time to reach deep folders</td>
+                        <td>Great if you remember the path</td>
                     </tr>
                     <tr>
-                        <td>Search Pattern</td>
-                        <td>Level by level</td>
-                        <td>Deep exploration</td>
+                        <td>Memory usage</td>
+                        <td>Remembers many folders</td>
+                        <td>Only remembers current path</td>
                     </tr>
                 </table>
             </div>
 
             <div class="virtual-lab">
-                <h2>🔬 Virtual Lab: Maze Pathfinding</h2>
+                <h2>🔬 Virtual Lab: File System Search</h2>
                 
-                <div class="maze-container">
-                    <p><strong>Maze Legend:</strong> S = Start, E = End, Dark = Wall, Light = Path</p>
-                    <div class="maze-grid" id="maze-grid">
-                        <!-- Maze cells will be populated by JavaScript -->
+                <div class="folder-container">
+                    <p><strong>📂 Computer File System</strong></p>
+                    <p>Search for a file in the folder structure below:</p>
+                    
+                    <div class="search-controls">
+                        <input type="text" class="search-input" id="searchInput" placeholder="Enter filename (e.g., vacation.jpg, resume.pdf)" value="vacation.jpg">
+                    </div>
+                    
+                    <div class="folder-tree" id="folderTree">
+                        <div class="folder-node" data-name="Root" data-type="folder">📂 Root</div>
+                        <div class="folder-node" data-name="Documents" data-type="folder">  📂 Documents</div>
+                        <div class="folder-node" data-name="Work" data-type="folder">    📂 Work</div>
+                        <div class="folder-node" data-name="resume.pdf" data-type="file">      📄 resume.pdf</div>
+                        <div class="folder-node" data-name="project.docx" data-type="file">      📄 project.docx</div>
+                        <div class="folder-node" data-name="College" data-type="folder">    📂 College</div>
+                        <div class="folder-node" data-name="notes.txt" data-type="file">      📄 notes.txt</div>
+                        <div class="folder-node" data-name="Pictures" data-type="folder">  📂 Pictures</div>
+                        <div class="folder-node" data-name="Family" data-type="folder">    📂 Family</div>
+                        <div class="folder-node" data-name="vacation.jpg" data-type="file">      📸 vacation.jpg</div>
+                        <div class="folder-node" data-name="party.png" data-type="file">      📸 party.png</div>
+                        <div class="folder-node" data-name="Screenshots" data-type="folder">    📂 Screenshots</div>
+                        <div class="folder-node" data-name="screen1.png" data-type="file">      📸 screen1.png</div>
+                        <div class="folder-node" data-name="Downloads" data-type="folder">  📂 Downloads</div>
+                        <div class="folder-node" data-name="software.exe" data-type="file">    💾 software.exe</div>
+                        <div class="folder-node" data-name="Music" data-type="folder">  📂 Music</div>
+                        <div class="folder-node" data-name="song.mp3" data-type="file">    🎵 song.mp3</div>
                     </div>
                     
                     <div class="control-buttons">
-                        <button class="control-btn" onclick="runBFS()">Run BFS (Level by Level)</button>
-                        <button class="control-btn dfs" onclick="runDFS()">Run DFS (Deep First)</button>
-                        <button class="control-btn" onclick="resetMaze()">Reset Maze</button>
+                        <button class="control-btn" onclick="runBFS()">🔍 Search with BFS (Level by Level)</button>
+                        <button class="control-btn dfs" onclick="runDFS()">🔍 Search with DFS (Deep Dive)</button>
+                        <button class="control-btn" onclick="resetSearch()">🔄 Reset Search</button>
                     </div>
                     
-                    <div id="algorithm-info" style="background: rgba(5, 150, 105, 0.1); padding: 15px; border-radius: 10px; margin-top: 15px; display: none;">
-                        <h4 id="algo-title" style="color: #059669; margin-bottom: 10px;"></h4>
-                        <p id="algo-description"></p>
-                        <div id="step-info" style="max-height: 200px; overflow-y: auto; background: rgba(234, 88, 12, 0.05); padding: 10px; border-radius: 5px; margin-top: 10px;">
-                            <div id="step-history"></div>
-                        </div>
+                    <div class="algorithm-info" id="algorithmInfo">
+                        <h4 id="algoTitle"></h4>
+                        <p id="algoDescription"></p>
+                        <div class="step-info" id="stepInfo"></div>
                     </div>
                 </div>
                 
-                <div class="result-display" id="result-display">
+                <div class="result-display" id="resultDisplay">
                     <h3>🔍 Search Results</h3>
-                    <p id="result-text"></p>
-                    <p id="path-text"></p>
-                    <p id="stats-text"></p>
+                    <p id="resultText"></p>
+                    <p id="pathText"></p>
+                    <p id="statsText"></p>
                 </div>
             </div>
         </div>
@@ -541,520 +527,453 @@
         <!-- Right Panel - Code Section -->
         <div class="right-panel">
             <div class="code-header">
-                <h2>💻 Code</h2>
+                <h2>💻 Student-Friendly Code</h2>
             </div>
 
             <div class="code-section">
-                <h3>BFS Implementation (Level by Level)</h3>
+                <h3>📂 Setting Up the File System</h3>
                 <div class="code-block">
                     <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
-<pre># BFS - Breadth First Search (Level by Level)
+<pre># Step 1: Create our computer's file system structure
+# Think of this like your actual computer folders!
 
-# Step 1: Set up the maze
-maze = [
-    ['S', 0, 1, 0],
-    [0, 0, 1, 0],
-    [1, 0, 0, 0],
-    [0, 1, 0, 'E']
-]
+file_system = {
+    "Root": {
+        "type": "folder",
+        "contains": {
+            "Documents": {
+                "type": "folder", 
+                "contains": {
+                    "resume.pdf": {"type": "file"},
+                    "project.docx": {"type": "file"},
+                    "College": {
+                        "type": "folder",
+                        "contains": {
+                            "notes.txt": {"type": "file"}
+                        }
+                    }
+                }
+            },
+            "Pictures": {
+                "type": "folder",
+                "contains": {
+                    "vacation.jpg": {"type": "file"},
+                    "party.png": {"type": "file"}
+                }
+            },
+            "Downloads": {
+                "type": "folder",
+                "contains": {
+                    "software.exe": {"type": "file"}
+                }
+            }
+        }
+    }
+}
 
-# Step 2: Find start and end positions
-start_row, start_col = 0, 0  # Position of 'S'
-end_row, end_col = 3, 3      # Position of 'E'
+print("📂 File system created!")
+print("Now we can search for any file using BFS or DFS")
 
-# Step 3: Set up BFS
-queue = []                    # Store positions to visit
-queue.append((start_row, start_col))
-visited = []                  # Remember visited positions
-
-# Step 4: BFS main loop
-print("=== BFS Search Process ===")
-while queue:
-    # Take the first position from queue (FIFO)
-    current_row, current_col = queue.pop(0)
-    
-    # Mark as visited
-    visited.append((current_row, current_col))
-    print(f"Visiting: ({current_row}, {current_col})")
-    
-    # Check if we found the end
-    if current_row == end_row and current_col == end_col:
-        print("Found the end! BFS Complete!")
-        break
-    
-    # Look at all 4 directions (up, down, left, right)
-    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-    
-    for dr, dc in directions:
-        new_row = current_row + dr
-        new_col = current_col + dc
-        
-        # Check if new position is valid
-        if (0 <= new_row < 4 and 0 <= new_col < 4 and           # Inside maze
-            maze[new_row][new_col] != 1 and                     # Not a wall
-            (new_row, new_col) not in visited and               # Not visited
-            (new_row, new_col) not in queue):                   # Not in queue
-            
-            queue.append((new_row, new_col))
-            print(f"Added to queue: ({new_row}, {new_col})")
-
-print(f"Total positions visited: {len(visited)}")
-print(f"Visited order: {visited}")
+# What file are we looking for?
+target_file = "vacation.jpg"
+print(f"🔍 Searching for: {target_file}")
 </pre>
                 </div>
             </div>
 
             <div class="code-section">
-                <h3>DFS Implementation (Deep First)</h3>
+                <h3>🔍 BFS - Breadth First Search (Check All Folders at Each Level)</h3>
                 <div class="code-block">
                     <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
-<pre># DFS - Depth First Search (Deep First)
+<pre># BFS: Like checking all folders on desktop first, then diving deeper
 
-# Step 1: Set up the maze (same as BFS)
-maze = [
-    ['S', 0, 1, 0],
-    [0, 0, 1, 0],
-    [1, 0, 0, 0],
-    [0, 1, 0, 'E']
-]
-
-# Step 2: Find start and end positions
-start_row, start_col = 0, 0  # Position of 'S'
-end_row, end_col = 3, 3      # Position of 'E'
-
-# Step 3: Set up DFS
-stack = []                    # Store positions to visit
-stack.append((start_row, start_col))
-visited = []                  # Remember visited positions
-
-# Step 4: DFS main loop
-print("=== DFS Search Process ===")
-while stack:
-    # Take the last position from stack (LIFO)
-    current_row, current_col = stack.pop()
+def search_file_with_bfs(file_system, target_file):
+    print("=== 🔍 BFS: Level by Level Search ===")
+    print("Strategy: Check all folders at current level before going deeper")
+    print()
     
-    # Skip if already visited
-    if (current_row, current_col) in visited:
-        continue
+    # Queue: "Remember to check these folders later"
+    folders_to_check = []  # This is our queue
+    folders_to_check.append(("Root", file_system["Root"], ["Root"]))
     
-    # Mark as visited
-    visited.append((current_row, current_col))
-    print(f"Visiting: ({current_row}, {current_col})")
+    steps_taken = 0
     
-    # Check if we found the end
-    if current_row == end_row and current_col == end_col:
-        print("Found the end! DFS Complete!")
-        break
-    
-    # Look at all 4 directions (up, down, left, right)
-    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-    
-    for dr, dc in directions:
-        new_row = current_row + dr
-        new_col = current_col + dc
+    while folders_to_check:
+        # Take the first folder from our queue (FIFO - First In, First Out)
+        current_name, current_folder, path = folders_to_check.pop(0)
+        steps_taken += 1
         
-        # Check if new position is valid
-        if (0 <= new_row < 4 and 0 <= new_col < 4 and           # Inside maze
-            maze[new_row][new_col] != 1 and                     # Not a wall
-            (new_row, new_col) not in visited):                 # Not visited
-            
-            stack.append((new_row, new_col))
-            print(f"Added to stack: ({new_row}, {new_col})")
+        print(f"Step {steps_taken}: 📂 Checking folder '{current_name}'")
+        print(f"Path: {' → '.join(path)}")
+        
+        # Look through everything in this folder
+        if "contains" in current_folder:
+            for item_name, item_data in current_folder["contains"].items():
+                
+                # Found a file!
+                if item_data["type"] == "file":
+                    print(f"   📄 Found file: {item_name}")
+                    
+                    # Is this the file we want?
+                    if item_name == target_file:
+                        final_path = path + [item_name]
+                        print(f"   ✅ SUCCESS! Found '{target_file}'!")
+                        print(f"   📍 Location: {' → '.join(final_path)}")
+                        print(f"   📊 Total folders checked: {steps_taken}")
+                        print(f"   🎯 BFS guarantees shortest folder path!")
+                        return final_path
+                
+                # Found another folder - add it to queue for later
+                elif item_data["type"] == "folder":
+                    new_path = path + [item_name]
+                    folders_to_check.append((item_name, item_data, new_path))
+                    print(f"   📂 Added '{item_name}' to queue for later checking")
+        
+        print()  # Empty line for readability
+    
+    print(f"❌ File '{target_file}' not found anywhere!")
+    print(f"📊 Total folders checked: {steps_taken}")
+    return None
 
-print(f"Total positions visited: {len(visited)}")
-print(f"Visited order: {visited}")
+# Run the search!
+result = search_file_with_bfs(file_system, "vacation.jpg")
 </pre>
                 </div>
             </div>
 
             <div class="code-section">
-                <h3>Simple Comparison</h3>
+                <h3>🏃‍♂️ DFS - Depth First Search (Deep Dive Strategy)</h3>
                 <div class="code-block">
                     <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
-<pre># Key Differences Between BFS and DFS
+<pre># DFS: Like opening one folder and going as deep as possible
 
-print("=== BFS vs DFS Comparison ===")
+def search_file_with_dfs(file_system, target_file):
+    print("=== 🏃‍♂️ DFS: Deep Dive Search ===")
+    print("Strategy: Go deep into one folder path before trying others")
+    print()
+    
+    # Stack: "Let me finish exploring this path first"
+    folders_to_check = []  # This is our stack
+    folders_to_check.append(("Root", file_system["Root"], ["Root"]))
+    
+    steps_taken = 0
+    
+    while folders_to_check:
+        # Take the last folder from our stack (LIFO - Last In, First Out)
+        current_name, current_folder, path = folders_to_check.pop()
+        steps_taken += 1
+        
+        print(f"Step {steps_taken}: 📂 Diving into folder '{current_name}'")
+        print(f"Path: {' → '.join(path)}")
+        
+        # Look through everything in this folder
+        if "contains" in current_folder:
+            # Process folders in reverse order for stack
+            items = list(current_folder["contains"].items())
+            
+            for item_name, item_data in items:
+                
+                # Found a file!
+                if item_data["type"] == "file":
+                    print(f"   📄 Found file: {item_name}")
+                    
+                    # Is this the file we want?
+                    if item_name == target_file:
+                        final_path = path + [item_name]
+                        print(f"   ✅ SUCCESS! Found '{target_file}'!")
+                        print(f"   📍 Location: {' → '.join(final_path)}")
+                        print(f"   📊 Total folders checked: {steps_taken}")
+                        print(f"   ⚠️  Path may not be shortest (DFS explores deep first)")
+                        return final_path
+            
+            # Add folders to stack (they'll be explored immediately)
+            for item_name, item_data in reversed(items):
+                if item_data["type"] == "folder":
+                    new_path = path + [item_name]
+                    folders_to_check.append((item_name, item_data, new_path))
+                    print(f"   📂 Will dive into '{item_name}' next (added to stack)")
+        
+        print()  # Empty line for readability
+    
+    print(f"❌ File '{target_file}' not found anywhere!")
+    print(f"📊 Total folders checked: {steps_taken}")
+    return None
 
-# BFS uses Queue (First In, First Out)
-bfs_queue = [1, 2, 3]
-first_out = bfs_queue.pop(0)  # Takes 1 (first added)
-print(f"BFS Queue: {bfs_queue}, First out: {first_out}")
+# Run the search!
+result = search_file_with_dfs(file_system, "vacation.jpg")
+</pre>
+                </div>
+            </div>
 
-# DFS uses Stack (Last In, First Out)  
-dfs_stack = [1, 2, 3]
-last_out = dfs_stack.pop()    # Takes 3 (last added)
-print(f"DFS Stack: {dfs_stack}, Last out: {last_out}")
+            <div class="code-section">
+                <h3>🆚 Side-by-Side Comparison</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+<pre># Compare BFS vs DFS - Which is better for finding files?
 
-print("\nBFS Characteristics:")
-print("- Explores level by level (like ripples in water)")
-print("- Uses queue: First In, First Out")
-print("- Finds shortest path")
-print("- Uses more memory")
+print("=== 🆚 BFS vs DFS: Which Should You Use? ===")
+print()
 
-print("\nDFS Characteristics:")
-print("- Explores deep first (like going down a tunnel)")
-print("- Uses stack: Last In, First Out")
-print("- May not find shortest path")
-print("- Uses less memory")
+# Let's compare both methods
+print("🔍 BFS (Breadth First Search):")
+print("   📊 How it works: Queue (First In, First Out)")
+print("   🎯 Strategy: Check all folders at current level first")
+print("   ✅ Best for: Finding files in shallow folders (Desktop, Downloads)")
+print("   ✅ Guarantees: Shortest folder path to file")
+print("   ❌ Downside: Uses more memory (remembers many folders)")
+print()
 
-print("\nWhen to use:")
-print("- BFS: When you need the shortest path")
-print("- DFS: When you need to explore all possibilities")
+print("🏃‍♂️ DFS (Depth First Search):")
+print("   📊 How it works: Stack (Last In, First Out)")  
+print("   🎯 Strategy: Go as deep as possible in one path first")
+print("   ✅ Best for: When you remember roughly where file is")
+print("   ✅ Memory efficient: Only remembers current path")
+print("   ❌ Downside: Might not find shortest path")
+print()
+
+print("🧠 Real Life Examples:")
+print()
+print("Looking for a recent download?")
+print("   → Use BFS! It checks Downloads folder early")
+print()
+print("Looking for old school project deep in folders?")
+print("   → DFS might be faster if you remember the path")
+print()
+print("Limited computer memory?")
+print("   → DFS uses less memory")
+print()
+print("Want guaranteed shortest path?")
+print("   → BFS always finds minimum folder depth")
+
+print()
+print("💡 Pro Tip: Most file search tools use optimized versions")
+print("   that combine both strategies for best results!")
 </pre>
                 </div>
             </div>
 
             <div class="highlight-box">
-                <strong>🚀 Quick Start:</strong> Copy the code above and paste it into a Python environment. Run it to see both algorithms solve the maze!
+                <strong>🚀 Try This:</strong> Copy the code above and run it in Python! Change the target_file to search for different files like "resume.pdf" or "notes.txt" and see how the search paths differ!
             </div>
         </div>
     </div>
 
     <script>
-        // Define the maze
-        const maze = [
-            ['S', 0, 1, 0],
-            [0, 0, 1, 0],
-            [1, 0, 0, 0],
-            [0, 1, 0, 'E']
+        // File system structure for visualization
+        const fileSystem = [
+            {name: "Root", type: "folder", level: 0, parent: null},
+            {name: "Documents", type: "folder", level: 1, parent: "Root"},
+            {name: "Work", type: "folder", level: 2, parent: "Documents"},
+            {name: "resume.pdf", type: "file", level: 3, parent: "Work"},
+            {name: "project.docx", type: "file", level: 3, parent: "Work"},
+            {name: "College", type: "folder", level: 2, parent: "Documents"},
+            {name: "notes.txt", type: "file", level: 3, parent: "College"},
+            {name: "Pictures", type: "folder", level: 1, parent: "Root"},
+            {name: "Family", type: "folder", level: 2, parent: "Pictures"},
+            {name: "vacation.jpg", type: "file", level: 3, parent: "Family"},
+            {name: "party.png", type: "file", level: 3, parent: "Family"},
+            {name: "Screenshots", type: "folder", level: 2, parent: "Pictures"},
+            {name: "screen1.png", type: "file", level: 3, parent: "Screenshots"},
+            {name: "Downloads", type: "folder", level: 1, parent: "Root"},
+            {name: "software.exe", type: "file", level: 2, parent: "Downloads"},
+            {name: "Music", type: "folder", level: 1, parent: "Root"},
+            {name: "song.mp3", type: "file", level: 2, parent: "Music"}
         ];
 
-        let start = null;
-        let end = null;
-        let isRunning = false;
+        let isSearching = false;
 
-        // Initialize the maze display
-        function initializeMaze() {
-            const mazeGrid = document.getElementById('maze-grid');
-            mazeGrid.innerHTML = '';
+        function resetSearch() {
+            if (isSearching) return;
             
-            // Find start and end positions
-            for (let i = 0; i < maze.length; i++) {
-                for (let j = 0; j < maze[i].length; j++) {
-                    if (maze[i][j] === 'S') {
-                        start = [i, j];
-                    } else if (maze[i][j] === 'E') {
-                        end = [i, j];
-                    }
-                }
-            }
+            const nodes = document.querySelectorAll('.folder-node');
+            nodes.forEach(node => {
+                node.classList.remove('highlight', 'found');
+            });
             
-            // Create maze cells
-            for (let i = 0; i < maze.length; i++) {
-                for (let j = 0; j < maze[i].length; j++) {
-                    const cell = document.createElement('div');
-                    cell.className = 'maze-cell';
-                    cell.id = `cell-${i}-${j}`;
-                    
-                    // Clear any inline styles
-                    cell.style.backgroundColor = '';
-                    cell.style.border = '';
-                    
-                    if (maze[i][j] === 'S') {
-                        cell.classList.add('start');
-                        cell.textContent = 'S';
-                    } else if (maze[i][j] === 'E') {
-                        cell.classList.add('end');
-                        cell.textContent = 'E';
-                    } else if (maze[i][j] === 1) {
-                        cell.classList.add('wall');
-                    } else {
-                        cell.classList.add('path');
-                    }
-                    
-                    mazeGrid.appendChild(cell);
-                }
-            }
+            document.getElementById('resultDisplay').classList.remove('show');
+            document.getElementById('algorithmInfo').style.display = 'none';
         }
 
-        // Reset maze to original state
-        function resetMaze() {
-            if (isRunning) return;
-            
-            for (let i = 0; i < maze.length; i++) {
-                for (let j = 0; j < maze[i].length; j++) {
-                    const cell = document.getElementById(`cell-${i}-${j}`);
-                    cell.className = 'maze-cell';
-                    cell.style.backgroundColor = '';
-                    cell.style.border = '';
-                    cell.textContent = '';
-                    
-                    if (maze[i][j] === 'S') {
-                        cell.classList.add('start');
-                        cell.textContent = 'S';
-                    } else if (maze[i][j] === 'E') {
-                        cell.classList.add('end');
-                        cell.textContent = 'E';
-                    } else if (maze[i][j] === 1) {
-                        cell.classList.add('wall');
-                    } else {
-                        cell.classList.add('path');
-                    }
-                }
-            }
-            
-            document.getElementById('result-display').classList.remove('show');
-            document.getElementById('algorithm-info').style.display = 'none';
-            clearStepHistory();
+        function showAlgorithmInfo(title, description) {
+            const algoInfo = document.getElementById('algorithmInfo');
+            document.getElementById('algoTitle').textContent = title;
+            document.getElementById('algoDescription').textContent = description;
+            algoInfo.style.display = 'block';
         }
 
-        // Check if position is valid
-        function isValid(row, col) {
-            return row >= 0 && row < maze.length && 
-                   col >= 0 && col < maze[0].length && 
-                   maze[row][col] !== 1;
+        function updateStepInfo(message) {
+            const stepInfo = document.getElementById('stepInfo');
+            stepInfo.innerHTML += message + '<br>';
+            stepInfo.scrollTop = stepInfo.scrollHeight;
         }
 
-        // Visualize visited cell
-        function visualizeVisited(row, col) {
-            const cell = document.getElementById(`cell-${row}-${col}`);
-            if (!cell.classList.contains('start') && !cell.classList.contains('end')) {
-                cell.classList.add('visited');
-                cell.style.backgroundColor = '#DCFCE7';
-                cell.style.border = '2px solid #16A34A';
-                cell.textContent = '✓';
-            }
+        function clearStepInfo() {
+            document.getElementById('stepInfo').innerHTML = '';
         }
 
-        // Add step to history
-        function addStepInfo(message, isImportant = false) {
-            const stepHistory = document.getElementById('step-history');
-            const stepDiv = document.createElement('div');
-            stepDiv.style.padding = '5px 0';
-            stepDiv.style.borderBottom = '1px solid rgba(234, 88, 12, 0.2)';
-            
-            if (isImportant) {
-                stepDiv.style.fontWeight = 'bold';
-                stepDiv.style.color = '#EA580C';
-                stepDiv.style.backgroundColor = 'rgba(234, 88, 12, 0.1)';
-                stepDiv.style.padding = '8px';
-                stepDiv.style.borderRadius = '5px';
-                stepDiv.style.margin = '5px 0';
-            } else {
-                stepDiv.style.color = '#1E293B';
-            }
-            
-            stepDiv.textContent = message;
-            stepHistory.appendChild(stepDiv);
-            
-            // Auto-scroll to bottom
-            document.getElementById('step-info').scrollTop = document.getElementById('step-info').scrollHeight;
-        }
-
-        // Clear step history
-        function clearStepHistory() {
-            document.getElementById('step-history').innerHTML = '';
-        }
-
-        // Run BFS Algorithm
         async function runBFS() {
-            if (isRunning) return;
-            isRunning = true;
-            resetMaze();
+            if (isSearching) return;
+            isSearching = true;
+            resetSearch();
             
-            // Show algorithm info
-            document.getElementById('algorithm-info').style.display = 'block';
-            document.getElementById('algo-title').textContent = 'BFS - Breadth First Search';
-            document.getElementById('algo-description').textContent = 'BFS explores level by level, like ripples in water. It uses a queue (First In, First Out) to visit neighbors systematically.';
-            clearStepHistory();
+            const targetFile = document.getElementById('searchInput').value.trim();
+            if (!targetFile) {
+                alert('Please enter a filename to search for!');
+                isSearching = false;
+                return;
+            }
+
+            showAlgorithmInfo('🔍 BFS - Breadth First Search', 'Exploring level by level, like checking all folders on desktop before diving deeper.');
+            clearStepInfo();
             
-            const queue = [[start[0], start[1]]];
-            const visited = new Set();
-            const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
-            let level = 0;
-            let nodesAtCurrentLevel = 1;
-            let nodesAtNextLevel = 0;
+            const queue = [{node: fileSystem[0], path: ["Root"]}];
+            let visitedCount = 0;
+            let currentLevel = 0;
             
-            addStepInfo(`🚀 Starting BFS at position (${start[0]}, ${start[1]})`, true);
-            addStepInfo(`Level ${level}: Starting exploration`);
-            
+            updateStepInfo(`🚀 Starting BFS search for "${targetFile}"`);
+            updateStepInfo(`📋 Strategy: Check all folders at each level before going deeper`);
+            updateStepInfo('');
+
             while (queue.length > 0) {
-                const [currentRow, currentCol] = queue.shift();
-                const key = `${currentRow},${currentCol}`;
+                const {node, path} = queue.shift();
+                visitedCount++;
                 
-                if (visited.has(key)) continue;
-                visited.add(key);
+                // Highlight current node
+                const nodeElement = document.querySelector(`[data-name="${node.name}"]`);
+                if (nodeElement) {
+                    nodeElement.classList.add('highlight');
+                    nodeElement.scrollIntoView({behavior: 'smooth', block: 'center'});
+                }
                 
-                // Visualize current position
-                visualizeVisited(currentRow, currentCol);
+                updateStepInfo(`📂 Level ${node.level}: Checking "${node.name}"`);
+                await new Promise(resolve => setTimeout(resolve, 1200));
                 
-                // Update step info
-                addStepInfo(`📍 Visiting (${currentRow}, ${currentCol}) at Level ${level}`);
-                addStepInfo(`📋 Queue size: ${queue.length} nodes waiting`);
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                // Check if reached goal
-                if (currentRow === end[0] && currentCol === end[1]) {
-                    addStepInfo(`🎯 Found the end at (${currentRow}, ${currentCol})!`, true);
-                    addStepInfo(`✅ BFS guarantees this is the shortest path`, true);
+                if (node.type === 'file' && node.name === targetFile) {
+                    if (nodeElement) {
+                        nodeElement.classList.remove('highlight');
+                        nodeElement.classList.add('found');
+                    }
                     
-                    document.getElementById('result-text').textContent = 'BFS Algorithm Complete!';
-                    document.getElementById('path-text').textContent = `Level-by-level search ensures optimal path`;
-                    document.getElementById('stats-text').textContent = `Nodes visited: ${visited.size}, Levels explored: ${level + 1}`;
-                    document.getElementById('result-display').classList.add('show');
+                    updateStepInfo(`✅ SUCCESS! Found "${targetFile}"`);
+                    updateStepInfo(`📍 Path: ${path.join(' → ')}`);
                     
-                    isRunning = false;
+                    document.getElementById('resultText').textContent = `✅ File found: ${targetFile}`;
+                    document.getElementById('pathText').textContent = `📁 Location: ${path.join(' → ')}`;
+                    document.getElementById('statsText').textContent = `📊 Folders/files checked: ${visitedCount} | Method: BFS (Level by level)`;
+                    document.getElementById('resultDisplay').classList.add('show');
+                    
+                    isSearching = false;
                     return;
                 }
                 
-                // Explore neighbors
-                let neighborsAdded = 0;
-                for (const [dr, dc] of directions) {
-                    const newRow = currentRow + dr;
-                    const newCol = currentCol + dc;
-                    const newKey = `${newRow},${newCol}`;
-                    
-                    if (isValid(newRow, newCol) && !visited.has(newKey)) {
-                        let alreadyInQueue = false;
-                        for (const [qr, qc] of queue) {
-                            if (qr === newRow && qc === newCol) {
-                                alreadyInQueue = true;
-                                break;
-                            }
-                        }
-                        
-                        if (!alreadyInQueue) {
-                            queue.push([newRow, newCol]);
-                            nodesAtNextLevel++;
-                            neighborsAdded++;
-                            
-                            // Highlight queued cells
-                            const cell = document.getElementById(`cell-${newRow}-${newCol}`);
-                            if (!cell.classList.contains('start') && !cell.classList.contains('end')) {
-                                cell.style.backgroundColor = '#FEF3C7';
-                                cell.style.border = '2px solid #F59E0B';
-                            }
-                            
-                            addStepInfo(`➕ Added (${newRow}, ${newCol}) to queue for next level`);
-                        }
-                    }
+                if (nodeElement) nodeElement.classList.remove('highlight');
+                
+                // Add children to queue (for next level exploration)
+                const children = fileSystem.filter(item => item.parent === node.name);
+                children.forEach(child => {
+                    const childPath = [...path, child.name];
+                    queue.push({node: child, path: childPath});
+                });
+                
+                if (children.length > 0) {
+                    updateStepInfo(`➕ Added ${children.length} items to queue for later checking`);
                 }
                 
-                if (neighborsAdded === 0) {
-                    addStepInfo(`❌ No new neighbors to add from (${currentRow}, ${currentCol})`);
-                }
-                
-                nodesAtCurrentLevel--;
-                if (nodesAtCurrentLevel === 0) {
-                    level++;
-                    nodesAtCurrentLevel = nodesAtNextLevel;
-                    nodesAtNextLevel = 0;
-                    
-                    if (queue.length > 0) {
-                        addStepInfo(`⬇️ Moving to Level ${level} - ${nodesAtCurrentLevel} nodes to explore`, true);
-                        await new Promise(resolve => setTimeout(resolve, 2000));
-                    }
+                // Check if we're moving to next level
+                const nextInQueue = queue[0];
+                if (nextInQueue && nextInQueue.node.level > currentLevel) {
+                    currentLevel = nextInQueue.node.level;
+                    updateStepInfo(`⬇️ Moving to Level ${currentLevel}`);
+                    updateStepInfo('');
                 }
             }
             
-            addStepInfo(`❌ BFS: No path found`, true);
-            document.getElementById('result-text').textContent = 'BFS: No path found';
-            document.getElementById('result-display').classList.add('show');
-            isRunning = false;
+            updateStepInfo(`❌ File "${targetFile}" not found`);
+            document.getElementById('resultText').textContent = `❌ File not found: ${targetFile}`;
+            document.getElementById('statsText').textContent = `📊 Folders/files checked: ${visitedCount} | Method: BFS`;
+            document.getElementById('resultDisplay').classList.add('show');
+            
+            isSearching = false;
         }
 
-        // Run DFS Algorithm
         async function runDFS() {
-            if (isRunning) return;
-            isRunning = true;
-            resetMaze();
+            if (isSearching) return;
+            isSearching = true;
+            resetSearch();
             
-            // Show algorithm info
-            document.getElementById('algorithm-info').style.display = 'block';
-            document.getElementById('algo-title').textContent = 'DFS - Depth First Search';
-            document.getElementById('algo-description').textContent = 'DFS explores as deep as possible before backtracking. It uses a stack (Last In, First Out) to dive deep into one path.';
-            clearStepHistory();
+            const targetFile = document.getElementById('searchInput').value.trim();
+            if (!targetFile) {
+                alert('Please enter a filename to search for!');
+                isSearching = false;
+                return;
+            }
+
+            showAlgorithmInfo('🏃‍♂️ DFS - Depth First Search', 'Going deep into one path first, like diving into one folder completely before trying others.');
+            clearStepInfo();
             
-            const stack = [[start[0], start[1]]];
-            const visited = new Set();
-            const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
-            let depth = 0;
-            let maxDepth = 0;
+            const stack = [{node: fileSystem[0], path: ["Root"]}];
+            let visitedCount = 0;
             
-            addStepInfo(`🚀 Starting DFS at position (${start[0]}, ${start[1]})`, true);
-            addStepInfo(`📚 Using stack (Last In, First Out) approach`);
-            
+            updateStepInfo(`🚀 Starting DFS search for "${targetFile}"`);
+            updateStepInfo(`📚 Strategy: Go as deep as possible in one path first`);
+            updateStepInfo('');
+
             while (stack.length > 0) {
-                const [currentRow, currentCol] = stack.pop();
-                const key = `${currentRow},${currentCol}`;
+                const {node, path} = stack.pop();
+                visitedCount++;
                 
-                if (visited.has(key)) {
-                    addStepInfo(`⚠️ (${currentRow}, ${currentCol}) already visited, skipping`);
-                    continue;
+                // Highlight current node
+                const nodeElement = document.querySelector(`[data-name="${node.name}"]`);
+                if (nodeElement) {
+                    nodeElement.classList.add('highlight');
+                    nodeElement.scrollIntoView({behavior: 'smooth', block: 'center'});
                 }
                 
-                visited.add(key);
+                updateStepInfo(`📂 Depth ${node.level}: Diving into "${node.name}"`);
+                await new Promise(resolve => setTimeout(resolve, 1200));
                 
-                // Calculate current depth (approximate)
-                depth = Math.max(0, Math.abs(currentRow - start[0]) + Math.abs(currentCol - start[1]));
-                maxDepth = Math.max(maxDepth, depth);
-                
-                // Visualize current position
-                visualizeVisited(currentRow, currentCol);
-                
-                // Update step info
-                addStepInfo(`📍 Visiting (${currentRow}, ${currentCol}) at depth ~${depth}`);
-                addStepInfo(`📚 Stack size: ${stack.length} nodes waiting`);
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                // Check if reached goal
-                if (currentRow === end[0] && currentCol === end[1]) {
-                    addStepInfo(`🎯 Found the end at (${currentRow}, ${currentCol})!`, true);
-                    addStepInfo(`⚠️ Path may not be optimal (DFS doesn't guarantee shortest path)`, true);
+                if (node.type === 'file' && node.name === targetFile) {
+                    if (nodeElement) {
+                        nodeElement.classList.remove('highlight');
+                        nodeElement.classList.add('found');
+                    }
                     
-                    document.getElementById('result-text').textContent = 'DFS Algorithm Complete!';
-                    document.getElementById('path-text').textContent = `Deep-first search found a path (may not be shortest)`;
-                    document.getElementById('stats-text').textContent = `Nodes visited: ${visited.size}, Maximum depth: ${maxDepth}`;
-                    document.getElementById('result-display').classList.add('show');
+                    updateStepInfo(`✅ SUCCESS! Found "${targetFile}"`);
+                    updateStepInfo(`📍 Path: ${path.join(' → ')}`);
                     
-                    isRunning = false;
+                    document.getElementById('resultText').textContent = `✅ File found: ${targetFile}`;
+                    document.getElementById('pathText').textContent = `📁 Location: ${path.join(' → ')}`;
+                    document.getElementById('statsText').textContent = `📊 Folders/files checked: ${visitedCount} | Method: DFS (Deep dive)`;
+                    document.getElementById('resultDisplay').classList.add('show');
+                    
+                    isSearching = false;
                     return;
                 }
                 
-                // Explore neighbors (in reverse order for stack)
-                let neighborsAdded = 0;
-                let backtracking = true;
+                if (nodeElement) nodeElement.classList.remove('highlight');
                 
-                for (const [dr, dc] of directions.slice().reverse()) {
-                    const newRow = currentRow + dr;
-                    const newCol = currentCol + dc;
-                    const newKey = `${newRow},${newCol}`;
-                    
-                    if (isValid(newRow, newCol) && !visited.has(newKey)) {
-                        stack.push([newRow, newCol]);
-                        neighborsAdded++;
-                        backtracking = false;
-                        
-                        // Highlight stacked cells
-                        const cell = document.getElementById(`cell-${newRow}-${newCol}`);
-                        if (!cell.classList.contains('start') && !cell.classList.contains('end')) {
-                            cell.style.backgroundColor = '#FEE2E2';
-                            cell.style.border = '2px solid #EF4444';
-                        }
-                        
-                        addStepInfo(`➕ Added (${newRow}, ${newCol}) to stack (will visit next)`);
-                    }
-                }
+                // Add children to stack (will be explored immediately)
+                const children = fileSystem.filter(item => item.parent === node.name);
+                children.reverse().forEach(child => {
+                    const childPath = [...path, child.name];
+                    stack.push({node: child, path: childPath});
+                });
                 
-                if (neighborsAdded === 0) {
-                    addStepInfo(`❌ No new neighbors to add from (${currentRow}, ${currentCol})`);
-                }
-                
-                if (backtracking && stack.length > 0) {
-                    addStepInfo(`⬅️ Backtracking... will return to previous path`, true);
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                } else if (neighborsAdded > 0) {
-                    addStepInfo(`⬇️ Going deeper... exploring ${neighborsAdded} new paths`);
+                if (children.length > 0) {
+                    updateStepInfo(`⬇️ Going deeper - added ${children.length} items to explore`);
+                } else if (stack.length > 0) {
+                    updateStepInfo(`⬅️ Backtracking to previous path...`);
                 }
             }
             
-            addStepInfo(`❌ DFS: No path found`, true);
-            document.getElementById('result-text').textContent = 'DFS: No path found';
-            document.getElementById('result-display').classList.add('show');
-            isRunning = false;
+            updateStepInfo(`❌ File "${targetFile}" not found`);
+            document.getElementById('resultText').textContent = `❌ File not found: ${targetFile}`;
+            document.getElementById('statsText').textContent = `📊 Folders/files checked: ${visitedCount} | Method: DFS`;
+            document.getElementById('resultDisplay').classList.add('show');
+            
+            isSearching = false;
         }
 
-        // Copy code functionality
         function copyCode(button) {
             const codeBlock = button.parentElement.querySelector('pre');
             const text = codeBlock.textContent;
@@ -1070,9 +989,6 @@ print("- DFS: When you need to explore all possibilities")
                 }, 2000);
             });
         }
-
-        // Initialize maze on page load
-        document.addEventListener('DOMContentLoaded', initializeMaze);
     </script>
 </body>
 </html>
