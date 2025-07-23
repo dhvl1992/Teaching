@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Study Notes: Schools of Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh;
+            color: #1E293B;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Base slide styling */
+        .slide {
+            background: #FEF7ED;
+            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            min-height: 500px;
+            page-break-after: always;
+        }
+
+        .slide:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Layout 1: Title Slide */
+        .title-slide {
+            background: #1E293B;
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-left: 5px solid #EA580C;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .title-slide .subtitle {
+            font-size: 1.6em;
+            opacity: 0.9;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .title-slide .author {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        /* Layout 2: Title and Content */
+        .title-content h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-area {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .content-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        .content-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #EA580C;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Layout 3: Section Header */
+        .section-header {
+            background: linear-gradient(135deg, #059669, #EA580C);
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section-header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section-header .section-subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+        }
+
+        /* Layout 4: Two Content */
+        .two-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .two-content h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-column {
+            padding: 20px;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: 10px;
+        }
+
+        .content-column h3 {
+            font-size: 1.6em;
+            color: #059669;
+            margin-bottom: 15px;
+        }
+
+        /* Layout 5: Comparison */
+        .comparison h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+            text-align: center;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .comparison-item {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(234, 88, 12, 0.1);
+        }
+
+        .comparison-item h3 {
+            font-size: 1.8em;
+            color: #EA580C;
+            margin-bottom: 20px;
+        }
+
+        .vs-divider {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .comparison {
+            position: relative;
+        }
+
+        /* Layout 6: Title Only */
+        .title-only {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-only h1 {
+            font-size: 3em;
+            color: #1E293B;
+            margin-bottom: 20px;
+        }
+
+        .title-only .subtitle {
+            font-size: 1.4em;
+            color: #059669;
+            font-style: italic;
+        }
+
+        /* Layout 7: Blank */
+        .blank-slide {
+            /* Intentionally minimal - just the base slide styling */
+        }
+
+        /* Layout 8: Content with Caption */
+        .content-caption {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 30px;
+        }
+
+        .content-caption h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .main-content-area {
+            background: linear-gradient(45deg, #059669, #EA580C);
+            border: 2px dashed #1E293B;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            color: #FEF7ED;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .caption-area {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #059669;
+        }
+
+        /* Layout 9: Picture with Caption */
+        .picture-caption {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .picture-caption h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .picture-area {
+            background: linear-gradient(45deg, #059669, #EA580C);
+            border: 2px dashed #1E293B;
+            border-radius: 15px;
+            padding: 60px 20px;
+            text-align: center;
+            color: #FEF7ED;
+            font-weight: bold;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .caption-sidebar {
+            background: rgba(234, 88, 12, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 4px solid #EA580C;
+        }
+
+        .caption-sidebar h3 {
+            color: #EA580C;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        /* Special Elements */
+        .highlight-box {
+            background: #059669;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .accent-box {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .emphasis {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .slide {
+                padding: 20px;
+                min-height: 400px;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5em;
+            }
+
+            .two-content,
+            .comparison-grid,
+            .picture-caption {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .vs-divider {
+                display: none;
+            }
+        }
+
+        /* Navigation */
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9em;
+        }
+
+        .timeline {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #059669;
+            margin: 20px 0;
+        }
+
+        .timeline-item {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #059669;
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .definition-box {
+            background: rgba(234, 88, 12, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #EA580C;
+            margin: 15px 0;
+        }
+
+        .principle-item {
+            background: rgba(5, 150, 105, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 3px solid #059669;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Title Slide -->
+        <div class="slide title-slide">
+            <h1>Schools of Management</h1>
+            <p class="subtitle"> History of Management</p>
+            <p class="author">Dr. Dhaval Patel • 2025</p>
+        </div>
+
+        <!-- Introduction: Why Study This -->
+        <div class="slide title-content">
+            <h2>Why Study Management History?</h2>
+            <div class="content-area">
+                <p>Think about the last time you organized a group project or planned a family event. You were using management principles that have evolved over thousands of years. Understanding management theory is like learning the history of human problem-solving.</p>
+                
+                <div class="highlight-box">
+                    Real Example: The Egyptian pyramids required coordinating tens of thousands of workers for fifteen years. This massive undertaking used sophisticated management techniques, proving that management has ancient roots.
+                </div>
+                
+                <p>However, studying management as a science - with theories, principles, and systematic approaches - only began about 120 years ago. Just like medicine evolved from folk remedies to scientific practice, management evolved from intuition to systematic study.</p>
+                
+                <div class="accent-box">
+                    Think of management theory as a toolkit that has been refined through trial, error, and scientific study. Each school of thought adds different tools to this kit.
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Header: Overview -->
+        <div class="slide section-header">
+            <h1>The Big Picture</h1>
+            <p class="section-subtitle">Four Major Approaches to Understanding Management</p>
+        </div>
+
+        <!-- Four Schools Overview -->
+        <div class="slide title-content">
+            <h2>The Four Main Schools of Management Thought</h2>
+            <div class="content-area">
+                <p>Think of these as four different lenses for looking at how to manage organizations effectively. Each approach emerged to solve specific problems and built upon previous knowledge.</p>
+                
+                <div class="principle-item">
+                    <strong>Classical Viewpoint (1900-1930):</strong> "How can we make work more efficient?" Focus on systems, processes, and finding the one best way to do everything.
+                </div>
+                
+                <div class="principle-item">
+                    <strong>Behavioral Viewpoint (1930-1960):</strong> "How do people's feelings and relationships affect work?" Focus on human psychology, motivation, and social dynamics.
+                </div>
+                
+                <div class="principle-item">
+                    <strong>Quantitative Viewpoint (1940-Present):</strong> "How can math and data help us make better decisions?" Focus on numbers, statistics, and mathematical analysis.
+                </div>
+                
+                <div class="principle-item">
+                    <strong>Contemporary Viewpoint (1960-Present):</strong> "How do we adapt to modern challenges?" Focus on flexibility, innovation, and situational leadership.
+                </div>
+                
+                <div class="accent-box">
+                    Remember: Each phase didn't replace the previous one. Modern managers use ideas from all approaches, choosing the right tool for each situation.
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline Evolution -->
+        <div class="slide content-caption">
+            <h2>Historical Development Timeline</h2>
+            
+            <div class="main-content-area">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <strong>Phase 1: Classical School (1900-1930)</strong><br>
+                        The Engineering Era: "Let's make work efficient and organized"<br>
+                        Key insight: Work can be studied scientifically to find optimal methods
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <strong>Phase 2: Neo-Classical (1930-1960)</strong><br>
+                        The Human Relations Era: "Wait, people have feelings and social needs too!"<br>
+                        Key insight: Worker satisfaction affects productivity
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <strong>Phase 3: Modern Approaches (1960-Present)</strong><br>
+                        The Flexible Era: "Every situation is different - we need adaptable approaches"<br>
+                        Key insight: Effective management depends on specific circumstances
+                    </div>
+                </div>
+            </div>
+            
+            <div class="caption-area">
+                <strong>Critical Understanding:</strong> This evolution reflects humanity's growing understanding of work complexity. We started by focusing on efficiency, then discovered the importance of human factors, and finally learned to adapt our approach based on specific situations and contexts.
+            </div>
+        </div>
+
+        <!-- Section Header: Scientific Management -->
+        <div class="slide section-header">
+            <h1>Scientific Management</h1>
+            <p class="section-subtitle">Frederick Taylor's Revolutionary Approach</p>
+        </div>
+
+        <!-- Taylor Introduction -->
+        <div class="slide title-content">
+            <h2>Meet Frederick Taylor (1856-1915) - The Father of Scientific Management</h2>
+            <div class="content-area">
+                <p>Imagine working in a factory where everyone does their job differently. Some workers are fast, others slow. Some use one method, others use completely different approaches. There's no standard way to do anything. This was the reality Frederick Taylor observed in the early 1900s.</p>
+                
+                <div class="definition-box">
+                    <strong>Taylor's Revolutionary Idea:</strong> Instead of leaving work methods to chance or tradition, let's use science to find the most efficient way to do everything.
+                </div>
+                
+                <p>Taylor saw workers deliberately working below their capacity - a problem he called "soldiering." He discovered this happened because workers feared that working efficiently would lead to higher standards without higher pay. They also lacked proper training in efficient methods.</p>
+                
+                <div class="highlight-box">
+                    Taylor's Scientific Approach: He observed workers, timed their activities, measured their output, and experimented with different methods - just like a scientist studying nature.
+                </div>
+                
+                <p>This was revolutionary because before Taylor, most work was done "the way we've always done it." He proved that systematic study could dramatically improve both efficiency and worker wages.</p>
+            </div>
+        </div>
+
+        <!-- Taylor's Four Principles -->
+        <div class="slide title-content">
+            <h2>Taylor's Four Scientific Principles</h2>
+            <div class="content-area">
+                <p>Think of these as a recipe for transforming any chaotic work situation into an efficient, systematic operation. Each principle builds on the others to create a comprehensive approach.</p>
+                
+                <div class="principle-item">
+                    <strong>Principle 1: Scientific Study of Work</strong><br>
+                    Replace rule-of-thumb methods with scientifically determined procedures. Study every tiny movement and find the most efficient way to do each task - like finding the fastest route to school through careful timing and analysis.
+                </div>
+                
+                <div class="principle-item">
+                    <strong>Principle 2: Scientific Selection and Training</strong><br>
+                    Choose workers who have the right skills and motivation for each specific job, then train them properly in the scientifically-proven best method instead of expecting them to "figure it out yourself."
+                </div>
+                
+                <div class="principle-item">
+                    <strong>Principle 3: Cooperation Between Management and Workers</strong><br>
+                    Create a partnership where management handles planning and workers focus on execution. Both parties work together toward shared goals rather than being adversaries.
+                </div>
+                
+                <div class="principle-item">
+                    <strong>Principle 4: Division of Responsibility</strong><br>
+                    Management becomes responsible for work design, planning, and creating proper conditions. Workers become responsible for following scientific methods and meeting performance standards.
+                </div>
+                
+                <div class="accent-box">
+                    Real Result: When Taylor applied these principles to loading iron at a steel company, productivity increased by 300%! Workers went from loading 12.5 tons per day to 47 tons per day.
+                </div>
+            </div>
+        </div>
+
+        <!-- Elements of Scientific Management -->
+        <div class="slide picture-caption">
+            <h2>Key Elements of Scientific Management</h2>
+            
+            <div class="picture-area">
+                <strong>Core Elements</strong><br><br>
+                ⚙️ Time and Motion Studies<br>
+                📏 Standardization<br>
+                🎯 Scientific Task Determination<br>
+                👥 Scientific Selection & Training<br>
+                💰 Differential Payment Systems<br>
+                🔄 Mental Revolution
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>Understanding Each Element</h3>
+                <p><strong>Time and Motion Studies:</strong> Breaking work into basic movements, timing each element, and finding the most efficient sequence.</p>
+                
+                <p><strong>Standardization:</strong> Establishing uniform methods, tools, and procedures to ensure consistent quality and performance.</p>
+                
+                <p><strong>Scientific Selection:</strong> Choosing the right person for each job based on abilities and aptitude rather than random assignment.</p>
+                
+                <p><strong>Differential Payment:</strong> Rewarding high performance with significantly higher wages while maintaining minimum standards for all workers.</p>
+                
+                <div class="accent-box">
+                    Mental Revolution: Both management and workers must change their mindset from adversarial to cooperative.
+                </div>
+            </div>
+        </div>
+
+        <!-- Benefits and Objectives -->
+        <div class="slide two-content">
+            <h2>What Scientific Management Achieved</h2>
+            
+            <div class="content-column">
+                <h3>Benefits for Organizations</h3>
+                <p>Scientific management delivered impressive results for companies willing to implement it properly:</p>
+                <ul class="content-list">
+                    <li>Eliminated waste in time, materials, and human effort</li>
+                    <li>Increased production without extra capital investment</li>
+                    <li>Improved product quality through standardization</li>
+                    <li>Reduced production costs significantly</li>
+                    <li>Created systematic approaches to training and development</li>
+                </ul>
+                <div class="highlight-box">
+                    Key insight: Efficiency benefits everyone when properly implemented
+                </div>
+            </div>
+            
+            <div class="content-column">
+                <h3>Benefits for Workers</h3>
+                <p>Contrary to common criticism, Taylor genuinely believed scientific management would improve workers' lives:</p>
+                <ul class="content-list">
+                    <li>Higher wages (30-100% increases for meeting standards)</li>
+                    <li>Better working conditions and reduced fatigue</li>
+                    <li>Clear expectations and proper training</li>
+                    <li>Improved safety through systematic methods</li>
+                    <li>Opportunities for skill development and advancement</li>
+                </ul>
+                <div class="accent-box">
+                    Win-Win Philosophy: Scientific management should benefit both employers and employees
+                </div>
+            </div>
+        </div>
+
+        <!-- Problems and Criticisms -->
+        <div class="slide comparison">
+            <h2>Benefits vs Problems with Scientific Management</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>The Bright Side</h3>
+                    <p>When implemented thoughtfully, scientific management created significant improvements:</p>
+                    <ul class="content-list">
+                        <li>Dramatic productivity increases</li>
+                        <li>Higher wages for workers</li>
+                        <li>Safer working conditions</li>
+                        <li>More efficient use of resources</li>
+                        <li>Clear performance standards</li>
+                    </ul>
+                    <div class="highlight-box">
+                        Many modern efficiency improvements still use Taylor's basic principles
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <h3>The Dark Side</h3>
+                    <p>Critics identified serious problems with the approach:</p>
+                    <ul class="content-list">
+                        <li>Work became boring and repetitive</li>
+                        <li>Workers lost creativity and autonomy</li>
+                        <li>Ignored social and psychological needs</li>
+                        <li>Could lead to worker exploitation</li>
+                        <li>Expensive and difficult to implement</li>
+                    </ul>
+                    <div class="accent-box">
+                        Key lesson: Efficiency alone isn't enough - human factors matter too
+                    </div>
+                </div>
+            </div>
+            
+            <div class="vs-divider">VS</div>
+        </div>
+
+        <!-- Taylor's Followers -->
+        <div class="slide two-content">
+            <h2>Followers and Extensions of Taylor's Work</h2>
+            
+            <div class="content-column">
+                <h3>Henry L. Gantt (1861-1919)</h3>
+                <p>Gantt worked with Taylor but developed a more humanistic approach. He recognized that motivation involves more than just money.</p>
+                
+                <p><strong>Key Contributions:</strong></p>
+                <ul class="content-list">
+                    <li>Gantt Charts for project management (still used today)</li>
+                    <li>Public recognition systems for good performance</li>
+                    <li>Bonus systems for supervisors based on subordinate performance</li>
+                    <li>Visual progress tracking methods</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    Innovation: Combined scientific efficiency with human psychology
+                </div>
+            </div>
+            
+            <div class="content-column">
+                <h3>Frank & Lillian Gilbreth</h3>
+                <p>The Gilbreths focused specifically on human motion and fatigue reduction, laying the foundation for modern ergonomics.</p>
+                
+                <p><strong>Key Contributions:</strong></p>
+                <ul class="content-list">
+                    <li>Motion studies to reduce fatigue and increase efficiency</li>
+                    <li>Identification of basic body movements ("therbligs")</li>
+                    <li>Employee development approaches</li>
+                    <li>Better tool and workspace design</li>
+                </ul>
+                
+                <div class="accent-box">
+                    Legacy: Their work influences modern workplace design and ergonomics
+                </div>
+            </div>
+        </div>
+
+        <!-- Modern Applications -->
+        <div class="slide content-caption">
+            <h2>Scientific Management in Today's World</h2>
+            
+            <div class="main-content-area">
+                <strong>Modern Applications You'll Recognize:</strong><br><br>
+                🏭 Manufacturing: Quality control and process optimization<br>
+                🏥 Healthcare: Standardized procedures and efficiency improvements<br>
+                💻 Technology: Software development methodologies and user interface design<br>
+                🍔 Service Industries: Standardized customer service procedures<br>
+                📊 Data Analytics: Using measurement to improve performance<br>
+                🎯 Project Management: Breaking complex tasks into manageable components
+            </div>
+            
+            <div class="caption-area">
+                <strong>The Key Evolution:</strong> Modern managers combine Taylor's scientific approach with insights from behavioral science. We use data and measurement (Taylor's scientific approach) while also considering employee satisfaction, team dynamics, and organizational culture. It's not either efficiency OR human factors - it's both together that create the most effective organizations.
+            </div>
+        </div>
+
+        <!-- Personal Applications -->
+        <div class="slide title-content">
+            <h2>How to Apply These Principles in Your Life</h2>
+            <div class="content-area">
+                <p>Scientific management isn't just historical theory - you can use these principles to improve your own effectiveness and leadership abilities.</p>
+                
+                <div class="definition-box">
+                    <strong>Personal Productivity Applications:</strong>
+                    <p>Analyze how you spend your time, identify wasteful activities, and experiment with different methods for accomplishing routine tasks. Use measurement and data to track your progress and refine your approaches. Create standardized routines for repetitive activities like meal preparation, exercise, or study habits.</p>
+                </div>
+                
+                <div class="definition-box">
+                    <strong>Team Leadership Applications:</strong>
+                    <p>When leading groups or projects, take responsibility for thorough planning and clear communication while allowing team members to focus on implementation. Use measurement and feedback systems to track progress. Recognize excellent performance while providing training and support for those who struggle.</p>
+                </div>
+                
+                <div class="definition-box">
+                    <strong>Career Development Applications:</strong>
+                    <p>Understanding management history helps you navigate workplace dynamics and contribute more effectively to organizational goals. You'll recognize when systematic approaches are appropriate and when more flexible methods are needed.</p>
+                </div>
+                
+                <div class="accent-box">
+                    Remember: The goal isn't to become a rigid efficiency machine, but to use systematic thinking as one tool among many for creating better outcomes.
+                </div>
+            </div>
+        </div>
+
+        <!-- Exam Key Points -->
+        <div class="slide title-content">
+            <h2>Essential Points for Exam Success</h2>
+            <div class="content-area">
+                <p>Focus on these critical concepts and their connections for comprehensive understanding and exam preparation.</p>
+                
+                <div class="definition-box">
+                    <strong>Key Definitions to Memorize:</strong>
+                    <p><strong>Scientific Management:</strong> A systematic approach to improving organizational efficiency through scientific study of work methods, worker selection and training, and cooperation between management and workers.</p>
+                    
+                    <p><strong>Time and Motion Studies:</strong> Techniques for measuring and analyzing work activities to identify the most efficient methods and eliminate waste.</p>
+                    
+                    <p><strong>Standardization:</strong> Establishing uniform methods, tools, and procedures to ensure consistent quality and performance.</p>
+                </div>
+                
+                <div class="definition-box">
+                    <strong>Important Names and Dates:</strong>
+                    <p><strong>Frederick Winslow Taylor (1856-1915):</strong> "Father of Scientific Management" - developed the four principles and systematic work study methods.</p>
+                    
+                    <p><strong>Henry L. Gantt (1861-1919):</strong> Visual progress tracking and humanistic motivation approaches.</p>
+                    
+                    <p><strong>Frank and Lillian Gilbreth:</strong> Motion studies and ergonomic principles.</p>
+                </div>
+                
+                <div class="highlight-box">
+                    Critical Analysis: Be prepared to discuss both benefits AND criticisms. Understand how scientific management improved efficiency while also creating problems related to worker satisfaction and organizational flexibility.
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary and Synthesis -->
+        <div class="slide title-content">
+            <h2>Building Your Management Philosophy</h2>
+            <div class="content-area">
+                <p>Understanding these foundational concepts helps you develop a comprehensive approach to leadership and organization that you'll use throughout your career and personal life.</p>
+                
+                <div class="highlight-box">
+                    The Evolution Pattern: Management thinking progressed from intuition → systematic efficiency → human psychology → situational flexibility. Each phase built upon previous knowledge while addressing its limitations.
+                </div>
+                
+                <div class="accent-box">
+                    Taylor's Lasting Legacy: His emphasis on systematic analysis, measurement, and continuous improvement remains valuable today. However, his limitations remind us to consider human factors and situational variables in our approach.
+                </div>
+                
+                <p>As you encounter management challenges in your career and personal life, draw on these historical insights while adapting them to contemporary realities. The goal isn't to apply any single approach rigidly, but to understand the tools available and choose appropriate methods for specific situations.</p>
+                
+                <div class="definition-box">
+                    <strong>The Ultimate Insight:</strong> Effective management serves human purposes - creating value for customers, providing meaningful work for employees, and contributing to societal well-being. The techniques and theories you study are means to these ends, not ends in themselves.
+                </div>
+                
+                <p>Remember that management is both art and science. Use systematic thinking and measurement (the science) combined with empathy, creativity, and situational awareness (the art) to become an effective leader and contributor to any organization.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        Slide 1 of 14
+    </div>
+
+    <script>
+        // Update slide counter on scroll
+        function updateSlideCounter() {
+            const slides = document.querySelectorAll('.slide');
+            const slideCounter = document.querySelector('.slide-counter');
+            
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    slideCounter.textContent = `Slide ${index + 1} of ${slides.length}`;
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateSlideCounter);
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            // Find current slide
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentSlide = index;
+                }
+            });
+            
+            // Navigate with arrow keys
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (currentSlide < slides.length - 1) {
+                    slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                if (currentSlide > 0) {
+                    slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
