@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uninformed Search - AI Lecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh;
+            color: #1E293B;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Base slide styling */
+        .slide {
+            background: #FEF7ED;
+            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            min-height: 500px;
+            page-break-after: always;
+        }
+
+        .slide:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Layout 1: Title Slide */
+        .title-slide {
+            background: #1E293B;
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-left: 5px solid #EA580C;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .title-slide .subtitle {
+            font-size: 1.6em;
+            opacity: 0.9;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .title-slide .author {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        /* Layout 2: Title and Content */
+        .title-content h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-area {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .content-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        .content-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #EA580C;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Layout 3: Section Header */
+        .section-header {
+            background: linear-gradient(135deg, #059669, #EA580C);
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section-header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section-header .section-subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+        }
+
+        /* Layout 4: Two Content */
+        .two-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .two-content h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-column {
+            padding: 20px;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: 10px;
+        }
+
+        .content-column h3 {
+            font-size: 1.6em;
+            color: #059669;
+            margin-bottom: 15px;
+        }
+
+        /* Layout 5: Comparison */
+        .comparison h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+            text-align: center;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .comparison-item {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(234, 88, 12, 0.1);
+        }
+
+        .comparison-item h3 {
+            font-size: 1.8em;
+            color: #EA580C;
+            margin-bottom: 20px;
+        }
+
+        .vs-divider {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .comparison {
+            position: relative;
+        }
+
+        /* Layout 6: Title Only */
+        .title-only {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-only h1 {
+            font-size: 3em;
+            color: #1E293B;
+            margin-bottom: 20px;
+        }
+
+        .title-only .subtitle {
+            font-size: 1.4em;
+            color: #059669;
+            font-style: italic;
+        }
+
+        /* Layout 7: Blank */
+        .blank-slide {
+            /* Intentionally minimal - just the base slide styling */
+        }
+
+        /* Layout 8: Content with Caption */
+        .content-caption {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 30px;
+        }
+
+        .content-caption h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .main-content-area {
+            background: linear-gradient(45deg, #059669, #EA580C);
+            border: 2px dashed #1E293B;
+            border-radius: 15px;
+            padding: 80px 40px;
+            text-align: center;
+            color: #FEF7ED;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .caption-area {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #059669;
+        }
+
+        /* Layout 9: Picture with Caption */
+        .picture-caption {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .picture-caption h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .picture-area {
+            background: #f8f9fa;
+            border: 2px solid #1E293B;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .caption-sidebar {
+            background: rgba(234, 88, 12, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 4px solid #EA580C;
+        }
+
+        .caption-sidebar h3 {
+            color: #EA580C;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        /* Special Elements */
+        .highlight-box {
+            background: #059669;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .accent-box {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .emphasis {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* Custom styling for code/technical content */
+        .code-block {
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            border-left: 4px solid #EA580C;
+        }
+
+        .algorithm-box {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #059669;
+            margin: 20px 0;
+        }
+
+        /* Visual Components */
+        .vacuum-world {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .room {
+            width: 120px;
+            height: 80px;
+            border: 3px solid #1E293B;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: auto;
+            position: relative;
+        }
+
+        .room.dirty {
+            background: #FCA5A5;
+        }
+
+        .room.clean {
+            background: #BBF7D0;
+        }
+
+        .agent {
+            font-size: 2em;
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 80px);
+            grid-template-rows: repeat(3, 80px);
+            gap: 2px;
+            margin: 20px auto;
+            border: 3px solid #1E293B;
+            border-radius: 10px;
+            padding: 10px;
+            background: #1E293B;
+        }
+
+        .puzzle-cell {
+            background: #FEF7ED;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1E293B;
+            border-radius: 5px;
+        }
+
+        .puzzle-cell.empty {
+            background: #E5E7EB;
+        }
+
+        .queens-board {
+            display: grid;
+            grid-template-columns: repeat(4, 60px);
+            grid-template-rows: repeat(4, 60px);
+            gap: 1px;
+            margin: 20px auto;
+            border: 2px solid #1E293B;
+        }
+
+        .chess-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+        }
+
+        .chess-cell:nth-child(odd) {
+            background: #F3F4F6;
+        }
+
+        .chess-cell:nth-child(even) {
+            background: #1E293B;
+            color: #FEF7ED;
+        }
+
+        .chess-cell:nth-child(2n+1):nth-child(-n+4),
+        .chess-cell:nth-child(2n):nth-child(n+5):nth-child(-n+8),
+        .chess-cell:nth-child(2n+1):nth-child(n+9):nth-child(-n+12),
+        .chess-cell:nth-child(2n):nth-child(n+13):nth-child(-n+16) {
+            background: #1E293B;
+            color: #FEF7ED;
+        }
+
+        .chess-cell:nth-child(2n):nth-child(-n+4),
+        .chess-cell:nth-child(2n+1):nth-child(n+5):nth-child(-n+8),
+        .chess-cell:nth-child(2n):nth-child(n+9):nth-child(-n+12),
+        .chess-cell:nth-child(2n+1):nth-child(n+13):nth-child(-n+16) {
+            background: #F3F4F6;
+            color: #1E293B;
+        }
+
+        .search-tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .tree-level {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .tree-node {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #1E293B;
+            border-radius: 50%;
+            background: #FEF7ED;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .tree-node.visited {
+            background: #BBF7D0;
+        }
+
+        .tree-node.current {
+            background: #EA580C;
+            color: #FEF7ED;
+        }
+
+        .tree-line {
+            position: absolute;
+            height: 2px;
+            background: #1E293B;
+            top: 50%;
+        }
+
+        .romania-map {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: #F8F9FA;
+            border: 2px solid #1E293B;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .city {
+            position: absolute;
+            width: 60px;
+            height: 30px;
+            background: #EA580C;
+            color: #FEF7ED;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .city.start {
+            background: #059669;
+        }
+
+        .city.goal {
+            background: #DC2626;
+        }
+
+        .road {
+            position: absolute;
+            height: 2px;
+            background: #6B7280;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .slide {
+                padding: 20px;
+                min-height: 400px;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5em;
+            }
+
+            .two-content,
+            .comparison-grid,
+            .picture-caption {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .vs-divider {
+                display: none;
+            }
+
+            .puzzle-grid {
+                grid-template-columns: repeat(3, 60px);
+                grid-template-rows: repeat(3, 60px);
+            }
+
+            .queens-board {
+                grid-template-columns: repeat(4, 45px);
+                grid-template-rows: repeat(4, 45px);
+            }
+        }
+
+        /* Navigation */
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9em;
+        }
+
+        /* Complex visual for search trees */
+        .bfs-visualization, .dfs-visualization {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: 10px;
+        }
+
+        .search-order {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #EA580C;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Slide 1: Title Slide -->
+        <div class="slide title-slide">
+            <h1>Uninformed Search</h1>
+            <p class="subtitle">Exploring AI Search Strategies Without Domain Knowledge</p>
+            <p class="author">Artificial Intelligence Course • Lecture 3 • Search Algorithms</p>
+        </div>
+
+        <!-- Slide 2: Course Overview -->
+        <div class="slide title-content">
+            <h2>What We'll Learn Today</h2>
+            <div class="content-area">
+                <p>Today's lecture will cover the fundamentals of uninformed search strategies in AI, providing you with essential knowledge for problem-solving.</p>
+                
+                <ul class="content-list">
+                    <li>Understanding states and knowledge representation</li>
+                    <li>Components of atomic agents and search problems</li>
+                    <li>Why search is crucial in AI with practical examples</li>
+                    <li>Evaluation criteria for search strategies</li>
+                    <li>Core uninformed search algorithms</li>
+                    <li>Complexity analysis and performance comparison</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    By the end of this lecture, you'll understand how AI agents find solutions without using domain-specific knowledge.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Section Header -->
+        <div class="slide section-header">
+            <h1>Fundamentals</h1>
+            <p class="section-subtitle">States & Knowledge Representation</p>
+        </div>
+
+        <!-- Slide 4: What is a State? -->
+        <div class="slide title-content">
+            <h2>What is a State?</h2>
+            <div class="content-area">
+                <p>A <span class="emphasis">state</span> represents a complete description of the world or problem situation at any given moment.</p>
+                
+                <div class="algorithm-box">
+                    <strong>State Definition:</strong><br>
+                    A state captures all relevant information needed to:
+                    <ul class="content-list">
+                        <li>Determine what actions are possible</li>
+                        <li>Evaluate whether the goal has been reached</li>
+                        <li>Understand the current situation completely</li>
+                        <li>Predict the outcome of actions</li>
+                    </ul>
+                </div>
+
+                <p><strong>Key Point:</strong> States are not just snapshots - they're comprehensive representations that enable decision-making and goal achievement in AI systems.</p>
+
+                <div class="accent-box">
+                    Think of a state as answering: "What is the complete current situation that matters for solving this problem?"
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Vacuum World Example -->
+        <div class="slide picture-caption">
+            <h2>Agent's Knowledge: Vacuum World Example</h2>
+            
+            <div class="picture-area">
+                <h3 style="margin-bottom: 20px; color: #1E293B;">Vacuum World Visualization</h3>
+                <div class="vacuum-world">
+                    <div class="room dirty">
+                        <div class="agent">🤖</div>
+                        Room A<br>DIRTY
+                    </div>
+                    <div class="room clean">
+                        Room B<br>CLEAN
+                    </div>
+                </div>
+                <p style="margin-top: 20px; color: #1E293B;"><strong>Current State:</strong> (Agent-A, A-Dirty, B-Clean)</p>
+                
+                <div style="margin-top: 20px; color: #1E293B;">
+                    <strong>Possible Actions:</strong><br>
+                    • Suck (clean room A)<br>
+                    • Move-Right (go to room B)
+                </div>
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>State Space Analysis</h3>
+                <ul class="content-list">
+                    <li><strong>Agent Position:</strong> A or B (2 options)</li>
+                    <li><strong>Room A Status:</strong> Clean or Dirty (2 options)</li>
+                    <li><strong>Room B Status:</strong> Clean or Dirty (2 options)</li>
+                    <li><strong>Total States:</strong> 2 × 2 × 2 = 8 states</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Actions Available:</strong><br>
+                    • Move-Right<br>
+                    • Move-Left<br>
+                    • Suck
+                </div>
+
+                <p><strong>Goal State:</strong> Both rooms clean, regardless of agent location (2 winning states out of 8 total).</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Atomic Agent Components -->
+        <div class="slide title-content">
+            <h2>Atomic Agent Input Components</h2>
+            <div class="content-area">
+                <p>Every search problem requires four essential components to be well-defined:</p>
+                
+                <div class="algorithm-box">
+                    <strong>1. Set of States</strong><br>
+                    All possible configurations of the world<br>
+                    <em>Example: In vacuum world, all 8 possible combinations of (Agent-Position, Room-A-Status, Room-B-Status)</em>
+                </div>
+
+                <div class="algorithm-box">
+                    <strong>2. Operators (Actions) and Costs</strong><br>
+                    Available actions and their associated costs<br>
+                    <em>Example: Move-Left (cost=1), Move-Right (cost=1), Suck (cost=1)</em>
+                </div>
+
+                <div class="algorithm-box">
+                    <strong>3. Start State</strong><br>
+                    The initial configuration where the agent begins<br>
+                    <em>Example: (Agent-A, A-Dirty, B-Dirty)</em>
+                </div>
+
+                <div class="algorithm-box">
+                    <strong>4. Goal State (Test)</strong><br>
+                    Condition or test that defines success<br>
+                    <em>Example: Both rooms are clean</em>
+                </div>
+
+                <div class="highlight-box">
+                    These components define the "search space" - the landscape of all possible paths from start to goal.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Section Header -->
+        <div class="slide section-header">
+            <h1>Why Search?</h1>
+            <p class="section-subtitle">Real-World Applications & Examples</p>
+        </div>
+
+        <!-- Slide 8: 8-Puzzle Example -->
+        <div class="slide picture-caption">
+            <h2>Example 1: The 8-Puzzle</h2>
+            
+            <div class="picture-area">
+                <div style="display: flex; align-items: center; gap: 40px;">
+                    <div>
+                        <h4 style="color: #1E293B; margin-bottom: 10px;">Start State</h4>
+                        <div class="puzzle-grid">
+                            <div class="puzzle-cell">1</div>
+                            <div class="puzzle-cell empty"></div>
+                            <div class="puzzle-cell">3</div>
+                            <div class="puzzle-cell">4</div>
+                            <div class="puzzle-cell">2</div>
+                            <div class="puzzle-cell">6</div>
+                            <div class="puzzle-cell">7</div>
+                            <div class="puzzle-cell">5</div>
+                            <div class="puzzle-cell">8</div>
+                        </div>
+                    </div>
+                    
+                    <div style="color: #EA580C; font-size: 2em;">→</div>
+                    
+                    <div>
+                        <h4 style="color: #1E293B; margin-bottom: 10px;">Goal State</h4>
+                        <div class="puzzle-grid">
+                            <div class="puzzle-cell">1</div>
+                            <div class="puzzle-cell">2</div>
+                            <div class="puzzle-cell">3</div>
+                            <div class="puzzle-cell">4</div>
+                            <div class="puzzle-cell">5</div>
+                            <div class="puzzle-cell">6</div>
+                            <div class="puzzle-cell">7</div>
+                            <div class="puzzle-cell">8</div>
+                            <div class="puzzle-cell empty"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>Problem Analysis</h3>
+                <ul class="content-list">
+                    <li><strong>States:</strong> 9!/2 = 181,440 configurations</li>
+                    <li><strong>Actions:</strong> Slide tile into empty space (Up, Down, Left, Right)</li>
+                    <li><strong>Goal:</strong> Arrange numbers 1-8 in order with empty space at bottom-right</li>
+                    <li><strong>Challenge:</strong> Find shortest sequence of moves</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Why Search?</strong><br>
+                    With 181,440 possible states, we need systematic exploration to find the optimal solution!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Romania Map Example -->
+        <div class="slide picture-caption">
+            <h2>Example 2: Romania Travel Problem</h2>
+            
+            <div class="picture-area">
+                <img src="" alt="images/ai/romania-map.jpeg" style="max-width: 100%; height: auto; border-radius: 10px; border: 2px solid #1E293B;">
+                <p style="color: #1E293B; text-align: center; margin-top: 10px;">
+                    <strong>Problem:</strong> Find shortest path from Arad to Bucharest
+                </p>
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>Search Problem Setup</h3>
+                <ul class="content-list">
+                    <li><strong>States:</strong> Cities (Arad, Oradea, Sibiu, Brasov, Bucharest, etc.)</li>
+                    <li><strong>Actions:</strong> Drive from one city to a connected city</li>
+                    <li><strong>Costs:</strong> Distance between cities (in km)</li>
+                    <li><strong>Goal:</strong> Reach Bucharest from Arad</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Multiple Paths Exist:</strong><br>
+                    • Arad → Sibiu → Brasov → Bucharest<br>
+                    • Arad → Oradea → ... → Bucharest<br>
+                    Which is shortest?
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: N-Queens Example -->
+        <div class="slide picture-caption">
+            <h2>Example 3: N-Queens Problem</h2>
+            
+            <div class="picture-area">
+                <div>
+                    <h4 style="color: #1E293B; margin-bottom: 15px;">4-Queens Solution</h4>
+                    <div class="queens-board">
+                        <div class="chess-cell"></div>
+                        <div class="chess-cell">♛</div>
+                        <div class="chess-cell"></div>
+                        <div class="chess-cell"></div>
+                        
+                        <div class="chess-cell"></div>
+                        <div class="chess-cell"></div>
+                        <div class="chess-cell"></div>
+                        <div class="chess-cell">♛</div>
+                        
+                        <div class="chess-cell">♛</div>
+                        <div class="chess-cell"></div>
+                        <div class="chess-cell"></div>
+                        <div class="chess-cell"></div>
+                        
+                        <div class="chess-cell"></div>
+                        <div class="chess-cell"></div>
+                        <div class="chess-cell">♛</div>
+                        <div class="chess-cell"></div>
+                    </div>
+                    <p style="color: #059669; font-weight: bold; text-align: center;">✓ No queens attack each other!</p>
+                </div>
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>Problem Complexity</h3>
+                <ul class="content-list">
+                    <li><strong>Goal:</strong> Place N queens on N×N board so none attack each other</li>
+                    <li><strong>States:</strong> Arrangements of queens on board</li>
+                    <li><strong>Actions:</strong> Place or move queens</li>
+                    <li><strong>Constraints:</strong> No two queens in same row, column, or diagonal</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Search Space:</strong><br>
+                    • 4-Queens: 2 solutions<br>
+                    • 8-Queens: 92 solutions<br>
+                    • But millions of possible arrangements to check!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Section Header -->
+        <div class="slide section-header">
+            <h1>Strategy Evaluation</h1>
+            <p class="section-subtitle">How Do We Judge Search Algorithms?</p>
+        </div>
+
+        <!-- Slide 12: Search Strategy Evaluation -->
+        <div class="slide title-content">
+            <h2>Search Strategy Evaluation Criteria</h2>
+            <div class="content-area">
+                <p>A search strategy is defined by <span class="emphasis">the order of node expansion</span>. We evaluate strategies along five key dimensions:</p>
+                
+                <div class="algorithm-box">
+                    <strong>1. Completeness:</strong> Does it always find a solution if one exists?<br>
+                    <em>Will the algorithm eventually find the goal, or might it get lost?</em>
+                </div>
+
+                <div class="algorithm-box">
+                    <strong>2. Time Complexity:</strong> Number of nodes generated/explored<br>
+                    <em>How much computation time does it take?</em>
+                </div>
+
+                <div class="algorithm-box">
+                    <strong>3. Space Complexity:</strong> Maximum number of nodes stored in memory<br>
+                    <em>How much memory does it require?</em>
+                </div>
+
+                <div class="algorithm-box">
+                    <strong>4. Optimality:</strong> Does it always find the least-cost solution?<br>
+                    <em>Is the solution the best possible?</em>
+                </div>
+
+                <div class="algorithm-box">
+                    <strong>5. Systematicity:</strong> Does it visit each state at most once?<br>
+                    <em>Does it avoid redundant work?</em>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Complexity Measures:</strong><br>
+                    • <strong>b:</strong> maximum branching factor (max children per node)<br>
+                    • <strong>d:</strong> depth of least-cost solution<br>
+                    • <strong>m:</strong> maximum depth (may be ∞)
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Section Header -->
+        <div class="slide section-header">
+            <h1>Uninformed Search</h1>
+            <p class="section-subtitle">Strategies Using Only Problem Definition</p>
+        </div>
+
+        <!-- Slide 14: Uninformed Search Overview -->
+        <div class="slide title-content">
+            <h2>Uninformed Search Strategies</h2>
+            <div class="content-area">
+                <p><span class="emphasis">Uninformed search strategies</span> use only the information available in the problem definition - no domain-specific knowledge!</p>
+                
+                <ul class="content-list">
+                    <li><strong>Breadth-First Search (BFS):</strong> Expand shallowest nodes first</li>
+                    <li><strong>Depth-First Search (DFS):</strong> Expand deepest nodes first</li>
+                    <li><strong>Depth-Limited Search:</strong> DFS with maximum depth limit</li>
+                    <li><strong>Iterative Deepening Search:</strong> Gradually increase depth limit</li>
+                    <li><strong>Bidirectional Search:</strong> Search from both start and goal</li>
+                </ul>
+                
+                <div class="accent-box">
+                    Also called "blind search" - they don't know if one non-goal state is more promising than another.
+                </div>
+
+                <p>Each strategy makes different trade-offs between time, space, completeness, and optimality.</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: BFS Visualization -->
+        <div class="slide picture-caption">
+            <h2>Breadth-First Search (BFS) Visualization</h2>
+            
+            <div class="picture-area">
+                <div class="bfs-visualization">
+                    <div class="search-order">BFS Expansion Order: Level by Level</div>
+                    <div class="search-tree">
+                        <div class="tree-level">
+                            <div class="tree-node visited">S</div>
+                        </div>
+                        
+                        <div class="tree-level" style="margin-top: 20px;">
+                            <div class="tree-node visited">A</div>
+                            <div class="tree-node visited">B</div>
+                            <div class="tree-node visited">C</div>
+                        </div>
+                        
+                        <div class="tree-level" style="margin-top: 20px;">
+                            <div class="tree-node current">D</div>
+                            <div class="tree-node">E</div>
+                            <div class="tree-node">F</div>
+                            <div class="tree-node">G</div>
+                            <div class="tree-node">H</div>
+                        </div>
+                        
+                        <div class="tree-level" style="margin-top: 20px;">
+                            <div class="tree-node">...</div>
+                            <div class="tree-node">...</div>
+                            <div class="tree-node">...</div>
+                            <div class="tree-node">...</div>
+                        </div>
+                    </div>
+                    <p style="color: #1E293B; text-align: center;">
+                        <strong>Order:</strong> S → A, B, C → D, E, F, G, H → ...
+                    </p>
+                </div>
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>BFS Characteristics</h3>
+                <ul class="content-list">
+                    <li><strong>Strategy:</strong> Expand all nodes at depth d before depth d+1</li>
+                    <li><strong>Complete:</strong> ✓ Yes (if b is finite)</li>
+                    <li><strong>Optimal:</strong> ✓ Yes (if step costs are equal)</li>
+                    <li><strong>Time:</strong> O(b^d)</li>
+                    <li><strong>Space:</strong> O(b^d) - stores entire frontier</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Key Insight:</strong> BFS guarantees shortest path but uses exponential memory!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: DFS Visualization -->
+        <div class="slide picture-caption">
+            <h2>Depth-First Search (DFS) Visualization</h2>
+            
+            <div class="picture-area">
+                <div class="dfs-visualization">
+                    <div class="search-order">DFS Expansion Order: Depth First</div>
+                    <div class="search-tree">
+                        <div class="tree-level">
+                            <div class="tree-node visited">S</div>
+                        </div>
+                        
+                        <div class="tree-level" style="margin-top: 20px;">
+                            <div class="tree-node visited">A</div>
+                            <div class="tree-node">B</div>
+                            <div class="tree-node">C</div>
+                        </div>
+                        
+                        <div class="tree-level" style="margin-top: 20px;">
+                            <div class="tree-node visited">D</div>
+                            <div class="tree-node">E</div>
+                            <div class="tree-node">F</div>
+                            <div class="tree-node">G</div>
+                            <div class="tree-node">H</div>
+                        </div>
+                        
+                        <div class="tree-level" style="margin-top: 20px;">
+                            <div class="tree-node current">I</div>
+                            <div class="tree-node">J</div>
+                            <div class="tree-node">...</div>
+                            <div class="tree-node">...</div>
+                        </div>
+                    </div>
+                    <p style="color: #1E293B; text-align: center;">
+                        <strong>Order:</strong> S → A → D → I → J → ... (backtrack) → E → ...
+                    </p>
+                </div>
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>DFS Characteristics</h3>
+                <ul class="content-list">
+                    <li><strong>Strategy:</strong> Expand deepest node first, backtrack when stuck</li>
+                    <li><strong>Complete:</strong> ✗ No (can get lost in infinite paths)</li>
+                    <li><strong>Optimal:</strong> ✗ No (finds any solution, not necessarily shortest)</li>
+                    <li><strong>Time:</strong> O(b^m)</li>
+                    <li><strong>Space:</strong> O(bm) - only stores path</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <strong>Key Insight:</strong> DFS uses much less memory but may never find the optimal solution!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: BFS vs DFS Comparison -->
+        <div class="slide comparison">
+            <h2>Breadth-First vs Depth-First Search</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>Breadth-First Search</h3>
+                    <p><strong>Strategy:</strong> Expand all nodes at depth d before any nodes at depth d+1</p>
+                    <div class="highlight-box">
+                        ✓ Complete & Optimal<br>
+                        ✓ Finds shortest path<br>
+                        ✗ High memory usage O(b^d)<br>
+                        ✗ Slow if solution is deep
+                    </div>
+                    <p><strong>Use when:</strong> Solutions are shallow, optimality is crucial, memory is available</p>
+                </div>
+                
+                <div class="comparison-item">
+                    <h3>Depth-First Search</h3>
+                    <p><strong>Strategy:</strong> Expand deepest node first, backtrack when needed</p>
+                    <div class="accent-box">
+                        ✓ Low memory usage O(bm)<br>
+                        ✓ Fast if many solutions exist<br>
+                        ✗ Not optimal<br>
+                        ✗ May get stuck in infinite paths<br>
+                        ✗ Not complete
+                    </div>
+                    <p><strong>Use when:</strong> Memory is limited, any solution is acceptable, search space is finite</p>
+                </div>
+            </div>
+            
+            <div class="vs-divider">VS</div>
+        </div>
+
+        <!-- Slide 18: Complexity Analysis -->
+        <div class="slide content-caption">
+            <h2>Time and Space Complexity: BFS Example</h2>
+            
+            <div class="main-content-area">
+                <div style="color: #FEF7ED;">
+                    <strong>Breadth-First Search Complexity Analysis</strong><br><br>
+                    <table style="color: #FEF7ED; margin: auto; text-align: center; border-collapse: collapse;">
+                        <tr style="border-bottom: 2px solid #FEF7ED;">
+                            <th style="padding: 8px;">Depth</th>
+                            <th style="padding: 8px;">Nodes</th>
+                            <th style="padding: 8px;">Time</th>
+                            <th style="padding: 8px;">Memory</th>
+                        </tr>
+                        <tr><td style="padding: 5px;">2</td><td>110</td><td>milliseconds</td><td>11 kilobytes</td></tr>
+                        <tr><td style="padding: 5px;">4</td><td>11,110</td><td>milliseconds</td><td>11 megabytes</td></tr>
+                        <tr><td style="padding: 5px;">6</td><td>10⁶</td><td>seconds</td><td>1.1 gigabytes</td></tr>
+                        <tr><td style="padding: 5px;">8</td><td>10⁸</td><td>minutes</td><td>100 gigabytes</td></tr>
+                        <tr><td style="padding: 5px;">10</td><td>10¹⁰</td><td>hours</td><td>10 terabytes</td></tr>
+                        <tr><td style="padding: 5px;">12</td><td>10¹²</td><td>days</td><td>1 petabyte</td></tr>
+                        <tr><td style="padding: 5px;">14</td><td>10¹⁴</td><td>years</td><td>100 petabytes</td></tr>
+                        <tr><td style="padding: 5px;">16</td><td>10¹⁶</td><td>years</td><td>10 exabytes</td></tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="caption-area">
+                <strong>Assumptions:</strong> Branching factor b = 10, 1 million nodes/second, 1000 bytes/node.<br><br>
+                <strong>Critical Insight:</strong> Memory becomes the limiting factor much faster than time! This exponential growth shows why we need smarter strategies for complex problems. Notice how memory requirements become impossible to satisfy well before time does.
+            </div>
+        </div>
+
+        <!-- Slide 19: Iterative Deepening Visualization -->
+        <div class="slide picture-caption">
+            <h2>Iterative Deepening Search Visualization</h2>
+            
+            <div class="picture-area">
+                <div class="bfs-visualization">
+                    <div class="search-order">Iterative Deepening: Gradually Increase Depth Limit</div>
+                    
+                    <div style="display: flex; justify-content: space-around; margin: 20px 0;">
+                        <div style="text-align: center;">
+                            <h4 style="color: #EA580C;">Depth Limit = 0</h4>
+                            <div class="search-tree" style="transform: scale(0.7);">
+                                <div class="tree-level">
+                                    <div class="tree-node visited">S</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <h4 style="color: #EA580C;">Depth Limit = 1</h4>
+                            <div class="search-tree" style="transform: scale(0.7);">
+                                <div class="tree-level">
+                                    <div class="tree-node visited">S</div>
+                                </div>
+                                <div class="tree-level" style="margin-top: 15px;">
+                                    <div class="tree-node visited">A</div>
+                                    <div class="tree-node visited">B</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center;">
+                            <h4 style="color: #EA580C;">Depth Limit = 2</h4>
+                            <div class="search-tree" style="transform: scale(0.7);">
+                                <div class="tree-level">
+                                    <div class="tree-node visited">S</div>
+                                </div>
+                                <div class="tree-level" style="margin-top: 10px;">
+                                    <div class="tree-node visited">A</div>
+                                    <div class="tree-node visited">B</div>
+                                </div>
+                                <div class="tree-level" style="margin-top: 10px;">
+                                    <div class="tree-node current">G</div>
+                                    <div class="tree-node visited">C</div>
+                                    <div class="tree-node visited">D</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p style="color: #059669; font-weight: bold; text-align: center;">
+                        ✓ Goal Found at Depth 2!
+                    </p>
+                </div>
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>How It Works</h3>
+                <ul class="content-list">
+                    <li><strong>Step 1:</strong> Try DFS with depth limit 0</li>
+                    <li><strong>Step 2:</strong> Try DFS with depth limit 1</li>
+                    <li><strong>Step 3:</strong> Try DFS with depth limit 2</li>
+                    <li><strong>Continue:</strong> Until solution found</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <strong>Benefits:</strong><br>
+                    ✓ Complete & Optimal<br>
+                    ✓ Memory efficient O(bd)<br>
+                    ✓ Not much slower than BFS
+                </div>
+                
+                <div class="accent-box">
+                    <strong>Why It Works:</strong> Most work is at the deepest level, so repeating shallow searches is negligible!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Bidirectional Search Visualization -->
+        <div class="slide picture-caption">
+            <h2>Bidirectional Search Visualization</h2>
+            
+            <div class="picture-area">
+                <div class="bfs-visualization">
+                    <div class="search-order">Bidirectional: Two Searches Meet in the Middle</div>
+                    
+                    <!-- Step-by-step progression -->
+                    <div style="display: flex; flex-direction: column; gap: 25px; margin: 20px 0;">
+                        
+                        <!-- Step 1: Initial -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(5, 150, 105, 0.05); border-radius: 10px;">
+                            <div style="text-align: center;">
+                                <div style="color: #059669; font-weight: bold; margin-bottom: 8px;">→ FORWARD →</div>
+                                <div class="tree-node" style="background: #059669; color: #FEF7ED; display: inline-block;">S</div>
+                                <div style="font-size: 0.9em; color: #059669; margin-top: 5px;">Start: Expand from S</div>
+                            </div>
+                            
+                            <div style="text-align: center; color: #6B7280;">
+                                <div style="font-size: 1.5em;">vs</div>
+                                <div style="font-size: 0.9em;">Step 1</div>
+                            </div>
+                            
+                            <div style="text-align: center;">
+                                <div style="color: #DC2626; font-weight: bold; margin-bottom: 8px;">← BACKWARD ←</div>
+                                <div class="tree-node" style="background: #DC2626; color: #FEF7ED; display: inline-block;">G</div>
+                                <div style="font-size: 0.9em; color: #DC2626; margin-top: 5px;">Goal: Expand from G</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2: Expansion -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(234, 88, 12, 0.05); border-radius: 10px;">
+                            <div style="text-align: center;">
+                                <div style="color: #059669; font-weight: bold; margin-bottom: 8px;">→ FORWARD →</div>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                                    <div class="tree-node" style="background: #059669; color: #FEF7ED; display: inline-block;">S</div>
+                                    <div style="display: flex; gap: 15px;">
+                                        <div class="tree-node visited" style="display: inline-block;">A</div>
+                                        <div class="tree-node visited" style="display: inline-block;">B</div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 0.9em; color: #059669; margin-top: 8px;">Explore: A, B</div>
+                            </div>
+                            
+                            <div style="text-align: center; color: #6B7280;">
+                                <div style="font-size: 1.5em;">vs</div>
+                                <div style="font-size: 0.9em;">Step 2</div>
+                            </div>
+                            
+                            <div style="text-align: center;">
+                                <div style="color: #DC2626; font-weight: bold; margin-bottom: 8px;">← BACKWARD ←</div>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                                    <div class="tree-node" style="background: #DC2626; color: #FEF7ED; display: inline-block;">G</div>
+                                    <div style="display: flex; gap: 15px;">
+                                        <div class="tree-node visited" style="display: inline-block;">Y</div>
+                                        <div class="tree-node visited" style="display: inline-block;">Z</div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 0.9em; color: #DC2626; margin-top: 8px;">Explore: Y, Z</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3: Meeting Point -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(220, 38, 38, 0.1)); border-radius: 10px; border: 3px solid #EA580C;">
+                            <div style="text-align: center;">
+                                <div style="color: #059669; font-weight: bold; margin-bottom: 8px;">→ FORWARD →</div>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                                    <div class="tree-node" style="background: #059669; color: #FEF7ED; display: inline-block;">S</div>
+                                    <div style="display: flex; gap: 10px;">
+                                        <div class="tree-node visited" style="display: inline-block;">A</div>
+                                        <div class="tree-node visited" style="display: inline-block;">B</div>
+                                    </div>
+                                    <div style="display: flex; gap: 10px;">
+                                        <div class="tree-node current" style="background: #EA580C; color: #FEF7ED; display: inline-block; border: 3px solid #FEF7ED; animation: pulse 1.5s infinite;">X</div>
+                                        <div class="tree-node visited" style="display: inline-block;">C</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="text-align: center;">
+                                <div style="font-size: 2.5em; color: #EA580C; animation: bounce 1s infinite;">⚡</div>
+                                <div style="background: #EA580C; color: #FEF7ED; padding: 15px; border-radius: 15px; margin: 10px 0; box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);">
+                                    <strong>COLLISION!</strong><br>
+                                    <div style="font-size: 1.5em; margin: 5px 0;">🎯</div>
+                                    <strong>Node X Found</strong>
+                                </div>
+                                <p style="color: #059669; font-weight: bold; font-size: 1.1em;">🏆 SUCCESS!</p>
+                            </div>
+                            
+                            <div style="text-align: center;">
+                                <div style="color: #DC2626; font-weight: bold; margin-bottom: 8px;">← BACKWARD ←</div>
+                                <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                                    <div class="tree-node" style="background: #DC2626; color: #FEF7ED; display: inline-block;">G</div>
+                                    <div style="display: flex; gap: 10px;">
+                                        <div class="tree-node visited" style="display: inline-block;">Y</div>
+                                        <div class="tree-node visited" style="display: inline-block;">Z</div>
+                                    </div>
+                                    <div style="display: flex; gap: 10px;">
+                                        <div class="tree-node current" style="background: #EA580C; color: #FEF7ED; display: inline-block; border: 3px solid #FEF7ED; animation: pulse 1.5s infinite;">X</div>
+                                        <div class="tree-node visited" style="display: inline-block;">W</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px; padding: 15px; background: rgba(5, 150, 105, 0.1); border-radius: 10px; border-left: 4px solid #059669;">
+                        <p style="color: #1E293B; font-weight: bold; font-size: 1.2em;">
+                            🛤️ Final Path: S → A → X ← Y ← G
+                        </p>
+                        <p style="color: #059669; margin-top: 8px;">
+                            <strong>Total Path Length:</strong> 4 steps | <strong>Nodes Explored:</strong> ~10 | <strong>vs Normal BFS:</strong> ~1000+ saved!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>Why It's Powerful</h3>
+                <ul class="content-list">
+                    <li><strong>Exponential Speedup:</strong> O(b^d) → O(b^(d/2))</li>
+                    <li><strong>Early Termination:</strong> Stop as soon as searches meet</li>
+                    <li><strong>Symmetric Exploration:</strong> Both directions contribute equally</li>
+                    <li><strong>Optimal Path:</strong> Combines shortest segments from both sides</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <strong>Complexity Example:</strong><br>
+                    • Normal BFS: 10¹⁰ nodes<br>
+                    • Bidirectional: 2 × 10⁵ nodes<br>
+                    • <strong>50,000x faster!</strong>
+                </div>
+                
+                <div class="accent-box">
+                    <strong>Requirements:</strong><br>
+                    • Reversible operators<br>
+                    • Explicit goal state<br>
+                    • Same search strategy both ways
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 21: Advanced Strategies Summary -->
+        <div class="slide two-content">
+            <h2>Advanced Uninformed Strategies Summary</h2>
+            
+            <div class="content-column">
+                <h3>Iterative Deepening Search</h3>
+                <p>Best general-purpose uninformed search:</p>
+                <ul class="content-list">
+                    <li>Combines BFS completeness with DFS memory efficiency</li>
+                    <li>Complete and optimal</li>
+                    <li>Space complexity: O(bd)</li>
+                    <li>Time complexity: O(b^d)</li>
+                </ul>
+
+                <div class="algorithm-box">
+                    <strong>When to Use:</strong><br>
+                    • Don't know solution depth<br>
+                    • Want optimal solution<br>
+                    • Memory is limited<br>
+                    • General-purpose choice
+                </div>
+            </div>
+            
+            <div class="content-column">
+                <h3>Bidirectional Search</h3>
+                <p>Most efficient when applicable:</p>
+                <ul class="content-list">
+                    <li>Exponential speedup: O(b^d) → O(b^(d/2))</li>
+                    <li>Complete and optimal</li>
+                    <li>Requires reversible operators</li>
+                    <li>Need explicit goal state</li>
+                </ul>
+
+                <div class="algorithm-box">
+                    <strong>When to Use:</strong><br>
+                    • Can work backwards from goal<br>
+                    • Large search spaces<br>
+                    • Solution depth is large<br>
+                    • Want maximum efficiency
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 22: Summary and Takeaways -->
+        <div class="slide title-content">
+            <h2>Summary: Choosing the Right Strategy</h2>
+            <div class="content-area">
+                <p>Each uninformed search strategy has its place depending on the problem characteristics:</p>
+                
+                <div class="algorithm-box">
+                    <strong>Use Breadth-First Search when:</strong><br>
+                    • Solution depth is small (d ≤ 12)<br>
+                    • You need the optimal solution<br>
+                    • Memory is not a constraint<br>
+                    • Step costs are uniform
+                </div>
+
+                <div class="algorithm-box">
+                    <strong>Use Depth-First Search when:</strong><br>
+                    • Memory is severely limited<br>
+                    • Solutions are deep but plentiful<br>
+                    • Any solution is acceptable (not necessarily optimal)<br>
+                    • Search space is finite
+                </div>
+
+                <div class="algorithm-box">
+                    <strong>Use Iterative Deepening when:</strong><br>
+                    • You want BFS optimality with DFS memory efficiency<br>
+                    • Search space has uniform cost<br>
+                    • Best general-purpose uninformed search<br>
+                    • Don't know the solution depth in advance
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Key Insight:</strong> Uninformed search teaches us the fundamental trade-offs in AI: time vs. space vs. optimality. Understanding these prepares us for informed search strategies that use domain knowledge to do much better!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 23: Questions and Discussion -->
+        <div class="slide title-only">
+            <h1>Questions & Discussion</h1>
+            <p class="subtitle">Understanding Uninformed Search</p>
+        </div>
+
+    </div>
+
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        Slide 1 of 23
+    </div>
+
+    <script>
+        // Update slide counter on scroll
+        function updateSlideCounter() {
+            const slides = document.querySelectorAll('.slide');
+            const slideCounter = document.querySelector('.slide-counter');
+            
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    slideCounter.textContent = `Slide ${index + 1} of ${slides.length}`;
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateSlideCounter);
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            // Find current slide
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentSlide = index;
+                }
+            });
+            
+            // Navigate with arrow keys
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (currentSlide < slides.length - 1) {
+                    slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                if (currentSlide > 0) {
+                    slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
