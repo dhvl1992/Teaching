@@ -376,6 +376,77 @@
             border-radius: 25px;
             font-size: 0.9em;
         }
+        /* Equations Styling */
+.equations-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin: 30px 0;
+}
+
+.equation-box {
+    background: rgba(5, 150, 105, 0.05);
+    padding: 25px;
+    border-radius: 15px;
+    border-left: 4px solid #059669;
+    text-align: center;
+}
+
+.equation-box h3 {
+    color: #059669;
+    font-size: 1.4em;
+    margin-bottom: 15px;
+}
+
+.equation {
+    background: #FEF7ED;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 15px 0;
+    border: 2px solid #EA580C;
+}
+
+.formula {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #1E293B;
+    display: inline-block;
+}
+
+.fraction {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    position: relative;
+}
+
+.numerator {
+    display: block;
+    border-bottom: 2px solid #EA580C;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
+.denominator {
+    display: block;
+    padding-top: 5px;
+}
+
+.equation-desc {
+    font-size: 0.95em;
+    color: #1E293B;
+    font-style: italic;
+    margin-top: 10px;
+    line-height: 1.4;
+}
+
+/* Responsive Design for Equations */
+@media (max-width: 768px) {
+    .equations-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}
     </style>
 </head>
 <body>
