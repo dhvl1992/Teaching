@@ -647,7 +647,51 @@
                 <strong>Think of it as a detailed report card:</strong> The confusion matrix shows exactly where your model succeeded and failed. It's the foundation for calculating accuracy, precision, recall, and F1-score. Every classification metric starts here!
             </div>
         </div>
-
+                <!-- Confusion Matrix Equations -->
+        <div class="slide title-content">
+            <h2>Essential Metrics from the Confusion Matrix</h2>
+            <div class="content-area">
+                <p>These four equations form the foundation of classification evaluation, all derived from the confusion matrix components:</p>
+                
+                <div class="equations-grid">
+                    <div class="equation-box">
+                        <h3>Accuracy</h3>
+                        <div class="equation">
+                            <span class="formula">Accuracy = <span class="fraction"><span class="numerator">TP + TN</span><span class="denominator">TP + TN + FP + FN</span></span></span>
+                        </div>
+                        <p class="equation-desc">Overall correctness: What proportion of all predictions were correct?</p>
+                    </div>
+                    
+                    <div class="equation-box">
+                        <h3>Precision</h3>
+                        <div class="equation">
+                            <span class="formula">Precision = <span class="fraction"><span class="numerator">TP</span><span class="denominator">TP + FP</span></span></span>
+                        </div>
+                        <p class="equation-desc">Quality of positive predictions: Of all positive predictions, how many were actually correct?</p>
+                    </div>
+                    
+                    <div class="equation-box">
+                        <h3>Recall (Sensitivity)</h3>
+                        <div class="equation">
+                            <span class="formula">Recall = <span class="fraction"><span class="numerator">TP</span><span class="denominator">TP + FN</span></span></span>
+                        </div>
+                        <p class="equation-desc">Coverage of actual positives: Of all actual positive cases, how many did we identify?</p>
+                    </div>
+                    
+                    <div class="equation-box">
+                        <h3>F1-Score</h3>
+                        <div class="equation">
+                            <span class="formula">F1 = <span class="fraction"><span class="numerator">2 × Precision × Recall</span><span class="denominator">Precision + Recall</span></span></span>
+                        </div>
+                        <p class="equation-desc">Harmonic mean: Balanced measure combining both precision and recall into a single score.</p>
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Remember:</strong> TP = True Positives, TN = True Negatives, FP = False Positives, FN = False Negatives
+                </div>
+            </div>
+        </div>
         <!-- Medical Diagnosis Example -->
         <div class="slide two-content">
             <h2>Understanding Metrics with Medical Diagnosis</h2>
