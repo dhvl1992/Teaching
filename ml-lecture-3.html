@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Fundamentals: Data Splitting, Bias-Variance, and Regularization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh;
+            color: #1E293B;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: #FEF7ED;
+            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            min-height: 500px;
+            page-break-after: always;
+        }
+
+        .slide:hover {
+            transform: translateY(-5px);
+        }
+
+        .title-slide {
+            background: #1E293B;
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-left: 5px solid #EA580C;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .title-slide .subtitle {
+            font-size: 1.6em;
+            opacity: 0.9;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .title-slide .author {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        .title-content h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-area {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .content-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        .content-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #EA580C;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #059669, #EA580C);
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section-header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section-header .section-subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+        }
+
+        .two-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .two-content h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-column {
+            padding: 20px;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: 10px;
+        }
+
+        .content-column h3 {
+            font-size: 1.6em;
+            color: #059669;
+            margin-bottom: 15px;
+        }
+
+        .comparison h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+            text-align: center;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .comparison-item {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(234, 88, 12, 0.1);
+        }
+
+        .comparison-item h3 {
+            font-size: 1.8em;
+            color: #EA580C;
+            margin-bottom: 20px;
+        }
+
+        .vs-divider {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .comparison {
+            position: relative;
+        }
+
+        .content-caption {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 30px;
+        }
+
+        .content-caption h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .main-content-area {
+            background: #FEF7ED;
+            border: 2px solid #EA580C;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            color: #1E293B;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .caption-area {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #059669;
+        }
+
+        .picture-caption {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .picture-caption h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .picture-area {
+            background: #FEF7ED;
+            border: 2px solid #EA580C;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            color: #1E293B;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .caption-sidebar {
+            background: rgba(234, 88, 12, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 4px solid #EA580C;
+        }
+
+        .caption-sidebar h3 {
+            color: #EA580C;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .highlight-box {
+            background: #059669;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .accent-box {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .emphasis {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .math-formula {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .data-table th {
+            background-color: #059669;
+            color: white;
+        }
+
+        .data-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .slide {
+                padding: 20px;
+                min-height: 400px;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5em;
+            }
+
+            .two-content,
+            .comparison-grid,
+            .picture-caption {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .vs-divider {
+                display: none;
+            }
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9em;
+        }
+
+        /* Visual Elements */
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: end;
+            justify-content: space-around;
+            height: 200px;
+            background: linear-gradient(to top, #f8fafc 0%, #f8fafc 100%);
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 10px;
+        }
+
+        .bar-fill {
+            width: 60px;
+            background: linear-gradient(to top, #EA580C, #059669);
+            border-radius: 4px 4px 0 0;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8em;
+            padding: 5px;
+        }
+
+        .bar-label {
+            margin-top: 10px;
+            font-size: 0.9em;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .scatter-plot {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(to top, #f8fafc 0%, #f8fafc 100%);
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .plot-point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .training-point {
+            background: #059669;
+        }
+
+        .validation-point {
+            background: #EA580C;
+        }
+
+        .test-point {
+            background: #1E293B;
+        }
+
+        .plot-axis {
+            position: absolute;
+            background: #64748b;
+        }
+
+        .x-axis {
+            bottom: 40px;
+            left: 40px;
+            right: 20px;
+            height: 2px;
+        }
+
+        .y-axis {
+            bottom: 40px;
+            left: 40px;
+            top: 20px;
+            width: 2px;
+        }
+
+        .axis-label {
+            position: absolute;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #374151;
+        }
+
+        .x-label {
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .y-label {
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+        }
+
+        .data-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .flow-box {
+            background: white;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            min-width: 120px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .flow-arrow {
+            font-size: 2em;
+            color: #EA580C;
+            margin: 0 10px;
+        }
+
+        .model-comparison {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .model-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 4px solid #d1d5db;
+            transition: transform 0.3s ease;
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .model-card.high-bias {
+            border-left-color: #dc2626;
+        }
+
+        .model-card.balanced {
+            border-left-color: #059669;
+        }
+
+        .model-card.high-variance {
+            border-left-color: #7c2d12;
+        }
+
+        .performance-meter {
+            width: 100%;
+            height: 20px;
+            background: #f3f4f6;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .meter-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .meter-good {
+            background: linear-gradient(to right, #10b981, #059669);
+        }
+
+        .meter-average {
+            background: linear-gradient(to right, #f59e0b, #d97706);
+        }
+
+        .meter-poor {
+            background: linear-gradient(to right, #ef4444, #dc2626);
+        }
+
+        .interactive-demo {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .slider-container {
+            margin: 20px 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e2e8f0;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .slider:hover {
+            opacity: 1;
+        }
+
+        .lambda-visualization {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .lambda-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .lambda-card.optimal {
+            border-color: #059669;
+            background: #f0fdf4;
+        }
+
+        .split-visualization {
+            display: flex;
+            width: 100%;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .split-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .train-section {
+            background: #059669;
+            width: 60%;
+        }
+
+        .val-section {
+            background: #EA580C;
+            width: 20%;
+        }
+
+        .test-section {
+            background: #1E293B;
+            width: 20%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Slide 1: Title Slide -->
+        <div class="slide title-slide">
+            <h1>Machine Learning Fundamentals</h1>
+            <p class="subtitle">Data Splitting, Bias-Variance Tradeoff, and Regularization</p>
+            <p class="author">Dr. Dhaval Patel • 2025</p>
+        </div>
+
+        <!-- Slide 2: Course Overview -->
+        <div class="slide title-content">
+            <h2>What We'll Learn Today</h2>
+            <div class="content-area">
+                <p>We'll explore three interconnected ML concepts using a <span class="emphasis">house price prediction</span> example throughout:</p>
+                
+                <ul class="content-list">
+                    <li><strong>Data Splitting Strategies:</strong> Why and how we split data into train/validation/test sets</li>
+                    <li><strong>Bias-Variance Tradeoff:</strong> The fundamental tension in machine learning models</li>
+                    <li><strong>Regularization Techniques:</strong> L1/L2 methods to control overfitting</li>
+                    <li><strong>Practical Implementation:</strong> Real-world application and code examples</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    🎯 Goal: Understand how these concepts work together to build robust ML models
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Our Running Example -->
+        <div class="slide content-caption">
+            <h2>Our Running Example: Flat Price Prediction in Mumbai</h2>
+            
+            <div class="main-content-area">
+                <h3>🏠 Predicting Flat Prices in Mumbai Metropolitan Region</h3>
+                <p><strong>Dataset:</strong> 20,000 flats across Mumbai, Thane, and Navi Mumbai</p>
+                <table class="data-table" style="margin: 20px auto; width: 80%;">
+                    <tr>
+                        <th>Feature</th>
+                        <th>Example Value</th>
+                        <th>Type</th>
+                    </tr>
+                    <tr>
+                        <td>Carpet Area (sq ft)</td>
+                        <td>850 sq ft</td>
+                        <td>Continuous</td>
+                    </tr>
+                    <tr>
+                        <td>BHK Configuration</td>
+                        <td>2 BHK</td>
+                        <td>Discrete</td>
+                    </tr>
+                    <tr>
+                        <td>Metro Distance (km)</td>
+                        <td>0.8 km</td>
+                        <td>Continuous</td>
+                    </tr>
+                    <tr>
+                        <td>Building Age (years)</td>
+                        <td>8 years</td>
+                        <td>Continuous</td>
+                    </tr>
+                    <tr>
+                        <td>Area (Locality)</td>
+                        <td>Bandra West</td>
+                        <td>Categorical</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Price</strong></td>
+                        <td><strong>₹1.2 Crore</strong></td>
+                        <td><strong>Target</strong></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="caption-area">
+                <strong>Why This Example Works:</strong> Mumbai real estate is complex with factors like metro connectivity, locality premium, and building amenities. Perfect for demonstrating overfitting risks - a model might memorize "Flat in Bandra = ₹1.2Cr" instead of learning the underlying patterns.
+            </div>
+        </div>
+
+        <!-- Slide 4: Section Header - Data Splitting -->
+        <div class="slide section-header">
+            <h1>Part 1: Data Splitting</h1>
+            <p class="section-subtitle">The Foundation of Reliable ML</p>
+        </div>
+
+        <!-- Slide 5: Why We Need Data Splitting -->
+        <div class="slide title-content">
+            <h2>Why We Can't Use All Data for Training</h2>
+            <div class="content-area">
+                <p><strong>Imagine:</strong> You're studying for IIT-JEE using previous year questions. If the actual exam contains the exact same questions you practiced with, how would you know if you truly understand concepts or just memorized answers?</p>
+                
+                <div class="highlight-box">
+                    The same problem exists in machine learning: if we test our model on the same data we trained it on, we can't tell if it's truly learned patterns or just memorized the training examples.
+                </div>
+                
+                <p><strong>In our Mumbai flat price example:</strong></p>
+                <ul class="content-list">
+                    <li>Training on all 20,000 flats and testing on the same flats would give misleadingly perfect results</li>
+                    <li>The model might memorize "Flat #1234 in Bandra with 850 sq ft = ₹1.2 Crore" rather than learning the relationship between area and locality</li>
+                    <li>When new flats come to market, the memorized model would fail catastrophically</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 6: The Three-Way Split -->
+        <div class="slide picture-caption">
+            <h2>Training / Validation / Test Split</h2>
+            
+            <div class="picture-area">
+                <h3>🏠 20,000 Mumbai Flats Visual Split</h3>
+                
+                <div class="split-visualization">
+                    <div class="split-section train-section">
+                        Training Set<br>12,000 flats (60%)
+                    </div>
+                    <div class="split-section val-section">
+                        Validation<br>4,000 flats (20%)
+                    </div>
+                    <div class="split-section test-section">
+                        Test Set<br>4,000 flats (20%)
+                    </div>
+                </div>
+
+                <div class="data-flow">
+                    <div class="flow-box" style="background: #059669; color: white;">
+                        <strong>Train</strong><br>
+                        Learn patterns
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box" style="background: #EA580C; color: white;">
+                        <strong>Validate</strong><br>
+                        Tune parameters
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box" style="background: #1E293B; color: white;">
+                        <strong>Test</strong><br>
+                        Final evaluation
+                    </div>
+                </div>
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>Key Rules</h3>
+                <ul class="content-list">
+                    <li><strong>Never</strong> let the model see test data during development</li>
+                    <li>Validation set guides model selection and hyperparameter tuning</li>
+                    <li>Test set gives unbiased estimate of real-world performance</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Critical:</strong> Test set is used exactly once - at the very end to report final results!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Cross-Validation -->
+        <div class="slide content-caption">
+            <h2>Cross-Validation: Making the Most of Limited Data</h2>
+            
+            <div class="main-content-area">
+                <h3>5-Fold Cross-Validation Visual Demo</h3>
+                
+                <div style="margin: 20px 0;">
+                    <div style="font-weight: bold; margin-bottom: 15px; text-align: center;">Click to see different folds:</div>
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                        <button onclick="showFold(1)" class="fold-btn" style="background: #059669; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Fold 1</button>
+                        <button onclick="showFold(2)" class="fold-btn" style="background: #059669; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Fold 2</button>
+                        <button onclick="showFold(3)" class="fold-btn" style="background: #059669; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Fold 3</button>
+                        <button onclick="showFold(4)" class="fold-btn" style="background: #059669; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Fold 4</button>
+                        <button onclick="showFold(5)" class="fold-btn" style="background: #059669; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Fold 5</button>
+                    </div>
+                    
+                    <div id="foldVisualization" style="display: flex; height: 60px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <!-- This will be populated by JavaScript -->
+                    </div>
+                    
+                    <div id="foldDescription" style="text-align: center; margin-top: 15px; font-weight: bold; color: #1e293b;">
+                        Click a fold button to see the train/validation split
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h4 style="text-align: center; margin-bottom: 15px;">Cross-Validation Scores</h4>
+                    <div class="bar-chart" style="height: 150px;">
+                        <div class="bar">
+                            <div class="bar-fill" style="height: 80px; background: #059669;">8.1L</div>
+                            <div class="bar-label">Fold 1</div>
+                        </div>
+                        <div class="bar">
+                            <div class="bar-fill" style="height: 85px; background: #059669;">8.5L</div>
+                            <div class="bar-label">Fold 2</div>
+                        </div>
+                        <div class="bar">
+                            <div class="bar-fill" style="height: 75px; background: #059669;">7.8L</div>
+                            <div class="bar-label">Fold 3</div>
+                        </div>
+                        <div class="bar">
+                            <div class="bar-fill" style="height: 90px; background: #059669;">8.9L</div>
+                            <div class="bar-label">Fold 4</div>
+                        </div>
+                        <div class="bar">
+                            <div class="bar-fill" style="height: 70px; background: #059669;">7.2L</div>
+                            <div class="bar-label">Fold 5</div>
+                        </div>
+                        <div class="bar">
+                            <div class="bar-fill" style="height: 80px; background: #EA580C;">8.1L</div>
+                            <div class="bar-label"><strong>Average</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="caption-area">
+                <strong>Benefits:</strong> More robust evaluation, better use of data, reduces variance in performance estimates. Each flat gets to be in the validation set exactly once, and in the training set four times.
+            </div>
+        </div>
+
+        <!-- Slide 8: Section Header - Bias-Variance -->
+        <div class="slide section-header">
+            <h1>Part 2: Bias-Variance Tradeoff</h1>
+            <p class="section-subtitle">The Core Tension in Machine Learning</p>
+        </div>
+
+        <!-- Slide 9: Understanding Bias and Variance -->
+        <div class="slide two-content">
+            <h2>Bias vs Variance: The Fundamental Tradeoff</h2>
+            
+            <div class="content-column">
+                <h3>🎯 Bias (Underfitting)</h3>
+                <p><strong>Definition:</strong> Error from overly simplistic assumptions</p>
+                
+                <p><strong>In our Mumbai flat example:</strong></p>
+                <ul class="content-list">
+                    <li>Model: "All flats cost ₹80 Lakh"</li>
+                    <li>Ignores carpet area, BHK, locality, metro distance</li>
+                    <li>Consistently wrong but predictably so</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    High Bias = Model too simple to capture true patterns
+                </div>
+            </div>
+            
+            <div class="content-column">
+                <h3>📊 Variance (Overfitting)</h3>
+                <p><strong>Definition:</strong> Error from sensitivity to small changes in training data</p>
+                
+                <p><strong>In our Mumbai flat example:</strong></p>
+                <ul class="content-list">
+                    <li>Model memorizes every training flat</li>
+                    <li>Perfect on training data</li>
+                    <li>Wildly wrong on new flats</li>
+                </ul>
+                
+                <div class="accent-box">
+                    High Variance = Model too complex, learns noise instead of signal
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Bias-Variance Mathematical Framework -->
+        <div class="slide title-content">
+            <h2>The Mathematical Framework</h2>
+            <div class="content-area">
+                <p>The total error of any machine learning model can be decomposed into three components:</p>
+                
+                <div class="math-formula">
+                    Total Error = Bias² + Variance + Irreducible Error
+                </div>
+                
+                <p><strong>For our Mumbai flat price model:</strong></p>
+                <ul class="content-list">
+                    <li><strong>Bias²:</strong> How far off our model's average prediction is from the true flat price</li>
+                    <li><strong>Variance:</strong> How much our predictions change when we retrain on different flat data</li>
+                    <li><strong>Irreducible Error:</strong> Random noise we can't eliminate (market fluctuations, measurement errors, sudden policy changes)</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    🎯 The Art of ML: Finding the sweet spot where Bias² + Variance is minimized
+                </div>
+                
+                <p><strong>Why it's a tradeoff:</strong> Typically, reducing bias increases variance and vice versa. More complex models have lower bias but higher variance.</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Visual Example of Bias-Variance -->
+        <div class="slide picture-caption">
+            <h2>Bias-Variance in Action: Mumbai Flat Price Models</h2>
+            
+            <div class="picture-area">
+                <h3 style="text-align: center; margin-bottom: 20px;">🎯 Target Practice Analogy</h3>
+                <p style="text-align: center; margin-bottom: 20px; color: #6b7280;">
+                    Imagine predicting the price of identical 2BHK flats in Bandra West (True Price: ₹1.2 Crore)
+                </p>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin: 30px 0;">
+                    
+                    <!-- High Bias Model -->
+                    <div style="text-align: center;">
+                        <h4 style="color: #dc2626; margin-bottom: 15px;">High Bias Model</h4>
+                        <div style="position: relative; width: 180px; height: 180px; margin: 0 auto; background: white; border: 3px solid #dc2626; border-radius: 50%;">
+                            <!-- Target circles -->
+                            <div style="position: absolute; top: 30px; left: 30px; width: 120px; height: 120px; border: 2px solid #e5e7eb; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 60px; left: 60px; width: 60px; height: 60px; border: 2px solid #d1d5db; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 75px; left: 75px; width: 30px; height: 30px; background: #fef3c7; border: 2px solid #f59e0b; border-radius: 50%;"></div>
+                            
+                            <!-- Bullseye (True Price) -->
+                            <div style="position: absolute; top: 85px; left: 85px; width: 10px; height: 10px; background: #059669; border-radius: 50%;"></div>
+                            
+                            <!-- Predictions (clustered but off-center) -->
+                            <div style="position: absolute; top: 45px; left: 120px; width: 8px; height: 8px; background: #dc2626; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 50px; left: 125px; width: 8px; height: 8px; background: #dc2626; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 55px; left: 118px; width: 8px; height: 8px; background: #dc2626; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 48px; left: 115px; width: 8px; height: 8px; background: #dc2626; border-radius: 50%;"></div>
+                        </div>
+                        <p style="margin-top: 15px; color: #dc2626; font-weight: bold;">Always predicts ₹80L</p>
+                        <p style="color: #6b7280; font-size: 0.9em;">Consistent but wrong</p>
+                    </div>
+                    
+                    <!-- High Variance Model -->
+                    <div style="text-align: center;">
+                        <h4 style="color: #7c2d12; margin-bottom: 15px;">High Variance Model</h4>
+                        <div style="position: relative; width: 180px; height: 180px; margin: 0 auto; background: white; border: 3px solid #7c2d12; border-radius: 50%;">
+                            <!-- Target circles -->
+                            <div style="position: absolute; top: 30px; left: 30px; width: 120px; height: 120px; border: 2px solid #e5e7eb; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 60px; left: 60px; width: 60px; height: 60px; border: 2px solid #d1d5db; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 75px; left: 75px; width: 30px; height: 30px; background: #fef3c7; border: 2px solid #f59e0b; border-radius: 50%;"></div>
+                            
+                            <!-- Bullseye (True Price) -->
+                            <div style="position: absolute; top: 85px; left: 85px; width: 10px; height: 10px; background: #059669; border-radius: 50%;"></div>
+                            
+                            <!-- Predictions (scattered everywhere) -->
+                            <div style="position: absolute; top: 20px; left: 40px; width: 8px; height: 8px; background: #7c2d12; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 140px; left: 150px; width: 8px; height: 8px; background: #7c2d12; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 80px; left: 25px; width: 8px; height: 8px; background: #7c2d12; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 160px; left: 90px; width: 8px; height: 8px; background: #7c2d12; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 95px; left: 88px; width: 8px; height: 8px; background: #7c2d12; border-radius: 50%;"></div>
+                        </div>
+                        <p style="margin-top: 15px; color: #7c2d12; font-weight: bold;">₹50L to ₹3Cr range</p>
+                        <p style="color: #6b7280; font-size: 0.9em;">Unpredictable</p>
+                    </div>
+                    
+                    <!-- Balanced Model -->
+                    <div style="text-align: center;">
+                        <h4 style="color: #059669; margin-bottom: 15px;">Balanced Model</h4>
+                        <div style="position: relative; width: 180px; height: 180px; margin: 0 auto; background: white; border: 3px solid #059669; border-radius: 50%;">
+                            <!-- Target circles -->
+                            <div style="position: absolute; top: 30px; left: 30px; width: 120px; height: 120px; border: 2px solid #e5e7eb; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 60px; left: 60px; width: 60px; height: 60px; border: 2px solid #d1d5db; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 75px; left: 75px; width: 30px; height: 30px; background: #fef3c7; border: 2px solid #f59e0b; border-radius: 50%;"></div>
+                            
+                            <!-- Bullseye (True Price) -->
+                            <div style="position: absolute; top: 85px; left: 85px; width: 10px; height: 10px; background: #059669; border-radius: 50%;"></div>
+                            
+                            <!-- Predictions (clustered around center) -->
+                            <div style="position: absolute; top: 82px; left: 95px; width: 8px; height: 8px; background: #059669; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 88px; left: 78px; width: 8px; height: 8px; background: #059669; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 92px; left: 92px; width: 8px; height: 8px; background: #059669; border-radius: 50%;"></div>
+                            <div style="position: absolute; top: 80px; left: 82px; width: 8px; height: 8px; background: #059669; border-radius: 50%;"></div>
+                        </div>
+                        <p style="margin-top: 15px; color: #059669; font-weight: bold;">₹1.1L to ₹1.3Cr range</p>
+                        <p style="color: #6b7280; font-size: 0.9em;">✅ Accurate & Consistent</p>
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border-left: 4px solid #059669; margin-top: 30px;">
+                    <h4 style="color: #059669; margin-bottom: 10px;">🎯 Target Practice Lesson:</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin: 8px 0;"><strong style="color: #dc2626;">High Bias:</strong> Always misses in the same direction (systematic error)</li>
+                        <li style="margin: 8px 0;"><strong style="color: #7c2d12;">High Variance:</strong> Shots all over the place (inconsistent)</li>
+                        <li style="margin: 8px 0;"><strong style="color: #059669;">Balanced:</strong> Shots clustered around the bullseye (accurate & precise)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>Performance Comparison</h3>
+                <table class="data-table" style="font-size: 0.85em;">
+                    <tr>
+                        <th>Model</th>
+                        <th>Training Error</th>
+                        <th>Test Error</th>
+                    </tr>
+                    <tr>
+                        <td>High Bias</td>
+                        <td>₹15 Lakh</td>
+                        <td>₹14.8 Lakh</td>
+                    </tr>
+                    <tr style="background: #d1fae5;">
+                        <td><strong>Balanced</strong></td>
+                        <td><strong>₹7 Lakh</strong></td>
+                        <td><strong>₹7.6 Lakh</strong></td>
+                    </tr>
+                    <tr>
+                        <td>High Variance</td>
+                        <td>₹1,000</td>
+                        <td>₹19 Lakh</td>
+                    </tr>
+                </table>
+                
+                <div class="accent-box">
+                    <strong>Notice:</strong> The balanced model hits closest to the target consistently!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Section Header - Regularization -->
+        <div class="slide section-header">
+            <h1>Part 3: Regularization</h1>
+            <p class="section-subtitle">Controlling Model Complexity</p>
+        </div>
+
+        <!-- Slide 13: Introduction to Regularization -->
+        <div class="slide title-content">
+            <h2>What is Regularization?</h2>
+            <div class="content-area">
+                <p>Regularization is like adding a "complexity penalty" to prevent overfitting. Think of it as a speed limit for your model's complexity.</p>
+                
+                <div class="highlight-box">
+                    🎯 Goal: Find models that perform well on training data WITHOUT becoming too complex
+                </div>
+                
+                <p><strong>In our Mumbai flat price example:</strong> Instead of letting our model create wild, complex relationships between carpet area and locality, regularization keeps it reasonable and generalizable.</p>
+                
+                <p><strong>The regularized objective becomes:</strong></p>
+                <div class="math-formula">
+                    Minimize: Training Error + λ × Complexity Penalty
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Training Error:</strong> How well the model fits the training flat data</li>
+                    <li><strong>Complexity Penalty:</strong> Punishment for overly complex models</li>
+                    <li><strong>λ (lambda):</strong> Hyperparameter controlling the tradeoff strength</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 14: L1 vs L2 Regularization -->
+        <div class="slide comparison">
+            <h2>L1 (Lasso) vs L2 (Ridge) Regularization</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>L1 Regularization (Lasso)</h3>
+                    <div class="math-formula">
+                        Penalty = λ × Σ|wi|
+                    </div>
+                    
+                    <p><strong>Effect:</strong> Encourages sparsity - sets some weights to exactly zero</p>
+                    
+                    <p><strong>In our Mumbai flat model:</strong></p>
+                    <ul class="content-list" style="text-align: left;">
+                        <li>Might eliminate "building age" feature entirely</li>
+                        <li>Performs automatic feature selection</li>
+                        <li>Creates simpler, more interpretable models</li>
+                    </ul>
+                    
+                    <div class="highlight-box">
+                        Best when: You have many features and want automatic feature selection
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <h3>L2 Regularization (Ridge)</h3>
+                    <div class="math-formula">
+                        Penalty = λ × Σwi²
+                    </div>
+                    
+                    <p><strong>Effect:</strong> Shrinks all weights toward zero but doesn't eliminate features</p>
+                    
+                    <p><strong>In our Mumbai flat model:</strong></p>
+                    <ul class="content-list" style="text-align: left;">
+                        <li>Keeps all features but reduces their impact</li>
+                        <li>Prevents any single feature from dominating</li>
+                        <li>More stable when features are correlated</li>
+                    </ul>
+                    
+                    <div class="accent-box">
+                        Best when: All features are potentially useful and you want to keep them all
+                    </div>
+                </div>
+            </div>
+            
+            <div class="vs-divider">VS</div>
+        </div>
+
+        <!-- Slide 15: Regularization in Practice -->
+        <div class="slide picture-caption">
+            <h2>Regularization Effect on Our Mumbai Flat Price Model</h2>
+            
+            <div class="picture-area">
+                <h3>Model Weights Comparison Chart</h3>
+                
+                <div class="chart-container">
+                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin: 20px 0;">
+                        <div style="text-align: center; font-weight: bold;">Feature</div>
+                        <div style="text-align: center; font-weight: bold;">No Regularization</div>
+                        <div style="text-align: center; font-weight: bold; color: #EA580C;">L1 (λ=0.1)</div>
+                        <div style="text-align: center; font-weight: bold; color: #059669;">L2 (λ=0.1)</div>
+                        <div style="text-align: center; font-weight: bold;">Visual</div>
+                        
+                        <!-- Carpet Area Row -->
+                        <div style="padding: 10px; background: #f9fafb; border-radius: 5px;">Carpet Area</div>
+                        <div style="text-align: center; padding: 10px;">5,750</div>
+                        <div style="text-align: center; padding: 10px; color: #EA580C;">4,900</div>
+                        <div style="text-align: center; padding: 10px; color: #059669;">5,365</div>
+                        <div style="display: flex; gap: 5px; align-items: center; padding: 10px;">
+                            <div style="height: 20px; width: 40px; background: #6b7280; border-radius: 3px;"></div>
+                            <div style="height: 20px; width: 34px; background: #EA580C; border-radius: 3px;"></div>
+                            <div style="height: 20px; width: 37px; background: #059669; border-radius: 3px;"></div>
+                        </div>
+                        
+                        <!-- BHK Row -->
+                        <div style="padding: 10px; background: #f9fafb; border-radius: 5px;">BHK</div>
+                        <div style="text-align: center; padding: 10px;">8,42,000</div>
+                        <div style="text-align: center; padding: 10px; color: #EA580C;">6,60,000</div>
+                        <div style="text-align: center; padding: 10px; color: #059669;">7,76,000</div>
+                        <div style="display: flex; gap: 5px; align-items: center; padding: 10px;">
+                            <div style="height: 20px; width: 50px; background: #6b7280; border-radius: 3px;"></div>
+                            <div style="height: 20px; width: 39px; background: #EA580C; border-radius: 3px;"></div>
+                            <div style="height: 20px; width: 46px; background: #059669; border-radius: 3px;"></div>
+                        </div>
+                        
+                        <!-- Metro Distance Row -->
+                        <div style="padding: 10px; background: #f9fafb; border-radius: 5px;">Metro Distance</div>
+                        <div style="text-align: center; padding: 10px;">-1,25,000</div>
+                        <div style="text-align: center; padding: 10px; color: #EA580C;">-98,000</div>
+                        <div style="text-align: center; padding: 10px; color: #059669;">-1,15,000</div>
+                        <div style="display: flex; gap: 5px; align-items: center; padding: 10px;">
+                            <div style="height: 20px; width: 35px; background: #6b7280; border-radius: 3px;"></div>
+                            <div style="height: 20px; width: 27px; background: #EA580C; border-radius: 3px;"></div>
+                            <div style="height: 20px; width: 32px; background: #059669; border-radius: 3px;"></div>
+                        </div>
+                        
+                        <!-- Building Age Row -->
+                        <div style="padding: 10px; background: #f9fafb; border-radius: 5px;">Building Age</div>
+                        <div style="text-align: center; padding: 10px;">-15,420</div>
+                        <div style="text-align: center; padding: 10px; color: #EA580C; font-weight: bold;">0</div>
+                        <div style="text-align: center; padding: 10px; color: #059669;">-11,200</div>
+                        <div style="display: flex; gap: 5px; align-items: center; padding: 10px;">
+                            <div style="height: 20px; width: 15px; background: #6b7280; border-radius: 3px;"></div>
+                            <div style="height: 20px; width: 0px; background: #EA580C; border-radius: 3px; border: 2px solid #EA580C;"></div>
+                            <div style="height: 20px; width: 11px; background: #059669; border-radius: 3px;"></div>
+                        </div>
+                        
+                        <!-- Parking Row -->
+                        <div style="padding: 10px; background: #f9fafb; border-radius: 5px;">Parking</div>
+                        <div style="text-align: center; padding: 10px;">2,34,000</div>
+                        <div style="text-align: center; padding: 10px; color: #EA580C; font-weight: bold;">0</div>
+                        <div style="text-align: center; padding: 10px; color: #059669;">1,89,000</div>
+                        <div style="display: flex; gap: 5px; align-items: center; padding: 10px;">
+                            <div style="height: 20px; width: 25px; background: #6b7280; border-radius: 3px;"></div>
+                            <div style="height: 20px; width: 0px; background: #EA580C; border-radius: 3px; border: 2px solid #EA580C;"></div>
+                            <div style="height: 20px; width: 20px; background: #059669; border-radius: 3px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>Key Observations</h3>
+                <ul class="content-list">
+                    <li><strong>L1 eliminated</strong> Building Age and Parking features completely (weights = 0)</li>
+                    <li><strong>L2 shrunk</strong> all weights but kept all features</li>
+                    <li>Both methods reduced the magnitude of coefficients</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    Result: Both regularized models generalize better to new Mumbai flats!
+                </div>
+                
+                <div class="accent-box">
+                    <strong>Performance:</strong><br>
+                    No Reg: ₹19L test error<br>
+                    L1: ₹8.4L test error<br>
+                    L2: ₹7.6L test error
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Choosing Lambda -->
+        <div class="slide content-caption">
+            <h2>Choosing the Right λ (Lambda) Value</h2>
+            
+            <div class="main-content-area">
+                <h3>Interactive λ Effect Visualization</h3>
+                
+                <div class="interactive-demo">
+                    <div class="slider-container">
+                        <label for="lambdaSlider"><strong>Adjust λ value:</strong></label>
+                        <input type="range" id="lambdaSlider" class="slider" min="0" max="4" step="1" value="2">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8em; margin-top: 5px;">
+                            <span>0 (No Reg)</span>
+                            <span>0.01</span>
+                            <span>0.1</span>
+                            <span>1.0</span>
+                            <span>10.0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <div class="bar-chart">
+                            <div class="bar">
+                                <div class="bar-fill" style="height: 120px;" id="trainBar">₹5.6L</div>
+                                <div class="bar-label">Training Error</div>
+                            </div>
+                            <div class="bar">
+                                <div class="bar-fill" style="height: 160px;" id="valBar">₹8.2L</div>
+                                <div class="bar-label">Validation Error</div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 10px;">
+                            <span id="modelStatus" style="font-weight: bold; color: #059669;">Sweet spot - balanced complexity</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lambda-visualization">
+                    <div class="lambda-card">
+                        <h4>λ = 0</h4>
+                        <div style="color: #dc2626;">⚠️ Overfitting</div>
+                        <small>Memorizes training data</small>
+                    </div>
+                    <div class="lambda-card">
+                        <h4>λ = 0.01</h4>
+                        <div style="color: #f59e0b;">⚡ Some overfitting</div>
+                        <small>Still learning noise</small>
+                    </div>
+                    <div class="lambda-card optimal">
+                        <h4>λ = 0.1</h4>
+                        <div style="color: #059669;">✅ Optimal</div>
+                        <small>Balanced complexity</small>
+                    </div>
+                    <div class="lambda-card">
+                        <h4>λ = 1.0</h4>
+                        <div style="color: #f59e0b;">📉 Underfitting</div>
+                        <small>Too simple</small>
+                    </div>
+                    <div class="lambda-card">
+                        <h4>λ = 10.0</h4>
+                        <div style="color: #dc2626;">🚫 Severe underfitting</div>
+                        <small>Ignores data patterns</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="caption-area">
+                <strong>How to Choose λ:</strong> Use cross-validation on the training set to find the λ that minimizes validation error. This is exactly why we need that separate validation set - to tune hyperparameters like λ without touching our test set!
+            </div>
+        </div>
+
+        <!-- Slide 17: Regularization in Practice -->
+        <div class="slide title-content">
+            <h2>How Everything Connects: The Complete Pipeline</h2>
+            <div class="content-area">
+                <p>Let's see how all three concepts work together in our Mumbai flat price prediction:</p>
+                
+                <div class="interactive-demo">
+                    <h4 style="text-align: center; margin-bottom: 20px;">🔄 Complete ML Pipeline Visualization</h4>
+                    
+                    <div class="data-flow" style="margin: 20px 0;">
+                        <div class="flow-box" style="background: #0284c7; color: white;">
+                            <strong>🏠 20,000 Flats</strong><br>
+                            Raw Data
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box" style="background: #16a34a; color: white;">
+                            <strong>📊 Split Data</strong><br>
+                            60-20-20 Rule
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box" style="background: #ea580c; color: white;">
+                            <strong>⚖️ Train Models</strong><br>
+                            Address Bias-Variance
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box" style="background: #9333ea; color: white;">
+                            <strong>🛡️ Regularize</strong><br>
+                            Optimal λ
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-box" style="background: #059669; color: white;">
+                            <strong>✅ Final Model</strong><br>
+                            Test & Deploy
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 30px 0;">
+                        <div class="chart-container">
+                            <h5 style="text-align: center; color: #dc2626;">❌ Without Our Techniques</h5>
+                            <div class="bar-chart" style="height: 120px;">
+                                <div class="bar">
+                                    <div class="bar-fill meter-poor" style="height: 100px;">₹19L</div>
+                                    <div class="bar-label">Test Error</div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; color: #dc2626; font-weight: bold;">
+                                Overfitted Model
+                            </div>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <h5 style="text-align: center; color: #059669;">✅ With Our Techniques</h5>
+                            <div class="bar-chart" style="height: 120px;">
+                                <div class="bar">
+                                    <div class="bar-fill meter-good" style="height: 40px;">₹7.6L</div>
+                                    <div class="bar-label">Test Error</div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; color: #059669; font-weight: bold;">
+                                Optimized Model
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; background: #f0fdf4; padding: 20px; border-radius: 10px; border-left: 4px solid #059669;">
+                        <h4 style="color: #059669;">🎉 60% Error Reduction!</h4>
+                        <p style="margin: 10px 0; color: #1e293b;">From ₹19 Lakh average error to ₹7.6 Lakh - much more reliable Mumbai flat price predictions!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Practical Example -->
+        <div class="slide picture-caption">
+            <h2>See Our Model in Action: Predicting a Bandra Flat</h2>
+            
+            <div class="picture-area">
+                <div class="interactive-demo">
+                    <h3 style="text-align: center; margin-bottom: 20px;">🏠 Flat Price Prediction Demo</h3>
+                    
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 10px; border: 2px solid #e2e8f0;">
+                        <h4 style="color: #1e293b; margin-bottom: 15px;">Input Features:</h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                            <div>
+                                <label style="font-weight: bold; color: #374151;">📐 Carpet Area:</label>
+                                <div style="background: white; padding: 10px; border-radius: 5px; border: 1px solid #d1d5db;">
+                                    950 sq ft
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label style="font-weight: bold; color: #374151;">🏠 BHK:</label>
+                                <div style="background: white; padding: 10px; border-radius: 5px; border: 1px solid #d1d5db;">
+                                    2 BHK
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label style="font-weight: bold; color: #374151;">🚇 Metro Distance:</label>
+                                <div style="background: white; padding: 10px; border-radius: 5px; border: 1px solid #d1d5db;">
+                                    0.5 km
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label style="font-weight: bold; color: #374151;">📍 Locality:</label>
+                                <div style="background: white; padding: 10px; border-radius: 5px; border: 1px solid #d1d5db;">
+                                    Bandra West
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label style="font-weight: bold; color: #374151;">🏗️ Building Age:</label>
+                                <div style="background: white; padding: 10px; border-radius: 5px; border: 1px solid #d1d5db;">
+                                    5 years
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label style="font-weight: bold; color: #374151;">🚗 Parking:</label>
+                                <div style="background: white; padding: 10px; border-radius: 5px; border: 1px solid #d1d5db;">
+                                    Yes
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 20px 0; text-align: center;">
+                        <div style="font-size: 2em; color: #ea580c;">⬇️</div>
+                        <strong style="color: #1e293b;">Our Regularized Model Processes...</strong>
+                    </div>
+                    
+                    <div style="background: #f0fdf4; padding: 20px; border-radius: 10px; border: 2px solid #059669;">
+                        <h4 style="color: #059669; text-align: center; margin-bottom: 15px;">🎯 Model Predictions</h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                            <div style="text-align: center; padding: 15px; background: white; border-radius: 8px; border: 1px solid #d1fae5;">
+                                <div style="color: #dc2626; font-weight: bold;">No Regularization</div>
+                                <div style="font-size: 1.5em; color: #dc2626; margin: 10px 0;">₹2.8 Cr</div>
+                                <div style="font-size: 0.8em; color: #6b7280;">Overconfident</div>
+                            </div>
+                            
+                            <div style="text-align: center; padding: 15px; background: #059669; color: white; border-radius: 8px; transform: scale(1.05);">
+                                <div style="font-weight: bold;">L2 Regularized</div>
+                                <div style="font-size: 1.5em; margin: 10px 0;">₹1.45 Cr</div>
+                                <div style="font-size: 0.8em;">✅ Most Reliable</div>
+                            </div>
+                            
+                            <div style="text-align: center; padding: 15px; background: white; border-radius: 8px; border: 1px solid #fed7d7;">
+                                <div style="color: #ea580c; font-weight: bold;">L1 Regularized</div>
+                                <div style="font-size: 1.5em; color: #ea580c; margin: 10px 0;">₹1.52 Cr</div>
+                                <div style="font-size: 0.8em; color: #6b7280;">Good Alternative</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>Why Our Model Works</h3>
+                <ul class="content-list">
+                    <li><strong>Proper Data Splitting:</strong> Trained on 12k flats, validated carefully</li>
+                    <li><strong>Bias-Variance Balance:</strong> Neither too simple nor too complex</li>
+                    <li><strong>L2 Regularization:</strong> Prevents overfitting to training quirks</li>
+                    <li><strong>Cross-Validation:</strong> Robust parameter selection</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Market Reality:</strong> A 950 sq ft 2BHK in Bandra West near metro typically costs ₹1.4-1.6 Cr - our model's prediction is spot on! 🎯
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Key Takeaways -->
+        <div class="slide title-content">
+            <h2>Key Takeaways & Best Practices</h2>
+            <div class="content-area">
+                <h3 style="color: #059669; margin-bottom: 15px;">🎯 Data Splitting</h3>
+                <ul class="content-list">
+                    <li>Always split data before any model development</li>
+                    <li>Use cross-validation to make the most of your data</li>
+                    <li>Test set is sacred - touch it only once for final evaluation</li>
+                </ul>
+                
+                <h3 style="color: #ea580c; margin-bottom: 15px; margin-top: 30px;">⚖️ Bias-Variance Tradeoff</h3>
+                <ul class="content-list">
+                    <li>Simple models: High bias, low variance (underfitting)</li>
+                    <li>Complex models: Low bias, high variance (overfitting)</li>
+                    <li>Sweet spot: Balance both for optimal test performance</li>
+                </ul>
+                
+                <h3 style="color: #7c3aed; margin-bottom: 15px; margin-top: 30px;">🛡️ Regularization</h3>
+                <ul class="content-list">
+                    <li>L1 (Lasso): Feature selection, sparse models</li>
+                    <li>L2 (Ridge): Shrinks all weights, handles correlated features well</li>
+                    <li>Always tune λ using cross-validation on training data</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Remember:</strong> These aren't separate techniques - they work together to build robust, generalizable machine learning models!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 21: Thank You -->
+        <div class="slide title-slide">
+            <h1>Questions?</h1>
+            <p class="subtitle">Ready to apply these concepts to your own ML projects!</p>
+            <p class="author">Next: Practice implementing these techniques with different datasets</p>
+        </div>
+
+    </div>
+
+    <div class="slide-counter">
+        Slide 1 of 20
+    </div>
+
+    <script>
+        function updateSlideCounter() {
+            const slides = document.querySelectorAll('.slide');
+            const slideCounter = document.querySelector('.slide-counter');
+            
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    slideCounter.textContent = `Slide ${index + 1} of ${slides.length}`;
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateSlideCounter);
+        
+        document.addEventListener('keydown', (e) => {
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentSlide = index;
+                }
+            });
+            
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (currentSlide < slides.length - 1) {
+                    slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                if (currentSlide > 0) {
+                    slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
