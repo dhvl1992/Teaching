@@ -595,6 +595,12 @@
                 <div class="code-block">
                     <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
 <pre># Simple folder structure as a dictionary
+# Answer 1
+import networkx as nx
+
+# Create a directed graph and build the file structure
+G = nx.DiGraph()
+
 file_system = {
     "C:": ["Users", "Program Files", "Games"],
     "Users": ["Dhaval", "Guest"],
@@ -610,62 +616,108 @@ file_system = {
     "Game2": [],
 }
 
-# -----------------------------
-# Breadth First Search (BFS)
-# -----------------------------
-def bfs_search(start, target):
-    print("\n🔍 BFS Search Steps:")
-    queue = [[start]]
+for parent, children in file_system.items():
+    for child in children:
+        G.add_edge(parent, child)
 
-    while queue:
-        path = queue.pop(0)   # Get the first path
-        node = path[-1]       # Get the last folder in the path
-
-        print("➡️  Visiting:", node)
-
-        if node == target:
-            print("✅ Found file at path:", " > ".join(path))
-            return
-
-        for child in file_system.get(node, []):
-            new_path = path + [child]
-            queue.append(new_path)
-
+# -----------------------
+# BFS: Use built-in traversal
+# -----------------------
+print("\n🔍 BFS Search Steps:")
+for node in nx.bfs_tree(G, source="C:"):
+    print("➡️ Visiting:", node)
+    if node == "Resume.docx":
+        print("✅ Found file:", node)
+        break
+else:
     print("❌ File not found using BFS")
 
-# -----------------------------
-# Depth First Search (DFS)
-# -----------------------------
-def dfs_search(start, target):
-    print("\n🔍 DFS Search Steps:")
-    stack = [[start]]
-
-    while stack:
-        path = stack.pop()    # Get the last path
-        node = path[-1]       # Get the last folder in the path
-
-        print("➡️  Visiting:", node)
-
-        if node == target:
-            print("✅ Found file at path:", " > ".join(path))
-            return
-
-        for child in file_system.get(node, [])[::-1]:  # Reverse for correct order
-            new_path = path + [child]
-            stack.append(new_path)
-
+# -----------------------
+# DFS: Use built-in traversal
+# -----------------------
+print("\n🔍 DFS Search Steps:")
+for node in nx.dfs_tree(G, source="C:"):
+    print("➡️ Visiting:", node)
+    if node == "Resume.docx":
+        print("✅ Found file:", node)
+        break
+else:
     print("❌ File not found using DFS")
 
+    
+# Answer 2
+# 🌳 Simple folder structure
+file_system = {
+    "C:": ["Users", "Program Files", "Games"],
+    "Users": ["Dhaval", "Guest"],
+    "Dhaval": ["Documents", "Pictures", "Resume.docx"],
+    "Guest": [],
+    "Documents": ["Notes.txt", "Project.pdf"],
+    "Pictures": ["Photo1.jpg", "Photo2.png"],
+    "Program Files": ["App1", "App2"],
+    "App1": ["Readme.txt"],
+    "App2": [],
+    "Games": ["Game1", "Game2"],
+    "Game1": [],
+    "Game2": [],
+}
 
-# ---------------------------------------
-# 🔧 Run both searches to compare results
-# ---------------------------------------
+# 🔍 BFS - Breadth First Search (search level by level)
+def bfs(start, target):
+    print("\n🚀 BFS Search:")
+    queue = [[start]]  # start with a list that has only the starting folder
 
-start_folder = "C:"
-file_to_find = "Resume.docx"
+    while len(queue) > 0:
+        path = queue[0]     # take first path from queue
+        queue = queue[1:]   # remove it from queue
+        current = path[-1]  # current folder or file
 
-bfs_search(start_folder, file_to_find)
-dfs_search(start_folder, file_to_find)
+        print("➡️ Visiting:", current)
+
+        if current == target:
+            print("✅ Found:", " > ".join(path))
+            return
+
+        if current in file_system:
+            children = file_system[current]
+            for child in children:
+                new_path = path + [child]  # go one step further
+                queue.append(new_path)
+
+    print("❌ Not Found")
+
+# 🔍 DFS - Depth First Search (go deep first)
+def dfs(start, target):
+    print("\n🚀 DFS Search:")
+    stack = [[start]]  # start with the starting folder
+
+    while len(stack) > 0:
+        path = stack[-1]    # take last path from stack
+        stack = stack[:-1]  # remove it from stack
+        current = path[-1]  # current folder or file
+
+        print("➡️ Visiting:", current)
+
+        if current == target:
+            print("✅ Found:", " > ".join(path))
+            return
+
+        if current in file_system:
+            children = file_system[current]
+            for i in range(len(children) - 1, -1, -1):  # reverse using simple loop
+                child = children[i]
+                new_path = path + [child]
+                stack.append(new_path)
+
+    print("❌ Not Found")
+
+# 🧪 Try both
+start = "C:"
+target = "Resume.docx"
+
+bfs(start, target)
+dfs(start, target)
+
 
 </pre>
                 </div>
