@@ -137,6 +137,66 @@
             padding: 3px 0;
             transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Improved indentation system */
+        .folder-node[data-level="0"] { padding-left: 0; }
+        .folder-node[data-level="1"] { padding-left: 20px; }
+        .folder-node[data-level="2"] { padding-left: 40px; }
+        .folder-node[data-level="3"] { padding-left: 60px; }
+        .folder-node[data-level="4"] { padding-left: 80px; }
+
+        /* Add tree lines for better hierarchy visualization */
+        .folder-node[data-level="1"]::before {
+            content: "├─";
+            position: absolute;
+            left: 0;
+            color: #94A3B8;
+            font-weight: normal;
+        }
+
+        .folder-node[data-level="2"]::before {
+            content: "│  ├─";
+            position: absolute;
+            left: 0;
+            color: #94A3B8;
+            font-weight: normal;
+        }
+
+        .folder-node[data-level="3"]::before {
+            content: "│  │  ├─";
+            position: absolute;
+            left: 0;
+            color: #94A3B8;
+            font-weight: normal;
+        }
+
+        .folder-node[data-level="4"]::before {
+            content: "│  │  │  ├─";
+            position: absolute;
+            left: 0;
+            color: #94A3B8;
+            font-weight: normal;
+        }
+
+        /* Last child styling */
+        .folder-node.last-child[data-level="1"]::before {
+            content: "└─";
+        }
+
+        .folder-node.last-child[data-level="2"]::before {
+            content: "│  └─";
+        }
+
+        .folder-node.last-child[data-level="3"]::before {
+            content: "│  │  └─";
+        }
+
+        .folder-node.last-child[data-level="4"]::before {
+            content: "│  │  │  └─";
         }
 
         .folder-node:hover {
@@ -483,23 +543,23 @@
                     </div>
                     
                     <div class="folder-tree" id="folderTree">
-                        <div class="folder-node" data-name="Root" data-type="folder">📂 Root</div>
-                        <div class="folder-node" data-name="Documents" data-type="folder">  📂 Documents</div>
-                        <div class="folder-node" data-name="Work" data-type="folder">    📂 Work</div>
-                        <div class="folder-node" data-name="resume.pdf" data-type="file">      📄 resume.pdf</div>
-                        <div class="folder-node" data-name="project.docx" data-type="file">      📄 project.docx</div>
-                        <div class="folder-node" data-name="College" data-type="folder">    📂 College</div>
-                        <div class="folder-node" data-name="notes.txt" data-type="file">      📄 notes.txt</div>
-                        <div class="folder-node" data-name="Pictures" data-type="folder">  📂 Pictures</div>
-                        <div class="folder-node" data-name="Family" data-type="folder">    📂 Family</div>
-                        <div class="folder-node" data-name="vacation.jpg" data-type="file">      📸 vacation.jpg</div>
-                        <div class="folder-node" data-name="party.png" data-type="file">      📸 party.png</div>
-                        <div class="folder-node" data-name="Screenshots" data-type="folder">    📂 Screenshots</div>
-                        <div class="folder-node" data-name="screen1.png" data-type="file">      📸 screen1.png</div>
-                        <div class="folder-node" data-name="Downloads" data-type="folder">  📂 Downloads</div>
-                        <div class="folder-node" data-name="software.exe" data-type="file">    💾 software.exe</div>
-                        <div class="folder-node" data-name="Music" data-type="folder">  📂 Music</div>
-                        <div class="folder-node" data-name="song.mp3" data-type="file">    🎵 song.mp3</div>
+                        <div class="folder-node" data-name="Root" data-type="folder" data-level="0">📂 Root</div>
+                        <div class="folder-node" data-name="Documents" data-type="folder" data-level="1">📂 Documents</div>
+                        <div class="folder-node" data-name="Work" data-type="folder" data-level="2">📂 Work</div>
+                        <div class="folder-node" data-name="resume.pdf" data-type="file" data-level="3">📄 resume.pdf</div>
+                        <div class="folder-node last-child" data-name="project.docx" data-type="file" data-level="3">📄 project.docx</div>
+                        <div class="folder-node last-child" data-name="College" data-type="folder" data-level="2">📂 College</div>
+                        <div class="folder-node last-child" data-name="notes.txt" data-type="file" data-level="3">📄 notes.txt</div>
+                        <div class="folder-node" data-name="Pictures" data-type="folder" data-level="1">📂 Pictures</div>
+                        <div class="folder-node" data-name="Family" data-type="folder" data-level="2">📂 Family</div>
+                        <div class="folder-node" data-name="vacation.jpg" data-type="file" data-level="3">📸 vacation.jpg</div>
+                        <div class="folder-node last-child" data-name="party.png" data-type="file" data-level="3">📸 party.png</div>
+                        <div class="folder-node last-child" data-name="Screenshots" data-type="folder" data-level="2">📂 Screenshots</div>
+                        <div class="folder-node last-child" data-name="screen1.png" data-type="file" data-level="3">📸 screen1.png</div>
+                        <div class="folder-node" data-name="Downloads" data-type="folder" data-level="1">📂 Downloads</div>
+                        <div class="folder-node last-child" data-name="software.exe" data-type="file" data-level="2">💾 software.exe</div>
+                        <div class="folder-node last-child" data-name="Music" data-type="folder" data-level="1">📂 Music</div>
+                        <div class="folder-node last-child" data-name="song.mp3" data-type="file" data-level="2">🎵 song.mp3</div>
                     </div>
                     
                     <div class="control-buttons">
@@ -531,7 +591,7 @@
             </div>
 
             <div class="code-section">
-                <h3>📂 DFs BFS in the File System</h3>
+                <h3>📂 DFS & BFS in File System</h3>
                 <div class="code-block">
                     <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
 <pre># Simple folder structure as a dictionary
