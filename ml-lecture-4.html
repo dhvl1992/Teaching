@@ -3,21 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>What is a Neural Network? - Lecture Slides</title>
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']],
-                packages: {'[+]': ['boldsymbol', 'ams']}
-            },
-            loader: {
-                load: ['[tex]/boldsymbol', '[tex]/ams']
-            }
-        };
-    </script>
-    <script async src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <title>Neural Networks: A Complete Deep Dive</title>
     <style>
         * {
             margin: 0;
@@ -259,12 +245,14 @@
         }
 
         .main-content-area {
-            background: rgba(5, 150, 105, 0.1);
-            border: 2px solid #059669;
+            background: linear-gradient(45deg, #059669, #EA580C);
+            border: 2px dashed #1E293B;
             border-radius: 15px;
-            padding: 40px;
+            padding: 80px 40px;
             text-align: center;
-            font-size: 1.3em;
+            color: #FEF7ED;
+            font-weight: bold;
+            font-size: 1.2em;
         }
 
         .caption-area {
@@ -292,8 +280,8 @@
         }
 
         .picture-area {
-            background: #f8f9fa;
-            border: 2px dashed #059669;
+            background: rgba(5, 150, 105, 0.05);
+            border: 2px solid #059669;
             border-radius: 15px;
             padding: 20px;
             text-align: center;
@@ -301,14 +289,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
         }
 
         .picture-area img {
             max-width: 100%;
             height: auto;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .caption-sidebar {
@@ -352,55 +339,45 @@
             display: inline-block;
         }
 
-        .math-box {
+        .math-equation {
             background: #f8f9fa;
+            border: 2px solid #059669;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        .key-insight {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: #FEF7ED;
             padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border-left: 5px solid #EA580C;
+        }
+
+        .key-insight h4 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            padding: 20px;
             border-radius: 10px;
             margin: 20px 0;
-            border-left: 4px solid #3498db;
-            text-align: center;
-            font-size: 1.2em;
         }
 
-        /* Network visualization */
-        .network-visual {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 30px;
-            background: #f8f9fa;
-            border-radius: 15px;
+        .interactive-element {
+            background: #e0e7ff;
+            border: 2px solid #6366f1;
+            padding: 20px;
+            border-radius: 10px;
             margin: 20px 0;
-        }
-
-        .layer-vis {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .layer-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #1E293B;
-            text-align: center;
-            font-size: 0.9em;
-        }
-
-        .neuron-vis {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #059669, #EA580C);
-            margin: 2px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        .connection-vis {
-            width: 2px;
-            height: 60px;
-            background: linear-gradient(to bottom, #bdc3c7, #95a5a6);
-            margin: 0 15px;
         }
 
         /* Responsive Design */
@@ -428,16 +405,6 @@
             .vs-divider {
                 display: none;
             }
-
-            .network-visual {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .connection-vis {
-                width: 60px;
-                height: 2px;
-            }
         }
 
         /* Navigation */
@@ -456,402 +423,905 @@
 <body>
     <div class="container">
         
-        <!-- Slide 1: Title Slide -->
+        <!-- Title Slide -->
         <div class="slide title-slide">
-            <h1>🧠 What is a Neural Network?</h1>
-            <p class="subtitle">Understanding the Building Blocks of AI</p>
-            <p class="author">Professor • Deep Learning Course • Chapter 1</p>
+            <h1>Neural Networks</h1>
+            <p class="subtitle">A Complete Deep Dive: From Biological Inspiration to Mathematical Foundation</p>
+            <p class="author">Chapter 1: But What IS a Neural Network? • Comprehensive University Course</p>
         </div>
 
-        <!-- Slide 2: Learning Objectives -->
+        <!-- Course Overview -->
         <div class="slide title-content">
-            <h2>🎯 Today's Learning Goals</h2>
+            <h2>🎯 Complete Learning Journey</h2>
             <div class="content-area">
-                <p>By the end of this lecture, you will understand:</p>
+                <p>This comprehensive course will transform you from a neural network novice to someone who truly understands these powerful systems from the ground up.</p>
+                
+                <div class="key-insight">
+                    <h4>🧠 Why This Matters</h4>
+                    <p>Neural networks power everything from your smartphone's camera to autonomous vehicles. Understanding them isn't just academic—it's essential for anyone working in modern technology.</p>
+                </div>
                 
                 <ul class="content-list">
-                    <li>What neural networks are and why they work</li>
-                    <li>The basic mathematical operations inside neurons</li>
-                    <li>How layers work together to recognize patterns</li>
-                    <li>Why we need activation functions</li>
-                    <li>How to read a digit recognition example</li>
+                    <li><strong>Fundamental Challenge:</strong> Why traditional programming fails at pattern recognition</li>
+                    <li><strong>Biological Inspiration:</strong> How brain-like structures solve impossible problems</li>
+                    <li><strong>Mathematical Foundation:</strong> The elegant math that makes it all work</li>
+                    <li><strong>Practical Implementation:</strong> From theory to working code</li>
+                    <li><strong>Advanced Concepts:</strong> Weight optimization and learning algorithms</li>
+                    <li><strong>Real-World Applications:</strong> How these concepts scale to modern AI</li>
                 </ul>
-                
-                <div class="highlight-box">
-                    💡 Think of this as learning the "anatomy" of artificial brains!
-                </div>
             </div>
         </div>
 
-        <!-- Slide 3: Section Header -->
+        <!-- Section 1 Header -->
         <div class="slide section-header">
-            <h1>The Big Idea</h1>
-            <p class="section-subtitle">From Brain Inspiration to AI</p>
+            <h1>Part I</h1>
+            <p class="section-subtitle">The Fundamental Challenge</p>
         </div>
 
-        <!-- Slide 4: The Challenge -->
+        <!-- The Paradox -->
         <div class="slide picture-caption">
-            <h2>The Challenge: Recognizing Handwritten Digits</h2>
+            <h2>The Human-Computer Paradox</h2>
             
             <div class="picture-area">
-                <img src="https://images.3blue1brown.com/neural-networks/brain-analogy.png" alt="Brain to Neural Network Analogy" />
+                <img src="three-3s.png" alt="A cartoon π character looks at three variations of the handwritten digit '3', highlighting the concept that humans can generalize different styles of the same digit, a task neural networks aim to mimic.">
             </div>
             
             <div class="caption-sidebar">
-                <h3>The Problem</h3>
-                <p>How can a computer recognize that these different scribbles are all the digit "3"?</p>
+                <h3>🤔 The Paradox</h3>
+                <p><strong>For Humans:</strong> Instant, effortless, automatic recognition across infinite variations.</p>
                 
-                <div class="accent-box">
-                    Traditional programming with if-statements and loops fails here!
+                <p><strong>For Computers:</strong> Each pixel must be analyzed, patterns must be hard-coded, exceptions must be manually programmed.</p>
+                
+                <div class="warning-box">
+                    <strong>⚠️ Traditional Approach Fails</strong><br>
+                    Try writing an if-statement to recognize ANY handwritten "3" - you'll quickly realize it's impossible!
                 </div>
                 
-                <ul class="content-list">
-                    <li>Each "3" looks different</li>
-                    <li>Infinite variations possible</li>
-                    <li>No clear rules to write</li>
-                </ul>
+                <div class="accent-box">
+                    This is exactly why we need a fundamentally different approach: Neural Networks.
+                </div>
             </div>
         </div>
 
-        <!-- Slide 5: Brain Inspiration -->
+        <!-- Traditional vs Neural Comparison -->
+        <div class="slide comparison">
+            <h2>Traditional Programming vs Neural Networks</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>Traditional Programming</h3>
+                    <p><strong>Rule-Based Approach:</strong></p>
+                    <ul class="content-list">
+                        <li>Programmer writes explicit rules</li>
+                        <li>If-then-else logic chains</li>
+                        <li>Every scenario must be anticipated</li>
+                        <li>Breaks down with complexity</li>
+                        <li>Cannot handle exceptions gracefully</li>
+                    </ul>
+                    
+                    <div class="math-equation">
+                        if (pixel[100] > 0.5 && pixel[101] > 0.5) {<br>
+                        &nbsp;&nbsp;// What goes here for "3"?<br>
+                        }
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <h3>Neural Networks</h3>
+                    <p><strong>Learning-Based Approach:</strong></p>
+                    <ul class="content-list">
+                        <li>Network learns patterns from examples</li>
+                        <li>Automatic feature extraction</li>
+                        <li>Handles unseen variations</li>
+                        <li>Scales with data complexity</li>
+                        <li>Graceful degradation</li>
+                    </ul>
+                    
+                    <div class="math-equation">
+                        Show 1000s of examples:<br>
+                        "This is a 3", "This is a 3"...<br>
+                        Network learns to recognize ANY 3!
+                    </div>
+                </div>
+            </div>
+            
+            <div class="vs-divider">VS</div>
+        </div>
+
+        <!-- Section 2 Header -->
+        <div class="slide section-header">
+            <h1>Part II</h1>
+            <p class="section-subtitle">Understanding Neurons: The Building Blocks</p>
+        </div>
+
+        <!-- What is a Neuron -->
+        <div class="slide title-content">
+            <h2>🧠 Demystifying the "Neuron"</h2>
+            <div class="content-area">
+                <p>Let's strip away the biological metaphor and understand what a neural network neuron <em>actually</em> is:</p>
+                
+                <div class="highlight-box">
+                    <strong>A neuron is simply:</strong> A container that holds a single number between 0.0 and 1.0
+                </div>
+                
+                <p><strong>That's it.</strong> No complex biology, no mysterious processes. Just a number.</p>
+                
+                <div class="key-insight">
+                    <h4>🔢 The "Activation" Concept</h4>
+                    <p>This number is called the neuron's <span class="emphasis">activation</span>:</p>
+                    <ul class="content-list">
+                        <li><strong>0.0:</strong> Neuron is "off" or inactive</li>
+                        <li><strong>1.0:</strong> Neuron is "fully activated" or "fired up"</li>
+                        <li><strong>0.3, 0.7, etc.:</strong> Partial activation levels</li>
+                    </ul>
+                </div>
+                
+                <div class="interactive-element">
+                    <strong>🎯 Mental Model:</strong> Think of neurons like dimmer switches for lights. Each can be off (0), fully on (1), or anywhere in between. The pattern of all these "light levels" across the network represents information.
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Layer Deep Dive -->
+        <div class="slide picture-caption">
+            <h2>Input Layer: Converting Reality to Numbers</h2>
+            
+            <div class="picture-area">
+                <img src="pixel-values.png" alt="Zoomed-in view of a grayscale image (digit '3') showing pixel values from 0.0 to 1.0, representing normalized intensity levels used as input for a neural network.">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>📊 The Conversion Process</h3>
+                <p><strong>Image → Numbers:</strong></p>
+                <ul class="content-list">
+                    <li>28×28 pixel image = 784 total pixels</li>
+                    <li>Each pixel: brightness value 0.0-1.0</li>
+                    <li>Black pixels = 0.0</li>
+                    <li>White pixels = 1.0</li>
+                    <li>Gray pixels = values between</li>
+                </ul>
+                
+                <div class="math-equation">
+                    28 × 28 = 784 input neurons
+                </div>
+                
+                <div class="key-insight">
+                    <h4>🔄 Information Encoding</h4>
+                    <p>Every piece of information must be converted to numbers between 0 and 1 to be processed by a neural network.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Layer Visualization -->
+        <div class="slide picture-caption">
+            <h2>The Input Layer in Action</h2>
+            
+            <div class="picture-area">
+                <img src="highlight-first-layer.png" alt="Same digit classification network with the first input layer highlighted in yellow, emphasizing the 784 input nodes corresponding to 28x28 image pixels.">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>🔍 Layer Breakdown</h3>
+                <p><strong>Input Layer Structure:</strong></p>
+                <ul class="content-list">
+                    <li>784 neurons total</li>
+                    <li>Each neuron = one pixel</li>
+                    <li>Organized in conceptual 28×28 grid</li>
+                    <li>Values fed simultaneously</li>
+                </ul>
+                
+                <div class="warning-box">
+                    <strong>Critical Point:</strong> The network doesn't see "images" - it only sees 784 numbers! The spatial relationship must be learned.
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Universal Principle:</strong> ANY input (text, audio, video) must be converted to numbers in this range.
+                </div>
+            </div>
+        </div>
+
+        <!-- Output Layer Deep Dive -->
+        <div class="slide picture-caption">
+            <h2>Output Layer: Making Predictions</h2>
+            
+            <div class="picture-area">
+                <img src="output-layer.png" alt="A feedforward neural network diagram for digit recognition using the MNIST dataset. The input is a handwritten digit '9', converted into 784 input neurons, followed by multiple hidden layers, and finally a 10-neuron output layer. The highlighted output neuron (index 9) indicates the model's prediction.">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>🎯 Prediction Mechanism</h3>
+                <p><strong>10 Output Neurons:</strong></p>
+                <ul class="content-list">
+                    <li>Neuron 0: "How much does this look like 0?"</li>
+                    <li>Neuron 1: "How much does this look like 1?"</li>
+                    <li>...</li>
+                    <li>Neuron 9: "How much does this look like 9?"</li>
+                </ul>
+                
+                <div class="math-equation">
+                    Highest activation = Network's "best guess"
+                </div>
+                
+                <div class="accent-box">
+                    The beauty: Network can express uncertainty! Multiple neurons can be partially activated.
+                </div>
+            </div>
+        </div>
+
+        <!-- Uncertainty Example -->
+        <div class="slide picture-caption">
+            <h2>When Networks Are Uncertain</h2>
+            
+            <div class="picture-area">
+                <img src="confused-output-question.png" alt="Digit classification neural network where multiple output nodes are activated with varying intensities. The output for '4' and '9' are darker, indicating uncertainty.">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>🤔 Interpreting Uncertainty</h3>
+                <p><strong>What This Tells Us:</strong></p>
+                <ul class="content-list">
+                    <li>Network is torn between "4" and "9"</li>
+                    <li>Both neurons highly activated</li>
+                    <li>Other digits have low confidence</li>
+                    <li>This reflects realistic ambiguity!</li>
+                </ul>
+                
+                <div class="key-insight">
+                    <h4>🧠 Human-Like Reasoning</h4>
+                    <p>Just like humans might be unsure between similar-looking digits, networks can express this uncertainty through activation patterns.</p>
+                </div>
+                
+                <div class="interactive-element">
+                    <strong>🎯 Think About It:</strong> How would you decide if a handwritten digit is a 4 or a 9? The network faces the same challenge!
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3 Header -->
+        <div class="slide section-header">
+            <h1>Part III</h1>
+            <p class="section-subtitle">The Hidden Layers: Where Magic Happens</p>
+        </div>
+
+        <!-- Hidden Layers Mystery -->
+        <div class="slide picture-caption">
+            <h2>The Great Mystery: Hidden Layers</h2>
+            
+            <div class="picture-area">
+                <img src="hidden-layers.png" alt="A neural network diagram with the hidden layers highlighted using a yellow box and question mark, symbolizing their mysterious role in feature learning.">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>❓ The Big Questions</h3>
+                <ul class="content-list">
+                    <li>What are these layers actually doing?</li>
+                    <li>How do they transform 784 numbers into 10 predictions?</li>
+                    <li>Why not connect input directly to output?</li>
+                </ul>
+                
+                <div class="warning-box">
+                    <strong>The Challenge:</strong> We have 784 inputs, 10 outputs, and need something powerful enough to recognize any digit pattern.
+                </div>
+                
+                <div class="key-insight">
+                    <h4>🔍 The Hypothesis</h4>
+                    <p>Hidden layers learn to detect increasingly complex features, building up from simple to sophisticated patterns.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hierarchical Learning Theory -->
         <div class="slide two-content">
-            <h2>From Biology to Mathematics</h2>
+            <h2>The Hierarchical Learning Hypothesis</h2>
             
             <div class="content-column">
-                <h3>🧠 Real Neurons</h3>
+                <h3>🏗️ Layer 1: Edge Detection</h3>
+                <p>The first hidden layer learns to detect basic edges and simple patterns.</p>
+                
+                <div class="math-equation">
+                    Pixels → Simple Edges
+                </div>
+                
                 <ul class="content-list">
-                    <li>Receive signals through dendrites</li>
-                    <li>Process in the cell body</li>
-                    <li>Send output through axon</li>
-                    <li>Connected by synapses</li>
-                    <li>Work together in networks</li>
+                    <li>Horizontal lines</li>
+                    <li>Vertical lines</li>
+                    <li>Diagonal edges</li>
+                    <li>Simple curves</li>
                 </ul>
                 
                 <div class="highlight-box">
-                    86 billion neurons in your brain!
+                    <strong>Think:</strong> Like finding individual Lego pieces in a complex structure.
                 </div>
             </div>
             
             <div class="content-column">
-                <h3>🤖 Artificial Neurons</h3>
+                <h3>🧩 Layer 2: Pattern Assembly</h3>
+                <p>The second hidden layer combines edges into meaningful patterns.</p>
+                
+                <div class="math-equation">
+                    Simple Edges → Complex Patterns
+                </div>
+                
                 <ul class="content-list">
-                    <li>Receive number inputs</li>
-                    <li>Calculate weighted sum</li>
-                    <li>Apply activation function</li>
-                    <li>Send number output</li>
-                    <li>Connected in layers</li>
+                    <li>Loops (for 0, 6, 8, 9)</li>
+                    <li>Lines (for 1, 4, 7)</li>
+                    <li>Curves (for 2, 3, 5)</li>
+                    <li>Intersections</li>
                 </ul>
                 
-                <div class="accent-box">
-                    Much simpler, but same idea!
+                <div name="highlight-box">
+                    <strong>Think:</strong> Like recognizing common shapes made from those Lego pieces.
                 </div>
             </div>
         </div>
 
-        <!-- Slide 6: Section Header -->
-        <div class="slide section-header">
-            <h1>Neural Network Structure</h1>
-            <p class="section-subtitle">Layers and Connections</p>
-        </div>
-
-        <!-- Slide 7: Network Architecture -->
+        <!-- Edge Detection Examples -->
         <div class="slide picture-caption">
-            <h2>Our Digit Recognition Network</h2>
+            <h2>Layer 1: Edge Detection in Action</h2>
             
             <div class="picture-area">
-                <img src="https://images.3blue1brown.com/neural-networks/layered-network.png" alt="Layered Network Architecture" />
+                <img src="loop-edges.png" alt="Image decomposition of a handwritten digit '0' into several edge components: diagonal, curve, and horizontal segments. Each colored box shows a different learned feature from the image.">
             </div>
             
             <div class="caption-sidebar">
-                <h3>Architecture</h3>
+                <h3>🔍 Breaking Down Complexity</h3>
+                <p><strong>Digit "0" Analysis:</strong></p>
                 <ul class="content-list">
-                    <li><span class="emphasis">Input:</span> 784 neurons (28×28 pixels)</li>
-                    <li><span class="emphasis">Hidden 1:</span> 16 neurons</li>
-                    <li><span class="emphasis">Hidden 2:</span> 16 neurons</li>
-                    <li><span class="emphasis">Output:</span> 10 neurons (digits 0-9)</li>
+                    <li>Top curve (red box)</li>
+                    <li>Right edge (blue box)</li>
+                    <li>Bottom curve (green box)</li>
+                    <li>Left edge (yellow box)</li>
                 </ul>
                 
+                <div class="key-insight">
+                    <h4>🎯 The Insight</h4>
+                    <p>Complex shapes are combinations of simpler edges. If we can detect edges, we can detect shapes!</p>
+                </div>
+                
+                <div class="math-equation">
+                    4 edges detected → Likely a "0"
+                </div>
+            </div>
+        </div>
+
+        <div class="slide picture-caption">
+            <h2>More Edge Detection Examples</h2>
+            
+            <div class="picture-area">
+                <img src="line-edges.png" alt="Image decomposition of a digit '1' into vertical and slightly slanted edges using learned features. Shows how a digit is built from simpler components.">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>🔍 Digit "1" Analysis</h3>
+                <p><strong>Simpler Pattern:</strong></p>
+                <ul class="content-list">
+                    <li>Main vertical line (blue)</li>
+                    <li>Top angle (red)</li>
+                    <li>Base extension (yellow)</li>
+                </ul>
+                
+                <div class="interactive-element">
+                    <strong>🤔 Notice:</strong> Different digits require different types of edge detection. The network must learn to detect ALL possible edge types!
+                </div>
+                
+                <div class="accent-box">
+                    <strong>Scaling Up:</strong> Imagine doing this for every possible handwriting style, for every digit, automatically!
+                </div>
+            </div>
+        </div>
+
+        <!-- Universal Pattern Recognition -->
+        <div class="slide picture-caption">
+            <h2>Beyond Digits: Universal Pattern Recognition</h2>
+            
+            <div class="picture-area">
+                <img src="edge-detection.png" alt="Side-by-side image showing a lion on the left and its corresponding edge-detected version on the right, used to explain how neural networks or vision systems detect edges.">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>🌍 Universal Applications</h3>
+                <p><strong>Edge Detection Works For:</strong></p>
+                <ul class="content-list">
+                    <li>Animal recognition</li>
+                    <li>Face detection</li>
+                    <li>Medical imaging</li>
+                    <li>Satellite imagery</li>
+                    <li>Quality control</li>
+                </ul>
+                
+                <div class="key-insight">
+                    <h4>🚀 Powerful Principle</h4>
+                    <p>The same hierarchical approach works across completely different domains!</p>
+                </div>
+                
                 <div class="highlight-box">
+                    <strong>This is why neural networks are revolutionary:</strong> One approach, infinite applications.
+                </div>
+            </div>
+        </div>
+
+        <!-- Audio Example -->
+        <div class="slide picture-caption">
+            <h2>Hierarchical Processing in Other Domains</h2>
+            
+            <div class="picture-area">
+                <img src="audio.png" alt="A visual of raw audio waveform transforming into the word 'recognition' through successive processing stages: audio ➝ text ➝ syllables ➝ final cleaned-up text. Demonstrates the transformation in speech recognition.">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>🎵 Speech Recognition Hierarchy</h3>
+                <p><strong>Layer by Layer:</strong></p>
+                <ul class="content-list">
+                    <li><strong>Layer 1:</strong> Raw audio → Basic sounds</li>
+                    <li><strong>Layer 2:</strong> Sounds → Phonemes</li>
+                    <li><strong>Layer 3:</strong> Phonemes → Syllables</li>
+                    <li><strong>Layer 4:</strong> Syllables → Words</li>
+                    <li><strong>Layer 5:</strong> Words → Meaning</li>
+                </ul>
+                
+                <div class="math-equation">
+                    Complex Problem = Hierarchy of Simple Steps
+                </div>
+                
+                <div class="accent-box">
+                    <strong>Universal Truth:</strong> Most intelligent tasks can be broken down into hierarchical processing steps.
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4 Header -->
+        <div class="slide section-header">
+            <h1>Part IV</h1>
+            <p class="section-subtitle">The Mathematics: How Information Flows</p>
+        </div>
+
+        <!-- Weights Introduction -->
+        <div class="slide title-content">
+            <h2>🔗 Understanding Weights: The Connection Strength</h2>
+            <div class="content-area">
+                <p>Now we get to the heart of how neural networks actually work. The magic lies in the <span class="emphasis">weights</span>.</p>
+                
+                <div class="key-insight">
+                    <h4>🧠 The Core Concept</h4>
+                    <p>A <strong>weight</strong> is simply a number that determines how much influence one neuron has on another. That's it.</p>
+                </div>
+                
+                <p><strong>Here's how it works:</strong></p>
+                <ul class="content-list">
+                    <li><strong>Positive weight:</strong> "When the first neuron is active, the second should be active too"</li>
+                    <li><strong>Negative weight:</strong> "When the first neuron is active, the second should be inactive"</li>
+                    <li><strong>Zero weight:</strong> "These neurons don't influence each other"</li>
+                    <li><strong>Large magnitude:</strong> Strong influence (positive or negative)</li>
+                    <li><strong>Small magnitude:</strong> Weak influence</li>
+                </ul>
+                
+                <div class="interactive-element">
+                    <strong>🎯 Analogy:</strong> Think of weights like volume controls. Some connections are turned up loud (high positive/negative), others are barely audible (near zero).
+                </div>
+            </div>
+        </div>
+
+        <!-- Specific Edge Detection Example -->
+        <div class="slide picture-caption">
+            <h2>Weights in Action: Detecting a Specific Edge</h2>
+            
+            <div class="picture-area">
+                <img src="desired-edge.png" alt="A neuron connected to a 784 input grid with a small white rectangle in the image. Demonstrates how a single neuron might detect a specific localized feature (like an edge) in an image.">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>🎯 The Goal</h3>
+                <p><strong>We want this neuron to detect this specific edge pattern.</strong></p>
+                
+                <p><strong>Strategy:</strong></p>
+                <ul class="content-list">
+                    <li>High positive weights where we want bright pixels</li>
+                    <li>High negative weights where we want dark pixels</li>
+                    <li>Zero weights where we don't care</li>
+                </ul>
+                
+                <div class="math-equation">
+                    Response = Σ(weight × pixel_value)
+                </div>
+                
+                <div class="key-insight">
+                    <h4>💡 The Insight</h4>
+                    <p>By carefully choosing 784 weights, we can make this neuron respond strongly to our desired pattern and weakly to others!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weight Visualization -->
+        <div class="slide picture-caption">
+            <h2>Visualizing Weights: The Complete Picture</h2>
+            
+            <div class="picture-area">
+                <img src="13002-blue.png" alt="Fully connected neural network with weights shown in blue and red colors based on polarity. Side box breaks down the total number of weights and biases—13,002 in total.">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>📊 The Numbers</h3>
+                <p><strong>Weight Breakdown:</strong></p>
+                <ul class="content-list">
+                    <li>Input to Hidden 1: 784×16 = 12,544 weights</li>
+                    <li>Hidden 1 to Hidden 2: 16×16 = 256 weights</li>
+                    <li>Hidden 2 to Output: 16×10 = 160 weights</li>
+                    <li>Plus biases: 16+16+10 = 42</li>
+                </ul>
+                
+                <div class="math-equation">
                     Total: 13,002 parameters to learn!
                 </div>
+                
+                <div class="warning-box">
+                    <strong>⚠️ Complexity Alert:</strong> Each of these 13,002 numbers must be precisely tuned for the network to work!
+                </div>
             </div>
         </div>
 
-        <!-- Slide 8: What Each Layer Does -->
+        <!-- Weighted Sum Calculation -->
         <div class="slide title-content">
-            <h2>🔍 What Each Layer Learns</h2>
+            <h2>🧮 The Weighted Sum: Core Calculation</h2>
             <div class="content-area">
-                <p>Think of layers as building complexity step by step:</p>
+                <p>Every neuron in a hidden or output layer performs the same fundamental calculation:</p>
                 
-                <div class="network-visual">
-                    <div class="layer-vis">
-                        <div class="layer-title">Layer 1<br/>Edge Detection</div>
-                        <div class="neuron-vis"></div>
-                        <div class="neuron-vis"></div>
-                        <div class="neuron-vis"></div>
-                    </div>
-                    
-                    <div class="connection-vis"></div>
-                    
-                    <div class="layer-vis">
-                        <div class="layer-title">Layer 2<br/>Shape Assembly</div>
-                        <div class="neuron-vis"></div>
-                        <div class="neuron-vis"></div>
-                        <div class="neuron-vis"></div>
-                    </div>
-                    
-                    <div class="connection-vis"></div>
-                    
-                    <div class="layer-vis">
-                        <div class="layer-title">Output<br/>Digit Recognition</div>
-                        <div class="neuron-vis"></div>
-                        <div class="neuron-vis"></div>
-                    </div>
+                <div class="math-equation">
+                    weighted_sum = w₁×a₁ + w₂×a₂ + w₃×a₃ + ... + wₙ×aₙ
                 </div>
                 
+                <p>Where:</p>
                 <ul class="content-list">
-                    <li><strong>Layer 1:</strong> Detects edges, corners, simple patterns</li>
-                    <li><strong>Layer 2:</strong> Combines edges into loops, lines, curves</li>
-                    <li><strong>Output:</strong> Recognizes complete digits</li>
+                    <li><strong>wᵢ</strong> = weight of connection i</li>
+                    <li><strong>aᵢ</strong> = activation of neuron i in previous layer</li>
+                    <li><strong>n</strong> = number of neurons in previous layer</li>
                 </ul>
+                
+                <div class="key-insight">
+                    <h4>🎯 What This Means</h4>
+                    <p>Each neuron is asking: "Based on the pattern of activations in the previous layer, and given my weights, how excited should I be?"</p>
+                </div>
+                
+                <div class="interactive-element">
+                    <strong>🤔 Think About It:</strong> If a neuron has learned to detect horizontal lines, it will have positive weights for horizontally-aligned pixels and negative weights elsewhere.
+                </div>
             </div>
         </div>
 
-        <!-- Slide 9: Section Header -->
+        <!-- Section 5 Header -->
         <div class="slide section-header">
-            <h1>The Mathematics</h1>
-            <p class="section-subtitle">How Neurons Actually Work</p>
+            <h1>Part V</h1>
+            <p class="section-subtitle">Activation Functions: The Squishification</p>
         </div>
 
-        <!-- Slide 10: Neuron Math -->
+        <!-- Why We Need Squishing -->
         <div class="slide picture-caption">
-            <h2>Inside a Single Neuron</h2>
+            <h2>The Problem: Unlimited Range</h2>
             
             <div class="picture-area">
-                <img src="https://images.3blue1brown.com/neural-networks/neuron-math.png" alt="Neuron Weighted Sum Calculation" />
+                <img src="number-line-squish.png" alt="A number line with a yellow arrow pointing at the small region between 0 and 1, emphasizing that neural activations are squished into this range after applying an activation function like sigmoid.">
             </div>
             
             <div class="caption-sidebar">
-                <h3>The Calculation</h3>
-                
-                <div class="math-box">
-                    $$\text{output} = \sigma(\sum w_i \cdot x_i + b)$$
-                </div>
-                
+                <h3>⚠️ The Challenge</h3>
+                <p><strong>Weighted Sum Problems:</strong></p>
                 <ul class="content-list">
-                    <li><strong>$x_i$:</strong> Inputs from previous layer</li>
-                    <li><strong>$w_i$:</strong> Weights (importance)</li>
-                    <li><strong>$b$:</strong> Bias (threshold)</li>
-                    <li><strong>$\sigma$:</strong> Activation function</li>
+                    <li>Can be any number: -1000, +500, etc.</li>
+                    <li>Our neurons need values 0.0-1.0</li>
+                    <li>Need smooth, differentiable function</li>
+                    <li>Should preserve relative ordering</li>
                 </ul>
                 
-                <div class="accent-box">
-                    It's like a weighted vote!
+                <div class="math-equation">
+                    Need: ℝ → [0,1]
+                </div>
+                
+                <div class="key-insight">
+                    <h4>🎯 Requirements</h4>
+                    <p>We need a function that smoothly maps any real number to our desired 0-1 range, while preserving the relative magnitudes.</p>
                 </div>
             </div>
         </div>
 
-        <!-- Slide 11: Activation Functions -->
-        <div class="slide content-caption">
-            <h2>🔄 The Sigmoid Activation Function</h2>
-            
-            <div class="main-content-area">
-                <div class="math-box">
-                    $$\sigma(z) = \frac{1}{1 + e^{-z}}$$
-                </div>
-                
-                <p><strong>What it does:</strong> Takes any number and "squishes" it to be between 0 and 1</p>
-                
-                <ul class="content-list">
-                    <li>Very negative input → output ≈ 0</li>
-                    <li>Zero input → output = 0.5</li>
-                    <li>Very positive input → output ≈ 1</li>
-                </ul>
-            </div>
-            
-            <div class="caption-area">
-                <strong>💡 Why we need this:</strong> Without activation functions, our network would just be a fancy linear equation! The sigmoid adds the "nonlinearity" that lets neural networks learn complex patterns.
-            </div>
-        </div>
-
-        <!-- Slide 12: Section Header -->
-        <div class="slide section-header">
-            <h1>Digit Recognition</h1>
-            <p class="section-subtitle">Putting It All Together</p>
-        </div>
-
-        <!-- Slide 13: Input Process -->
+        <!-- Sigmoid Function -->
         <div class="slide picture-caption">
-            <h2>From Image to Numbers</h2>
+            <h2>The Sigmoid Function: Perfect Solution</h2>
             
             <div class="picture-area">
-                <img src="https://images.3blue1brown.com/neural-networks/digit-flow.png" alt="Digit Recognition Flow" />
+                <img src="sigmoid.png" alt="A graph of the sigmoid activation function: σ(x) = 1/(1 + e^(-x)). The curve transitions smoothly from 0 to 1 as x increases.">
             </div>
             
             <div class="caption-sidebar">
-                <h3>The Process</h3>
+                <h3>📈 Sigmoid Properties</h3>
+                <p><strong>Mathematical Definition:</strong></p>
+                
+                <div class="math-equation">
+                    σ(x) = 1/(1 + e^(-x))
+                </div>
+                
+                <p><strong>Key Properties:</strong></p>
                 <ul class="content-list">
-                    <li><strong>Step 1:</strong> Take 28×28 image</li>
-                    <li><strong>Step 2:</strong> Flatten to 784 numbers</li>
-                    <li><strong>Step 3:</strong> Each pixel = one input neuron</li>
-                    <li><strong>Step 4:</strong> 0 = black, 1 = white</li>
+                    <li>Range: (0, 1) - perfect for our needs!</li>
+                    <li>Smooth and continuous</li>
+                    <li>Differentiable everywhere</li>
+                    <li>S-shaped curve</li>
+                    <li>σ(0) = 0.5 (midpoint)</li>
                 </ul>
+                
+                <div class="interactive-element">
+                    <strong>🧪 Test Your Understanding:</strong> What is σ(-1000)? Close to 0! What about σ(1000)? Close to 1!
+                </div>
+            </div>
+        </div>
+
+        <!-- Bias Introduction -->
+        <div class="slide picture-caption">
+            <h2>Bias: Fine-Tuning Activation</h2>
+            
+            <div class="picture-area">
+                <img src="bias.png" alt="Mathematical expression with a highlighted negative bias (-10) and a caption stating that neurons only activate meaningfully when the weighted sum exceeds 10. Explains the role of bias in neural nets.">
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>⚙️ The Role of Bias</h3>
+                <p><strong>Problem:</strong> What if we don't want the neuron to activate when weighted_sum > 0?</p>
+                
+                <p><strong>Solution:</strong> Add a bias term!</p>
+                
+                <div class="math-equation">
+                    activation = σ(weighted_sum + bias)
+                </div>
+                
+                <p><strong>Bias Effects:</strong></p>
+                <ul class="content-list">
+                    <li><strong>Negative bias:</strong> Harder to activate</li>
+                    <li><strong>Positive bias:</strong> Easier to activate</li>
+                    <li><strong>Zero bias:</strong> Activates at weighted_sum = 0</li>
+                </ul>
+                
+                <div class="key-insight">
+                    <h4>🎯 Control Mechanism</h4>
+                    <p>Bias lets us control exactly when each neuron should "fire"!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Complete Neuron Formula -->
+        <div class="slide title-content">
+            <h2>🧮 The Complete Neuron Formula</h2>
+            <div class="content-area">
+                <p>Now we can write the complete formula for any neuron's activation:</p>
+                
+                <div class="math-equation">
+                    aⱼ = σ(w₁ⱼa₁ + w₂ⱼa₂ + w₃ⱼa₃ + ... + wₙⱼaₙ + bⱼ)
+                </div>
+                
+                <p><strong>Where:</strong></p>
+                <ul class="content-list">
+                    <li><strong>aⱼ</strong> = activation of neuron j in current layer</li>
+                    <li><strong>wᵢⱼ</strong> = weight from neuron i (prev layer) to neuron j (current layer)</li>
+                    <li><strong>aᵢ</strong> = activation of neuron i in previous layer</li>
+                    <li><strong>bⱼ</strong> = bias of neuron j</li>
+                    <li><strong>σ</strong> = sigmoid function</li>
+                </ul>
+                
+                <div class="key-insight">
+                    <h4>🎉 This is it!</h4>
+                    <p>This single formula describes how every neuron in every hidden and output layer computes its activation. The entire network is just this formula applied thousands of times!</p>
+                </div>
                 
                 <div class="highlight-box">
-                    The network sees numbers, not pictures!
+                    <strong>Universal Truth:</strong> Despite all the complexity we've discussed, every neuron does exactly the same simple calculation!
                 </div>
             </div>
         </div>
 
-        <!-- Slide 14: Output Interpretation -->
+        <!-- Section 6 Header -->
+        <div class="slide section-header">
+            <h1>Part VI</h1>
+            <p class="section-subtitle">Matrix Mathematics: Elegant Notation</p>
+        </div>
+
+        <!-- Matrix Representation -->
         <div class="slide picture-caption">
-            <h2>Reading the Network's Answer</h2>
+            <h2>Matrix Magic: Computing All Neurons at Once</h2>
             
             <div class="picture-area">
-                <img src="https://images.3blue1brown.com/neural-networks/output-vector.png" alt="Output Vector Probabilities" />
+                <img src="annotated-equation.png" alt="Annotated equation showing how activations are calculated in a neural network layer. Highlights how superscripts represent layers, subscripts represent neurons, and biases are added after weighted sums.">
             </div>
             
             <div class="caption-sidebar">
-                <h3>Example Output</h3>
-                <div style="font-family: monospace; font-size: 0.9em; background: #f8f9fa; padding: 10px; border-radius: 5px;">
-                    Digit 0: 0.1<br/>
-                    Digit 1: 0.05<br/>
-                    Digit 2: 0.02<br/>
-                    <strong>Digit 3: 0.8</strong> ← Winner!<br/>
-                    Digit 4: 0.6<br/>
-                    ...
+                <h3>🧮 Matrix Power</h3>
+                <p><strong>Instead of computing each neuron individually, we can compute ALL neurons in a layer simultaneously using matrix operations!</strong></p>
+                
+                <div class="math-equation">
+                    a⁽ˡ⁺¹⁾ = σ(W⁽ˡ⁾a⁽ˡ⁾ + b⁽ˡ⁾)
                 </div>
                 
-                <div class="accent-box">
-                    The network thinks it's a "3" but is a bit unsure between 3 and 4!
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 15: Matrix Magic -->
-        <div class="slide content-caption">
-            <h2>⚡ Making It Fast: Matrix Operations</h2>
-            
-            <div class="main-content-area">
-                <p>Instead of calculating each neuron one by one...</p>
-                
-                <div class="math-box">
-                    $$\mathbf{a}^{(next)} = \sigma(\mathbf{W} \cdot \mathbf{a}^{(current)} + \mathbf{b})$$
-                </div>
-                
-                <p><strong>One equation calculates ALL neurons in a layer simultaneously!</strong></p>
-                
+                <p><strong>Notation Guide:</strong></p>
                 <ul class="content-list">
-                    <li><strong>$\mathbf{W}$:</strong> Weight matrix</li>
-                    <li><strong>$\mathbf{a}$:</strong> Activation vector</li>
-                    <li><strong>$\mathbf{b}$:</strong> Bias vector</li>
+                    <li><strong>a⁽ˡ⁾:</strong> Activations of layer l</li>
+                    <li><strong>W⁽ˡ⁾:</strong> Weight matrix from layer l to l+1</li>
+                    <li><strong>b⁽ˡ⁾:</strong> Bias vector for layer l+1</li>
+                    <li><strong>σ:</strong> Applied element-wise</li>
                 </ul>
             </div>
-            
-            <div class="caption-area">
-                <strong>🚀 Speed boost:</strong> Matrix operations are 10-100x faster than loops! This is how we can train networks with millions of parameters.
+        </div>
+
+        <!-- Matrix Details -->
+        <div class="slide title-content">
+            <h2>📐 Matrix Dimensions: Getting the Math Right</h2>
+            <div class="content-area">
+                <p>Understanding matrix dimensions is crucial for implementing neural networks:</p>
+                
+                <div class="key-insight">
+                    <h4>📊 Dimension Analysis</h4>
+                    <p><strong>For a layer with n input neurons and m output neurons:</strong></p>
+                    <ul class="content-list">
+                        <li><strong>Weight matrix W:</strong> m × n (rows = outputs, cols = inputs)</li>
+                        <li><strong>Input activations a:</strong> n × 1 (column vector)</li>
+                        <li><strong>Bias vector b:</strong> m × 1 (column vector)</li>
+                        <li><strong>Output activations:</strong> m × 1 (column vector)</li>
+                    </ul>
+                </div>
+                
+                <div class="math-equation">
+                    (m × n) × (n × 1) + (m × 1) = (m × 1)
+                </div>
+                
+                <p><strong>Why This Matters:</strong></p>
+                <ul class="content-list">
+                    <li>Enables vectorized computation (much faster!)</li>
+                    <li>Libraries like NumPy/TensorFlow optimize matrix operations</li>
+                    <li>Makes code cleaner and more readable</li>
+                    <li>Essential for implementing backpropagation (next lesson!)</li>
+                </ul>
+                
+                <div class="interactive-element">
+                    <strong>🎯 Pro Tip:</strong> Always check your matrix dimensions when implementing neural networks. Dimension mismatches are the #1 source of bugs!
+                </div>
             </div>
         </div>
 
-        <!-- Slide 16: Why It Works -->
+        <!-- Section 7 Header -->
+        <div class="slide section-header">
+            <h1>Part VII</h1>
+            <p class="section-subtitle">The Big Picture: Understanding the Complete System</p>
+        </div>
+
+        <!-- Network as Function -->
+        <div class="slide title-content">
+            <h2>🔧 The Network as a Function</h2>
+            <div class="content-area">
+                <p>Let's step back and see the forest for the trees:</p>
+                
+                <div class="highlight-box">
+                    <strong>Fundamental Truth:</strong> A neural network is just a very complicated function that takes numbers as input and produces numbers as output.
+                </div>
+                
+                <p><strong>For our digit recognizer:</strong></p>
+                <ul class="content-list">
+                    <li><strong>Input:</strong> 784 numbers (pixel values)</li>
+                    <li><strong>Output:</strong> 10 numbers (digit probabilities)</li>
+                    <li><strong>Parameters:</strong> 13,002 weights and biases</li>
+                    <li><strong>Operations:</strong> Matrix multiplications and sigmoid applications</li>
+                </ul>
+                
+                <div class="math-equation">
+                    f(pixel₁, pixel₂, ..., pixel₇₈₄) = (prob₀, prob₁, ..., prob₉)
+                </div>
+                
+                <div class="key-insight">
+                    <h4>🤯 Mind-Blowing Realization</h4>
+                    <p>This "function" can recognize handwritten digits better than most humans, yet it's just arithmetic operations applied in sequence!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Complexity and Beauty -->
         <div class="slide two-content">
-            <h2>🤔 Why Do Neural Networks Work?</h2>
+            <h2>Complexity Meets Elegance</h2>
             
             <div class="content-column">
-                <h3>✨ The Magic</h3>
+                <h3>🔥 The Complexity</h3>
                 <ul class="content-list">
-                    <li>Layers build up complexity gradually</li>
-                    <li>Each layer learns useful features</li>
-                    <li>Connections adapt during training</li>
-                    <li>Pattern recognition emerges naturally</li>
+                    <li>13,002 parameters to tune</li>
+                    <li>Thousands of multiplication operations</li>
+                    <li>Non-linear transformations at each layer</li>
+                    <li>Intricate interaction patterns</li>
+                    <li>Emergent intelligent behavior</li>
                 </ul>
                 
-                <div class="highlight-box">
-                    Universal Approximation: Deep enough networks can learn ANY pattern!
+                <div class="warning-box">
+                    <strong>Humbling Fact:</strong> No human could ever manually set these 13,002 parameters to make the network work!
                 </div>
             </div>
             
             <div class="content-column">
-                <h3>🎯 The Reality</h3>
+                <h3>✨ The Elegance</h3>
                 <ul class="content-list">
-                    <li>Need lots of training data</li>
-                    <li>Requires careful tuning</li>
-                    <li>Can be fooled by edge cases</li>
-                    <li>Not always interpretable</li>
+                    <li>Every neuron follows the same simple rule</li>
+                    <li>Just weighted sums and sigmoid functions</li>
+                    <li>Beautiful mathematical structure</li>
+                    <li>Scalable to any size network</li>
+                    <li>Universal approximation capability</li>
                 </ul>
-                
-                <div class="accent-box">
-                    Powerful but not magic!
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 17: Section Header -->
-        <div class="slide section-header">
-            <h1>What's Next?</h1>
-            <p class="section-subtitle">Learning and Training</p>
-        </div>
-
-        <!-- Slide 18: The Learning Challenge -->
-        <div class="slide title-content">
-            <h2>🔧 The Big Question: How Does It Learn?</h2>
-            <div class="content-area">
-                <p>We now understand the structure, but how do we find the right values for those 13,002 parameters?</p>
                 
                 <div class="highlight-box">
-                    <strong>Next Chapter Preview:</strong> Gradient Descent & Backpropagation
-                </div>
-                
-                <ul class="content-list">
-                    <li><strong>Gradient Descent:</strong> How to improve the network step by step</li>
-                    <li><strong>Backpropagation:</strong> How to calculate what to change</li>
-                    <li><strong>Training Process:</strong> Show examples and let it learn</li>
-                    <li><strong>Optimization:</strong> Making learning faster and better</li>
-                </ul>
-                
-                <div class="accent-box">
-                    Think of it like teaching someone to recognize handwriting by showing them thousands of examples!
+                    <strong>Beautiful Truth:</strong> Infinite complexity emerges from infinite repetition of simple operations!
                 </div>
             </div>
         </div>
 
-        <!-- Slide 19: Key Takeaways -->
+        <!-- What We Haven't Covered -->
         <div class="slide title-content">
-            <h2>🎓 Key Takeaways</h2>
+            <h2>🔮 The Mystery Remains: How Do We Learn?</h2>
+            <div class="content-area">
+                <p>We now understand the structure and mathematics, but the biggest question remains:</p>
+                
+                <div class="accent-box">
+                    <strong>The $64,000 Question:</strong> How does the network learn the right values for those 13,002 parameters?
+                </div>
+                
+                <p><strong>What we know so far:</strong></p>
+                <ul class="content-list">
+                    <li>✅ What neurons are and how they work</li>
+                    <li>✅ How layers organize to solve complex problems</li>
+                    <li>✅ How weights and biases control behavior</li>
+                    <li>✅ How activation functions keep values in range</li>
+                    <li>✅ How matrix math makes it all efficient</li>
+                </ul>
+                
+                <p><strong>What we still need to learn:</strong></p>
+                <ul class="content-list">
+                    <li>❓ How do we find the right weight values?</li>
+                    <li>❓ What does "learning from examples" actually mean?</li>
+                    <li>❓ How do we measure if our network is improving?</li>
+                    <li>❓ How do we automatically adjust thousands of parameters?</li>
+                </ul>
+                
+                <div class="key-insight">
+                    <h4>🎯 Next Chapter Preview</h4>
+                    <p>The learning process involves <strong>gradient descent</strong> and <strong>backpropagation</strong> - elegant mathematical techniques that automatically adjust all 13,002 parameters to minimize prediction errors!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Summary -->
+        <div class="slide title-content">
+            <h2>🎓 Chapter 1 Complete: What You've Mastered</h2>
             <div class="content-area">
                 <div class="highlight-box">
-                    <strong>Neural networks are function approximators that learn hierarchical patterns</strong>
+                    <strong>🏆 Congratulations!</strong> You now have a deep, comprehensive understanding of neural network architecture and computation.
                 </div>
                 
+                <p><strong>Key Concepts Mastered:</strong></p>
                 <ul class="content-list">
-                    <li><strong>Structure:</strong> Layers of simple mathematical units (neurons)</li>
-                    <li><strong>Computation:</strong> Weighted sums + activation functions</li>
-                    <li><strong>Power:</strong> Composition creates complex decision boundaries</li>
-                    <li><strong>Learning:</strong> Adjust 13,002 parameters to recognize patterns</li>
-                    <li><strong>Applications:</strong> Image recognition, language, games, and more!</li>
+                    <li><strong>The Fundamental Challenge:</strong> Why traditional programming fails at pattern recognition</li>
+                    <li><strong>Neuron Mechanics:</strong> Simple containers holding numbers between 0 and 1</li>
+                    <li><strong>Layer Architecture:</strong> Input → Hidden → Output structure and why it works</li>
+                    <li><strong>Hierarchical Learning:</strong> Edges → Patterns → Recognition</li>
+                    <li><strong>Weight Mathematics:</strong> How connections determine behavior</li>
+                    <li><strong>Activation Functions:</strong> Sigmoid squishification and bias control</li>
+                    <li><strong>Matrix Representation:</strong> Elegant mathematical notation</li>
+                    <li><strong>System Perspective:</strong> Networks as complex functions</li>
                 </ul>
                 
-                <div class="math-box">
-                    Remember: $\text{output} = \sigma(\mathbf{W} \cdot \text{input} + \mathbf{b})$
+                <div class="key-insight">
+                    <h4>🚀 You're Ready for Advanced Topics</h4>
+                    <p>With this foundation, you can now tackle gradient descent, backpropagation, and modern neural network architectures with confidence!</p>
                 </div>
                 
-                <div class="accent-box">
-                    You now understand how artificial brains process information! 🧠→🤖
+                <div class="interactive-element">
+                    <strong>🎯 Challenge Yourself:</strong> Can you explain to someone else how a neural network recognizes handwritten digits? If yes, you've truly mastered this material!
                 </div>
             </div>
-        </div>
-
-        <!-- Slide 20: Questions -->
-        <div class="slide title-only">
-            <h1>Questions & Discussion</h1>
-            <p class="subtitle">Let's explore your curiosity about neural networks!</p>
         </div>
 
     </div>
 
     <!-- Slide Counter -->
     <div class="slide-counter">
-        Slide 1 of 20
+        Slide 1 of 30
     </div>
 
     <script>
