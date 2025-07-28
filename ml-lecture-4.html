@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What is a Neural Network? - Lecture Slides</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                packages: {'[+]': ['boldsymbol', 'ams']}
+            },
+            loader: {
+                load: ['[tex]/boldsymbol', '[tex]/ams']
+            }
+        };
+    </script>
+    <script async src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh;
+            color: #1E293B;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Base slide styling */
+        .slide {
+            background: #FEF7ED;
+            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            min-height: 500px;
+            page-break-after: always;
+        }
+
+        .slide:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Layout 1: Title Slide */
+        .title-slide {
+            background: #1E293B;
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-left: 5px solid #EA580C;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .title-slide .subtitle {
+            font-size: 1.6em;
+            opacity: 0.9;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .title-slide .author {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        /* Layout 2: Title and Content */
+        .title-content h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-area {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .content-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        .content-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #EA580C;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Layout 3: Section Header */
+        .section-header {
+            background: linear-gradient(135deg, #059669, #EA580C);
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section-header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section-header .section-subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+        }
+
+        /* Layout 4: Two Content */
+        .two-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .two-content h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-column {
+            padding: 20px;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: 10px;
+        }
+
+        .content-column h3 {
+            font-size: 1.6em;
+            color: #059669;
+            margin-bottom: 15px;
+        }
+
+        /* Layout 5: Comparison */
+        .comparison h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+            text-align: center;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .comparison-item {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(234, 88, 12, 0.1);
+        }
+
+        .comparison-item h3 {
+            font-size: 1.8em;
+            color: #EA580C;
+            margin-bottom: 20px;
+        }
+
+        .vs-divider {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .comparison {
+            position: relative;
+        }
+
+        /* Layout 6: Title Only */
+        .title-only {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-only h1 {
+            font-size: 3em;
+            color: #1E293B;
+            margin-bottom: 20px;
+        }
+
+        .title-only .subtitle {
+            font-size: 1.4em;
+            color: #059669;
+            font-style: italic;
+        }
+
+        /* Layout 7: Blank */
+        .blank-slide {
+            /* Intentionally minimal - just the base slide styling */
+        }
+
+        /* Layout 8: Content with Caption */
+        .content-caption {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 30px;
+        }
+
+        .content-caption h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .main-content-area {
+            background: rgba(5, 150, 105, 0.1);
+            border: 2px solid #059669;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            font-size: 1.3em;
+        }
+
+        .caption-area {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #059669;
+        }
+
+        /* Layout 9: Picture with Caption */
+        .picture-caption {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .picture-caption h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .picture-area {
+            background: #f8f9fa;
+            border: 2px dashed #059669;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .picture-area img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .caption-sidebar {
+            background: rgba(234, 88, 12, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 4px solid #EA580C;
+        }
+
+        .caption-sidebar h3 {
+            color: #EA580C;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        /* Special Elements */
+        .highlight-box {
+            background: #059669;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .accent-box {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        .emphasis {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .math-box {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        /* Network visualization */
+        .network-visual {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .layer-vis {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .layer-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #1E293B;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .neuron-vis {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #059669, #EA580C);
+            margin: 2px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .connection-vis {
+            width: 2px;
+            height: 60px;
+            background: linear-gradient(to bottom, #bdc3c7, #95a5a6);
+            margin: 0 15px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .slide {
+                padding: 20px;
+                min-height: 400px;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5em;
+            }
+
+            .two-content,
+            .comparison-grid,
+            .picture-caption {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .vs-divider {
+                display: none;
+            }
+
+            .network-visual {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .connection-vis {
+                width: 60px;
+                height: 2px;
+            }
+        }
+
+        /* Navigation */
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Slide 1: Title Slide -->
+        <div class="slide title-slide">
+            <h1>🧠 What is a Neural Network?</h1>
+            <p class="subtitle">Understanding the Building Blocks of AI</p>
+            <p class="author">Professor • Deep Learning Course • Chapter 1</p>
+        </div>
+
+        <!-- Slide 2: Learning Objectives -->
+        <div class="slide title-content">
+            <h2>🎯 Today's Learning Goals</h2>
+            <div class="content-area">
+                <p>By the end of this lecture, you will understand:</p>
+                
+                <ul class="content-list">
+                    <li>What neural networks are and why they work</li>
+                    <li>The basic mathematical operations inside neurons</li>
+                    <li>How layers work together to recognize patterns</li>
+                    <li>Why we need activation functions</li>
+                    <li>How to read a digit recognition example</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    💡 Think of this as learning the "anatomy" of artificial brains!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Section Header -->
+        <div class="slide section-header">
+            <h1>The Big Idea</h1>
+            <p class="section-subtitle">From Brain Inspiration to AI</p>
+        </div>
+
+        <!-- Slide 4: The Challenge -->
+        <div class="slide picture-caption">
+            <h2>The Challenge: Recognizing Handwritten Digits</h2>
+            
+            <div class="picture-area">
+                <img src="https://images.3blue1brown.com/neural-networks/brain-analogy.png" alt="Brain to Neural Network Analogy" />
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>The Problem</h3>
+                <p>How can a computer recognize that these different scribbles are all the digit "3"?</p>
+                
+                <div class="accent-box">
+                    Traditional programming with if-statements and loops fails here!
+                </div>
+                
+                <ul class="content-list">
+                    <li>Each "3" looks different</li>
+                    <li>Infinite variations possible</li>
+                    <li>No clear rules to write</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 5: Brain Inspiration -->
+        <div class="slide two-content">
+            <h2>From Biology to Mathematics</h2>
+            
+            <div class="content-column">
+                <h3>🧠 Real Neurons</h3>
+                <ul class="content-list">
+                    <li>Receive signals through dendrites</li>
+                    <li>Process in the cell body</li>
+                    <li>Send output through axon</li>
+                    <li>Connected by synapses</li>
+                    <li>Work together in networks</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    86 billion neurons in your brain!
+                </div>
+            </div>
+            
+            <div class="content-column">
+                <h3>🤖 Artificial Neurons</h3>
+                <ul class="content-list">
+                    <li>Receive number inputs</li>
+                    <li>Calculate weighted sum</li>
+                    <li>Apply activation function</li>
+                    <li>Send number output</li>
+                    <li>Connected in layers</li>
+                </ul>
+                
+                <div class="accent-box">
+                    Much simpler, but same idea!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Section Header -->
+        <div class="slide section-header">
+            <h1>Neural Network Structure</h1>
+            <p class="section-subtitle">Layers and Connections</p>
+        </div>
+
+        <!-- Slide 7: Network Architecture -->
+        <div class="slide picture-caption">
+            <h2>Our Digit Recognition Network</h2>
+            
+            <div class="picture-area">
+                <img src="https://images.3blue1brown.com/neural-networks/layered-network.png" alt="Layered Network Architecture" />
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>Architecture</h3>
+                <ul class="content-list">
+                    <li><span class="emphasis">Input:</span> 784 neurons (28×28 pixels)</li>
+                    <li><span class="emphasis">Hidden 1:</span> 16 neurons</li>
+                    <li><span class="emphasis">Hidden 2:</span> 16 neurons</li>
+                    <li><span class="emphasis">Output:</span> 10 neurons (digits 0-9)</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    Total: 13,002 parameters to learn!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: What Each Layer Does -->
+        <div class="slide title-content">
+            <h2>🔍 What Each Layer Learns</h2>
+            <div class="content-area">
+                <p>Think of layers as building complexity step by step:</p>
+                
+                <div class="network-visual">
+                    <div class="layer-vis">
+                        <div class="layer-title">Layer 1<br/>Edge Detection</div>
+                        <div class="neuron-vis"></div>
+                        <div class="neuron-vis"></div>
+                        <div class="neuron-vis"></div>
+                    </div>
+                    
+                    <div class="connection-vis"></div>
+                    
+                    <div class="layer-vis">
+                        <div class="layer-title">Layer 2<br/>Shape Assembly</div>
+                        <div class="neuron-vis"></div>
+                        <div class="neuron-vis"></div>
+                        <div class="neuron-vis"></div>
+                    </div>
+                    
+                    <div class="connection-vis"></div>
+                    
+                    <div class="layer-vis">
+                        <div class="layer-title">Output<br/>Digit Recognition</div>
+                        <div class="neuron-vis"></div>
+                        <div class="neuron-vis"></div>
+                    </div>
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Layer 1:</strong> Detects edges, corners, simple patterns</li>
+                    <li><strong>Layer 2:</strong> Combines edges into loops, lines, curves</li>
+                    <li><strong>Output:</strong> Recognizes complete digits</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: Section Header -->
+        <div class="slide section-header">
+            <h1>The Mathematics</h1>
+            <p class="section-subtitle">How Neurons Actually Work</p>
+        </div>
+
+        <!-- Slide 10: Neuron Math -->
+        <div class="slide picture-caption">
+            <h2>Inside a Single Neuron</h2>
+            
+            <div class="picture-area">
+                <img src="https://images.3blue1brown.com/neural-networks/neuron-math.png" alt="Neuron Weighted Sum Calculation" />
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>The Calculation</h3>
+                
+                <div class="math-box">
+                    $$\text{output} = \sigma(\sum w_i \cdot x_i + b)$$
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>$x_i$:</strong> Inputs from previous layer</li>
+                    <li><strong>$w_i$:</strong> Weights (importance)</li>
+                    <li><strong>$b$:</strong> Bias (threshold)</li>
+                    <li><strong>$\sigma$:</strong> Activation function</li>
+                </ul>
+                
+                <div class="accent-box">
+                    It's like a weighted vote!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Activation Functions -->
+        <div class="slide content-caption">
+            <h2>🔄 The Sigmoid Activation Function</h2>
+            
+            <div class="main-content-area">
+                <div class="math-box">
+                    $$\sigma(z) = \frac{1}{1 + e^{-z}}$$
+                </div>
+                
+                <p><strong>What it does:</strong> Takes any number and "squishes" it to be between 0 and 1</p>
+                
+                <ul class="content-list">
+                    <li>Very negative input → output ≈ 0</li>
+                    <li>Zero input → output = 0.5</li>
+                    <li>Very positive input → output ≈ 1</li>
+                </ul>
+            </div>
+            
+            <div class="caption-area">
+                <strong>💡 Why we need this:</strong> Without activation functions, our network would just be a fancy linear equation! The sigmoid adds the "nonlinearity" that lets neural networks learn complex patterns.
+            </div>
+        </div>
+
+        <!-- Slide 12: Section Header -->
+        <div class="slide section-header">
+            <h1>Digit Recognition</h1>
+            <p class="section-subtitle">Putting It All Together</p>
+        </div>
+
+        <!-- Slide 13: Input Process -->
+        <div class="slide picture-caption">
+            <h2>From Image to Numbers</h2>
+            
+            <div class="picture-area">
+                <img src="https://images.3blue1brown.com/neural-networks/digit-flow.png" alt="Digit Recognition Flow" />
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>The Process</h3>
+                <ul class="content-list">
+                    <li><strong>Step 1:</strong> Take 28×28 image</li>
+                    <li><strong>Step 2:</strong> Flatten to 784 numbers</li>
+                    <li><strong>Step 3:</strong> Each pixel = one input neuron</li>
+                    <li><strong>Step 4:</strong> 0 = black, 1 = white</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    The network sees numbers, not pictures!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Output Interpretation -->
+        <div class="slide picture-caption">
+            <h2>Reading the Network's Answer</h2>
+            
+            <div class="picture-area">
+                <img src="https://images.3blue1brown.com/neural-networks/output-vector.png" alt="Output Vector Probabilities" />
+            </div>
+            
+            <div class="caption-sidebar">
+                <h3>Example Output</h3>
+                <div style="font-family: monospace; font-size: 0.9em; background: #f8f9fa; padding: 10px; border-radius: 5px;">
+                    Digit 0: 0.1<br/>
+                    Digit 1: 0.05<br/>
+                    Digit 2: 0.02<br/>
+                    <strong>Digit 3: 0.8</strong> ← Winner!<br/>
+                    Digit 4: 0.6<br/>
+                    ...
+                </div>
+                
+                <div class="accent-box">
+                    The network thinks it's a "3" but is a bit unsure between 3 and 4!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Matrix Magic -->
+        <div class="slide content-caption">
+            <h2>⚡ Making It Fast: Matrix Operations</h2>
+            
+            <div class="main-content-area">
+                <p>Instead of calculating each neuron one by one...</p>
+                
+                <div class="math-box">
+                    $$\mathbf{a}^{(next)} = \sigma(\mathbf{W} \cdot \mathbf{a}^{(current)} + \mathbf{b})$$
+                </div>
+                
+                <p><strong>One equation calculates ALL neurons in a layer simultaneously!</strong></p>
+                
+                <ul class="content-list">
+                    <li><strong>$\mathbf{W}$:</strong> Weight matrix</li>
+                    <li><strong>$\mathbf{a}$:</strong> Activation vector</li>
+                    <li><strong>$\mathbf{b}$:</strong> Bias vector</li>
+                </ul>
+            </div>
+            
+            <div class="caption-area">
+                <strong>🚀 Speed boost:</strong> Matrix operations are 10-100x faster than loops! This is how we can train networks with millions of parameters.
+            </div>
+        </div>
+
+        <!-- Slide 16: Why It Works -->
+        <div class="slide two-content">
+            <h2>🤔 Why Do Neural Networks Work?</h2>
+            
+            <div class="content-column">
+                <h3>✨ The Magic</h3>
+                <ul class="content-list">
+                    <li>Layers build up complexity gradually</li>
+                    <li>Each layer learns useful features</li>
+                    <li>Connections adapt during training</li>
+                    <li>Pattern recognition emerges naturally</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    Universal Approximation: Deep enough networks can learn ANY pattern!
+                </div>
+            </div>
+            
+            <div class="content-column">
+                <h3>🎯 The Reality</h3>
+                <ul class="content-list">
+                    <li>Need lots of training data</li>
+                    <li>Requires careful tuning</li>
+                    <li>Can be fooled by edge cases</li>
+                    <li>Not always interpretable</li>
+                </ul>
+                
+                <div class="accent-box">
+                    Powerful but not magic!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Section Header -->
+        <div class="slide section-header">
+            <h1>What's Next?</h1>
+            <p class="section-subtitle">Learning and Training</p>
+        </div>
+
+        <!-- Slide 18: The Learning Challenge -->
+        <div class="slide title-content">
+            <h2>🔧 The Big Question: How Does It Learn?</h2>
+            <div class="content-area">
+                <p>We now understand the structure, but how do we find the right values for those 13,002 parameters?</p>
+                
+                <div class="highlight-box">
+                    <strong>Next Chapter Preview:</strong> Gradient Descent & Backpropagation
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Gradient Descent:</strong> How to improve the network step by step</li>
+                    <li><strong>Backpropagation:</strong> How to calculate what to change</li>
+                    <li><strong>Training Process:</strong> Show examples and let it learn</li>
+                    <li><strong>Optimization:</strong> Making learning faster and better</li>
+                </ul>
+                
+                <div class="accent-box">
+                    Think of it like teaching someone to recognize handwriting by showing them thousands of examples!
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Key Takeaways -->
+        <div class="slide title-content">
+            <h2>🎓 Key Takeaways</h2>
+            <div class="content-area">
+                <div class="highlight-box">
+                    <strong>Neural networks are function approximators that learn hierarchical patterns</strong>
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Structure:</strong> Layers of simple mathematical units (neurons)</li>
+                    <li><strong>Computation:</strong> Weighted sums + activation functions</li>
+                    <li><strong>Power:</strong> Composition creates complex decision boundaries</li>
+                    <li><strong>Learning:</strong> Adjust 13,002 parameters to recognize patterns</li>
+                    <li><strong>Applications:</strong> Image recognition, language, games, and more!</li>
+                </ul>
+                
+                <div class="math-box">
+                    Remember: $\text{output} = \sigma(\mathbf{W} \cdot \text{input} + \mathbf{b})$
+                </div>
+                
+                <div class="accent-box">
+                    You now understand how artificial brains process information! 🧠→🤖
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Questions -->
+        <div class="slide title-only">
+            <h1>Questions & Discussion</h1>
+            <p class="subtitle">Let's explore your curiosity about neural networks!</p>
+        </div>
+
+    </div>
+
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        Slide 1 of 20
+    </div>
+
+    <script>
+        // Update slide counter on scroll
+        function updateSlideCounter() {
+            const slides = document.querySelectorAll('.slide');
+            const slideCounter = document.querySelector('.slide-counter');
+            
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    slideCounter.textContent = `Slide ${index + 1} of ${slides.length}`;
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateSlideCounter);
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            
+            // Find current slide
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentSlide = index;
+                }
+            });
+            
+            // Navigate with arrow keys
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                if (currentSlide < slides.length - 1) {
+                    slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                if (currentSlide > 0) {
+                    slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
