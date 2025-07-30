@@ -962,7 +962,7 @@
                 <p>A <strong>heuristic</strong> is like giving an AI system "intuition" about how close it is to the goal.</p>
 
                 <div class="image-container">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Romania_map.svg/800px-Romania_map.svg.png" alt="Romania Map with Cities and Distances" style="max-height: 400px;">
+                    <img src="images/ai/romania-map.jpeg" alt="Romania Map with Cities and Distances" style="max-height: 400px;">
                     <p><em>Romania Map - Our Classic AI Example</em></p>
                 </div>
 
@@ -1077,11 +1077,11 @@
             </div>
         </div>
 
-        <!-- Slide 9: A* Step by Step with Visual Color Coding -->
+        <!-- Slide 9: A* Step by Step with Visual Highlighting -->
         <div class="slide title-content">
             <h2>👣 A* Step-by-Step: Arad to Bucharest</h2>
             <div class="content-area">
-                <p>Let's trace through A* with visual color coding: 🟢 Selected | 🟠 Considered | ⚫ Available</p>
+                <p>Let's trace through A* finding the optimal path from Arad to Bucharest:</p>
 
                 <div class="astar-tree">
                     <h3>🌳 A* Search Tree with f(n) = g(n) + h(n)</h3>
@@ -1111,12 +1111,12 @@
                     </div>
                     
                     <div class="astar-level">
-                        <strong>Step 3: Expand Sibiu → Options Available</strong><br>
+                        <strong>Step 3: Expand Sibiu → Choose Rimnicu Vilcea (lowest f)</strong><br>
                         <div class="astar-node selected">
                             Rimnicu Vilcea<br>
                             <div class="node-calculation">f = 220 + 193 = 413</div>
                         </div>
-                        <div class="astar-node considered">
+                        <div class="astar-node available">
                             Fagaras<br>
                             <div class="node-calculation">f = 239 + 176 = 415</div>
                         </div>
@@ -1135,8 +1135,8 @@
                     </div>
                     
                     <div class="astar-level">
-                        <strong>Step 4: Expand Rimnicu Vilcea (f=413 < f=415)</strong><br>
-                        <div class="astar-node considered">
+                        <strong>Step 4: Expand Rimnicu Vilcea → Choose Fagaras (f=415 < f=417)</strong><br>
+                        <div class="astar-node selected">
                             Fagaras<br>
                             <div class="node-calculation">f = 415</div>
                         </div>
@@ -1144,7 +1144,7 @@
                             Craiova<br>
                             <div class="node-calculation">f = 366 + 160 = 526</div>
                         </div>
-                        <div class="astar-node selected">
+                        <div class="astar-node available">
                             Pitesti<br>
                             <div class="node-calculation">f = 317 + 100 = 417</div>
                         </div>
@@ -1155,12 +1155,12 @@
                     </div>
                     
                     <div class="astar-level">
-                        <strong>Step 5: Expand Fagaras (f=415 < f=417)</strong><br>
+                        <strong>Step 5: Expand Fagaras → Choose Pitesti (f=417 < f=450)</strong><br>
                         <div class="astar-node available">
                             Bucharest<br>
                             <div class="node-calculation">f = 450 + 0 = 450</div>
                         </div>
-                        <div class="astar-node considered">
+                        <div class="astar-node selected">
                             Pitesti<br>
                             <div class="node-calculation">f = 417</div>
                         </div>
@@ -1171,7 +1171,7 @@
                     </div>
                     
                     <div class="astar-level">
-                        <strong>Step 6: Expand Pitesti (f=417 < f=450) → GOAL!</strong><br>
+                        <strong>Step 6: Expand Pitesti → GOAL!</strong><br>
                         <div class="astar-node goal">
                             Bucharest<br>
                             <div class="node-calculation">f = 418 + 0 = 418 ✓</div>
@@ -1402,7 +1402,7 @@
                 <p>Let's solve a classic problem: Find the optimal (shortest) path from node A to node G.</p>
 
                 <div class="image-container">
-                    <img src="https://i.imgur.com/5yX9Z8L.png" alt="DFBB Problem Graph showing nodes A through G with edge costs" style="max-height: 400px;">
+                    <img src="images/ai/problem_a-g.png" alt="DFBB Problem Graph showing nodes A through G with edge costs" style="max-height: 400px;">
                     <p><em>Problem Graph: Find shortest path from A to G</em></p>
                 </div>
 
@@ -1447,12 +1447,12 @@
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 30px 0;">
                     <div class="image-container">
-                        <img src="https://i.imgur.com/7mK2VfA.png" alt="DFBB Search Tree showing complete exploration" style="max-height: 350px;">
+                        <img src="images/ai/problem_a-g_tree.png" alt="DFBB Search Tree showing complete exploration" style="max-height: 350px;">
                         <p><em>Complete Search Tree Structure</em></p>
                     </div>
                     
                     <div class="image-container">
-                        <img src="https://i.imgur.com/BpQr8Xe.png" alt="DFBB step-by-step exploration with pruning" style="max-height: 350px;">
+                        <img src="images/ai/problem_a-g_bound.png" alt="DFBB step-by-step exploration with pruning" style="max-height: 350px;">
                         <p><em>Step-by-Step Exploration with Pruning</em></p>
                     </div>
                 </div>
