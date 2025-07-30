@@ -84,6 +84,31 @@
             box-shadow: 0 15px 30px rgba(0,0,0,0.25);
         }
 
+        /* Additional image styling for specific layouts */
+        .portrait-image {
+            max-width: 300px;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 4px solid #EA580C;
+        }
+
+        .landscape-image {
+            max-width: 600px;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .small-inline-image {
+            max-width: 200px;
+            max-height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 10px;
+        }
+
         /* Layout 1: Enhanced Title Slide */
         .title-slide {
             background: #1E293B;
@@ -902,6 +927,16 @@
                 height: 40px;
                 font-size: 1em;
             }
+
+            .portrait-image {
+                max-width: 250px;
+                max-height: 300px;
+            }
+
+            .landscape-image {
+                max-width: 100%;
+                max-height: 250px;
+            }
         }
     </style>
 </head>
@@ -913,6 +948,9 @@
         
         <!-- Title Slide -->
         <div class="slide title-slide">
+            <div class="image-container">
+                <img src="https://example.com/business-meeting.jpg" alt="Business meeting" class="landscape-image">
+            </div>
             <h1>Schools of Management</h1>
             <p class="subtitle">Classical, Neo-Classical & Modern Approaches</p>
             <p class="author">Chapter 2 • Management Theory • Educational Presentation</p>
@@ -922,6 +960,10 @@
         <div class="slide title-content">
             <h2>2.1 Schools of Management</h2>
             <div class="content-area">
+                <div class="image-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/All_Gizah_Pyramids.jpg/1200px-All_Gizah_Pyramids.jpg" alt="Egyptian pyramids" class="landscape-image">
+                </div>
+                
                 <p>Management practice has existed for several thousand years. The great pyramids of Egypt were the result of efforts by numerous architects, engineers, and tens of thousands of laborers working together for fifteen years.</p>
                 
                 <div class="highlight-box">
@@ -937,6 +979,9 @@
             <h2>Management Theory Approaches</h2>
             
             <div class="content-column">
+                <div class="image-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/Wolfsburg_VW-Werk.jpg" alt="Historical factory" class="small-inline-image">
+                </div>
                 <h3>Historical Approaches</h3>
                 <ul class="content-list">
                     <li>Classical viewpoint - emphasizes finding ways to manage work and organizations more efficiently</li>
@@ -946,6 +991,9 @@
             </div>
             
             <div class="content-column">
+                <div class="image-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Cologne_Germany_Industrial-work-with-Personal-Protective-Equipment-01.jpg/960px-Cologne_Germany_Industrial-work-with-Personal-Protective-Equipment-01.jpg?20150809074221" alt="Industrial workplace" class="small-inline-image">
+                </div>
                 <h3>Four Milestone Responses</h3>
                 <ul class="content-list">
                     <li>Scientific management theory by Frederick Taylor</li>
@@ -989,6 +1037,9 @@
 
         <!-- Section Header for Scientific Management -->
         <div class="slide section-header">
+            <div class="image-container">
+                <img src="https://architecture-history.org/schools/PIC/1910-1911,%20Fagus%20Factory,%20ALFELD%20AN%20DER%20LEINE,%20LOWER%20SAXONY,%20GERMANY,%20WALTER%20GROPIUS.jpeg" alt="Early 20th century factory" class="landscape-image">
+            </div>
             <h1>Scientific Management</h1>
             <p class="section-subtitle">Frederick Taylor's Revolutionary Approach</p>
         </div>
@@ -997,6 +1048,10 @@
         <div class="slide title-content">
             <h2>2.2 Scientific Management</h2>
             <div class="content-area">
+                <div class="image-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Time_study_stopwatch.JPG/960px-Time_study_stopwatch.JPG?20110601083525" alt="Stopwatch and clipboard" class="small-inline-image">
+                </div>
+                
                 <p>Scientific management is an attempt to <span class="emphasis">determine and apply facts and laws</span> of gaining efficiency without leaving anything to chance.</p>
                 
                 <div class="accent-box">
@@ -1051,9 +1106,9 @@
             <h2>2.3 Frederick Winslow Taylor (1856-1915)</h2>
             
             <div class="picture-area">
-                <div style="font-size: 1.8em;">👨‍💼</div>
-                <h3>"Father of Scientific Management"</h3>
-                <p>Developed principles at Midvale Steel Company</p>
+                <div class="image-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Fredrick_Winslow_Taylor_c1907_retouched.png/500px-Fredrick_Winslow_Taylor_c1907_retouched.png" alt="Frederick Taylor" class="portrait-image">
+                </div>
             </div>
             
             <div class="caption-sidebar">
@@ -1114,6 +1169,9 @@
             <h2>Objectives of Scientific Management</h2>
             
             <div class="content-column">
+                <div class="image-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/ed/Anim_engrenages_helicoidaux.gif" alt="Efficiency gears" class="small-inline-image">
+                </div>
                 <h3>Efficiency Goals</h3>
                 <ul class="content-list">
                     <li>Find and eliminate causes of waste</li>
@@ -1125,6 +1183,9 @@
             </div>
             
             <div class="content-column">
+                <div class="image-container">
+                    <img src="https://www.shrm.org/in/topics-tools/news/employee-relations/7-ways-to-create-happier-workplace/_jcr_content/_cq_featuredimage.coreimg.82.1200.jpeg/1702838080002/istock-1321397448-h4kdno.jpeg" alt="Happy workers" class="small-inline-image">
+                </div>
                 <h3>Worker & Social Goals</h3>
                 <ul class="content-list">
                     <li>Protect interests of owners and labor</li>
@@ -1164,6 +1225,10 @@
         <div class="slide title-content">
             <h2>Features & Elements of Scientific Management</h2>
             <div class="content-area">
+                <div class="image-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Stylised_atom_with_three_Bohr_model_orbits_and_stylised_nucleus.svg/250px-Stylised_atom_with_three_Bohr_model_orbits_and_stylised_nucleus.svg.png" alt="Scientific method" class="landscape-image">
+                </div>
+                
                 <div class="highlight-box">
                     Key Features
                 </div>
@@ -1185,6 +1250,9 @@
             <h2>Followers and Extensions of Taylor's Work</h2>
             
             <div class="content-column">
+                <div class="image-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Henry_L._Gantt.jpg/500px-Henry_L._Gantt.jpg" alt="Henry Gantt" class="portrait-image">
+                </div>
                 <h3>Henry L. Gantt (1861-1919)</h3>
                 <ul class="content-list">
                     <li>Pioneered statistical production control</li>
@@ -1195,6 +1263,9 @@
             </div>
             
             <div class="content-column">
+                <div class="image-container">
+                    <img src="https://ethw.org/w/images/thumb/2/22/Gilbreth.jpg/300px-Gilbreth.jpg" alt="Frank and Lillian Gilbreth" class="portrait-image">
+                </div>
                 <h3>Frank & Lillian Gilbreth</h3>
                 <ul class="content-list">
                     <li>Investigated principles of human body movement</li>
@@ -1235,6 +1306,9 @@
             </div>
             
             <div class="caption-area">
+                <div class="image-container">
+                    <img src="https://logisticpackaging.com/CrXBdba4vG7B2k/wPHm6Sft56fw2V/wp-content/uploads/2021/03/storage-bins-assembly-lines-825x300.jpg.webp" alt="Assembly line workers" class="landscape-image">
+                </div>
                 <strong>Key Issues:</strong> Work dehumanization, loss of craft skills, assumption that managers know jobs better than workers, and potential loss of employee loyalty due to over-emphasis on efficiency.
             </div>
         </div>
@@ -1245,9 +1319,7 @@
             
             <div class="metaphor-visual">
                 <div class="image-container">
-                    <div style="background: linear-gradient(45deg, #059669, #EA580C); color: #FEF7ED; padding: 80px; text-align: center; font-size: 1.5em; font-weight: bold; border-radius: 10px;">
-                        ⚙️ Workplace as a Well-Oiled Machine
-                    </div>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/KUKA_Industrial_Robots_IR.jpg/1280px-KUKA_Industrial_Robots_IR.jpg" alt="Industrial machinery" class="landscape-image">
                 </div>
             </div>
             
@@ -1270,6 +1342,9 @@
 
         <!-- Conclusion -->
         <div class="slide title-only">
+            <div class="image-container">
+                <img src="https://www.souderbrothersconstruction.com/wp-content/uploads/2019/05/office-design-ideas-1-768x512.jpg" alt="Modern office" class="landscape-image">
+            </div>
             <h1>Looking Forward</h1>
             <p class="subtitle">From Scientific Management to Modern Leadership</p>
         </div>
