@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Search and Optimization - Interactive Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh;
+            color: #1E293B;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: #EA580C;
+            transition: width 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(234, 88, 12, 0.3);
+        }
+
+        /* Enhanced Base slide styling */
+        .slide {
+            background: #FEF7ED;
+            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.5s ease;
+            min-height: 500px;
+            page-break-after: always;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .slide.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        /* Enhanced images with animations */
+        .image-container {
+            text-align: center;
+            margin: 30px 0;
+            overflow: hidden;
+            border-radius: 15px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            transition: all 0.4s ease;
+        }
+
+        /* Layout 1: Enhanced Title Slide */
+        .title-slide {
+            background: #1E293B;
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-left: 5px solid #EA580C;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .title-slide::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(234, 88, 12, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideInFromTop 1s ease-out;
+        }
+
+        .title-slide .subtitle {
+            font-size: 1.6em;
+            opacity: 0.9;
+            font-style: italic;
+            margin-bottom: 20px;
+            animation: slideInFromLeft 1s ease-out 0.3s both;
+        }
+
+        .title-slide .author {
+            font-size: 1.2em;
+            opacity: 0.8;
+            animation: fadeIn 1s ease-out 0.6s both;
+        }
+
+        /* Layout 2: Enhanced Title and Content */
+        .title-content h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .title-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: #059669;
+            transition: left 0.8s ease;
+        }
+
+        .title-content.visible h2::after {
+            left: 0;
+        }
+
+        .content-area {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .content-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.6s ease;
+        }
+
+        .visible .content-list li {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .content-list li:nth-child(1) { transition-delay: 0.1s; }
+        .content-list li:nth-child(2) { transition-delay: 0.2s; }
+        .content-list li:nth-child(3) { transition-delay: 0.3s; }
+        .content-list li:nth-child(4) { transition-delay: 0.4s; }
+
+        .content-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #EA580C;
+            font-weight: bold;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .content-list li:hover::before {
+            color: #059669;
+            transform: translateX(5px);
+        }
+
+        /* Layout 3: Enhanced Section Header */
+        .section-header {
+            background: linear-gradient(135deg, #059669, #EA580C);
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .section-header.visible::before {
+            left: 100%;
+        }
+
+        .section-header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section-header .section-subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+        }
+
+        /* Layout 4: Enhanced Two Content */
+        .two-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .two-content h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-column {
+            padding: 20px;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: 10px;
+            transition: all 0.4s ease;
+            transform: scale(0.95);
+            opacity: 0;
+        }
+
+        .visible .content-column {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .visible .content-column:nth-child(2) { transition-delay: 0.1s; }
+        .visible .content-column:nth-child(3) { transition-delay: 0.2s; }
+
+        .content-column:hover {
+            background: rgba(5, 150, 105, 0.1);
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .content-column h3 {
+            font-size: 1.6em;
+            color: #059669;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        /* Layout 5: Enhanced Comparison */
+        .comparison h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+            text-align: center;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .comparison-item {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(234, 88, 12, 0.1);
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .comparison-item h3 {
+            font-size: 1.8em;
+            color: #EA580C;
+            margin-bottom: 20px;
+        }
+
+        .vs-divider {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2em;
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);
+        }
+
+        .comparison {
+            position: relative;
+        }
+
+        /* Layout 6: Enhanced Title Only */
+        .title-only {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .title-only h1 {
+            font-size: 3em;
+            color: #1E293B;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .title-only h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: #EA580C;
+            transition: width 0.8s ease;
+        }
+
+        .title-only.visible h1::after {
+            width: 100%;
+        }
+
+        .title-only .subtitle {
+            font-size: 1.4em;
+            color: #059669;
+            font-style: italic;
+        }
+
+        /* Interactive Quiz Layout */
+        .interactive-quiz {
+            background: rgba(5, 150, 105, 0.05);
+            border-left: 5px solid #059669;
+        }
+
+        .interactive-quiz h2 {
+            color: #059669;
+            border-bottom-color: #059669;
+        }
+
+        .quiz-question {
+            background: #FEF7ED;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 2px solid #059669;
+            font-size: 1.2em;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .quiz-option {
+            padding: 15px;
+            background: rgba(234, 88, 12, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .quiz-option:hover {
+            background: rgba(234, 88, 12, 0.2);
+            border-color: #EA580C;
+            transform: translateY(-2px);
+        }
+
+        .reveal-button {
+            background: #EA580C;
+            color: #FEF7ED;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+        }
+
+        .reveal-button:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
+        }
+
+        .quiz-answer {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #059669;
+            margin-top: 20px;
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .quiz-answer.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Progressive Concept Layout */
+        .progressive-concept {
+            background: linear-gradient(to right, rgba(5, 150, 105, 0.05), rgba(234, 88, 12, 0.05));
+        }
+
+        .concept-steps {
+            display: grid;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .concept-step {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            gap: 20px;
+            align-items: center;
+            padding: 20px;
+            background: #FEF7ED;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transform: translateX(-50px);
+            opacity: 0;
+            transition: all 0.6s ease;
+        }
+
+        .visible .concept-step {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .concept-step:nth-child(1) { transition-delay: 0.1s; }
+        .concept-step:nth-child(2) { transition-delay: 0.2s; }
+        .concept-step:nth-child(3) { transition-delay: 0.3s; }
+        .concept-step:nth-child(4) { transition-delay: 0.4s; }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: #EA580C;
+            color: #FEF7ED;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .step-content h4 {
+            color: #059669;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        /* Visual Metaphor Layout */
+        .visual-metaphor {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .metaphor-visual {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .metaphor-explanation {
+            background: rgba(5, 150, 105, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #059669;
+        }
+
+        .metaphor-explanation h3 {
+            color: #059669;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+        }
+
+        .metaphor-connection {
+            background: rgba(234, 88, 12, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #EA580C;
+        }
+
+        /* Special Elements */
+        .highlight-box {
+            background: #059669;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .accent-box {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+            transform: scale(0.98);
+            transition: all 0.3s ease;
+        }
+
+        .accent-box:hover {
+            transform: scale(1);
+            box-shadow: 0 8px 20px rgba(234, 88, 12, 0.3);
+        }
+
+        .emphasis {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .emphasis:hover {
+            background: #059669;
+            transform: scale(1.05);
+        }
+
+        /* Chess Board Visualization */
+        .chess-board {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 2px;
+            max-width: 400px;
+            margin: 20px auto;
+            border: 3px solid #1E293B;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .chess-square {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .chess-square.light {
+            background: #F8F4F0;
+        }
+
+        .chess-square.dark {
+            background: #D4B896;
+        }
+
+        .chess-square.attacking {
+            background: rgba(234, 88, 12, 0.3) !important;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .queen {
+            color: #1E293B;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* Algorithm Visualization */
+        .algorithm-viz {
+            background: rgba(30, 41, 59, 0.05);
+            border: 2px solid #1E293B;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+        }
+
+        .algorithm-step {
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(5, 150, 105, 0.1);
+            border-left: 4px solid #059669;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .algorithm-step:hover {
+            background: rgba(5, 150, 105, 0.2);
+            transform: translateX(5px);
+        }
+
+        /* Landscape Graph */
+        .landscape-graph {
+            width: 100%;
+            height: 300px;
+            border: 2px solid #1E293B;
+            border-radius: 10px;
+            background: linear-gradient(to bottom, #87CEEB 0%, #98FB98 50%, #F4A460 100%);
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .mountain-peak {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        .global-peak {
+            bottom: 50px;
+            left: 70%;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 120px solid #8B4513;
+        }
+
+        .local-peak {
+            bottom: 50px;
+            left: 20%;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 80px solid #A0522D;
+        }
+
+        .plateau {
+            position: absolute;
+            bottom: 50px;
+            left: 45%;
+            width: 60px;
+            height: 40px;
+            background: #CD853F;
+        }
+
+        .search-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #EA580C;
+            border-radius: 50%;
+            bottom: 60px;
+            left: 25%;
+            animation: bounce 2s ease-in-out infinite;
+            box-shadow: 0 2px 8px rgba(234, 88, 12, 0.5);
+        }
+
+        /* Animations */
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(180deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Navigation */
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 12px 18px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            box-shadow: 0 4px 15px rgba(30, 41, 59, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .slide-counter:hover {
+            background: #EA580C;
+            transform: scale(1.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .slide {
+                padding: 20px;
+                min-height: 400px;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5em;
+            }
+
+            .two-content,
+            .comparison-grid,
+            .visual-metaphor {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+
+            .vs-divider {
+                display: none;
+            }
+
+            .concept-step {
+                grid-template-columns: 50px 1fr;
+                gap: 15px;
+            }
+
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1em;
+            }
+
+            .chess-board {
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="container">
+        
+        <!-- Title Slide -->
+        <div class="slide title-slide">
+            <h1>🔍 Local Search & Optimization</h1>
+            <p class="subtitle">From Hill Climbing to Finding Global Solutions</p>
+            <p class="author">Interactive AI Learning • Professor Claude</p>
+        </div>
+
+        <!-- Introduction: What is Local Search? -->
+        <div class="slide visual-metaphor">
+            <h2 style="grid-column: 1 / -1; font-size: 2.2em; color: #1E293B; margin-bottom: 30px; padding-bottom: 10px; border-bottom: 3px solid #EA580C;">🏔️ Think of Search as Exploring a Landscape</h2>
+            
+            <div class="metaphor-visual">
+                <div class="landscape-graph">
+                    <div class="global-peak"></div>
+                    <div class="local-peak"></div>
+                    <div class="plateau"></div>
+                    <div class="search-dot"></div>
+                </div>
+            </div>
+            
+            <div class="metaphor-explanation">
+                <h3>Two Ways to Explore</h3>
+                <p><strong>Traditional Search:</strong> Like having a map and systematically exploring every path to find the destination.</p>
+                
+                <p><strong>Local Search:</strong> Like a hiker in fog who can only see nearby terrain and tries to climb uphill step by step.</p>
+                
+                <div class="metaphor-connection">
+                    <strong>Key Insight:</strong> Sometimes we don't need the path - we just need to find the highest peak (best solution)!
+                </div>
+            </div>
+        </div>
+
+        <!-- Path vs State Optimization -->
+        <div class="slide comparison">
+            <h2>🎯 Path-Finding vs. State Optimization</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>Path-Based Search</h3>
+                    <p><strong>Goal:</strong> Find the sequence of steps to reach destination</p>
+                    <div class="highlight-box">
+                        "How do I get from A to B?"
+                    </div>
+                    <ul class="content-list">
+                        <li>Navigation problems</li>
+                        <li>Puzzle solving</li>
+                        <li>Game moves</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-item">
+                    <h3>State Optimization</h3>
+                    <p><strong>Goal:</strong> Find the best configuration or arrangement</p>
+                    <div class="accent-box">
+                        "What's the best arrangement?"
+                    </div>
+                    <ul class="content-list">
+                        <li>8-Queens problem</li>
+                        <li>Schedule optimization</li>
+                        <li>Design problems</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="vs-divider">VS</div>
+        </div>
+
+        <!-- Section: Basic Hill Climbing -->
+        <div class="slide section-header">
+            <h1>⛰️ Hill Climbing</h1>
+            <p class="section-subtitle">The Greedy Local Search</p>
+        </div>
+
+        <!-- Hill Climbing Explained -->
+        <div class="slide progressive-concept">
+            <h2>🥾 How Hill Climbing Works</h2>
+            
+            <p style="margin-bottom: 30px; font-size: 1.2em;">Imagine you're a hiker in thick fog trying to reach the highest point:</p>
+            
+            <div class="concept-steps">
+                <div class="concept-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Start Somewhere</h4>
+                        <p>Begin at a random position (initial state)</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Look Around</h4>
+                        <p>Check all neighboring positions you can reach in one step</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Move Uphill</h4>
+                        <p>Always move to the neighbor with the highest elevation</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Repeat or Stop</h4>
+                        <p>If no neighbor is higher, you've reached a peak! Otherwise, repeat.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="algorithm-viz">
+                <div class="algorithm-step"><strong>while</strong> there exists a better neighbor:</div>
+                <div class="algorithm-step">&nbsp;&nbsp;&nbsp;&nbsp;current ← best neighbor</div>
+                <div class="algorithm-step"><strong>return</strong> current</div>
+            </div>
+        </div>
+
+        <!-- 8-Queens Example -->
+        <div class="slide title-content">
+            <h2>♛ The 8-Queens Problem</h2>
+            
+            <div class="content-area">
+                <p>Place 8 queens on a chessboard so none can attack each other. Perfect for demonstrating local search!</p>
+                
+                <div class="chess-board" id="chessBoard">
+                    <!-- Chess squares will be generated by JavaScript -->
+                </div>
+                
+                <div class="accent-box">
+                    <strong>Objective Function:</strong> Minimize the number of attacking pairs<br>
+                    <strong>Perfect Solution:</strong> 0 attacking pairs (all queens safe)
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>State:</strong> Position of all 8 queens</li>
+                    <li><strong>Neighbors:</strong> Move one queen to different row in same column</li>
+                    <li><strong>Evaluation:</strong> Count attacking pairs (lower is better)</li>
+                    <li><strong>Success:</strong> Found arrangement with 0 conflicts</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Interactive Quiz -->
+        <div class="slide interactive-quiz">
+            <h2>🧠 Quick Check: Understanding Hill Climbing</h2>
+            
+            <div class="quiz-question">
+                <strong>Question:</strong> You're using hill climbing and reach a state where all neighbors have worse values than your current state. What has happened?
+            </div>
+            
+            <div class="quiz-options">
+                <div class="quiz-option">A) Found the global optimum</div>
+                <div class="quiz-option">B) Reached a local maximum</div>
+                <div class="quiz-option">C) Made an error</div>
+                <div class="quiz-option">D) Need more neighbors</div>
+            </div>
+            
+            <button class="reveal-button" onclick="revealAnswer('quiz1')">Reveal Answer</button>
+            
+            <div class="quiz-answer" id="quiz1">
+                <strong>Answer: B) Reached a local maximum</strong><br>
+                Hill climbing stops when no neighbor is better, but this might just be a local peak, not the highest point in the entire landscape!
+            </div>
+        </div>
+
+        <!-- Problems with Hill Climbing -->
+        <div class="slide section-header">
+            <h1>⚠️ When Hill Climbing Gets Stuck</h1>
+            <p class="section-subtitle">Understanding the Limitations</p>
+        </div>
+
+        <!-- Problems Visualization -->
+        <div class="slide title-content">
+            <h2>🚧 Three Major Problems</h2>
+            
+            <div class="content-area">
+                <div class="highlight-box">
+                    <strong>🏔️ Local Maxima:</strong> Peaks that aren't the highest
+                </div>
+                <p>Like reaching the top of a small hill when Mount Everest is nearby but hidden by fog.</p>
+                
+                <div class="highlight-box">
+                    <strong>🏔️ Plateaus:</strong> Flat areas with no uphill direction
+                </div>
+                <p>Like walking on a mesa - everywhere you look is the same height!</p>
+                
+                <div class="highlight-box">
+                    <strong>🏔️ Ridges:</strong> Narrow peaks with steep sides
+                </div>
+                <p>Progress requires going diagonally, but you can only move north/south/east/west.</p>
+                
+                <div class="accent-box">
+                    For 8-Queens: Hill climbing succeeds only <span class="emphasis">14%</span> of the time, but takes just <span class="emphasis">4 steps</span> when it works!
+                </div>
+            </div>
+        </div>
+
+        <!-- Solutions Section -->
+        <div class="slide section-header">
+            <h1>🔧 Smart Solutions</h1>
+            <p class="section-subtitle">Escaping Local Optima</p>
+        </div>
+
+        <!-- Random Restarts -->
+        <div class="slide two-content">
+            <h2>🎲 Hill Climbing with Random Restarts</h2>
+            
+            <div class="content-column">
+                <h3>The Strategy</h3>
+                <p><strong>"If at first you don't succeed, try, try again!"</strong></p>
+                <ul class="content-list">
+                    <li>Run hill climbing multiple times</li>
+                    <li>Start from different random positions</li>
+                    <li>Keep the best solution found</li>
+                    <li>Eventually find the global optimum</li>
+                </ul>
+            </div>
+            
+            <div class="content-column">
+                <h3>Amazing Results</h3>
+                <p>With random restarts, if each attempt has probability <span class="emphasis">p</span> of success:</p>
+                <ul class="content-list">
+                    <li>Expected restarts: <span class="emphasis">1/p</span></li>
+                    <li>For 8-Queens: <span class="emphasis">1/0.14 ≈ 7</span> restarts</li>
+                    <li>Total steps: <span class="emphasis">7 × 4 = 28</span> on average</li>
+                    <li>Finds solution <span class="emphasis">almost always!</span></li>
+                </ul>
+                
+                <div class="accent-box">
+                    This is often the <strong>best</strong> local search algorithm to use!
+                </div>
+            </div>
+        </div>
+
+        <!-- Simulated Annealing -->
+        <div class="slide visual-metaphor">
+            <h2 style="grid-column: 1 / -1; font-size: 2.2em; color: #1E293B; margin-bottom: 30px; padding-bottom: 10px; border-bottom: 3px solid #EA580C;">🔥 Simulated Annealing</h2>
+            
+            <div class="metaphor-visual">
+                <div class="image-container">
+                    <div style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1); color: #FEF7ED; padding: 80px; text-align: center; font-size: 1.5em; font-weight: bold; border-radius: 10px;">
+                        🌡️ Cooling Metal to Perfect Crystal
+                    </div>
+                </div>
+            </div>
+            
+            <div class="metaphor-explanation">
+                <h3>Physics Meets Search</h3>
+                <p>Inspired by metallurgy: heating metal makes atoms move randomly, slowly cooling allows perfect crystal formation.</p>
+                
+                <ul class="content-list">
+                    <li><span class="emphasis">High Temperature:</span> Accept bad moves frequently</li>
+                    <li><span class="emphasis">Gradual Cooling:</span> Become more selective over time</li>
+                    <li><span class="emphasis">Low Temperature:</span> Behave like hill climbing</li>
+                    <li><span class="emphasis">Result:</span> Escape local maxima early, converge later</li>
+                </ul>
+                
+                <div class="metaphor-connection">
+                    <strong>Key Formula:</strong> Accept worse move with probability e^(ΔE/T)<br>
+                    Where ΔE is change in quality, T is temperature
+                </div>
+            </div>
+        </div>
+
+        <!-- Genetic Algorithms -->
+        <div class="slide progressive-concept">
+            <h2>🧬 Genetic Algorithms: Evolution in Action</h2>
+            
+            <p style="margin-bottom: 30px; font-size: 1.2em;">Instead of one solution, maintain a population and let them "breed":</p>
+            
+            <div class="concept-steps">
+                <div class="concept-step">
+                    <div class="step-number">🧬</div>
+                    <div class="step-content">
+                        <h4>Population</h4>
+                        <p>Start with multiple random solutions (like different DNA)</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">⭐</div>
+                    <div class="step-content">
+                        <h4>Fitness Selection</h4>
+                        <p>Better solutions get higher chance to "reproduce"</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">🔀</div>
+                    <div class="step-content">
+                        <h4>Crossover</h4>
+                        <p>Combine parts of two parent solutions to create children</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">⚡</div>
+                    <div class="step-content">
+                        <h4>Mutation</h4>
+                        <p>Randomly change small parts to maintain diversity</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accent-box">
+                <strong>For 8-Queens:</strong> Represent each solution as string "24748552" (queen positions)
+            </div>
+        </div>
+
+        <!-- Advanced Topics -->
+        <div class="slide section-header">
+            <h1>🚀 Beyond Discrete Problems</h1>
+            <p class="section-subtitle">Continuous Optimization</p>
+        </div>
+
+        <!-- Gradient Descent -->
+        <div class="slide two-content">
+            <h2>📈 Gradient Descent: Local Search for Continuous Functions</h2>
+            
+            <div class="content-column">
+                <h3>The Calculus Approach</h3>
+                <p>When your landscape is a smooth mathematical function:</p>
+                <ul class="content-list">
+                    <li>Calculate the gradient (slope in all directions)</li>
+                    <li>Move in direction of steepest ascent</li>
+                    <li>Step size λ controls how far to move</li>
+                </ul>
+                
+                <div class="algorithm-viz">
+                    <div class="algorithm-step">x ← x + λ × ∇f(x)</div>
+                </div>
+            </div>
+            
+            <div class="content-column">
+                <h3>Smart Step Sizing</h3>
+                <p>How big steps should you take?</p>
+                <ul class="content-list">
+                    <li><strong>Too small:</strong> Very slow progress</li>
+                    <li><strong>Too big:</strong> Overshoot the peak</li>
+                    <li><strong>Line search:</strong> Start small, double until function stops improving</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    Used everywhere: machine learning, physics simulations, economics!
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Quiz -->
+        <div class="slide interactive-quiz">
+            <h2>🎓 Final Challenge: Choosing the Right Algorithm</h2>
+            
+            <div class="quiz-question">
+                <strong>Scenario:</strong> You need to solve a complex optimization problem with many local optima and you have limited time. Which approach would you choose?
+            </div>
+            
+            <div class="quiz-options">
+                <div class="quiz-option">A) Basic hill climbing</div>
+                <div class="quiz-option">B) Hill climbing with random restarts</div>
+                <div class="quiz-option">C) Genetic algorithm</div>
+                <div class="quiz-option">D) Simulated annealing</div>
+            </div>
+            
+            <button class="reveal-button" onclick="revealAnswer('quiz2')">Reveal Answer</button>
+            
+            <div class="quiz-answer" id="quiz2">
+                <strong>Answer: B) Hill climbing with random restarts</strong><br>
+                For most practical problems, this gives the best balance of simplicity, speed, and effectiveness. It's the "Swiss Army knife" of local search!
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="slide title-content">
+            <h2>🎯 Key Takeaways</h2>
+            
+            <div class="content-area">
+                <div class="highlight-box">
+                    Local search trades completeness for efficiency and memory savings
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Hill Climbing:</strong> Simple but gets stuck in local optima</li>
+                    <li><strong>Random Restarts:</strong> Usually the best practical choice</li>
+                    <li><strong>Simulated Annealing:</strong> Elegant physics-inspired approach</li>
+                    <li><strong>Genetic Algorithms:</strong> Population-based evolution</li>
+                    <li><strong>Gradient Descent:</strong> The calculus approach for smooth functions</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>When to use:</strong> When you need a good solution quickly and the path doesn't matter - just the final state!
+                </div>
+                
+                <p>These algorithms power everything from AI training to industrial design optimization. You've learned the foundations of modern optimization!</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Enhanced Slide Counter -->
+    <div class="slide-counter" id="slideCounter">
+        Slide 1 of 15
+    </div>
+
+    <script>
+        // Enhanced Intersection Observer for slide animations
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progressBar');
+        const slideCounter = document.getElementById('slideCounter');
+
+        const observerOptions = {
+            threshold: 0.3,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const slideObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Add visible class for animations
+                    entry.target.classList.add('visible');
+                    
+                    // Update progress bar and counter
+                    const slideIndex = Array.from(slides).indexOf(entry.target);
+                    const progress = ((slideIndex + 1) / slides.length) * 100;
+                    progressBar.style.width = progress + '%';
+                    slideCounter.textContent = `Slide ${slideIndex + 1} of ${slides.length}`;
+                }
+            });
+        }, observerOptions);
+
+        // Observe all slides
+        slides.forEach(slide => {
+            slideObserver.observe(slide);
+        });
+
+        // Create Chess Board
+        function createChessBoard() {
+            const board = document.getElementById('chessBoard');
+            if (!board) return;
+            
+            // 8-Queens solution example
+            const queens = [0, 4, 7, 5, 2, 6, 1, 3]; // One valid solution
+            
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const square = document.createElement('div');
+                    square.className = `chess-square ${(row + col) % 2 === 0 ? 'light' : 'dark'}`;
+                    
+                    // Place queens
+                    if (queens[col] === row) {
+                        square.innerHTML = '<span class="queen">♛</span>';
+                    }
+                    
+                    board.appendChild(square);
+                }
+            }
+            
+            // Add attacking visualization on hover (simplified)
+            setTimeout(() => {
+                const squares = board.querySelectorAll('.chess-square');
+                board.addEventListener('mouseenter', () => {
+                    // Show some attacking pairs for demonstration
+                    squares[8].classList.add('attacking'); // Example attacking squares
+                    squares[9].classList.add('attacking');
+                });
+                
+                board.addEventListener('mouseleave', () => {
+                    squares.forEach(square => square.classList.remove('attacking'));
+                });
+            }, 1000);
+        }
+
+        // Enhanced keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            let currentSlide = 0;
+            
+            // Find current slide
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 200 && rect.bottom >= 200) {
+                    currentSlide = index;
+                }
+            });
+            
+            // Navigate with arrow keys
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                if (currentSlide < slides.length - 1) {
+                    slides[currentSlide + 1].scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                if (currentSlide > 0) {
+                    slides[currentSlide - 1].scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                slides[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                slides[slides.length - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+
+        // Interactive quiz functionality
+        function revealAnswer(quizId) {
+            const answer = document.getElementById(quizId);
+            answer.classList.add('visible');
+            
+            // Add success animation
+            const button = event.target;
+            button.style.background = '#059669';
+            button.textContent = '✓ Answer Revealed';
+            button.disabled = true;
+        }
+
+        // Initialize
+        setTimeout(() => {
+            if (slides[0]) {
+                slides[0].classList.add('visible');
+            }
+            createChessBoard();
+        }, 100);
+
+        // Add smooth scrolling behavior for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
