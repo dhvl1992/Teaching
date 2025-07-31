@@ -1094,11 +1094,15 @@
                 <p>Before diving into specific problems, let's visualize the optimization landscape that hill climbing algorithms must navigate. This landscape metaphor helps us understand why local search can get stuck.</p>
                 
                 <div class="image-container">
-                    <img src="images/ai/Hill_climb_landscape.jpg" alt="Hill climbing landscape showing global maximum, local maximum, shoulder, and current state with objective function plotted against state space" />
+                    <img src="images/ai/hill_climb_landscape.png" alt="Hill climbing landscape showing global maximum, local maximum, shoulder, and current state with objective function plotted against state space" />
                 </div>
                 
                 <div class="highlight-box">
                     <strong>Key Landscape Features:</strong> The search space contains peaks (local maxima), flat areas (plateaus/shoulders), and valleys that create challenges for local search algorithms.
+                </div>
+                
+                <div class="image-container">
+                    <img src="images/ai/hill_climb_all_problems.png" alt="Search landscape showing all three types of problems: local maxima, plateaus with shoulders, and ridges that create challenges for hill climbing algorithms" />
                 </div>
                 
                 <h3>Understanding the Terrain:</h3>
@@ -1111,22 +1115,16 @@
                 </ul>
                 
                 <div class="accent-box">
-                    <strong>Navigation Challenge:</strong> Hill climbing can only see immediate neighbors, like navigating in thick fog where visibility is limited to just a few steps in any direction.
+                    <strong>Navigation Challenge:</strong> Hill climbing can only see immediate neighbors, like navigating in thick fog where visibility is limited to just a few steps in any direction. The second image shows how all three problem types (local maxima, plateaus, and ridges) appear in the optimization landscape.
                 </div>
             </div>
         </div>
 
         <!-- Local Maxima Problem -->
-        <div class="slide two-content">
+        <div class="slide title-content">
             <h2>🏔️ Problem 1: Local Maxima</h2>
             
-            <div class="content-column">
-                <div class="image-container">
-                    <img src="images/ai/Hill_climb_error.jpg" alt="Hill climbing getting stuck at local maximum" />
-                </div>
-            </div>
-            
-            <div class="content-column">
+            <div class="content-area">
                 <h3>The Local Maximum Trap</h3>
                 <p>A <strong>local maximum</strong> is a state that is better than all its neighbors, but not necessarily the best state in the entire search space.</p>
                 
@@ -1147,20 +1145,22 @@
                 <div class="accent-box">
                     <strong>Frequency:</strong> For 8-Queens, basic hill climbing gets stuck in local maxima about 86% of the time!
                 </div>
+                
+                <h3>Characteristics of Local Maxima:</h3>
+                <ul class="content-list">
+                    <li><strong>Optimization Trap:</strong> Algorithm terminates prematurely</li>
+                    <li><strong>Solution Quality:</strong> Often far from optimal solution</li>
+                    <li><strong>Predictable Failure:</strong> Same starting points lead to same local maxima</li>
+                    <li><strong>Problem Dependency:</strong> Frequency varies by problem structure</li>
+                </ul>
             </div>
         </div>
 
         <!-- Plateaus Problem -->
-        <div class="slide two-content">
+        <div class="slide title-content">
             <h2>🏔️ Problem 2: Plateaus (Flat Areas)</h2>
             
-            <div class="content-column">
-                <div class="image-container">
-                    <img src="images/ai/Hill_climb_problems_combined.jpg" alt="Search landscape showing all three types of problems: local maxima, plateaus with shoulders, and ridges that create challenges for hill climbing algorithms" />
-                </div>
-            </div>
-            
-            <div class="content-column">
+            <div class="content-area">
                 <h3>The Plateau Problem</h3>
                 <p>A <strong>plateau</strong> is a flat area of the search space where all neighboring states have the same objective function value.</p>
                 
@@ -1181,8 +1181,16 @@
                     <strong>Solution Preview:</strong> Allow "sideways moves" to states with equal value, but limit the number to avoid infinite loops.
                 </div>
                 
-                <h3>All Three Problems Visualized:</h3>
-                <p>The image shows how local maxima, plateaus, and ridges all create different types of traps for hill climbing algorithms in the optimization landscape.</p>
+                <h3>Plateau Characteristics:</h3>
+                <ul class="content-list">
+                    <li><strong>Stagnation Risk:</strong> Algorithm stops making progress</li>
+                    <li><strong>Hidden Potential:</strong> Better solutions may exist beyond the flat area</li>
+                    <li><strong>Exploration Challenge:</strong> Need strategy to traverse flat regions</li>
+                    <li><strong>Infinite Loop Risk:</strong> Moving in circles without direction</li>
+                </ul>
+                
+                <h3>Real-World Examples:</h3>
+                <p>Plateaus commonly occur in neural network training when loss functions have flat regions, scheduling problems with equivalent arrangements, and game AI when multiple moves have equal evaluation scores.</p>
             </div>
         </div>
 
@@ -1522,6 +1530,10 @@
             <p style="margin-bottom: 30px; font-size: 1.2em;">Instead of maintaining a single solution, genetic algorithms maintain a <strong>population</strong> of solutions and evolve them over generations using principles inspired by natural selection.</p>
             
             <div class="image-container">
+                <img src="images/ai/nqueens-initial-population.png" alt="Initial position of N-Queens showing multiple random starting configurations for genetic algorithm population" />
+            </div>
+            
+            <div class="image-container">
                 <img src="images/ai/genetic-algorithm-process.png" alt="Genetic algorithm workflow showing initial population, fitness function evaluation, selection, crossover, and mutation steps with numerical examples" />
             </div>
             
@@ -1530,7 +1542,7 @@
                     <div class="step-number">🧬</div>
                     <div class="step-content">
                         <h4>Population Initialization</h4>
-                        <p>Start with a diverse population of random solutions (typically 50-1000 individuals). Each solution is encoded as a string (like DNA).</p>
+                        <p>Start with a diverse population of random solutions (typically 50-1000 individuals). Each solution is encoded as a string (like DNA). The first image shows various initial N-Queens configurations.</p>
                     </div>
                 </div>
                 
@@ -1568,7 +1580,7 @@
             </div>
             
             <div class="accent-box">
-                <strong>8-Queens Example:</strong> Represent each solution as string "24748552" where position i contains row of queen in column i. Fitness = 28 - (number of attacking pairs). The diagram above shows how these genetic operations work together through selection, crossover, and mutation phases.
+                <strong>8-Queens Example:</strong> Represent each solution as string "24748552" where position i contains row of queen in column i. Fitness = 28 - (number of attacking pairs). The diagrams above show both the initial population diversity and how genetic operations work together through selection, crossover, and mutation phases.
             </div>
         </div>
 
