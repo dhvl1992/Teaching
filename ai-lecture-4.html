@@ -1425,15 +1425,30 @@
                             A→B: 1, A→C: 3, A→D: 2
                         </div>
                         <div>
-                            <strong>Middle Nodes:</strong><br>
-                            B→E: 5, B→F: 3<br>
-                            C→E: 3, C→H: 1<br>
-                            D→F: 4, D→H: 7
+                            <strong>From B:</strong><br>
+                            B→E: 5, B→C: 3
                         </div>
                         <div>
-                            <strong>To G:</strong><br>
-                            E→G: 4, F→G: 1, H→G: 1
+                            <strong>From C:</strong><br>
+                            C→E: 4, C→F: 3, C→D: 1
                         </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0;">
+                        <div>
+                            <strong>From D:</strong><br>
+                            D→H: 7
+                        </div>
+                        <div>
+                            <strong>From E:</strong><br>
+                            E→F: 4, E→G: 4
+                        </div>
+                        <div>
+                            <strong>From F:</strong><br>
+                            F→H: 1, F→G: 1
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin: 10px 0;">
+                        <strong>From H:</strong> H→G: 1
                     </div>
                 </div>
             </div>
@@ -1461,30 +1476,32 @@
                     <h3>🔍 DFBB Process Summary</h3>
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 20px 0;">
                         <div>
-                            <strong>🌳 Branching Strategy:</strong><br>
+                            <strong>🌳 Complete Search Tree:</strong><br>
                             1. Start at A (cost = 0)<br>
-                            2. Explore B first (lowest cost = 1)<br>
-                            3. From B, try F (cost = 4)<br>
-                            4. Reach G via F (total cost = 5)<br>
-                            5. Set Upper Bound = 5
+                            2. Expand A → B, C, D<br>
+                            3. Choose B first (cost = 1)<br>
+                            4. From B → E (cost = 6), C (cost = 4)<br>
+                            5. Continue systematic exploration<br>
+                            6. Terminate expanding nodes when bound exceeded
                         </div>
                         <div>
-                            <strong>✂️ Pruning Strategy:</strong><br>
-                            6. Try B→E→G (cost = 10 > UB=5) → PRUNE<br>
-                            7. Try A→D→H→G (cost = 10 > UB=5) → PRUNE<br>
-                            8. Try A→C→H→G (cost = 5 = UB) → KEEP<br>
-                            9. Try A→C→E→G (cost = 10 > UB=5) → PRUNE
+                            <strong>✂️ Bound-based Pruning:</strong><br>
+                            • Usually UB < UB (Upper Bound improves)<br>
+                            • If UB > UB, the expanding node can be terminated<br>
+                            • For feasible solutions: update bounds<br>
+                            • For expanding nodes: compare with current bound<br>
+                            • Optimal path found when all branches explored or pruned
                         </div>
                     </div>
                 </div>
 
                 <div class="highlight-box">
-                    🏆 DFBB finds optimal solutions: A→B→F→G (cost 5) and A→C→H→G (cost 5)
-                    <br>🎯 Key insight: Upper bound improves as we find better solutions, enabling more aggressive pruning
+                    🏆 DFBB systematically explores the complete search tree while using bounds to prune suboptimal branches
+                    <br>🎯 Key insight: Upper bound guides pruning decisions - when current path cost exceeds best known solution, terminate that branch
                 </div>
 
                 <div class="accent-box">
-                    ⚡ Efficiency: DFBB pruned 3 branches that would have led to suboptimal solutions, saving computation time while guaranteeing optimality!
+                    ⚡ Efficiency: DFBB guarantees optimal solution by exploring all promising paths while eliminating provably suboptimal branches early!
                 </div>
             </div>
         </div>
@@ -1499,45 +1516,46 @@
                         
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 30px 0;">
                             <div style="text-align: center;">
-                                <h4 style="color: #059669;">Upper Bound (UB)</h4>
+                                <h4 style="color: #059669;">Upper Bound (for feasible solutions)</h4>
                                 <div style="background: rgba(5, 150, 105, 0.1); padding: 20px; border-radius: 10px;">
-                                    <p><strong>Best solution found so far</strong></p>
-                                    <div style="font-size: 2em; color: #059669; margin: 10px 0;">UB = 5</div>
-                                    <p>Path: A→B→F→G</p>
-                                    <p>Any complete solution ≥ UB can be pruned</p>
+                                    <p><strong>Best complete solution found so far</strong></p>
+                                    <div style="font-size: 1.8em; color: #059669; margin: 10px 0;">UB</div>
+                                    <p>Updates when better complete path to goal is found</p>
+                                    <p>Provides pruning threshold for ongoing search</p>
                                 </div>
                             </div>
                             
                             <div style="text-align: center;">
-                                <h4 style="color: #EA580C;">Lower Bound (LB)</h4>
+                                <h4 style="color: #EA580C;">Lower Bound (for expanding nodes)</h4>
                                 <div style="background: rgba(234, 88, 12, 0.1); padding: 20px; border-radius: 10px;">
-                                    <p><strong>Minimum possible cost for current partial path</strong></p>
-                                    <div style="font-size: 2em; color: #EA580C; margin: 10px 0;">LB = g(n)</div>
-                                    <p>Cost so far to reach node n</p>
-                                    <p>If LB ≥ UB, prune this branch</p>
+                                    <p><strong>Minimum cost estimate for partial path</strong></p>
+                                    <div style="font-size: 1.8em; color: #EA580C; margin: 10px 0;">LB</div>
+                                    <p>Cost accumulated so far + optimistic estimate to goal</p>
+                                    <p>If LB ≥ UB, this path cannot be optimal</p>
                                 </div>
                             </div>
                         </div>
                         
                         <div style="background: #f8fafc; padding: 20px; border-radius: 10px; margin: 20px 0;">
-                            <h4>🔍 Pruning Decision Rule:</h4>
+                            <h4>🔍 DFBB Termination Rule:</h4>
                             <div style="font-size: 1.2em; text-align: center; margin: 15px 0;">
-                                <strong>IF</strong> Lower Bound ≥ Upper Bound <strong>THEN</strong> Prune Branch ✂️
+                                <strong>IF</strong> UB ≥ UB (bound comparison) <strong>THEN</strong> Expanding node can be terminated ✂️
                             </div>
                             
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
                                 <div>
-                                    <strong>Example 1:</strong><br>
-                                    Path A→B→E: cost = 6<br>
-                                    Remaining to G: ≥ 4<br>
-                                    Total: ≥ 10<br>
-                                    Since 10 > UB(5): <span style="color: #dc2626;">PRUNE ✂️</span>
+                                    <strong>Feasible Solutions:</strong><br>
+                                    Complete paths to goal G<br>
+                                    Update Upper Bound if better<br>
+                                    Enable more aggressive pruning<br>
+                                    <span style="color: #059669;">Update UB ✓</span>
                                 </div>
                                 <div>
-                                    <strong>Example 2:</strong><br>
-                                    Path A→C: cost = 3<br>
-                                    Could reach G via H: 3+1+1=5<br>
-                                    Since 5 ≤ UB(5): <span style="color: #059669;">CONTINUE ✓</span>
+                                    <strong>Expanding Nodes:</strong><br>
+                                    Partial paths being explored<br>
+                                    Compare bound with current UB<br>
+                                    Terminate if cannot improve<br>
+                                    <span style="color: #dc2626;">Prune if LB ≥ UB ✂️</span>
                                 </div>
                             </div>
                         </div>
