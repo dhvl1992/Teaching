@@ -598,134 +598,162 @@
             <div class="code-section">
                 <div class="code-block">
                     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-<pre>from collections import defaultdict
+<pre># Import required library for advanced data structures (not used here but good practice)
+from collections import defaultdict
 
-# Step 1: Social Network Graph (Friend Connections)
+# ========== STEP 1: BUILD THE SOCIAL NETWORK GRAPH ==========
+# Dictionary representing friendship connections (bidirectional relationships)
+# Key: Person's name, Value: List of their direct friends
 graph = {
-    'Rahul': ['Priya', 'Aman'],
-    'Priya': ['Rahul', 'Neha', 'Ravi'],
-    'Aman': ['Rahul', 'Simran', 'Kiran'],
-    'Neha': ['Priya'],
-    'Ravi': ['Priya'],
-    'Simran': ['Aman'],
-    'Kiran': ['Aman']
+    'Rahul': ['Priya', 'Aman'],        # Rahul is friends with Priya and Aman
+    'Priya': ['Rahul', 'Neha', 'Ravi'], # Priya knows Rahul + 2 others (Neha, Ravi)
+    'Aman': ['Rahul', 'Simran', 'Kiran'], # Aman knows Rahul + 2 others (Simran, Kiran)
+    'Neha': ['Priya'],                 # Neha only knows Priya (candidate for Rahul)
+    'Ravi': ['Priya'],                 # Ravi only knows Priya (candidate for Rahul)
+    'Simran': ['Aman'],                # Simran only knows Aman (candidate for Rahul)
+    'Kiran': ['Aman']                  # Kiran only knows Aman (candidate for Rahul)
 }
 
-# Step 2: User Locations
+# ========== STEP 2: DEFINE USER LOCATIONS ==========
+# Dictionary mapping each person to their city (geographic heuristic)
 locations = {
-    'Rahul': 'Delhi',
-    'Priya': 'Delhi',
-    'Aman': 'Mumbai',
-    'Neha': 'Delhi',
-    'Ravi': 'Pune',
-    'Simran': 'Mumbai',
-    'Kiran': 'Delhi'
+    'Rahul': 'Delhi',     # Target user lives in Delhi
+    'Priya': 'Delhi',     # Same city as Rahul (+5 bonus for any Delhi candidates)
+    'Aman': 'Mumbai',     # Different city from Rahul
+    'Neha': 'Delhi',      # Same city as Rahul (will get +5 points)
+    'Ravi': 'Pune',       # Different city from Rahul (no location bonus)
+    'Simran': 'Mumbai',   # Different city from Rahul (no location bonus)
+    'Kiran': 'Delhi'      # Same city as Rahul (will get +5 points)
 }
 
-# Step 3: User Technical Skills
+# ========== STEP 3: DEFINE TECHNICAL SKILLS ==========
+# Dictionary mapping each person to their technical skills (professional heuristic)
 interests = {
-    'Rahul': ['Python', 'AI'],
-    'Priya': ['Python', 'Web Tech'],
-    'Aman': ['AI', 'JavaScript'],
-    'Neha': ['Python', 'Web Tech'],
-    'Ravi': ['JavaScript', 'AI'],
-    'Simran': ['Embedded', 'Python'],
-    'Kiran': ['AI', 'JavaScript']
+    'Rahul': ['Python', 'AI'],           # Target user's skills
+    'Priya': ['Python', 'Web Tech'],     # Shares Python with Rahul
+    'Aman': ['AI', 'JavaScript'],        # Shares AI with Rahul
+    'Neha': ['Python', 'Web Tech'],      # Shares Python with Rahul (+2 points)
+    'Ravi': ['JavaScript', 'AI'],        # Shares AI with Rahul (+2 points)
+    'Simran': ['Embedded', 'Python'],    # Shares Python with Rahul (+2 points)
+    'Kiran': ['AI', 'JavaScript']        # Shares AI with Rahul (+2 points)
 }
 
-# Step 4: Heuristic Scoring Function
+# ========== STEP 4: HEURISTIC SCORING FUNCTION ==========
 def calculate_friend_score(user, candidate):
     """
-    Calculate friendship score using Best-First Search heuristic
-    Score = 10*(mutual friends) + 5*(same city) + 2*(common skills)
+    Calculate friendship compatibility score using Best-First Search heuristic
+    This is the core of our informed search algorithm
+    Formula: Score = 10*(mutual friends) + 5*(same city) + 2*(common skills)
     """
-    score = 0
+    score = 0  # Initialize total friendship score
     
-    # Mutual friends: +10 points each
-    user_friends = set(graph.get(user, []))
-    candidate_friends = set(graph.get(candidate, []))
-    mutual_friends = user_friends & candidate_friends
-    score += 10 * len(mutual_friends)
+    # HEURISTIC 1: Mutual Friends Analysis (+10 points each)
+    # Convert friend lists to sets for efficient intersection operation
+    user_friends = set(graph.get(user, []))           # Rahul's friends: {'Priya', 'Aman'}
+    candidate_friends = set(graph.get(candidate, [])) # e.g., Neha's friends: {'Priya'}
+    mutual_friends = user_friends & candidate_friends # Find common friends using set intersection
+    score += 10 * len(mutual_friends)                 # Each mutual friend adds 10 points
     
-    # Same city: +5 points
+    # HEURISTIC 2: Geographic Proximity (+5 points)
+    # Check if both users live in the same city
     if locations.get(user) == locations.get(candidate):
-        score += 5
+        score += 5  # Same city bonus (e.g., both in Delhi)
     
-    # Common technical skills: +2 points each
-    user_skills = set(interests.get(user, []))
-    candidate_skills = set(interests.get(candidate, []))
-    common_skills = user_skills & candidate_skills
-    score += 2 * len(common_skills)
+    # HEURISTIC 3: Technical Skill Compatibility (+2 points each)
+    # Convert skill lists to sets and find common technical skills
+    user_skills = set(interests.get(user, []))           # Rahul's skills: {'Python', 'AI'}
+    candidate_skills = set(interests.get(candidate, [])) # e.g., Neha's skills: {'Python', 'Web Tech'}
+    common_skills = user_skills & candidate_skills      # Common skills: {'Python'}
+    score += 2 * len(common_skills)                     # Each common skill adds 2 points
     
+    # Return total score and detailed breakdown for analysis
     return score, mutual_friends, common_skills
 
-# Step 5: Best-First Search Friend Recommendation
+# ========== STEP 5: BEST-FIRST SEARCH ALGORITHM ==========
 def recommend_friends(target_user):
     """
-    Use Best-First Search to recommend friends
-    Explores friends-of-friends and ranks by heuristic score
+    Implement Best-First Search for friend recommendations
+    Key principle: Always evaluate the most promising candidates first
     """
     print(f"🎯 Finding friend recommendations for {target_user}")
     print("=" * 50)
     
-    visited_candidates = set()
-    friend_candidates = []
+    # Initialize data structures for search algorithm
+    visited_candidates = set()    # Track candidates we've already evaluated
+    friend_candidates = []        # Store (score, person, details) tuples
     
-    # Get user's current friends
-    current_friends = set(graph.get(target_user, []))
+    # Get target user's existing social circle
+    current_friends = set(graph.get(target_user, []))  # Rahul's current friends
     print(f"Current friends: {', '.join(current_friends)}")
     print()
     
-    # Explore friends-of-friends (second-degree connections)
-    for friend in current_friends:
+    # ========== EXPLORATION PHASE: Find Friends-of-Friends ==========
+    # This implements the "expand node" step in Best-First Search
+    for friend in current_friends:  # For each of Rahul's friends (Priya, Aman)
         print(f"🔍 Exploring {friend}'s connections...")
         
+        # Look at each connection of the current friend
         for potential_friend in graph.get(friend, []):
-            # Skip if it's the user themselves or already a friend
-            if (potential_friend != target_user and 
-                potential_friend not in current_friends and
-                potential_friend not in visited_candidates):
+            # Apply filtering rules to avoid invalid recommendations
+            if (potential_friend != target_user and           # Don't recommend user to themselves
+                potential_friend not in current_friends and   # Don't recommend existing friends
+                potential_friend not in visited_candidates):  # Don't evaluate same person twice
                 
-                # Calculate friendship score using heuristic
+                # ========== HEURISTIC EVALUATION ==========
+                # This is where Best-First Search uses domain knowledge
                 score, mutual, common_skills = calculate_friend_score(
                     target_user, potential_friend
                 )
                 
+                # Store candidate with their score and supporting data
                 friend_candidates.append((score, potential_friend, mutual, common_skills))
-                visited_candidates.add(potential_friend)
+                visited_candidates.add(potential_friend)  # Mark as evaluated
                 
+                # Display evaluation details for learning purposes
                 print(f"  → {potential_friend}: Score = {score}")
                 print(f"    Mutual friends: {list(mutual)}")
                 print(f"    Common skills: {list(common_skills)}")
                 print(f"    Same city: {locations[target_user] == locations[potential_friend]}")
                 print()
     
-    # Best-First Search: Sort by highest score (greedy selection)
-    friend_candidates.sort(reverse=True, key=lambda x: x[0])
+    # ========== BEST-FIRST SELECTION ==========
+    # Sort candidates by score in descending order (highest score first)
+    # This is the "greedy" aspect - always pick the best option available
+    friend_candidates.sort(reverse=True, key=lambda x: x[0])  # Sort by score (index 0)
     
     print("🏆 FRIEND RECOMMENDATIONS (Best-First Order):")
     print("=" * 50)
     
+    # Display sorted recommendations with detailed breakdown
     for i, (score, person, mutual, common_skills) in enumerate(friend_candidates, 1):
-        print(f"{i}. {person} (Score: {score})")
-        print(f"   📍 City: {locations[person]}")
-        print(f"   💻 Skills: {', '.join(interests[person])}")
-        print(f"   👥 Mutual friends: {', '.join(mutual) if mutual else 'None'}")
-        print(f"   🎯 Common skills: {', '.join(common_skills) if common_skills else 'None'}")
+        print(f"{i}. {person} (Score: {score})")                    # Rank and total score
+        print(f"   📍 City: {locations[person]}")                   # Geographic info
+        print(f"   💻 Skills: {', '.join(interests[person])}")      # Technical skills
+        print(f"   👥 Mutual friends: {', '.join(mutual) if mutual else 'None'}")        # Social connections
+        print(f"   🎯 Common skills: {', '.join(common_skills) if common_skills else 'None'}")  # Skill overlap
         print()
     
-    return friend_candidates
+    return friend_candidates  # Return sorted list for further processing
 
-# Step 6: Run the Friend Recommendation System
+# ========== STEP 6: EXECUTE THE RECOMMENDATION SYSTEM ==========
 if __name__ == "__main__":
+    # Run the Best-First Search algorithm for Rahul
     recommendations = recommend_friends('Rahul')
     
+    # Display final summary statistics
     print("✨ SUMMARY:")
     print(f"Found {len(recommendations)} potential friends")
     
+    # Highlight the best recommendation (highest scoring candidate)
     if recommendations:
-        best_match = recommendations[0]
+        best_match = recommendations[0]  # First item after sorting = highest score
         print(f"Best recommendation: {best_match[1]} with score {best_match[0]}")
+        
+        # Expected result: Neha should score highest with:
+        # - Mutual friend Priya: +10 points
+        # - Same city (Delhi): +5 points  
+        # - Common skill (Python): +2 points
+        # - Total: 17 points
 </pre>
                 </div>
             </div>
