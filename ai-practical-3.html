@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A* Search - Route Planning</title>
+    <title>Best-First Search - Friend Recommendation System</title>
     <style>
         * {
             margin: 0;
@@ -47,7 +47,7 @@
             color: #FEF7ED;
             border-radius: 15px;
             margin-bottom: 30px;
-            border-left: 5px solid #EA580C;
+            border-left: 5px solid #3B82F6;
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
         }
@@ -73,7 +73,7 @@
             padding: 30px;
             border-radius: 15px;
             margin-bottom: 30px;
-            border-left: 5px solid #EA580C;
+            border-left: 5px solid #3B82F6;
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
         }
@@ -92,7 +92,7 @@
             color: #1E293B;
             margin-bottom: 25px;
             padding-bottom: 10px;
-            border-bottom: 3px solid #EA580C;
+            border-bottom: 3px solid #3B82F6;
         }
 
         .theory-section h2 {
@@ -130,89 +130,52 @@
             color: #FEF7ED;
         }
 
-        .map-container {
+        .social-network-container {
             background: #FEF7ED;
-            border: 2px solid #EA580C;
+            border: 2px solid #3B82F6;
             border-radius: 15px;
             padding: 25px;
             margin: 25px 0;
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
-        .map-svg {
+        .network-svg {
             width: 100%;
-            height: 400px;
+            height: 500px;
             background: #ffffff;
             border-radius: 10px;
             border: 2px solid #E2E8F0;
         }
 
-        .city-node {
+        .person-node {
             transition: all 0.3s ease;
             cursor: pointer;
         }
 
-        .city-node.start { fill: #059669; stroke: #047857; stroke-width: 3; }
-        .city-node.goal { fill: #EA580C; stroke: #DC2626; stroke-width: 3; }
-        .city-node.current { 
-            fill: #EA580C; 
+        .person-node.target { fill: #3B82F6; stroke: #1D4ED8; stroke-width: 3; }
+        .person-node.friend { fill: #10B981; stroke: #059669; stroke-width: 2; }
+        .person-node.candidate { fill: #F59E0B; stroke: #D97706; stroke-width: 2; }
+        .person-node.evaluating { 
+            fill: #EF4444; 
             stroke: #DC2626; 
             stroke-width: 4;
             animation: pulse 1s infinite;
         }
-        .city-node.visited { fill: #6B7280; stroke: #4B5563; stroke-width: 2; }
-        .city-node.in-queue { fill: #A855F7; stroke: #7C3AED; stroke-width: 2; }
+        .person-node.recommended { fill: #8B5CF6; stroke: #7C3AED; stroke-width: 3; }
 
-        .road {
+        .connection {
             stroke: #94A3B8;
             stroke-width: 2;
             fill: none;
             transition: all 0.3s ease;
         }
 
-        .road.active { stroke: #EA580C; stroke-width: 4; }
-        .road.traveled { stroke: #059669; stroke-width: 3; }
+        .connection.active { stroke: #3B82F6; stroke-width: 3; }
+        .connection.mutual { stroke: #10B981; stroke-width: 3; }
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.2); }
-        }
-
-        .info-tables {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 25px 0;
-        }
-
-        .info-table {
-            background: rgba(234, 88, 12, 0.05);
-            border: 2px solid #EA580C;
-            border-radius: 10px;
-            padding: 20px;
-            border-left: 5px solid #EA580C;
-        }
-
-        .info-table h4 {
-            color: #EA580C;
-            margin-bottom: 15px;
-            text-align: center;
-            font-size: 1.2em;
-        }
-
-        .table-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #E2E8F0;
-        }
-
-        .table-row:last-child { border-bottom: none; }
-        .table-row.highlight { 
-            background: #FEF3C7; 
-            font-weight: bold;
-            border-radius: 5px;
-            padding: 8px 10px;
         }
 
         .controls {
@@ -224,7 +187,7 @@
         }
 
         .btn {
-            background: #EA580C;
+            background: #3B82F6;
             color: #FEF7ED;
             border: none;
             padding: 15px 25px;
@@ -234,13 +197,13 @@
             font-family: Georgia, serif;
             font-weight: bold;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
 
         .btn:hover { 
-            background: #DC2626;
+            background: #2563EB;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(234, 88, 12, 0.4);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
         }
 
         .btn:disabled { 
@@ -250,12 +213,38 @@
             box-shadow: none;
         }
 
+        .user-profiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .profile-card {
+            background: rgba(59, 130, 246, 0.05);
+            border: 2px solid #3B82F6;
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 5px solid #3B82F6;
+        }
+
+        .profile-card h4 {
+            color: #3B82F6;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .profile-info {
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
         .step-info {
             background: rgba(5, 150, 105, 0.1);
             padding: 20px;
             border-radius: 10px;
             margin: 20px 0;
-            max-height: 300px;
+            max-height: 400px;
             overflow-y: auto;
             font-family: 'Courier New', monospace;
             font-size: 13px;
@@ -285,23 +274,37 @@
             margin-bottom: 15px;
         }
 
-        .copy-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #EA580C;
-            color: #FEF7ED;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            font-family: Georgia, serif;
-            transition: all 0.3s ease;
+        .scoring-display {
+            background: rgba(234, 88, 12, 0.05);
+            border: 2px solid #EA580C;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
         }
 
-        .copy-btn:hover {
-            background: #DC2626;
+        .scoring-display.show { display: block; }
+
+        .scoring-display h4 {
+            color: #EA580C;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .score-item:last-child { border-bottom: none; }
+
+        .score-item.highlight { 
+            background: #FEF3C7; 
+            font-weight: bold;
+            border-radius: 5px;
+            padding: 8px 10px;
         }
 
         .formula {
@@ -312,8 +315,8 @@
             font-family: 'Courier New', monospace;
             text-align: center;
             margin: 20px 0;
-            font-size: 18px;
-            border-left: 5px solid #EA580C;
+            font-size: 16px;
+            border-left: 5px solid #3B82F6;
             box-shadow: 0 4px 15px rgba(30, 41, 59, 0.3);
         }
 
@@ -328,13 +331,13 @@
         }
 
         .accent-box {
-            background: #EA580C;
+            background: #3B82F6;
             color: #FEF7ED;
             padding: 20px;
             border-radius: 10px;
             margin: 20px 0;
             font-style: italic;
-            border-left: 5px solid #DC2626;
+            border-left: 5px solid #2563EB;
         }
 
         .content-list {
@@ -352,14 +355,33 @@
             content: "→";
             position: absolute;
             left: 0;
-            color: #EA580C;
+            color: #3B82F6;
             font-weight: bold;
             font-size: 1.2em;
         }
 
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #3B82F6;
+            color: #FEF7ED;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #2563EB;
+        }
+
         @media (max-width: 768px) {
             .container { grid-template-columns: 1fr; }
-            .info-tables { grid-template-columns: 1fr; }
+            .user-profiles { grid-template-columns: 1fr; }
             .panel { padding: 20px; }
             .header h1 { font-size: 2em; }
             .section { padding: 20px; }
@@ -371,162 +393,194 @@
         <!-- Left Panel -->
         <div class="panel left-panel">
             <div class="header">
-                <h1>A* Search Algorithm</h1>
-                <p>Optimal Route Planning with Heuristics</p>
+                <h1>Best-First Search</h1>
+                <p>Smart Friend Recommendation System</p>
             </div>
 
             <div class="section">
                 <h2>🎯 Aim</h2>
-                <p><strong>To implement and understand the A* search algorithm for finding the optimal route from Bharuch to Saputara using both actual road distances and heuristic estimates.</strong></p>
+                <p><strong>To understand and implement the Best-First Search algorithm for recommending friends in a simulated social network using heuristic scoring based on mutual friends, shared location, and common technical skills.</strong></p>
                 
                 <div class="highlight-box">
-                    <strong>Objective:</strong> Demonstrate how A* search combines actual path costs with heuristic estimates to find the shortest route efficiently, making it superior to both uninformed search methods and pure greedy best-first search.
+                    <strong>Objective:</strong> Demonstrate how Best-First Search uses intelligent heuristics to make friend recommendations, similar to how LinkedIn suggests professional connections by analyzing technical skills, education, and professional relationships.
                 </div>
             </div>
 
             <div class="section theory-section">
-                <h2>📚 Theory: A* Search Algorithm</h2>
+                <h2>📚 Theory: Best-First Search in Social Networks</h2>
                 
-                <h3>What is A* Search?</h3>
-                <p>A* (A-star) is an informed search algorithm that finds the optimal path from start to goal by using both:</p>
-                <ul class="content-list">
-                    <li><strong>g(n):</strong> Actual cost from start to current node</li>
-                    <li><strong>h(n):</strong> Heuristic estimate from current node to goal</li>
-                </ul>
+                <h3>What is Best-First Search?</h3>
+                <p>Best-First Search is an informed search algorithm that uses heuristic evaluation to decide which node to expand next. In friend recommendation systems, it evaluates potential friends using social data.</p>
 
                 <div class="formula">
-                    f(n) = g(n) + h(n)
+                    Friend Score = 10×(Mutual Friends) + 5×(Same City) + 2×(Common Skills)
                 </div>
 
                 <h3>Key Components:</h3>
+                <ul class="content-list">
+                    <li><strong>Social Graph:</strong> Network of people and their relationships</li>
+                    <li><strong>Heuristic Function:</strong> Scoring system based on social similarity</li>
+                    <li><strong>Greedy Selection:</strong> Always picks the highest-scoring candidate next</li>
+                    <li><strong>Friends-of-Friends:</strong> Explores second-degree connections</li>
+                </ul>
+
+                <h3>Scoring System Breakdown:</h3>
                 <div style="margin: 15px 0;">
-                    <strong>Cost Function g(n):</strong> The actual distance traveled from Bharuch to the current city via roads.
+                    <strong>Mutual Friends (+10 each):</strong> People with common friends are more likely to connect.
                 </div>
                 <div style="margin: 15px 0;">
-                    <strong>Heuristic Function h(n):</strong> Straight-line distance from current city to Saputara (admissible heuristic).
+                    <strong>Same City (+5):</strong> Geographic proximity increases friendship probability.
                 </div>
                 <div style="margin: 15px 0;">
-                    <strong>Evaluation Function f(n):</strong> Total estimated cost of the cheapest path through current node.
+                    <strong>Common Skills (+2 each):</strong> Shared technical skills create professional connections.
                 </div>
 
                 <h3>Algorithm Properties:</h3>
                 <ul class="content-list">
-                    <li><strong>Optimal:</strong> Guaranteed to find shortest path (if heuristic is admissible)</li>
-                    <li><strong>Complete:</strong> Will find solution if one exists</li>
-                    <li><strong>Efficient:</strong> Uses heuristic to guide search toward goal</li>
-                    <li><strong>Informed:</strong> Makes better decisions than uninformed search</li>
+                    <li><strong>Informed:</strong> Uses social data to make intelligent decisions</li>
+                    <li><strong>Greedy:</strong> Always selects the most promising candidate</li>
+                    <li><strong>Efficient:</strong> Focuses on high-potential connections first</li>
+                    <li><strong>Practical:</strong> Models real-world recommendation systems</li>
                 </ul>
 
                 <div class="accent-box">
-                    <strong>Real-world Application:</strong> A* is used in GPS navigation systems, video game AI pathfinding, robotics, and network routing protocols to find optimal paths efficiently.
+                    <strong>Real-world Application:</strong> This exact approach is used by social media platforms to suggest friends, professional connections, and content recommendations by analyzing user behavior and relationship patterns.
                 </div>
             </div>
 
             <div class="section">
-                <h2>🗺️ Route Map Visualization</h2>
-                <div class="map-container">
-                    <h3 style="text-align: center; color: #1E293B; margin-bottom: 20px;">Gujarat Cities - Bharuch to Saputara</h3>
+                <h2>👥 Interactive Social Network</h2>
+                <div class="social-network-container">
+                    <h3 style="text-align: center; color: #1E293B; margin-bottom: 20px;">Social Network Graph</h3>
                     
-                    <svg class="map-svg" viewBox="0 0 600 400">
-                        <!-- Grid background -->
+                    <svg class="network-svg" viewBox="0 0 600 500">
+                        <!-- Background grid -->
                         <defs>
-                            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <pattern id="socialGrid" width="20" height="20" patternUnits="userSpaceOnUse">
                                 <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#f1f5f9" stroke-width="1"/>
                             </pattern>
                         </defs>
-                        <rect width="100%" height="100%" fill="url(#grid)" />
+                        <rect width="100%" height="100%" fill="url(#socialGrid)" />
                         
-                        <!-- Roads with distances -->
-                        <g class="roads">
-                            <line x1="100" y1="200" x2="200" y2="300" class="road" data-from="Bharuch" data-to="Surat"/>
-                            <text x="140" y="245" fill="#666" font-size="12" font-family="Georgia">75km</text>
+                        <!-- Connections -->
+                        <g class="connections">
+                            <!-- Direct friends of Rahul -->
+                            <line x1="300" y1="250" x2="200" y2="150" class="connection" data-from="Rahul" data-to="Priya"/>
+                            <line x1="300" y1="250" x2="400" y2="150" class="connection" data-from="Rahul" data-to="Aman"/>
                             
-                            <line x1="100" y1="200" x2="250" y2="150" class="road" data-from="Bharuch" data-to="Tapi"/>
-                            <text x="165" y="170" fill="#666" font-size="12" font-family="Georgia">100km</text>
+                            <!-- Priya's connections -->
+                            <line x1="200" y1="150" x2="100" y2="100" class="connection" data-from="Priya" data-to="Neha"/>
+                            <line x1="200" y1="150" x2="150" y2="50" class="connection" data-from="Priya" data-to="Ravi"/>
                             
-                            <line x1="200" y1="300" x2="300" y2="350" class="road" data-from="Surat" data-to="Navsari"/>
-                            <text x="240" y="330" fill="#666" font-size="12" font-family="Georgia">35km</text>
-                            
-                            <line x1="300" y1="350" x2="400" y2="380" class="road" data-from="Navsari" data-to="Valsad"/>
-                            <text x="340" y="370" fill="#666" font-size="12" font-family="Georgia">35km</text>
-                            
-                            <line x1="300" y1="350" x2="500" y2="100" class="road" data-from="Navsari" data-to="Saputara"/>
-                            <text x="390" y="220" fill="#666" font-size="12" font-family="Georgia">60km</text>
-                            
-                            <line x1="250" y1="150" x2="500" y2="100" class="road" data-from="Tapi" data-to="Saputara"/>
-                            <text x="360" y="120" fill="#666" font-size="12" font-family="Georgia">100km</text>
-                            
-                            <line x1="400" y1="380" x2="500" y2="100" class="road" data-from="Valsad" data-to="Saputara"/>
-                            <text x="440" y="240" fill="#666" font-size="12" font-family="Georgia">75km</text>
+                            <!-- Aman's connections -->
+                            <line x1="400" y1="150" x2="500" y2="100" class="connection" data-from="Aman" data-to="Simran"/>
+                            <line x1="400" y1="150" x2="450" y2="50" class="connection" data-from="Aman" data-to="Kiran"/>
                         </g>
                         
-                        <!-- Cities -->
-                        <g class="cities">
-                            <circle cx="100" cy="200" r="15" class="city-node start" data-city="Bharuch"/>
-                            <text x="100" y="205" text-anchor="middle" fill="white" font-weight="bold" font-size="12">B</text>
-                            <text x="100" y="230" text-anchor="middle" fill="#1e293b" font-weight="bold" font-family="Georgia">Bharuch</text>
+                        <!-- People -->
+                        <g class="people">
+                            <!-- Target user -->
+                            <circle cx="300" cy="250" r="25" class="person-node target" data-person="Rahul"/>
+                            <text x="300" y="255" text-anchor="middle" fill="white" font-weight="bold" font-size="14">R</text>
+                            <text x="300" y="285" text-anchor="middle" fill="#1e293b" font-weight="bold" font-family="Georgia">Rahul</text>
                             
-                            <circle cx="200" cy="300" r="12" class="city-node" data-city="Surat"/>
-                            <text x="200" y="305" text-anchor="middle" fill="white" font-weight="bold" font-size="10">S</text>
-                            <text x="200" y="325" text-anchor="middle" fill="#1e293b" font-weight="bold" font-family="Georgia">Surat</text>
+                            <!-- Direct friends -->
+                            <circle cx="200" cy="150" r="20" class="person-node friend" data-person="Priya"/>
+                            <text x="200" y="155" text-anchor="middle" fill="white" font-weight="bold" font-size="12">P</text>
+                            <text x="200" y="130" text-anchor="middle" fill="#1e293b" font-weight="bold" font-family="Georgia">Priya</text>
                             
-                            <circle cx="250" cy="150" r="12" class="city-node" data-city="Tapi"/>
-                            <text x="250" y="155" text-anchor="middle" fill="white" font-weight="bold" font-size="10">T</text>
-                            <text x="250" y="135" text-anchor="middle" fill="#1e293b" font-weight="bold" font-family="Georgia">Tapi</text>
+                            <circle cx="400" cy="150" r="20" class="person-node friend" data-person="Aman"/>
+                            <text x="400" y="155" text-anchor="middle" fill="white" font-weight="bold" font-size="12">A</text>
+                            <text x="400" y="130" text-anchor="middle" fill="#1e293b" font-weight="bold" font-family="Georgia">Aman</text>
                             
-                            <circle cx="300" cy="350" r="12" class="city-node" data-city="Navsari"/>
-                            <text x="300" y="355" text-anchor="middle" fill="white" font-weight="bold" font-size="10">N</text>
-                            <text x="300" y="375" text-anchor="middle" fill="#1e293b" font-weight="bold" font-family="Georgia">Navsari</text>
+                            <!-- Friend candidates -->
+                            <circle cx="100" cy="100" r="18" class="person-node candidate" data-person="Neha"/>
+                            <text x="100" y="105" text-anchor="middle" fill="white" font-weight="bold" font-size="11">N</text>
+                            <text x="100" y="85" text-anchor="middle" fill="#1e293b" font-weight="bold" font-family="Georgia">Neha</text>
                             
-                            <circle cx="400" cy="380" r="12" class="city-node" data-city="Valsad"/>
-                            <text x="400" y="385" text-anchor="middle" fill="white" font-weight="bold" font-size="10">V</text>
-                            <text x="400" y="405" text-anchor="middle" fill="#1e293b" font-weight="bold" font-family="Georgia">Valsad</text>
+                            <circle cx="150" cy="50" r="18" class="person-node candidate" data-person="Ravi"/>
+                            <text x="150" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="11">R</text>
+                            <text x="150" y="35" text-anchor="middle" fill="#1e293b" font-weight="bold" font-family="Georgia">Ravi</text>
                             
-                            <circle cx="500" cy="100" r="15" class="city-node goal" data-city="Saputara"/>
-                            <text x="500" y="105" text-anchor="middle" fill="white" font-weight="bold" font-size="12">G</text>
-                            <text x="500" y="85" text-anchor="middle" fill="#1e293b" font-weight="bold" font-family="Georgia">Saputara</text>
+                            <circle cx="500" cy="100" r="18" class="person-node candidate" data-person="Simran"/>
+                            <text x="500" y="105" text-anchor="middle" fill="white" font-weight="bold" font-size="11">S</text>
+                            <text x="500" y="85" text-anchor="middle" fill="#1e293b" font-weight="bold" font-family="Georgia">Simran</text>
+                            
+                            <circle cx="450" cy="50" r="18" class="person-node candidate" data-person="Kiran"/>
+                            <text x="450" y="55" text-anchor="middle" fill="white" font-weight="bold" font-size="11">K</text>
+                            <text x="450" y="35" text-anchor="middle" fill="#1e293b" font-weight="bold" font-family="Georgia">Kiran</text>
                         </g>
                         
                         <!-- Legend -->
-                        <g transform="translate(20, 20)">
-                            <rect x="0" y="0" width="150" height="80" fill="rgba(254,247,237,0.95)" stroke="#EA580C" rx="5"/>
+                        <g transform="translate(20, 380)">
+                            <rect x="0" y="0" width="200" height="100" fill="rgba(254,247,237,0.95)" stroke="#3B82F6" rx="5"/>
                             <text x="5" y="15" font-weight="bold" font-size="12" font-family="Georgia">Legend:</text>
-                            <circle cx="15" cy="30" r="5" fill="#059669"/>
-                            <text x="25" y="35" font-size="11" font-family="Georgia">Start</text>
-                            <circle cx="15" cy="45" r="5" fill="#EA580C"/>
-                            <text x="25" y="50" font-size="11" font-family="Georgia">Goal</text>
-                            <circle cx="15" cy="60" r="5" fill="#EA580C"/>
-                            <text x="25" y="65" font-size="11" font-family="Georgia">Current</text>
-                            <circle cx="80" cy="30" r="5" fill="#6b7280"/>
-                            <text x="90" y="35" font-size="11" font-family="Georgia">Visited</text>
-                            <circle cx="80" cy="45" r="5" fill="#A855F7"/>
-                            <text x="90" y="50" font-size="11" font-family="Georgia">In Queue</text>
+                            <circle cx="15" cy="30" r="8" fill="#3B82F6"/>
+                            <text x="28" y="35" font-size="11" font-family="Georgia">Target User</text>
+                            <circle cx="15" cy="45" r="6" fill="#10B981"/>
+                            <text x="28" y="50" font-size="11" font-family="Georgia">Direct Friends</text>
+                            <circle cx="15" cy="60" r="6" fill="#F59E0B"/>
+                            <text x="28" y="65" font-size="11" font-family="Georgia">Candidates</text>
+                            <circle cx="15" cy="75" r="6" fill="#EF4444"/>
+                            <text x="28" y="80" font-size="11" font-family="Georgia">Evaluating</text>
+                            <circle cx="120" cy="30" r="6" fill="#8B5CF6"/>
+                            <text x="133" y="35" font-size="11" font-family="Georgia">Recommended</text>
                         </g>
                     </svg>
                     
-                    <div class="info-tables">
-                        <div class="info-table">
-                            <h4>Heuristic Values (h)</h4>
-                            <div class="table-row" data-city="Bharuch"><span>Bharuch</span><span>200km</span></div>
-                            <div class="table-row" data-city="Surat"><span>Surat</span><span>140km</span></div>
-                            <div class="table-row" data-city="Tapi"><span>Tapi</span><span>120km</span></div>
-                            <div class="table-row" data-city="Navsari"><span>Navsari</span><span>100km</span></div>
-                            <div class="table-row" data-city="Valsad"><span>Valsad</span><span>130km</span></div>
-                            <div class="table-row" data-city="Saputara"><span>Saputara</span><span>0km</span></div>
+                    <div class="user-profiles">
+                        <div class="profile-card">
+                            <h4>Rahul (Target)</h4>
+                            <div class="profile-info">
+                                📍 <strong>City:</strong> Delhi<br>
+                                💻 <strong>Skills:</strong> Python, AI<br>
+                                👥 <strong>Friends:</strong> Priya, Aman
+                            </div>
                         </div>
-                        
-                        <div class="info-table">
-                            <h4>Current Costs (g)</h4>
-                            <div id="cost-table">
-                                <div class="table-row"><span>No search started</span><span>-</span></div>
+                        <div class="profile-card">
+                            <h4>Neha (Candidate)</h4>
+                            <div class="profile-info">
+                                📍 <strong>City:</strong> Delhi<br>
+                                💻 <strong>Skills:</strong> Python, Web Tech<br>
+                                👥 <strong>Friends:</strong> Priya
+                            </div>
+                        </div>
+                        <div class="profile-card">
+                            <h4>Ravi (Candidate)</h4>
+                            <div class="profile-info">
+                                📍 <strong>City:</strong> Pune<br>
+                                💻 <strong>Skills:</strong> JavaScript, AI<br>
+                                👥 <strong>Friends:</strong> Priya
+                            </div>
+                        </div>
+                        <div class="profile-card">
+                            <h4>Simran (Candidate)</h4>
+                            <div class="profile-info">
+                                📍 <strong>City:</strong> Mumbai<br>
+                                💻 <strong>Skills:</strong> Embedded, Python<br>
+                                👥 <strong>Friends:</strong> Aman
+                            </div>
+                        </div>
+                        <div class="profile-card">
+                            <h4>Kiran (Candidate)</h4>
+                            <div class="profile-info">
+                                📍 <strong>City:</strong> Delhi<br>
+                                💻 <strong>Skills:</strong> AI, JavaScript<br>
+                                👥 <strong>Friends:</strong> Aman
                             </div>
                         </div>
                     </div>
                     
+                    <div class="scoring-display" id="scoringDisplay">
+                        <h4>Candidate Evaluation Scores</h4>
+                        <div id="scoreContent"></div>
+                    </div>
+                    
                     <div class="controls">
-                        <button class="btn" onclick="runAStarSearch()">🚀 Start A* Search</button>
-                        <button class="btn" onclick="resetSearch()">🔄 Reset</button>
-                        <button class="btn" onclick="showAllPaths()">📍 Show All Paths</button>
+                        <button class="btn" onclick="runFriendRecommendation()">🚀 Find Friend Recommendations</button>
+                        <button class="btn" onclick="resetNetwork()">🔄 Reset</button>
+                        <button class="btn" onclick="showScoring()">📊 Show Scoring Details</button>
+                        <button class="btn" onclick="explainAlgorithm()">🧠 Explain Algorithm</button>
                     </div>
                     
                     <div class="step-info" id="stepInfo"></div>
@@ -538,50 +592,140 @@
         <!-- Right Panel -->
         <div class="panel right-panel">
             <div class="header">
-                <h2>💻 A* Search Implementation</h2>
+                <h2>💻 Friend Recommendation Implementation</h2>
             </div>
 
             <div class="code-section">
                 <div class="code-block">
                     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-<pre># A* Search using heapq
-import heapq
+<pre>from collections import defaultdict
 
-def a_star_search(graph, start, goal, heuristic, costs):
-    """A* Search: Best-First + actual costs"""
-    heap = [(0 + heuristic[start], 0, [start])]
-    visited = set()
-    
-    while heap:
-        f_cost, g_cost, path = heapq.heappop(heap)
-        current = path[-1]
-        
-        if current == goal:
-            return path, g_cost
-            
-        if current not in visited:
-            visited.add(current)
-            
-            for neighbor in graph[current]:
-                if neighbor not in visited:
-                    new_g = g_cost + costs.get((current, neighbor), 1)
-                    new_f = new_g + heuristic[neighbor]
-                    new_path = path + [neighbor]
-                    
-                    heapq.heappush(heap, (new_f, new_g, new_path))
-    
-    return None, float('inf')
-
-# Road distances
-costs = {
-    ('Bharuch', 'Surat'): 75, ('Bharuch', 'Tapi'): 100,
-    ('Surat', 'Navsari'): 35, ('Navsari', 'Valsad'): 35,
-    ('Navsari', 'Saputara'): 60, ('Tapi', 'Saputara'): 100,
-    ('Valsad', 'Saputara'): 75
+# Step 1: Social Network Graph (Friend Connections)
+graph = {
+    'Rahul': ['Priya', 'Aman'],
+    'Priya': ['Rahul', 'Neha', 'Ravi'],
+    'Aman': ['Rahul', 'Simran', 'Kiran'],
+    'Neha': ['Priya'],
+    'Ravi': ['Priya'],
+    'Simran': ['Aman'],
+    'Kiran': ['Aman']
 }
 
-path, total_cost = a_star_search(G, 'Bharuch', 'Saputara', heuristic, costs)
-print(f"Optimal route: {' → '.join(path)} ({total_cost}km)")
+# Step 2: User Locations
+locations = {
+    'Rahul': 'Delhi',
+    'Priya': 'Delhi',
+    'Aman': 'Mumbai',
+    'Neha': 'Delhi',
+    'Ravi': 'Pune',
+    'Simran': 'Mumbai',
+    'Kiran': 'Delhi'
+}
+
+# Step 3: User Technical Skills
+interests = {
+    'Rahul': ['Python', 'AI'],
+    'Priya': ['Python', 'Web Tech'],
+    'Aman': ['AI', 'JavaScript'],
+    'Neha': ['Python', 'Web Tech'],
+    'Ravi': ['JavaScript', 'AI'],
+    'Simran': ['Embedded', 'Python'],
+    'Kiran': ['AI', 'JavaScript']
+}
+
+# Step 4: Heuristic Scoring Function
+def calculate_friend_score(user, candidate):
+    """
+    Calculate friendship score using Best-First Search heuristic
+    Score = 10*(mutual friends) + 5*(same city) + 2*(common skills)
+    """
+    score = 0
+    
+    # Mutual friends: +10 points each
+    user_friends = set(graph.get(user, []))
+    candidate_friends = set(graph.get(candidate, []))
+    mutual_friends = user_friends & candidate_friends
+    score += 10 * len(mutual_friends)
+    
+    # Same city: +5 points
+    if locations.get(user) == locations.get(candidate):
+        score += 5
+    
+    # Common technical skills: +2 points each
+    user_skills = set(interests.get(user, []))
+    candidate_skills = set(interests.get(candidate, []))
+    common_skills = user_skills & candidate_skills
+    score += 2 * len(common_skills)
+    
+    return score, mutual_friends, common_skills
+
+# Step 5: Best-First Search Friend Recommendation
+def recommend_friends(target_user):
+    """
+    Use Best-First Search to recommend friends
+    Explores friends-of-friends and ranks by heuristic score
+    """
+    print(f"🎯 Finding friend recommendations for {target_user}")
+    print("=" * 50)
+    
+    visited_candidates = set()
+    friend_candidates = []
+    
+    # Get user's current friends
+    current_friends = set(graph.get(target_user, []))
+    print(f"Current friends: {', '.join(current_friends)}")
+    print()
+    
+    # Explore friends-of-friends (second-degree connections)
+    for friend in current_friends:
+        print(f"🔍 Exploring {friend}'s connections...")
+        
+        for potential_friend in graph.get(friend, []):
+            # Skip if it's the user themselves or already a friend
+            if (potential_friend != target_user and 
+                potential_friend not in current_friends and
+                potential_friend not in visited_candidates):
+                
+                # Calculate friendship score using heuristic
+                score, mutual, common_skills = calculate_friend_score(
+                    target_user, potential_friend
+                )
+                
+                friend_candidates.append((score, potential_friend, mutual, common_skills))
+                visited_candidates.add(potential_friend)
+                
+                print(f"  → {potential_friend}: Score = {score}")
+                print(f"    Mutual friends: {list(mutual)}")
+                print(f"    Common skills: {list(common_skills)}")
+                print(f"    Same city: {locations[target_user] == locations[potential_friend]}")
+                print()
+    
+    # Best-First Search: Sort by highest score (greedy selection)
+    friend_candidates.sort(reverse=True, key=lambda x: x[0])
+    
+    print("🏆 FRIEND RECOMMENDATIONS (Best-First Order):")
+    print("=" * 50)
+    
+    for i, (score, person, mutual, common_skills) in enumerate(friend_candidates, 1):
+        print(f"{i}. {person} (Score: {score})")
+        print(f"   📍 City: {locations[person]}")
+        print(f"   💻 Skills: {', '.join(interests[person])}")
+        print(f"   👥 Mutual friends: {', '.join(mutual) if mutual else 'None'}")
+        print(f"   🎯 Common skills: {', '.join(common_skills) if common_skills else 'None'}")
+        print()
+    
+    return friend_candidates
+
+# Step 6: Run the Friend Recommendation System
+if __name__ == "__main__":
+    recommendations = recommend_friends('Rahul')
+    
+    print("✨ SUMMARY:")
+    print(f"Found {len(recommendations)} potential friends")
+    
+    if recommendations:
+        best_match = recommendations[0]
+        print(f"Best recommendation: {best_match[1]} with score {best_match[0]}")
 </pre>
                 </div>
             </div>
@@ -589,48 +733,89 @@ print(f"Optimal route: {' → '.join(path)} ({total_cost}km)")
     </div>
 
     <script>
-        const graph = {
-            'Bharuch': ['Surat', 'Tapi'],
-            'Surat': ['Navsari'],
-            'Navsari': ['Valsad', 'Saputara'],
-            'Tapi': ['Saputara'],
-            'Valsad': ['Saputara'],
-            'Saputara': []
+        // Social network data
+        const socialGraph = {
+            'Rahul': ['Priya', 'Aman'],
+            'Priya': ['Rahul', 'Neha', 'Ravi'],
+            'Aman': ['Rahul', 'Simran', 'Kiran'],
+            'Neha': ['Priya'],
+            'Ravi': ['Priya'],
+            'Simran': ['Aman'],
+            'Kiran': ['Aman']
         };
 
-        const heuristic = {
-            'Bharuch': 200, 'Surat': 140, 'Tapi': 120,
-            'Navsari': 100, 'Valsad': 130, 'Saputara': 0
+        const locations = {
+            'Rahul': 'Delhi',
+            'Priya': 'Delhi',
+            'Aman': 'Mumbai',
+            'Neha': 'Delhi',
+            'Ravi': 'Pune',
+            'Simran': 'Mumbai',
+            'Kiran': 'Delhi'
         };
 
-        const costs = {
-            'Bharuch-Surat': 75, 'Bharuch-Tapi': 100,
-            'Surat-Navsari': 35, 'Navsari-Valsad': 35,
-            'Navsari-Saputara': 60, 'Tapi-Saputara': 100,
-            'Valsad-Saputara': 75
+        const interests = {
+            'Rahul': ['Python', 'AI'],
+            'Priya': ['Python', 'Web Tech'],
+            'Aman': ['AI', 'JavaScript'],
+            'Neha': ['Python', 'Web Tech'],
+            'Ravi': ['JavaScript', 'AI'],
+            'Simran': ['Embedded', 'Python'],
+            'Kiran': ['AI', 'JavaScript']
         };
 
         let isSearching = false;
 
-        function resetSearch() {
-            document.querySelectorAll('.city-node').forEach(node => {
-                node.className = node.dataset.city === 'Bharuch' ? 'city-node start' :
-                                node.dataset.city === 'Saputara' ? 'city-node goal' : 'city-node';
+        function calculateFriendScore(user, candidate) {
+            let score = 0;
+            let details = {
+                mutualFriends: [],
+                sameCity: false,
+                commonInterests: []
+            };
+
+            // Mutual friends: +10 each
+            const userFriends = new Set(socialGraph[user] || []);
+            const candidateFriends = new Set(socialGraph[candidate] || []);
+            const mutualFriends = [...userFriends].filter(x => candidateFriends.has(x));
+            score += 10 * mutualFriends.length;
+            details.mutualFriends = mutualFriends;
+
+            // Same city: +5
+            if (locations[user] === locations[candidate]) {
+                score += 5;
+                details.sameCity = true;
+            }
+
+            // Common interests: +2 each
+            const userInterests = new Set(interests[user] || []);
+            const candidateInterests = new Set(interests[candidate] || []);
+            const commonInterests = [...userInterests].filter(x => candidateInterests.has(x));
+            score += 2 * commonInterests.length;
+            details.commonInterests = commonInterests;
+
+            return { score, details };
+        }
+
+        function resetNetwork() {
+            document.querySelectorAll('.person-node').forEach(node => {
+                const person = node.dataset.person;
+                if (person === 'Rahul') {
+                    node.className = 'person-node target';
+                } else if (['Priya', 'Aman'].includes(person)) {
+                    node.className = 'person-node friend';
+                } else {
+                    node.className = 'person-node candidate';
+                }
             });
-            
-            document.querySelectorAll('.road').forEach(road => {
-                road.className = 'road';
+
+            document.querySelectorAll('.connection').forEach(conn => {
+                conn.className = 'connection';
             });
-            
-            document.querySelectorAll('.table-row').forEach(row => {
-                row.classList.remove('highlight');
-            });
-            
-            document.getElementById('cost-table').innerHTML = 
-                '<div class="table-row"><span>No search started</span><span>-</span></div>';
-            
+
             document.getElementById('stepInfo').style.display = 'none';
             document.getElementById('result').style.display = 'none';
+            document.getElementById('scoringDisplay').style.display = 'none';
         }
 
         function updateStep(message) {
@@ -640,134 +825,175 @@ print(f"Optimal route: {' → '.join(path)} ({total_cost}km)")
             stepInfo.scrollTop = stepInfo.scrollHeight;
         }
 
-        function updateCostTable(costs) {
-            const costTable = document.getElementById('cost-table');
-            costTable.innerHTML = '';
-            
-            Object.entries(costs).forEach(([city, cost]) => {
-                const row = document.createElement('div');
-                row.className = 'table-row';
-                row.innerHTML = `<span>${city}</span><span>${cost}km</span>`;
-                costTable.appendChild(row);
-            });
+        function highlightPerson(person, className) {
+            const personEl = document.querySelector(`[data-person="${person}"]`);
+            if (personEl) {
+                personEl.className = `person-node ${className}`;
+            }
         }
 
-        function highlightCity(cityName, className) {
-            const cityEl = document.querySelector(`[data-city="${cityName}"]`);
-            const heuristicRow = document.querySelector(`[data-city="${cityName}"]`);
-            
-            if (cityEl) cityEl.className = `city-node ${className}`;
-            if (heuristicRow) heuristicRow.classList.add('highlight');
+        function highlightConnection(from, to, className) {
+            const connection = document.querySelector(`[data-from="${from}"][data-to="${to}"]`) ||
+                             document.querySelector(`[data-from="${to}"][data-to="${from}"]`);
+            if (connection) {
+                connection.className = `connection ${className}`;
+            }
         }
 
-        function highlightRoad(from, to, className) {
-            const road = document.querySelector(`[data-from="${from}"][data-to="${to}"]`) ||
-                        document.querySelector(`[data-from="${to}"][data-to="${from}"]`);
-            if (road) road.className = `road ${className}`;
-        }
-
-        async function runAStarSearch() {
+        async function runFriendRecommendation() {
             if (isSearching) return;
             isSearching = true;
-            
-            resetSearch();
+
+            resetNetwork();
             document.getElementById('stepInfo').innerHTML = '';
             
-            updateStep('🚀 Starting A* Search: Bharuch → Saputara');
-            updateStep('Algorithm: f(n) = g(n) + h(n)');
+            updateStep('🚀 Starting Best-First Search Friend Recommendation');
+            updateStep('Target User: Rahul');
+            updateStep('Heuristic: 10×(Mutual Friends) + 5×(Same City) + 2×(Common Skills)');
             updateStep('');
-            
-            // Priority queue: [f_cost, g_cost, path]
-            const heap = [[heuristic['Bharuch'], 0, ['Bharuch']]];
-            const visited = new Set();
-            const currentCosts = { 'Bharuch': 0 };
-            let step = 0;
-            
-            while (heap.length > 0) {
-                step++;
+
+            const targetUser = 'Rahul';
+            const currentFriends = new Set(socialGraph[targetUser]);
+            const visitedCandidates = new Set();
+            const friendCandidates = [];
+
+            updateStep(`📋 Current friends: ${Array.from(currentFriends).join(', ')}`);
+            updateStep('');
+
+            // Explore friends-of-friends
+            for (const friend of currentFriends) {
+                updateStep(`🔍 Exploring ${friend}'s connections...`);
+                highlightPerson(friend, 'evaluating');
+                highlightConnection('Rahul', friend, 'active');
                 
-                // Sort by f_cost (first element)
-                heap.sort((a, b) => a[0] - b[0]);
-                
-                const [f_cost, g_cost, path] = heap.shift();
-                const current = path[path.length - 1];
-                
-                updateStep(`Step ${step}: Examining ${current}`);
-                updateStep(`  Path: ${path.join(' → ')}`);
-                updateStep(`  g(${current}) = ${g_cost}km (actual cost)`);
-                updateStep(`  h(${current}) = ${heuristic[current]}km (heuristic)`);
-                updateStep(`  f(${current}) = ${f_cost}km (total estimate)`);
-                
-                highlightCity(current, 'current');
-                updateCostTable(currentCosts);
-                
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                
-                if (current === 'Saputara') {
-                    highlightCity(current, 'goal');
-                    updateStep('✅ GOAL REACHED!');
-                    updateStep(`Optimal path: ${path.join(' → ')}`);
-                    updateStep(`Total distance: ${g_cost}km`);
-                    
-                    document.getElementById('result').innerHTML = 
-                        `<h3>✅ Optimal Route Found!</h3>
-                         <p><strong>Path:</strong> ${path.join(' → ')}</p>
-                         <p><strong>Total Distance:</strong> ${g_cost}km</p>
-                         <p><strong>Steps:</strong> ${step}</p>`;
-                    document.getElementById('result').style.display = 'block';
-                    
-                    isSearching = false;
-                    return;
-                }
-                
-                if (!visited.has(current)) {
-                    visited.add(current);
-                    highlightCity(current, 'visited');
-                    
-                    const neighbors = graph[current];
-                    updateStep(`  Neighbors: ${neighbors.join(', ')}`);
-                    
-                    for (const neighbor of neighbors) {
-                        if (!visited.has(neighbor)) {
-                            const roadCost = costs[`${current}-${neighbor}`] || costs[`${neighbor}-${current}`];
-                            const new_g = g_cost + roadCost;
-                            const new_f = new_g + heuristic[neighbor];
-                            const new_path = [...path, neighbor];
-                            
-                            heap.push([new_f, new_g, new_path]);
-                            currentCosts[neighbor] = new_g;
-                            
-                            highlightCity(neighbor, 'in-queue');
-                            highlightRoad(current, neighbor, 'active');
-                            
-                            updateStep(`    → ${neighbor}: g=${new_g}, h=${heuristic[neighbor]}, f=${new_f}`);
-                        }
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                for (const potentialFriend of socialGraph[friend] || []) {
+                    if (potentialFriend !== targetUser && 
+                        !currentFriends.has(potentialFriend) && 
+                        !visitedCandidates.has(potentialFriend)) {
+                        
+                        updateStep(`  → Evaluating ${potentialFriend}...`);
+                        highlightPerson(potentialFriend, 'evaluating');
+                        highlightConnection(friend, potentialFriend, 'mutual');
+                        
+                        await new Promise(resolve => setTimeout(resolve, 800));
+
+                        const { score, details } = calculateFriendScore(targetUser, potentialFriend);
+                        friendCandidates.push({ 
+                            person: potentialFriend, 
+                            score, 
+                            details,
+                            throughFriend: friend
+                        });
+                        visitedCandidates.add(potentialFriend);
+
+                        updateStep(`    Score: ${score} points`);
+                        updateStep(`    Mutual friends: ${details.mutualFriends.join(', ') || 'None'} (+${details.mutualFriends.length * 10})`);
+                        updateStep(`    Same city: ${details.sameCity ? 'Yes' : 'No'} (+${details.sameCity ? 5 : 0})`);
+                        updateStep(`    Common skills: ${details.commonInterests.join(', ') || 'None'} (+${details.commonInterests.length * 2})`);
+                        updateStep('');
+
+                        highlightPerson(potentialFriend, 'candidate');
                     }
                 }
-                updateStep('');
+
+                highlightPerson(friend, 'friend');
+                highlightConnection('Rahul', friend, 'connection');
             }
+
+            // Sort by score (Best-First)
+            friendCandidates.sort((a, b) => b.score - a.score);
+
+            updateStep('🏆 FRIEND RECOMMENDATIONS (Best-First Order):');
+            updateStep('');
+
+            let resultHTML = '<h3>🎯 Friend Recommendations for Rahul</h3>';
             
-            updateStep('❌ No path found');
+            friendCandidates.forEach((candidate, index) => {
+                const rank = index + 1;
+                updateStep(`${rank}. ${candidate.person} (Score: ${candidate.score})`);
+                updateStep(`   📍 City: ${locations[candidate.person]}`);
+                updateStep(`   💻 Skills: ${interests[candidate.person].join(', ')}`);
+                updateStep(`   👥 Connected through: ${candidate.throughFriend}`);
+                updateStep('');
+
+                if (index === 0) {
+                    highlightPerson(candidate.person, 'recommended');
+                }
+
+                resultHTML += `
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <strong>${rank}. ${candidate.person}</strong> - Score: ${candidate.score}<br>
+                        📍 ${locations[candidate.person]} | 
+                        💻 ${interests[candidate.person].join(', ')}<br>
+                        👥 Through: ${candidate.throughFriend}
+                    </div>
+                `;
+            });
+
+            if (friendCandidates.length > 0) {
+                const bestMatch = friendCandidates[0];
+                updateStep(`✅ Best recommendation: ${bestMatch.person} with ${bestMatch.score} points`);
+                
+                resultHTML += `<p style="margin-top: 20px;"><strong>🎯 Top Recommendation: ${bestMatch.person}</strong></p>`;
+            }
+
+            document.getElementById('result').innerHTML = resultHTML;
+            document.getElementById('result').style.display = 'block';
+
             isSearching = false;
         }
 
-        function showAllPaths() {
-            resetSearch();
+        function showScoring() {
+            const scoringDisplay = document.getElementById('scoringDisplay');
+            const scoreContent = document.getElementById('scoreContent');
+            
+            scoringDisplay.style.display = 'block';
+            scoreContent.innerHTML = '';
+
+            const candidates = ['Neha', 'Ravi', 'Simran', 'Kiran'];
+            
+            candidates.forEach(candidate => {
+                const { score, details } = calculateFriendScore('Rahul', candidate);
+                
+                const item = document.createElement('div');
+                item.innerHTML = `
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <strong>${candidate}: ${score} points</strong><br>
+                        <small>
+                            • Mutual friends: ${details.mutualFriends.join(', ') || 'None'} (+${details.mutualFriends.length * 10})<br>
+                            • Same city: ${details.sameCity ? 'Yes' : 'No'} (+${details.sameCity ? 5 : 0})<br>
+                            • Common skills: ${details.commonInterests.join(', ') || 'None'} (+${details.commonInterests.length * 2})
+                        </small>
+                    </div>
+                `;
+                scoreContent.appendChild(item);
+            });
+        }
+
+        function explainAlgorithm() {
             const stepInfo = document.getElementById('stepInfo');
             stepInfo.style.display = 'block';
             stepInfo.innerHTML = `
-                📍 All Possible Routes with A* Analysis:<br><br>
-                <strong>Route 1: Bharuch → Surat → Navsari → Saputara</strong><br>
-                Cost: 75 + 35 + 60 = 170km<br>
-                f-values: 275 → 175 → 135 → 0<br><br>
-                <strong>Route 2: Bharuch → Tapi → Saputara</strong><br>
-                Cost: 100 + 100 = 200km<br>
-                f-values: 300 → 220 → 0<br><br>
-                <strong>Route 3: Bharuch → Surat → Navsari → Valsad → Saputara</strong><br>
-                Cost: 75 + 35 + 35 + 75 = 220km<br>
-                f-values: 275 → 175 → 135 → 240 → 0<br><br>
-                🎯 <strong>A* will find Route 1 (170km) as optimal!</strong><br>
-                The algorithm uses f(n) = g(n) + h(n) to balance actual cost with heuristic guidance.
+                🧠 Best-First Search Algorithm for Friend Recommendations:<br><br>
+                <strong>1. Initialization:</strong><br>
+                   - Start with target user (Rahul)<br>
+                   - Identify current friends (Priya, Aman)<br><br>
+                <strong>2. Exploration Phase:</strong><br>
+                   - For each current friend, explore their connections<br>
+                   - Find friends-of-friends (second-degree connections)<br>
+                   - Skip users who are already friends or the target user<br><br>
+                <strong>3. Heuristic Evaluation:</strong><br>
+                   - Calculate score for each candidate using formula:<br>
+                   - Score = 10×(Mutual Friends) + 5×(Same City) + 2×(Common Skills)<br><br>
+                <strong>4. Best-First Selection:</strong><br>
+                   - Sort all candidates by score (highest first)<br>
+                   - This greedy approach prioritizes most promising candidates<br><br>
+                <strong>5. Recommendation Output:</strong><br>
+                   - Present ranked list of friend suggestions<br>
+                   - Higher scores indicate better potential friendships<br><br>
+                🎯 <strong>Key Insight:</strong> Best-First Search uses domain knowledge (social data) to make intelligent decisions, unlike blind search algorithms that explore randomly!
             `;
         }
 
