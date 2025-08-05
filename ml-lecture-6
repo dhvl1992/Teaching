@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Backpropagation: The Heart of Neural Network Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh;
+            color: #1E293B;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: #EA580C;
+            transition: width 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(234, 88, 12, 0.3);
+        }
+
+        /* Enhanced Base slide styling */
+        .slide {
+            background: #FEF7ED;
+            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.5s ease;
+            min-height: 500px;
+            page-break-after: always;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .slide.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        /* Enhanced images with animations */
+        .image-container {
+            text-align: center;
+            margin: 30px 0;
+            overflow: hidden;
+            border-radius: 15px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            transition: all 0.4s ease;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+        }
+
+        /* Neural Network Visualization */
+        .neural-network-viz {
+            background: #1E293B;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .network-layer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 20px;
+        }
+
+        .network-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            min-height: 200px;
+        }
+
+        .neuron {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #EA580C;
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FEF7ED;
+            font-weight: bold;
+            font-size: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .neuron:hover {
+            transform: scale(1.2);
+            background: #059669;
+            box-shadow: 0 0 20px rgba(5, 150, 105, 0.5);
+        }
+
+        .neuron.active {
+            background: #059669;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .connection {
+            position: absolute;
+            height: 2px;
+            background: #EA580C;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .connection.positive {
+            background: #059669;
+        }
+
+        .connection.negative {
+            background: #EF4444;
+        }
+
+        .connection:hover {
+            opacity: 1;
+            height: 4px;
+        }
+
+        .layer-label {
+            color: #FEF7ED;
+            margin-top: 10px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* Layout 1: Enhanced Title Slide */
+        .title-slide {
+            background: #1E293B;
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-left: 5px solid #EA580C;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .title-slide::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(234, 88, 12, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideInFromTop 1s ease-out;
+        }
+
+        .title-slide .subtitle {
+            font-size: 1.6em;
+            opacity: 0.9;
+            font-style: italic;
+            margin-bottom: 20px;
+            animation: slideInFromLeft 1s ease-out 0.3s both;
+        }
+
+        .title-slide .author {
+            font-size: 1.2em;
+            opacity: 0.8;
+            animation: fadeIn 1s ease-out 0.6s both;
+        }
+
+        /* Layout 2: Enhanced Title and Content */
+        .title-content h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .title-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: -100%;
+            width: 100%;
+            height: 3px;
+            background: #059669;
+            transition: left 0.8s ease;
+        }
+
+        .title-content.visible h2::after {
+            left: 0;
+        }
+
+        .content-area {
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .content-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.6s ease;
+        }
+
+        .visible .content-list li {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .content-list li:nth-child(1) { transition-delay: 0.1s; }
+        .content-list li:nth-child(2) { transition-delay: 0.2s; }
+        .content-list li:nth-child(3) { transition-delay: 0.3s; }
+        .content-list li:nth-child(4) { transition-delay: 0.4s; }
+
+        .content-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #EA580C;
+            font-weight: bold;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .content-list li:hover::before {
+            color: #059669;
+            transform: translateX(5px);
+        }
+
+        /* Layout 3: Enhanced Section Header */
+        .section-header {
+            background: linear-gradient(135deg, #059669, #EA580C);
+            color: #FEF7ED;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .section-header.visible::before {
+            left: 100%;
+        }
+
+        .section-header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .section-header .section-subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+        }
+
+        /* Layout 4: Enhanced Two Content */
+        .two-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .two-content h2 {
+            grid-column: 1 / -1;
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .content-column {
+            padding: 20px;
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: 10px;
+            transition: all 0.4s ease;
+            transform: scale(0.95);
+            opacity: 0;
+        }
+
+        .visible .content-column {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .visible .content-column:nth-child(2) { transition-delay: 0.1s; }
+        .visible .content-column:nth-child(3) { transition-delay: 0.2s; }
+
+        .content-column:hover {
+            background: rgba(5, 150, 105, 0.1);
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .content-column h3 {
+            font-size: 1.6em;
+            color: #059669;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .content-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #EA580C;
+            transition: width 0.6s ease;
+        }
+
+        .content-column:hover h3::after {
+            width: 100%;
+        }
+
+        /* Interactive Quiz Layout */
+        .interactive-quiz {
+            background: rgba(5, 150, 105, 0.05);
+            border-left: 5px solid #059669;
+        }
+
+        .interactive-quiz h2 {
+            color: #059669;
+            border-bottom-color: #059669;
+        }
+
+        .quiz-question {
+            background: #FEF7ED;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 2px solid #059669;
+            font-size: 1.2em;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .quiz-option {
+            padding: 15px;
+            background: rgba(234, 88, 12, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .quiz-option:hover {
+            background: rgba(234, 88, 12, 0.2);
+            border-color: #EA580C;
+            transform: translateY(-2px);
+        }
+
+        .reveal-button {
+            background: #EA580C;
+            color: #FEF7ED;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+        }
+
+        .reveal-button:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
+        }
+
+        .quiz-answer {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #059669;
+            margin-top: 20px;
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .quiz-answer.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Progressive Concept Layout */
+        .progressive-concept {
+            background: linear-gradient(to right, rgba(5, 150, 105, 0.05), rgba(234, 88, 12, 0.05));
+        }
+
+        .concept-steps {
+            display: grid;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .concept-step {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            gap: 20px;
+            align-items: center;
+            padding: 20px;
+            background: #FEF7ED;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transform: translateX(-50px);
+            opacity: 0;
+            transition: all 0.6s ease;
+        }
+
+        .visible .concept-step {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .concept-step:nth-child(1) { transition-delay: 0.1s; }
+        .concept-step:nth-child(2) { transition-delay: 0.2s; }
+        .concept-step:nth-child(3) { transition-delay: 0.3s; }
+        .concept-step:nth-child(4) { transition-delay: 0.4s; }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: #EA580C;
+            color: #FEF7ED;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .step-content h4 {
+            color: #059669;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        /* Special Elements */
+        .highlight-box {
+            background: #059669;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .highlight-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .highlight-box:hover::before {
+            left: 100%;
+        }
+
+        .accent-box {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+            transform: scale(0.98);
+            transition: all 0.3s ease;
+        }
+
+        .accent-box:hover {
+            transform: scale(1);
+            box-shadow: 0 8px 20px rgba(234, 88, 12, 0.3);
+        }
+
+        .emphasis {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .emphasis:hover {
+            background: #059669;
+            transform: scale(1.05);
+        }
+
+        /* Gradient visualization */
+        .gradient-viz {
+            background: linear-gradient(45deg, #EF4444 0%, #EA580C 25%, #F59E0B 50%, #84CC16 75%, #059669 100%);
+            height: 60px;
+            border-radius: 10px;
+            position: relative;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FEF7ED;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .math-equation {
+            background: rgba(30, 41, 59, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #1E293B;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* Animations */
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(180deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 10px rgba(5, 150, 105, 0.3);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 0 20px rgba(5, 150, 105, 0.6);
+            }
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 12px 18px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            box-shadow: 0 4px 15px rgba(30, 41, 59, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .slide-counter:hover {
+            background: #EA580C;
+            transform: scale(1.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .slide {
+                padding: 20px;
+                min-height: 400px;
+            }
+
+            .title-slide h1 {
+                font-size: 2.5em;
+            }
+
+            .two-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+
+            .concept-step {
+                grid-template-columns: 50px 1fr;
+                gap: 15px;
+            }
+
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1em;
+            }
+
+            .network-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .network-layer {
+                flex-direction: row;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="container">
+        
+        <!-- Title Slide -->
+        <div class="slide title-slide">
+            <h1>Backpropagation</h1>
+            <p class="subtitle">The Heart of Neural Network Learning</p>
+            <p class="author">Dr. Dhaval Patel • 2025</p>
+        </div>
+
+        <!-- Introduction -->
+        <div class="slide title-content">
+            <h2>🧠 What Makes Neural Networks Learn?</h2>
+            <div class="content-area">
+                <p>Imagine you're trying to teach a computer to recognize handwritten digits. You show it thousands of examples, but how does it actually <em>learn</em> from mistakes?</p>
+                
+                <div class="neural-network-viz">
+                    <div class="network-container">
+                        <div class="network-layer">
+                            <div class="neuron">7</div>
+                            <div class="neuron">8</div>
+                            <div class="neuron">4</div>
+                            <div class="layer-label">Input<br>(784 pixels)</div>
+                        </div>
+                        <div class="network-layer">
+                            <div class="neuron">●</div>
+                            <div class="neuron">●</div>
+                            <div class="layer-label">Hidden<br>(16 neurons)</div>
+                        </div>
+                        <div class="network-layer">
+                            <div class="neuron">●</div>
+                            <div class="neuron">●</div>
+                            <div class="layer-label">Hidden<br>(16 neurons)</div>
+                        </div>
+                        <div class="network-layer">
+                            <div class="neuron active">2</div>
+                            <div class="neuron">3</div>
+                            <div class="neuron">8</div>
+                            <div class="layer-label">Output<br>(10 digits)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Backpropagation</strong> is the algorithm that makes learning possible</li>
+                    <li>It works backwards through the network, adjusting connections</li>
+                    <li>Like a coach analyzing what went wrong after each play</li>
+                    <li>The math is complex, but the intuition is beautifully simple</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Section Header -->
+        <div class="slide section-header">
+            <h1>🎯 The Big Picture</h1>
+            <p class="section-subtitle">Learning Through Error Correction</p>
+        </div>
+
+        <!-- The Problem Setup -->
+        <div class="slide title-content">
+            <h2>📊 The Learning Challenge</h2>
+            <div class="content-area">
+                <p>Let's start with a concrete example. Our network is trying to classify this handwritten digit:</p>
+                
+                <div class="image-container">
+                    <div style="background: #1E293B; color: #FEF7ED; padding: 40px; border-radius: 10px; font-size: 3em; text-align: center; font-weight: bold; border: 3px dashed #EA580C;">
+                        2
+                    </div>
+                    <p style="margin-top: 10px; font-style: italic; color: #059669;"><strong>Target:</strong> The network should recognize this as the digit "2"</p>
+                </div>
+
+                <div class="accent-box">
+                    But our untrained network outputs garbage! Instead of confidently saying "2", it might output [0.1, 0.2, 0.05, 0.3, 0.1, 0.1, 0.05, 0.05, 0.03, 0.02] - essentially random guesses.
+                </div>
+
+                <p>The question is: <span class="emphasis">How do we fix this?</span></p>
+
+                <ul class="content-list">
+                    <li>We can't directly change the output neurons</li>
+                    <li>We can only adjust weights and biases</li>
+                    <li>But we need to figure out <em>which</em> weights to change and <em>by how much</em></li>
+                    <li>This is where backpropagation comes to the rescue!</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- The Intuition -->
+        <div class="slide progressive-concept">
+            <h2>💡 The Core Intuition: Three Ways to Improve</h2>
+            
+            <p style="margin-bottom: 30px; font-size: 1.2em;">When a neuron gives the wrong answer, there are exactly three things we can adjust:</p>
+            
+            <div class="concept-steps">
+                <div class="concept-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Adjust the Bias</h4>
+                        <p><strong>Like adjusting a neuron's "threshold"</strong> - make it easier or harder to activate. If we want neuron "2" to be more active, increase its bias!</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Adjust the Weights</h4>
+                        <p><strong>Like adjusting connection strength</strong> - strengthen connections from bright pixels that look like a "2", weaken connections from pixels that don't.</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Change Previous Layer Activations</h4>
+                        <p><strong>Like asking for better input</strong> - we can't directly control this, but we can identify what we <em>wish</em> the previous layer would do.</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">🔄</div>
+                    <div class="step-content">
+                        <h4>Repeat Backwards</h4>
+                        <p><strong>The magic happens here!</strong> We propagate these "wishes" backwards through every layer, creating a chain of adjustments.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Quiz -->
+        <div class="slide interactive-quiz">
+            <h2>🧠 Test Your Understanding</h2>
+            
+            <div class="quiz-question">
+                <strong>Question:</strong> If we want the "2" neuron to activate more strongly, and we see that it's connected to a bright pixel that's clearly part of the digit "2", what should we do to the weight of that connection?
+            </div>
+            
+            <div class="quiz-options">
+                <div class="quiz-option">A) Decrease the weight (make it more negative)</div>
+                <div class="quiz-option">B) Increase the weight (make it more positive)</div>
+                <div class="quiz-option">C) Set the weight to zero</div>
+                <div class="quiz-option">D) The weight doesn't matter</div>
+            </div>
+            
+            <button class="reveal-button" onclick="revealAnswer('quiz1')">Reveal Answer & Explanation</button>
+            
+            <div class="quiz-answer" id="quiz1">
+                <strong>Answer: B) Increase the weight (make it more positive)</strong><br><br>
+                Think of it this way: <em>Weight × Activation = Contribution</em><br><br>
+                If the pixel is bright (high activation) and it's part of a "2", then increasing the weight makes this pixel contribute more strongly to the "2" neuron. This is exactly what we want!<br><br>
+                <div class="math-equation">
+                    Strong "2" pixel (0.9) × Bigger weight (0.8) = Stronger vote for "2" (0.72)
+                </div>
+            </div>
+        </div>
+
+        <!-- The Weight Adjustment Deep Dive -->
+        <div class="slide two-content">
+            <h2>⚖️ Weight Adjustments: The Details</h2>
+            
+            <div class="content-column">
+                <h3>🎯 Proportional to Activations</h3>
+                <p>Here's a key insight: <strong>adjust weights in proportion to the input activations.</strong></p>
+                
+                <div class="highlight-box">
+                    Big activation = Big weight change<br>
+                    Small activation = Small weight change
+                </div>
+                
+                <p>Why? Because you get more "bang for your buck" by adjusting connections to bright neurons. A small change to a weight connected to a bright neuron has a big impact!</p>
+                
+                <ul class="content-list">
+                    <li>Bright input neuron (0.8) → Large weight adjustment</li>
+                    <li>Dim input neuron (0.1) → Small weight adjustment</li>
+                    <li>Off input neuron (0.0) → No weight adjustment</li>
+                </ul>
+            </div>
+            
+            <div class="content-column">
+                <h3>🧠 Hebbian Learning Connection</h3>
+                <p>This connects to a famous principle in neuroscience:</p>
+                
+                <div class="accent-box">
+                    "Neurons that fire together, wire together"
+                </div>
+                
+                <p>In our case: pixels that are "on" when we're looking at a "2" should have stronger connections to the "2" neuron.</p>
+                
+                <div class="image-container">
+                    <div style="background: linear-gradient(45deg, #059669, #EA580C); color: #FEF7ED; padding: 30px; border-radius: 10px; text-align: center;">
+                        <strong>Active Input + Desired Output</strong><br>
+                        ↓<br>
+                        <strong>Strengthen Connection</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- The Propagation Backwards -->
+        <div class="slide title-content">
+            <h2>🔄 Propagating Backwards: The Chain Reaction</h2>
+            <div class="content-area">
+                <p>Now comes the truly clever part. We've figured out how to improve the output layer, but what about all the hidden layers?</p>
+
+                <div class="neural-network-viz">
+                    <div class="network-container" style="position: relative;">
+                        <div class="network-layer">
+                            <div class="neuron">?</div>
+                            <div class="neuron">?</div>
+                            <div class="neuron">?</div>
+                            <div class="layer-label">What should<br>these do?</div>
+                        </div>
+                        <div class="network-layer">
+                            <div class="neuron">?</div>
+                            <div class="neuron">?</div>
+                            <div class="layer-label">And these?</div>
+                        </div>
+                        <div class="network-layer">
+                            <div class="neuron active">📢</div>
+                            <div class="neuron">📢</div>
+                            <div class="layer-label">We know what<br>we want here!</div>
+                        </div>
+                        
+                        <!-- Animated arrows showing backward flow -->
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #EA580C; font-size: 2em;">
+                            ← ← ←
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>The Big Idea:</strong> If we know what we want from the output layer, we can work backwards to figure out what we want from each previous layer!
+                </div>
+
+                <ul class="content-list">
+                    <li><strong>Layer 3 (Output):</strong> "I want neuron 2 to be more active and the others less active"</li>
+                    <li><strong>Layer 2 (Hidden):</strong> "To help layer 3, I should adjust based on my connections to it"</li>
+                    <li><strong>Layer 1 (Hidden):</strong> "To help layer 2, I should adjust based on my connections to it"</li>
+                    <li><strong>Weights:</strong> "Each weight adjusts based on the neurons it connects"</li>
+                </ul>
+
+                <p>This creates a beautiful chain reaction of adjustments, flowing backwards through the entire network!</p>
+            </div>
+        </div>
+
+        <!-- The Mathematical Foundation -->
+        <div class="slide title-content">
+            <h2>🔢 The Mathematics: Understanding the Gradient</h2>
+            <div class="content-area">
+                <p>Behind all this intuition lies elegant mathematics. Let's connect our intuitive understanding to the formal calculus that makes it all work.</p>
+
+                <div class="gradient-viz">
+                    🏔️ The gradient vector points uphill in cost space - we walk downhill to minimize error
+                </div>
+
+                <div class="math-equation">
+                    <strong>The Gradient Vector:</strong><br>
+                    ∇C = [∂C/∂w⁽¹⁾, ∂C/∂b⁽¹⁾, ..., ∂C/∂w⁽ᴸ⁾, ∂C/∂b⁽ᴸ⁾]ᵀ
+                </div>
+
+                <p>Each entry in this vector tells us: <em>"How much does the cost change if I nudge this particular weight or bias?"</em></p>
+
+                <div class="highlight-box">
+                    <strong>The Chain Rule Connection:</strong> To find ∂C/∂w⁽ᴸ⁾, we trace the path:<br>
+                    w⁽ᴸ⁾ → z⁽ᴸ⁾ → a⁽ᴸ⁾ → C₀
+                </div>
+
+                <ul class="content-list">
+                    <li><strong>∂C/∂w⁽ᴸ⁾:</strong> "How does cost change with the last layer's weight?"</li>
+                    <li><strong>Chain Rule:</strong> Break it into smaller, manageable pieces</li>
+                    <li><strong>Each piece:</strong> A simple derivative we can actually calculate</li>
+                    <li><strong>Multiply together:</strong> Get the total effect on cost</li>
+                </ul>
+
+                <div class="accent-box">
+                    <strong>Beautiful Insight:</strong> The "impossible" derivative ∂C/∂w⁽ᴸ⁾ becomes three simple derivatives multiplied together!
+                </div>
+            </div>
+        </div>
+
+        <!-- Chain Rule Deep Dive -->
+        <div class="slide progressive-concept">
+            <h2>🔗 The Chain Rule: Breaking Down the "Impossible"</h2>
+            
+            <p style="margin-bottom: 30px; font-size: 1.2em;">Let's see how we calculate ∂C₀/∂w⁽ᴸ⁾ step by step. This seems impossible at first, but the chain rule makes it manageable!</p>
+            
+            <div class="concept-steps">
+                <div class="concept-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>The Chain of Dependencies</h4>
+                        <p><strong>w⁽ᴸ⁾ → z⁽ᴸ⁾ → a⁽ᴸ⁾ → C₀</strong><br>
+                        A tiny change to the weight causes a change to z, which changes a, which changes the cost.</p>
+                        <div class="math-equation">
+                            ∂C₀/∂w⁽ᴸ⁾ = (∂z⁽ᴸ⁾/∂w⁽ᴸ⁾) × (∂a⁽ᴸ⁾/∂z⁽ᴸ⁾) × (∂C₀/∂a⁽ᴸ⁾)
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>First Link: ∂z⁽ᴸ⁾/∂w⁽ᴸ⁾</h4>
+                        <p><strong>From z⁽ᴸ⁾ = w⁽ᴸ⁾a⁽ᴸ⁻¹⁾ + b⁽ᴸ⁾</strong><br>
+                        "How does the weighted sum change when we change the weight?"</p>
+                        <div class="math-equation">
+                            ∂z⁽ᴸ⁾/∂w⁽ᴸ⁾ = a⁽ᴸ⁻¹⁾
+                        </div>
+                        <p style="font-style: italic; color: #059669;">This is why bright neurons have more influence!</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Second Link: ∂a⁽ᴸ⁾/∂z⁽ᴸ⁾</h4>
+                        <p><strong>From a⁽ᴸ⁾ = σ(z⁽ᴸ⁾)</strong><br>
+                        "How does the activation change when we change the weighted sum?"</p>
+                        <div class="math-equation">
+                            ∂a⁽ᴸ⁾/∂z⁽ᴸ⁾ = σ'(z⁽ᴸ⁾)
+                        </div>
+                        <p style="font-style: italic; color: #059669;">This is the slope of the activation function!</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Third Link: ∂C₀/∂a⁽ᴸ⁾</h4>
+                        <p><strong>From C₀ = (a⁽ᴸ⁾ - y)²</strong><br>
+                        "How does the cost change when we change the final activation?"</p>
+                        <div class="math-equation">
+                            ∂C₀/∂a⁽ᴸ⁾ = 2(a⁽ᴸ⁾ - y)
+                        </div>
+                        <p style="font-style: italic; color: #059669;">Bigger errors create stronger learning signals!</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">🎯</div>
+                    <div class="step-content">
+                        <h4>Putting It All Together</h4>
+                        <p><strong>The Final Formula:</strong></p>
+                        <div class="math-equation">
+                            ∂C₀/∂w⁽ᴸ⁾ = a⁽ᴸ⁻¹⁾ × σ'(z⁽ᴸ⁾) × 2(a⁽ᴸ⁾ - y)
+                        </div>
+                        <p>Three simple pieces that capture the essence of learning!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Math Quiz -->
+        <div class="slide interactive-quiz">
+            <h2>🧮 Mathematical Intuition Check</h2>
+            
+            <div class="quiz-question">
+                <strong>Looking at our formula: ∂C₀/∂w⁽ᴸ⁾ = a⁽ᴸ⁻¹⁾ × σ'(z⁽ᴸ⁾) × 2(a⁽ᴸ⁾ - y)</strong><br><br>
+                If the previous neuron has activation a⁽ᴸ⁻¹⁾ = 0 (completely off), what happens to the gradient for this weight?
+            </div>
+            
+            <div class="quiz-options">
+                <div class="quiz-option">A) The gradient becomes very large</div>
+                <div class="quiz-option">B) The gradient becomes zero</div>
+                <div class="quiz-option">C) The gradient becomes negative</div>
+                <div class="quiz-option">D) The gradient is unaffected</div>
+            </div>
+            
+            <button class="reveal-button" onclick="revealAnswer('math_quiz')">Reveal Mathematical Insight</button>
+            
+            <div class="quiz-answer" id="math_quiz">
+                <strong>Answer: B) The gradient becomes zero</strong><br><br>
+                This is a profound insight! When a⁽ᴸ⁻¹⁾ = 0, the entire gradient becomes zero because:<br><br>
+                <div class="math-equation">
+                    ∂C₀/∂w⁽ᴸ⁾ = 0 × σ'(z⁽ᴸ⁾) × 2(a⁽ᴸ⁾ - y) = 0
+                </div>
+                <br>
+                <strong>What this means:</strong> If a neuron is completely inactive (0), then the weights connecting TO it won't learn at all! This is why we need activation functions and why "dead neurons" are a problem in deep learning.
+                <br><br>
+                <div class="highlight-box">
+                    This mathematical property directly reflects our intuition: "You can't strengthen a connection if there's no signal flowing through it!"
+                </div>
+            </div>
+        </div>
+        <div class="slide two-content">
+            <h2>🎲 Making It Practical: Mini-Batches</h2>
+            
+            <div class="content-column">
+                <h3>🐌 The Slow Way: Full Batch</h3>
+                <p>In theory, we should look at ALL training examples before making any weight adjustments.</p>
+                
+                <div style="background: #EF4444; color: #FEF7ED; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong>Problem:</strong> This is incredibly slow!<br>
+                    50,000 examples × complex calculations = hours per step
+                </div>
+                
+                <div class="image-container">
+                    <div style="background: #1E293B; color: #FEF7ED; padding: 20px; border-radius: 10px; text-align: center;">
+                        🐢 Very slow, but perfectly accurate steps
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-column">
+                <h3>🏃‍♂️ The Fast Way: Mini-Batches</h3>
+                <p>Instead, we use random mini-batches of ~100 examples and take many quick steps.</p>
+                
+                <div style="background: #059669; color: #FEF7ED; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong>Solution:</strong> Much faster!<br>
+                    100 examples × many quick steps = rapid learning
+                </div>
+                
+                <div class="image-container">
+                    <div style="background: #EA580C; color: #FEF7ED; padding: 20px; border-radius: 10px; text-align: center;">
+                        🏃‍♂️ Like a drunk person stumbling quickly downhill<br>
+                        (but it works!)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Quiz 2 -->
+        <div class="slide interactive-quiz">
+            <h2>🧠 Master Challenge: Putting It All Together</h2>
+            
+            <div class="quiz-question">
+                <strong>Final Challenge:</strong> You have a network with layers of sizes [784, 16, 16, 10]. During backpropagation, you notice that ∂C/∂w₁₅,₇⁽²⁾ (the weight from neuron 7 in layer 1 to neuron 15 in layer 2) has a very large magnitude. What does this tell you about the learning process?
+            </div>
+            
+            <div class="quiz-options">
+                <div class="quiz-option">A) This weight is broken and should be reset to zero</div>
+                <div class="quiz-option">B) This weight has a strong influence on the cost and will receive large updates</div>
+                <div class="quiz-option">C) The network is overfitting to the training data</div>
+                <div class="quiz-option">D) The learning rate is too high</div>
+            </div>
+            
+            <button class="reveal-button" onclick="revealAnswer('final_quiz')">Reveal the Deep Truth</button>
+            
+            <div class="quiz-answer" id="final_quiz">
+                <strong>Answer: B) This weight has a strong influence on the cost and will receive large updates</strong><br><br>
+                
+                You've just witnessed the beauty of backpropagation in action! A large gradient magnitude means:<br><br>
+                
+                <div class="highlight-box">
+                    <strong>Mathematical Interpretation:</strong><br>
+                    |∂C/∂w₁₅,₇⁽²⁾| is large → small changes to this weight cause big changes to the cost
+                </div>
+                
+                <div class="accent-box">
+                    <strong>Learning Interpretation:</strong><br>
+                    This connection is crucial for the network's current performance. The weight update will be:<br>
+                    w₁₅,₇⁽²⁾ ← w₁₅,₇⁽²⁾ - α × (large gradient)
+                </div>
+                
+                <strong>What this means practically:</strong><br>
+                • This connection will change significantly in the next update<br>
+                • The network has identified this as an important feature pathway<br>
+                • The learning is focused where it matters most<br><br>
+                
+                <div class="math-equation">
+                    Beautiful insight: The mathematics automatically prioritizes the most impactful connections!
+                </div>
+            </div>
+        </div>
+
+        <!-- The Big Picture Summary -->
+        <div class="slide section-header">
+            <h1>🎯 The Complete Picture</h1>
+            <p class="section-subtitle">How It All Comes Together</p>
+        </div>
+
+        <!-- Final Summary -->
+        <div class="slide progressive-concept">
+            <h2>🎯 The Complete Picture: Intuition Meets Mathematics</h2>
+            
+            <div class="concept-steps">
+                <div class="concept-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Forward Pass</h4>
+                        <p><strong>Feed an example through: a⁽ᴸ⁾ = σ(w⁽ᴸ⁾a⁽ᴸ⁻¹⁾ + b⁽ᴸ⁾)</strong><br>
+                        Calculate what the network predicts and compare to truth: C₀ = (a⁽ᴸ⁾ - y)²</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Backward Pass: Chain Rule Magic</h4>
+                        <p><strong>∂C₀/∂w⁽ᴸ⁾ = (∂z⁽ᴸ⁾/∂w⁽ᴸ⁾) × (∂a⁽ᴸ⁾/∂z⁽ᴸ⁾) × (∂C₀/∂a⁽ᴸ⁾)</strong><br>
+                        Break the "impossible" derivative into three manageable pieces.</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Propagate Through All Layers</h4>
+                        <p><strong>∂C₀/∂a_k⁽ᴸ⁻¹⁾ = Σⱼ (∂z_j⁽ᴸ⁾/∂a_k⁽ᴸ⁻¹⁾) × (∂a_j⁽ᴸ⁾/∂z_j⁽ᴸ⁾) × (∂C₀/∂a_j⁽ᴸ⁾)</strong><br>
+                        Work backwards layer by layer, summing over all paths of influence.</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Average Over Mini-Batches</h4>
+                        <p><strong>∇C ≈ (1/m) Σₖ∈batch ∇Cₖ</strong><br>
+                        Use random samples to approximate the full gradient efficiently.</p>
+                    </div>
+                </div>
+                
+                <div class="concept-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>Update and Repeat</h4>
+                        <p><strong>w ← w - α∇C</strong><br>
+                        Step downhill in parameter space, repeat until the network learns!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>The Mathematical Miracle:</strong> Simple calculus rules (chain rule, partial derivatives) combined with matrix operations create a learning algorithm that can recognize faces, translate languages, and play games at superhuman levels!
+            </div>
+        </div>
+
+        <!-- Final Insights -->
+        <div class="slide title-content">
+            <h2>✨ The Beauty of Backpropagation</h2>
+            <div class="content-area">
+                <p>We've journeyed from intuition to rigorous mathematics. Here's what makes backpropagation so remarkable:</p>
+
+                <ul class="content-list">
+                    <li><strong>🧠 Biological Inspiration:</strong> "Neurons that fire together, wire together" becomes ∂z/∂w = a</li>
+                    <li><strong>📐 Mathematical Elegance:</strong> The chain rule decomposes complexity into simplicity</li>
+                    <li><strong>⚡ Computational Efficiency:</strong> One backward pass computes ALL gradients simultaneously</li>
+                    <li><strong>🎯 Error-Driven Learning:</strong> Bigger mistakes automatically get more attention</li>
+                    <li><strong>🌊 Information Flow:</strong> Knowledge propagates backwards through the entire network</li>
+                </ul>
+
+                <div class="math-equation">
+                    <strong>From Simple to Extraordinary:</strong><br>
+                    ∂/∂x, matrix multiplication, and σ(x) → Image recognition, language translation, game mastery!
+                </div>
+
+                <div class="accent-box">
+                    <strong>The Philosophical Wonder:</strong> We took the fuzzy concept of "learning from mistakes" and turned it into precise mathematical operations. Each partial derivative represents a tiny adjustment that collectively creates intelligence.
+                </div>
+
+                <div class="highlight-box">
+                    🧠 <strong>Remember:</strong> Every time a neural network correctly identifies a cat, translates a sentence, or recommends a movie, it's because millions of these tiny mathematical adjustments, orchestrated by backpropagation, taught it to recognize patterns in data.
+                </div>
+
+                <p>The next time you see ∂C/∂w, don't just see symbols - see the mathematical poetry of learning itself!</p>
+
+                <div class="gradient-viz" style="background: linear-gradient(45deg, #059669, #EA580C); color: #FEF7ED; text-align: center; padding: 30px;">
+                    🎓 You now understand both the intuition AND the mathematics of how neural networks learn!
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Slide Counter -->
+    <div class="slide-counter" id="slideCounter">
+        Slide 1 of 16
+    </div>
+
+    <script>
+        // Enhanced Intersection Observer for slide animations
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progressBar');
+        const slideCounter = document.getElementById('slideCounter');
+
+        const observerOptions = {
+            threshold: 0.3,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const slideObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    const slideIndex = Array.from(slides).indexOf(entry.target);
+                    const progress = ((slideIndex + 1) / slides.length) * 100;
+                    progressBar.style.width = progress + '%';
+                    slideCounter.textContent = `Slide ${slideIndex + 1} of ${slides.length}`;
+                }
+            });
+        }, observerOptions);
+
+        slides.forEach(slide => {
+            slideObserver.observe(slide);
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            let currentSlide = 0;
+            
+            slides.forEach((slide, index) => {
+                const rect = slide.getBoundingClientRect();
+                if (rect.top <= 200 && rect.bottom >= 200) {
+                    currentSlide = index;
+                }
+            });
+            
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                if (currentSlide < slides.length - 1) {
+                    slides[currentSlide + 1].scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                if (currentSlide > 0) {
+                    slides[currentSlide - 1].scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }
+        });
+
+        // Interactive quiz functionality
+        function revealAnswer(quizId) {
+            const answer = document.getElementById(quizId);
+            answer.classList.add('visible');
+            
+            const button = event.target;
+            button.style.background = '#059669';
+            button.textContent = '✓ Answer Revealed';
+            button.disabled = true;
+            
+            // Add a subtle animation to the revealed answer
+            answer.style.animation = 'slideInFromLeft 0.6s ease-out';
+        }
+
+        // Initialize first slide as visible
+        setTimeout(() => {
+            if (slides[0]) {
+                slides[0].classList.add('visible');
+            }
+        }, 100);
+
+        // Neural network interaction
+        document.querySelectorAll('.neuron').forEach(neuron => {
+            neuron.addEventListener('click', function() {
+                this.classList.toggle('active');
+                
+                // Add some visual feedback
+                this.style.transform = 'scale(1.3)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            });
+        });
+
+        // Add some dynamic network connections
+        function createConnections() {
+            const networkViz = document.querySelectorAll('.neural-network-viz');
+            networkViz.forEach(viz => {
+                const layers = viz.querySelectorAll('.network-layer');
+                if (layers.length >= 2) {
+                    // This would create visual connections between layers
+                    // Implementation would depend on exact positioning
+                }
+            });
+        }
+
+        // Add interactive mathematical demonstrations
+        function toggleMathMode() {
+            const mathElements = document.querySelectorAll('.math-equation');
+            mathElements.forEach(el => {
+                el.style.transition = 'all 0.3s ease';
+                el.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                    this.style.background = 'rgba(5, 150, 105, 0.1)';
+                });
+                el.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                    this.style.background = 'rgba(30, 41, 59, 0.05)';
+                });
+            });
+        }
+
+        // Mathematical equation interactions
+        function createDerivativeAnimation() {
+            const equations = document.querySelectorAll('.math-equation');
+            equations.forEach((eq, index) => {
+                eq.style.opacity = '0';
+                eq.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    eq.style.transition = 'all 0.6s ease';
+                    eq.style.opacity = '1';
+                    eq.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        }
+
+        // Initialize mathematical interactions
+        setTimeout(() => {
+            toggleMathMode();
+            createDerivativeAnimation();
+        }, 1500);
+    </script>
+</body>
+</html>
