@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adversarial Search: Minimax & Alpha-Beta Pruning</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:Georgia,serif;background:#FEF7ED;color:#1E293B;line-height:1.6;overflow-x:hidden}
+        #particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1}
+        nav{position:fixed;top:0;width:100%;background:rgba(254,247,237,.95);backdrop-filter:blur(10px);z-index:1000;padding:1rem 2rem;transition:all .3s;border-bottom:2px solid #EA580C}
+        nav.scrolled{background:rgba(254,247,237,.98);box-shadow:0 2px 20px rgba(234,88,12,.1)}
+        nav ul{list-style:none;display:flex;justify-content:center;flex-wrap:wrap;gap:1.5rem}
+        nav a{color:#1E293B;text-decoration:none;font-weight:600;transition:all .3s;padding:.5rem 1rem;border-radius:25px;font-size:0.9rem}
+        nav a:hover{background:rgba(234,88,12,.1);color:#EA580C;transform:translateY(-2px)}
+        .progress-bar{position:fixed;top:80px;left:0;height:4px;background:linear-gradient(90deg,#EA580C,#059669);z-index:999;transform-origin:left;transform:scaleX(0);transition:transform .1s}
+        .container{max-width:1200px;margin:0 auto;padding:20px}
+        .slide{background:#FEF7ED;margin-bottom:30px;padding:40px;border-radius:15px;border-left:5px solid #EA580C;box-shadow:0 8px 25px rgba(0,0,0,.1);transition:all .8s;min-height:500px;transform:translateY(50px);opacity:0}
+        .slide.visible{transform:translateY(0);opacity:1}
+        .slide:hover{transform:translateY(-5px)}
+        
+        /* Slide Types */
+        .title-slide{background:#1E293B;color:#FEF7ED;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
+        .title-slide h1{font-size:3.5em;margin-bottom:30px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+        .title-slide .subtitle{font-size:1.6em;opacity:.9;font-style:italic;margin-bottom:20px}
+        .title-slide .author{font-size:1.2em;opacity:.8}
+        
+        .title-content h2,.two-content h2,.comparison h2,.content-caption h2,.picture-caption h2{font-size:2.2em;color:#1E293B;margin-bottom:30px;padding-bottom:10px;border-bottom:3px solid #EA580C}
+        .content-area{font-size:1.1em;line-height:1.8}
+        .content-list{list-style:none}
+        .content-list li{position:relative;padding-left:30px;margin-bottom:15px}
+        .content-list li::before{content:"→";position:absolute;left:0;color:#EA580C;font-weight:bold;font-size:1.2em}
+        
+        .section-header{background:linear-gradient(135deg,#059669,#EA580C);color:#FEF7ED;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
+        .section-header h1{font-size:3em;margin-bottom:20px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+        .section-header .section-subtitle{font-size:1.4em;opacity:.9}
+        
+        .two-content{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+        .two-content h2{grid-column:1/-1}
+        .content-column{padding:20px;background:rgba(5,150,105,.05);border-radius:10px}
+        .content-column h3{font-size:1.6em;color:#059669;margin-bottom:15px}
+        
+        .comparison{position:relative}
+        .comparison h2{text-align:center}
+        .comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:40px}
+        .comparison-item{text-align:center;padding:30px;border-radius:15px;background:rgba(234,88,12,.1)}
+        .comparison-item h3{font-size:1.8em;color:#EA580C;margin-bottom:20px}
+        .vs-divider{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#EA580C;color:#FEF7ED;padding:10px 20px;border-radius:50px;font-weight:bold;font-size:1.2em}
+        
+        .title-only{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+        .title-only h1{font-size:3em;color:#1E293B;margin-bottom:20px}
+        .title-only .subtitle{font-size:1.4em;color:#059669;font-style:italic}
+        
+        .content-caption{display:grid;grid-template-rows:auto 1fr auto;gap:30px}
+        .main-content-area{background:linear-gradient(45deg,#059669,#EA580C);border:2px dashed #1E293B;border-radius:15px;padding:80px 40px;text-align:center;color:#FEF7ED;font-weight:bold;font-size:1.2em}
+        .caption-area{background:rgba(5,150,105,.1);padding:20px;border-radius:10px;border-left:4px solid #059669}
+        
+        .picture-caption{display:grid;grid-template-columns:2fr 1fr;gap:40px;align-items:start}
+        .picture-caption h2{grid-column:1/-1}
+        .picture-area{background:rgba(5,150,105,.1);border:2px solid #059669;border-radius:15px;padding:20px;text-align:center;min-height:300px;display:flex;align-items:center;justify-content:center}
+        .caption-sidebar{background:rgba(234,88,12,.1);padding:30px;border-radius:15px;border-left:4px solid #EA580C}
+        .caption-sidebar h3{color:#EA580C;margin-bottom:15px;font-size:1.4em}
+        
+        /* Interactive Demo Styles */
+        .demo-container{background:#fff;border:2px solid #059669;border-radius:15px;padding:20px;margin:20px 0;box-shadow:0 5px 20px rgba(0,0,0,.1)}
+        .demo-container iframe{width:100%;height:600px;border:none;border-radius:10px}
+        .demo-title{background:#059669;color:#FEF7ED;padding:10px 20px;margin:-20px -20px 20px -20px;border-radius:13px 13px 0 0;font-weight:bold;font-size:1.2em}
+        
+        /* Utility Classes */
+        .highlight-box{background:#059669;color:#FEF7ED;padding:20px;border-radius:10px;margin:20px 0;font-weight:bold}
+        .accent-box{background:#EA580C;color:#FEF7ED;padding:20px;border-radius:10px;margin:20px 0;font-style:italic}
+        .emphasis{background:#EA580C;color:#FEF7ED;padding:4px 8px;border-radius:5px;font-weight:bold;display:inline-block}
+        .back-to-top{position:fixed;bottom:30px;right:30px;background:linear-gradient(45deg,#EA580C,#059669);color:#FEF7ED;border:none;border-radius:50%;width:60px;height:60px;font-size:1.5rem;cursor:pointer;opacity:0;transition:all .3s;z-index:1000}
+        .back-to-top.visible{opacity:1}
+        .back-to-top:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(234,88,12,.3)}
+        .float{animation:float 3s ease-in-out infinite}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+        
+        /* Game Visual Styles */
+        .game-visual{display:flex;justify-content:center;align-items:center;margin:20px 0;padding:30px;background:rgba(5,150,105,.1);border-radius:15px}
+        .chessboard{width:200px;height:200px;background:linear-gradient(45deg,#8B4513 25%, transparent 25%),linear-gradient(-45deg,#8B4513 25%, transparent 25%),linear-gradient(45deg,transparent 75%,#8B4513 75%),linear-gradient(-45deg,transparent 75%,#8B4513 75%);background-size:50px 50px;background-position:0 0,0 25px,25px -25px,-25px 0px;border:3px solid #1E293B;border-radius:10px;position:relative}
+        .player{width:60px;height:60px;background:#EA580C;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#FEF7ED;font-weight:bold;margin:0 20px;position:relative}
+        .player::after{content:"";position:absolute;top:50%;right:-40px;width:30px;height:2px;background:#1E293B;transform:translateY(-50%)}
+        .player:last-child::after{left:-40px;right:auto}
+        .arrow{font-size:2em;color:#EA580C;margin:0 10px}
+        
+        .tree-diagram{background:#fff;border:2px solid #059669;border-radius:15px;padding:30px;margin:20px 0;text-align:center}
+        .tree-level{display:flex;justify-content:center;margin:20px 0;gap:20px}
+        .tree-node{width:50px;height:50px;background:#EA580C;color:#FEF7ED;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;position:relative}
+        .tree-node.max{background:#059669}
+        .tree-node.leaf{background:#1E293B}
+        
+        @media (max-width:768px){
+            nav{display:none}
+            .container{padding:10px}
+            .slide{padding:20px;min-height:400px}
+            .title-slide h1{font-size:2.5em}
+            .two-content,.comparison-grid,.picture-caption{grid-template-columns:1fr;gap:20px}
+            .vs-divider{display:none}
+            .demo-container iframe{height:500px}
+            .game-visual{flex-direction:column;gap:20px}
+            .player::after{display:none}
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <div class="progress-bar" id="progress-bar"></div>
+    
+    <nav id="navbar">
+        <ul>
+            <li><a href="#slide1">Title</a></li>
+            <li><a href="#slide2">Games</a></li>
+            <li><a href="#slide3">Why Games?</a></li>
+            <li><a href="#slide4">Game Trees</a></li>
+            <li><a href="#slide5">Minimax</a></li>
+            <li><a href="#slide6">Demo</a></li>
+            <li><a href="#slide7">Alpha-Beta</a></li>
+            <li><a href="#slide8">Pruning Demo</a></li>
+            <li><a href="#slide9">Performance</a></li>
+            <li><a href="#slide10">Applications</a></li>
+            <li><a href="#slide11">Practice</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- 1. Title Slide -->
+        <div id="slide1" class="slide title-slide">
+            <h1 class="float">Adversarial Search</h1>
+            <p class="subtitle">Minimax & Alpha-Beta Pruning</p>
+            <p class="author">Professor Dr. Dhaval Patel • AI Course • Computer Science Department</p>
+        </div>
+
+        <!-- 2. What are Adversarial Games? -->
+        <div id="slide2" class="slide title-content">
+            <h2>What are Adversarial Games?</h2>
+            <div class="content-area">
+                <p>Many AI problems can be modeled as <span class="emphasis">games between two players</span>, where each makes moves in turn, trying to optimize their own outcome.</p>
+                
+                <div class="game-visual">
+                    <div class="player">👤</div>
+                    <div class="arrow">⟷</div>
+                    <div class="chessboard"></div>
+                    <div class="arrow">⟷</div>
+                    <div class="player">🤖</div>
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Chess:</strong> Classic strategy game with perfect information</li>
+                    <li><strong>Tic-Tac-Toe:</strong> Simple but perfect for understanding concepts</li>
+                    <li><strong>Checkers:</strong> Another perfect information game</li>
+                    <li><strong>Go:</strong> Ancient game with enormous complexity</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    Key Characteristic: Two players alternate moves, each trying to maximize their own score while minimizing their opponent's score.
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Why are Games Interesting for AI? -->
+        <div id="slide3" class="slide two-content">
+            <h2>Why Study Games in AI?</h2>
+            <div class="content-column">
+                <h3>🧠 Cognitive Challenges</h3>
+                <ul class="content-list">
+                    <li>Test reasoning and planning abilities</li>
+                    <li>Require looking ahead multiple moves</li>
+                    <li>Decision making under uncertainty</li>
+                    <li>Strategic thinking and pattern recognition</li>
+                </ul>
+                <div class="accent-box">
+                    Games provide a perfect sandbox for testing AI reasoning!
+                </div>
+            </div>
+            <div class="content-column">
+                <h3>📊 Measurable Progress</h3>
+                <ul class="content-list">
+                    <li>Clear win/lose/draw outcomes</li>
+                    <li>Direct comparison with human experts</li>
+                    <li>Well-defined rules and objectives</li>
+                    <li>Benchmarking against other AI systems</li>
+                </ul>
+                <div class="highlight-box">
+                    Human vs AI: The ultimate test of artificial intelligence!
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Game Trees - The Foundation -->
+        <div id="slide4" class="slide content-caption">
+            <h2>Game Trees – The Playground of Minimax</h2>
+            <div class="main-content-area">
+                <div class="tree-diagram">
+                    <div class="tree-level">
+                        <div class="tree-node max">MAX</div>
+                    </div>
+                    <div class="tree-level">
+                        <div class="tree-node">MIN</div>
+                        <div class="tree-node">MIN</div>
+                        <div class="tree-node">MIN</div>
+                    </div>
+                    <div class="tree-level">
+                        <div class="tree-node leaf">3</div>
+                        <div class="tree-node leaf">5</div>
+                        <div class="tree-node leaf">2</div>
+                        <div class="tree-node leaf">9</div>
+                        <div class="tree-node leaf">0</div>
+                        <div class="tree-node leaf">1</div>
+                        <div class="tree-node leaf">7</div>
+                        <div class="tree-node leaf">5</div>
+                        <div class="tree-node leaf">4</div>
+                    </div>
+                </div>
+            </div>
+            <div class="caption-area">
+                <strong>Game Tree Structure:</strong>
+                <ul class="content-list">
+                    <li><strong>Root:</strong> Current game state</li>
+                    <li><strong>Nodes:</strong> Possible game states after moves</li>
+                    <li><strong>Edges:</strong> Legal moves available</li>
+                    <li><strong>Leaves:</strong> Terminal states (win/lose/draw)</li>
+                    <li><strong>Alternating Levels:</strong> MAX player vs MIN player</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 5. The Minimax Algorithm -->
+        <div id="slide5" class="slide title-content">
+            <h2>The Minimax Idea</h2>
+            <div class="content-area">
+                <p>The core insight of Minimax is beautifully simple yet powerful:</p>
+                
+                <div class="highlight-box">
+                    <strong>Assume your opponent plays optimally!</strong><br>
+                    Choose moves that maximize your minimum possible outcome.
+                </div>
+                
+                <h3 style="color:#059669;margin:30px 0 15px 0">How Minimax Works:</h3>
+                <ul class="content-list">
+                    <li><strong>MAX nodes:</strong> Your turn - pick the move with highest value</li>
+                    <li><strong>MIN nodes:</strong> Opponent's turn - they pick lowest value for you</li>
+                    <li><strong>Backup values:</strong> Propagate scores from leaves to root</li>
+                    <li><strong>Best move:</strong> Root node tells you the optimal first move</li>
+                </ul>
+                
+                <div class="accent-box">
+                    💡 <strong>Think of it like:</strong> You're climbing a ladder while your opponent tries to shake it. You look for the safest, highest step you can reach!
+                </div>
+                
+                <p><strong>Algorithm guarantees:</strong> If both players play perfectly, Minimax finds the best possible outcome for the MAX player.</p>
+            </div>
+        </div>
+
+        <!-- 6. Interactive Minimax Demo -->
+        <div id="slide6" class="slide content-caption">
+            <h2>Minimax Algorithm in Action</h2>
+            <div class="main-content-area">
+                <div class="demo-container">
+                    <div class="demo-title">🎮 Interactive Minimax Demo - Step Through the Algorithm</div>
+                    <iframe src="data:text/html;charset=utf-8,<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <title>Minimax Algorithm – 3-Level Demo</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <style>
+    html, body { margin:0; padding:0; box-sizing:border-box;}
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #F1F5F9;
+      text-align: center;
+    }
+    .container {
+      max-width: 660px;
+      margin: auto;
+      padding: 0 8px;
+    }
+    h2 {
+      font-size: 1.22rem;
+      font-weight: bold;
+      margin: 18px 0 6px 0;
+      color: #1e293b;
+    }
+    .desc {
+      background: #fffbe8;
+      color: #4b5563;
+      border-radius: 10px;
+      padding: 12px 10px;
+      margin: 14px auto 8px auto;
+      font-size: 1.05rem;
+      min-height: 46px;
+      max-width: 480px;
+      box-shadow: 0 2px 8px #e5e7eb;
+      word-break: break-word;
+    }
+    .tree-wrap { position: relative; margin: 0 auto 10px auto; }
+    .tree {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 10px 0 0 0;
+      width: 100%;
+      z-index: 1;
+      position: relative;
+    }
+    .level {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      margin: 14px 0 0 0;
+      width: 100%;
+      gap: 14px;
+      position: relative;
+      z-index: 1;
+    }
+    .root-level {
+      justify-content: center !important;
+      gap: 0 !important;
+      margin-bottom: 0 !important;
+    }
+    .root-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .node {
+      border: 2.2px solid #3B82F6;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      font-weight: 600;
+      font-size: 18px;
+      margin: 0 4px;
+      position: relative;
+      transition: background 0.4s, border-color 0.4s;
+      box-shadow: 0 2px 6px #e0e7ef77;
+      z-index: 2;
+    }
+    .highlight { background: #A7F3D0 !important; border-color: #059669 !important; }
+    .max { color: #2563EB; }
+    .min { color: #DC2626; }
+    .buttons {
+      display: flex; justify-content: center; gap: 20px; margin: 16px 0 10px 0;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 13px 24px;
+      font-size: 17px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #6366F1 0%, #3B82F6 100%);
+      color: #fff;
+      box-shadow: 0 2px 8px #dbeafe88;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: background 0.2s, transform 0.2s;
+      outline: none;
+      min-width: 120px;
+    }
+    .btn:active { background: #312e81; transform: scale(.97);}
+    .btn:disabled { opacity: 0.55; background: #94a3b8; cursor: not-allowed;}
+    #svgLines {
+      position: absolute;
+      pointer-events: none;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class='container'>
+    <h2>Minimax Algorithm – 3-Level Demo</h2>
+    <div class='desc' id='desc'></div>
+    <div class='tree-wrap'>
+      <svg id='svgLines'></svg>
+      <div class='tree' id='tree'></div>
+    </div>
+    <div class='buttons'>
+      <button class='btn' id='nextBtn'>Next Step</button>
+      <button class='btn' id='resetBtn'>Reset</button>
+    </div>
+  </div>
+  <script>
+    const treeData = {
+      type: 'max', value: null, children: [
+        {
+          type: 'min', value: null, children: [
+            { type: null, value: 3, children: [] },
+            { type: null, value: 5, children: [] },
+            { type: null, value: 2, children: [] }
+          ]
+        },
+        {
+          type: 'min', value: null, children: [
+            { type: null, value: 9, children: [] },
+            { type: null, value: 12, children: [] },
+            { type: null, value: 5, children: [] }
+          ]
+        },
+        {
+          type: 'min', value: null, children: [
+            { type: null, value: 14, children: [] },
+            { type: null, value: 2, children: [] },
+            { type: null, value: 8, children: [] }
+          ]
+        }
+      ]
+    };
+    let highlights = [], stepper = null, visitState = null;
+    function buildState(node) {
+      const st = {visited:false, children:[]};
+      node.children.forEach((child, i) => st.children[i] = buildState(child));
+      return st;
+    }
+    function* minimaxStep(node, state, path = [], isMax = true) {
+      if (!node.children.length) {
+        state.visited = true; highlights = [path];
+        yield {desc: `Reached leaf node: value = ${node.value}`, highlights: [path]};
+        return node.value;
+      }
+      let bestVal = isMax ? -Infinity : Infinity;
+      for (let i = 0; i < node.children.length; i++) {
+        let child = node.children[i], childState = state.children[i];
+        highlights = [path.concat([i])];
+        yield {desc: `${isMax?'MAX':'MIN'} node at depth ${path.length}: evaluating child ${i+1}/${node.children.length}`, highlights:[path.concat([i])]};
+        let val = yield* minimaxStep(child, childState, path.concat([i]), !isMax);
+        if (isMax) { if (val > bestVal) bestVal = val; }
+        else { if (val < bestVal) bestVal = val; }
+      }
+      node.value = bestVal; state.visited = true;
+      highlights = [path];
+      yield {desc: `${isMax?'MAX':'MIN'} node at depth ${path.length}: back up value = ${bestVal}`, highlights:[path]};
+      return bestVal;
+    }
+    function getLevels(node, state, depth = 0, levels = [], slevels = []) {
+      if (!levels[depth]) { levels[depth] = []; slevels[depth] = []; }
+      levels[depth].push(node); slevels[depth].push(state);
+      node.children.forEach((child, i) => getLevels(child, state.children[i], depth + 1, levels, slevels));
+      return [levels, slevels];
+    }
+    function renderTree() {
+      const treeDiv = document.getElementById('tree');
+      treeDiv.innerHTML = '';
+      const [levels, slevels] = getLevels(treeData, visitState);
+      setTimeout(() => drawSVGLines(levels, slevels), 10);
+      levels.forEach((level, d) => {
+        let levelDiv;
+        if (d === 0) {
+          levelDiv = document.createElement('div');
+          levelDiv.className = 'level root-level';
+          const rootWrap = document.createElement('div');
+          rootWrap.className = 'root-wrap';
+          const div = document.createElement('div');
+          div.className = 'node';
+          let state = slevels[d][0];
+          if (level[0].type === 'max') div.classList.add('max');
+          if (level[0].type === 'min') div.classList.add('min');
+          if (state.visited) div.classList.add('highlight');
+          div.innerText = level[0].value!==null ? level[0].value : level[0].type ? level[0].type.toUpperCase() : '?';
+          rootWrap.appendChild(div);
+          levelDiv.appendChild(rootWrap);
+        } else {
+          levelDiv = document.createElement('div');
+          levelDiv.className = 'level';
+          level.forEach((node, i) => {
+            const div = document.createElement('div');
+            div.className = 'node';
+            let state = slevels[d][i];
+            if (node.type === 'max') div.classList.add('max');
+            if (node.type === 'min') div.classList.add('min');
+            if (state.visited) div.classList.add('highlight');
+            if (highlights.some(path => {
+              if (path.length !== d) return false;
+              let idxs = path.slice(), idx = idxs.pop(), ref = visitState;
+              for (let dd = 0; dd < d-1; dd++) { if (!ref.children[idxs[dd]]) return false; ref = ref.children[idxs[dd]]; }
+              return ref.children && ref.children[idx] === state;
+            })) div.classList.add('highlight');
+            div.innerText = node.value!==null ? node.value : node.type ? node.type.toUpperCase() : '?';
+            levelDiv.appendChild(div);
+          });
+        }
+        treeDiv.appendChild(levelDiv);
+      });
+    }
+    function drawSVGLines(levels, slevels) {
+      const svg = document.getElementById('svgLines');
+      svg.innerHTML = '';
+      const allNodes = Array.from(document.querySelectorAll('.tree .node'));
+      let offset = 0;
+      let nodeCenters = [];
+      levels.forEach((level, d) => {
+        let levelCenters = [];
+        let levelNodes = allNodes.slice(offset, offset + level.length);
+        levelNodes.forEach(nodeEl => {
+          const rect = nodeEl.getBoundingClientRect();
+          const parentRect = svg.getBoundingClientRect();
+          levelCenters.push({
+            x: rect.left - parentRect.left + rect.width/2,
+            y: rect.top - parentRect.top + rect.height/2
+          });
+        });
+        nodeCenters.push(levelCenters);
+        offset += level.length;
+      });
+      for (let d = 0; d < nodeCenters.length-1; d++) {
+        let parentLevel = nodeCenters[d], childLevel = nodeCenters[d+1];
+        let pi = 0;
+        levels[d].forEach((parent, i) => {
+          let children = parent.children || [];
+          for (let j = 0; j < children.length; j++) {
+            let ci = pi;
+            pi++;
+            let line = document.createElementNS('http://www.w3.org/2000/svg','line');
+            line.setAttribute('x1', parentLevel[i].x);
+            line.setAttribute('y1', parentLevel[i].y+18);
+            line.setAttribute('x2', childLevel[ci].x);
+            line.setAttribute('y2', childLevel[ci].y-18);
+            line.setAttribute('stroke', '#b6b6b6');
+            line.setAttribute('stroke-width', '2');
+            svg.appendChild(line);
+          }
+        });
+      }
+    }
+    function nextStep() {
+      let {value, done} = stepper.next();
+      renderTree();
+      document.getElementById('desc').innerText = value ? value.desc : '';
+      if (done) {
+        document.getElementById('nextBtn').disabled = true;
+        document.getElementById('desc').innerText += `\n\nMinimax Complete! Root value: ${treeData.value}`;
+      }
+    }
+    function restart() {
+      visitState = buildState(treeData);
+      highlights = [];
+      treeData.value = null;
+      treeData.children.forEach(child => {
+        child.value = null;
+      });
+      stepper = minimaxStep(treeData, visitState, [], true);
+      document.getElementById('nextBtn').disabled = false;
+      nextStep();
+    }
+    document.getElementById('nextBtn').onclick = nextStep;
+    document.getElementById('resetBtn').onclick = restart;
+    restart();
+  </script>
+</body>
+</html>"></iframe>
+                </div>
+            </div>
+            <div class="caption-area">
+                <strong>🎯 Try the Demo Above:</strong> Click "Next Step" to watch how Minimax evaluates each node, backs up values from leaves to root, and finds the optimal move. The algorithm guarantees the best possible outcome assuming perfect opponent play.
+            </div>
+        </div>
+
+        <!-- 7. Alpha-Beta Pruning Section -->
+        <div id="slide7" class="slide section-header">
+            <h1>Alpha-Beta Pruning</h1>
+            <p class="section-subtitle">Search Smarter, Not Harder</p>
+        </div>
+
+        <!-- 8. Alpha-Beta Pruning Explanation -->
+        <div id="slide8" class="slide title-content">
+            <h2>The Problem with Minimax</h2>
+            <div class="content-area">
+                <div class="accent-box">
+                    ⚠️ <strong>Minimax Bottleneck:</strong> Time complexity is O(b^m) where b = branching factor and m = maximum depth. This explodes quickly!
+                </div>
+                
+                <h3 style="color:#EA580C;margin:30px 0 15px 0">Enter Alpha-Beta Pruning! 🚀</h3>
+                <p>Alpha-Beta pruning <span class="emphasis">skips branches that cannot affect the final decision</span>, dramatically reducing the search space while guaranteeing the same result as Minimax.</p>
+                
+                <div class="two-content" style="margin-top: 30px">
+                    <div class="content-column">
+                        <h3>🔍 Alpha (α)</h3>
+                        <ul class="content-list">
+                            <li>Best value found so far for MAX</li>
+                            <li>Lower bound for MAX player</li>
+                            <li>Gets updated at MAX nodes</li>
+                            <li>Starts at -∞</li>
+                        </ul>
+                    </div>
+                    <div class="content-column">
+                        <h3>✂️ Beta (β)</h3>
+                        <ul class="content-list">
+                            <li>Best value found so far for MIN</li>
+                            <li>Upper bound for MIN player</li>
+                            <li>Gets updated at MIN nodes</li>
+                            <li>Starts at +∞</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Pruning Rule:</strong> If α ≥ β at any point, stop searching that branch! The remaining moves cannot improve the outcome.
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. Interactive Alpha-Beta Demo -->
+        <div id="slide9" class="slide content-caption">
+            <h2>Alpha-Beta Pruning in Action</h2>
+            <div class="main-content-area">
+                <div class="demo-container">
+                    <div class="demo-title">✂️ Interactive Alpha-Beta Pruning Demo - Watch the Pruning Magic!</div>
+                    <iframe src="data:text/html;charset=utf-8,<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <title>Alpha-Beta Pruning with Visual Connectors</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <style>
+    html, body { margin:0; padding:0; box-sizing:border-box;}
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #F1F5F9;
+      text-align: center;
+    }
+    .container {
+      max-width: 660px;
+      margin: auto;
+      padding: 0 8px;
+    }
+    h2 {
+      font-size: 1.22rem;
+      font-weight: bold;
+      margin: 18px 0 6px 0;
+      color: #1e293b;
+    }
+    .desc {
+      background: #fffbe8;
+      color: #4b5563;
+      border-radius: 10px;
+      padding: 12px 10px;
+      margin: 14px auto 8px auto;
+      font-size: 1.05rem;
+      min-height: 46px;
+      max-width: 480px;
+      box-shadow: 0 2px 8px #e5e7eb;
+      word-break: break-word;
+    }
+    .tree-wrap { position: relative; margin: 0 auto 10px auto; }
+    .tree {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 10px 0 0 0;
+      width: 100%;
+      z-index: 1;
+      position: relative;
+    }
+    .level {
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      margin: 14px 0 0 0;
+      width: 100%;
+      gap: 14px;
+      position: relative;
+      z-index: 1;
+    }
+    .root-level {
+      justify-content: center !important;
+      gap: 0 !important;
+      margin-bottom: 0 !important;
+    }
+    .root-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .node {
+      border: 2.2px solid #3B82F6;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      font-weight: 600;
+      font-size: 18px;
+      margin: 0 4px;
+      position: relative;
+      transition: background 0.4s, border-color 0.4s;
+      box-shadow: 0 2px 6px #e0e7ef77;
+      z-index: 2;
+    }
+    .highlight { background: #FFF6D3 !important; border-color: #F59E42 !important; }
+    .pruned    { background: #E5E7EB !important; border-color: #D1D5DB !important; color: #aaa !important; }
+    .max { color: #2563EB; }
+    .min { color: #DC2626; }
+    .ab-labels {
+      display: flex; justify-content: center; gap: 6px;
+      margin-top: 2px;
+    }
+    .ab-badge {
+      display: inline-block; padding: 2px 6px 2px 6px;
+      border-radius: 7px; font-size: 11.5px; font-weight: 500;
+      margin: 0 2px; line-height: 1.2;
+    }
+    .ab-alpha { background: #e0e7ff; color: #2563eb; border: 1.2px solid #b5bcf7;}
+    .ab-beta  { background: #fee2e2; color: #dc2626; border: 1.2px solid #fca5a5;}
+    .buttons {
+      display: flex; justify-content: center; gap: 20px; margin: 16px 0 10px 0;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 13px 24px;
+      font-size: 17px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #6366F1 0%, #3B82F6 100%);
+      color: #fff;
+      box-shadow: 0 2px 8px #dbeafe88;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: background 0.2s, transform 0.2s;
+      outline: none;
+      min-width: 120px;
+    }
+    .btn:active { background: #312e81; transform: scale(.97);}
+    .btn:disabled { opacity: 0.55; background: #94a3b8; cursor: not-allowed;}
+    #svgLines {
+      position: absolute;
+      pointer-events: none;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class='container'>
+    <h2>Alpha-Beta Pruning – 4-Level Demo</h2>
+    <div class='desc' id='desc'></div>
+    <div class='tree-wrap'>
+      <svg id='svgLines'></svg>
+      <div class='tree' id='tree'></div>
+    </div>
+    <div class='buttons'>
+      <button class='btn' id='nextBtn'>Next Step</button>
+      <button class='btn' id='resetBtn'>Reset</button>
+    </div>
+  </div>
+  <script>
+    const treeData = {
+      type: 'max', value: null, alpha: null, beta: null, children: [
+        {
+          type: 'min', value: null, alpha: null, beta: null, children: [
+            {
+              type: 'max', value: null, alpha: null, beta: null, children: [
+                { type: 'min', value: null, alpha: null, beta: null, children: [
+                  { type: null, value: 3, children: [] },
+                  { type: null, value: 12, children: [] }
+                ]},
+                { type: 'min', value: null, alpha: null, beta: null, children: [
+                  { type: null, value: 8, children: [] },
+                  { type: null, value: 2, children: [] }
+                ]}
+              ]
+            },
+            {
+              type: 'max', value: null, alpha: null, beta: null, children: [
+                { type: 'min', value: null, alpha: null, beta: null, children: [
+                  { type: null, value: 14, children: [] },
+                  { type: null, value: 5, children: [] }
+                ]},
+                { type: 'min', value: null, alpha: null, beta: null, children: [
+                  { type: null, value: 2, children: [] },
+                  { type: null, value: 4, children: [] }
+                ]}
+              ]
+            }
+          ]
+        },
+        {
+          type: 'min', value: null, alpha: null, beta: null, children: [
+            {
+              type: 'max', value: null, alpha: null, beta: null, children: [
+                { type: 'min', value: null, alpha: null, beta: null, children: [
+                  { type: null, value: 5, children: [] },
+                  { type: null, value: 2, children: [] }
+                ]},
+                { type: 'min', value: null, alpha: null, beta: null, children: [
+                  { type: null, value: 4, children: [] },
+                  { type: null, value: 6, children: [] }
+                ]}
+              ]
+            },
+            {
+              type: 'max', value: null, alpha: null, beta: null, children: [
+                { type: 'min', value: null, alpha: null, beta: null, children: [
+                  { type: null, value: 6, children: [] },
+                  { type: null, value: 10, children: [] }
+                ]},
+                { type: 'min', value: null, alpha: null, beta: null, children: [
+                  { type: null, value: 8, children: [] },
+                  { type: null, value: 11, children: [] }
+                ]}
+              ]
+            }
+          ]
+        }
+      ]
+    };
+    let visitState = null, highlights = [], stepper = null;
+    function buildState(node) {
+      const st = {visited:false,pruned:false,children:[]};
+      node.children.forEach((child, i) => st.children[i] = buildState(child));
+      return st;
+    }
+    function* alphabetaStep(node, state, alpha, beta, path = [], isMax = true) {
+      if (!node.children.length) {
+        state.visited = true; highlights = [path];
+        yield {desc: `Reached leaf node: value = ${node.value}`, highlights: [path]};
+        return node.value;
+      }
+      let bestVal = isMax ? -Infinity : Infinity;
+      node.alpha = alpha; node.beta = beta;
+      for (let i = 0; i < node.children.length; i++) {
+        let child = node.children[i], childState = state.children[i];
+        highlights = [path.concat([i])];
+        yield {desc: `${isMax?'MAX':'MIN'} node at depth ${path.length}: evaluating child ${i+1}/${node.children.length} (α=${alpha}, β=${beta})`, highlights:[path.concat([i])]};
+        let val = yield* alphabetaStep(child, childState, alpha, beta, path.concat([i]), child.type === 'max');
+        if (isMax) { if (val > bestVal) bestVal = val; if (val > alpha) alpha = val; }
+        else { if (val < bestVal) bestVal = val; if (val < beta) beta = val; }
+        node.alpha = alpha; node.beta = beta;
+        if (beta <= alpha) {
+          for (let j = i+1; j < node.children.length; j++) state.children[j].pruned = true;
+          yield {desc: `Pruning remaining ${node.children.length-i-1} branch(es) at this ${isMax?'MAX':'MIN'} node (β ≤ α)!`, highlights:[path]};
+          break;
+        }
+      }
+      node.value = bestVal; state.visited = true;
+      highlights = [path];
+      yield {desc: `${isMax?'MAX':'MIN'} node at depth ${path.length}: back up value = ${bestVal}`, highlights:[path]};
+      return bestVal;
+    }
+    function getLevels(node, state, depth = 0, levels = [], slevels = []) {
+      if (!levels[depth]) { levels[depth] = []; slevels[depth] = []; }
+      levels[depth].push(node); slevels[depth].push(state);
+      node.children.forEach((child, i) => getLevels(child, state.children[i], depth + 1, levels, slevels));
+      return [levels, slevels];
+    }
+    function renderTree() {
+      const treeDiv = document.getElementById('tree');
+      treeDiv.innerHTML = '';
+      const [levels, slevels] = getLevels(treeData, visitState);
+      setTimeout(() => drawSVGLines(levels, slevels), 10);
+      levels.forEach((level, d) => {
+        let levelDiv;
+        if (d === 0) {
+          levelDiv = document.createElement('div');
+          levelDiv.className = 'level root-level';
+          const rootWrap = document.createElement('div');
+          rootWrap.className = 'root-wrap';
+          const div = document.createElement('div');
+          div.className = 'node';
+          let state = slevels[d][0];
+          if (level[0].type === 'max') div.classList.add('max');
+          if (level[0].type === 'min') div.classList.add('min');
+          if (state.pruned) div.classList.add('pruned');
+          if (highlights.some(path => path.length === 0 && visitState === state))
+            div.classList.add('highlight');
+          div.innerText = level[0].value!==null ? level[0].value : level[0].type ? level[0].type.toUpperCase() : '?';
+          rootWrap.appendChild(div);
+          if (level[0].children && level[0].children.length && !state.pruned) {
+            const abDiv = document.createElement('div');
+            abDiv.className = 'ab-labels';
+            if (level[0].alpha !== null)
+                abDiv.innerHTML += `<span class='ab-badge ab-alpha'>α: ${level[0].alpha === -Infinity ? '−∞' : level[0].alpha}</span>`;
+            if (level[0].beta !== null)
+                abDiv.innerHTML += `<span class='ab-badge ab-beta'>β: ${level[0].beta === Infinity ? '+∞' : level[0].beta}</span>`;
+            abDiv.style.marginBottom = '10px';
+            rootWrap.appendChild(abDiv);
+          }
+          levelDiv.appendChild(rootWrap);
+        } else {
+          levelDiv = document.createElement('div');
+          levelDiv.className = 'level';
+          level.forEach((node, i) => {
+            const div = document.createElement('div');
+            div.className = 'node';
+            let state = slevels[d][i];
+            if (node.type === 'max') div.classList.add('max');
+            if (node.type === 'min') div.classList.add('min');
+            if (state.pruned) div.classList.add('pruned');
+            if (highlights.some(path => {
+              if (path.length !== d) return false;
+              let idxs = path.slice(), idx = idxs.pop(), ref = visitState;
+              for (let dd = 0; dd < d-1; dd++) { if (!ref.children[idxs[dd]]) return false; ref = ref.children[idxs[dd]]; }
+              return ref.children && ref.children[idx] === state;
+            })) div.classList.add('highlight');
+            div.innerText = node.value!==null ? node.value : node.type ? node.type.toUpperCase() : '?';
+            if (node.children && node.children.length && !state.pruned) {
+              const abDiv = document.createElement('div');
+              abDiv.className = 'ab-labels';
+              if (node.alpha !== null)
+                  abDiv.innerHTML += `<span class='ab-badge ab-alpha'>α: ${node.alpha === -Infinity ? '−∞' : node.alpha}</span>`;
+              if (node.beta !== null)
+                  abDiv.innerHTML += `<span class='ab-badge ab-beta'>β: ${node.beta === Infinity ? '+∞' : node.beta}</span>`;
+              div.appendChild(abDiv);
+            }
+            levelDiv.appendChild(div);
+          });
+        }
+        treeDiv.appendChild(levelDiv);
+      });
+    }
+    function drawSVGLines(levels, slevels) {
+      const svg = document.getElementById('svgLines');
+      svg.innerHTML = '';
+      const allNodes = Array.from(document.querySelectorAll('.tree .node'));
+      let offset = 0;
+      let nodeCenters = [];
+      levels.forEach((level, d) => {
+        let levelCenters = [];
+        let levelNodes = allNodes.slice(offset, offset + level.length);
+        levelNodes.forEach(nodeEl => {
+          const rect = nodeEl.getBoundingClientRect();
+          const parentRect = svg.getBoundingClientRect();
+          levelCenters.push({
+            x: rect.left - parentRect.left + rect.width/2,
+            y: rect.top - parentRect.top + rect.height/2
+          });
+        });
+        nodeCenters.push(levelCenters);
+        offset += level.length;
+      });
+      for (let d = 0; d < nodeCenters.length-1; d++) {
+        let parentLevel = nodeCenters[d], childLevel = nodeCenters[d+1];
+        let pi = 0;
+        levels[d].forEach((parent, i) => {
+          let state = slevels[d][i];
+          if (state.pruned) return;
+          let children = parent.children || [];
+          for (let j = 0; j < children.length; j++) {
+            let ci = pi;
+            let childState = slevels[d+1][ci];
+            pi++;
+            if (childState.pruned) continue;
+            let line = document.createElementNS('http://www.w3.org/2000/svg','line');
+            line.setAttribute('x1', parentLevel[i].x);
+            line.setAttribute('y1', parentLevel[i].y+18);
+            line.setAttribute('x2', childLevel[ci].x);
+            line.setAttribute('y2', childLevel[ci].y-18);
+            line.setAttribute('stroke', '#b6b6b6');
+            line.setAttribute('stroke-width', '2');
+            svg.appendChild(line);
+          }
+        });
+      }
+    }
+    function nextStep() {
+      let {value, done} = stepper.next();
+      renderTree();
+      document.getElementById('desc').innerText = value ? value.desc : '';
+      if (done) {
+        document.getElementById('nextBtn').disabled = true;
+        document.getElementById('desc').innerText += `\n\nAlpha-Beta Complete! Root value: ${treeData.value}`;
+      }
+    }
+    function restart() {
+      visitState = buildState(treeData);
+      highlights = [];
+      treeData.value = null; treeData.alpha = null; treeData.beta = null;
+      treeData.children.forEach(child => {
+        child.value = null; child.alpha = null; child.beta = null;
+        child.children.forEach(c2 => {
+          c2.value = null; c2.alpha = null; c2.beta = null;
+          c2.children.forEach(c3 => {
+            c3.value = null; c3.alpha = null; c3.beta = null;
+          });
+        });
+      });
+      stepper = alphabetaStep(treeData, visitState, -Infinity, Infinity, [], true);
+      document.getElementById('nextBtn').disabled = false;
+      nextStep();
+    }
+    document.getElementById('nextBtn').onclick = nextStep;
+    document.getElementById('resetBtn').onclick = restart;
+    restart();
+  </script>
+</body>
+</html>"></iframe>
+                </div>
+            </div>
+            <div class="caption-area">
+                <strong>✂️ Watch the Pruning Power:</strong> Notice how Alpha-Beta prunes entire subtrees (shown in gray) when α ≥ β. The algorithm achieves the exact same result as Minimax but explores far fewer nodes!
+            </div>
+        </div>
+
+        <!-- 10. Performance Comparison -->
+        <div id="slide10" class="slide comparison">
+            <h2>Minimax vs Alpha-Beta Performance</h2>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>🐌 Standard Minimax</h3>
+                    <ul class="content-list">
+                        <li><strong>Time Complexity:</strong> O(b^m)</li>
+                        <li><strong>Space Complexity:</strong> O(bm)</li>
+                        <li><strong>Nodes Explored:</strong> All nodes</li>
+                        <li><strong>Guarantees:</strong> Optimal solution</li>
+                    </ul>
+                    <div class="accent-box">Explores the entire search tree - can be very slow for deep games!</div>
+                </div>
+                <div class="comparison-item">
+                    <h3>🚀 Alpha-Beta Pruning</h3>
+                    <ul class="content-list">
+                        <li><strong>Best Case:</strong> O(b^(m/2))</li>
+                        <li><strong>Worst Case:</strong> O(b^m)</li>
+                        <li><strong>Typical Case:</strong> Much better than Minimax</li>
+                        <li><strong>Guarantees:</strong> Same optimal solution</li>
+                    </ul>
+                    <div class="highlight-box">Can search twice as deep in the same time with perfect move ordering!</div>
+                </div>
+            </div>
+            <div class="vs-divider">VS</div>
+        </div>
+
+        <!-- 11. Real-World Applications -->
+        <div id="slide11" class="slide content-caption">
+            <h2>Real-World Game AI Victories</h2>
+            <div class="main-content-area">
+                <div style="background: rgba(254,247,237,0.9); padding: 40px; border-radius: 15px; color: #1E293B; line-height: 1.8; text-align: left;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start;">
+                        <div>
+                            <h3 style="color: #EA580C; margin-bottom: 15px;">🏆 Historic Victories</h3>
+                            <ul style="list-style: none; padding-left: 0;">
+                                <li style="margin-bottom: 12px;"><strong>1997:</strong> Deep Blue defeats Garry Kasparov at Chess</li>
+                                <li style="margin-bottom: 12px;"><strong>2007:</strong> Chinook solves Checkers completely</li>
+                                <li style="margin-bottom: 12px;"><strong>2016:</strong> AlphaGo beats Lee Sedol at Go</li>
+                                <li style="margin-bottom: 12px;"><strong>2017:</strong> Libratus dominates Poker pros</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 style="color: #059669; margin-bottom: 15px;">🎯 Key Techniques Used</h3>
+                            <ul style="list-style: none; padding-left: 0;">
+                                <li style="margin-bottom: 12px;">✓ Alpha-Beta Pruning</li>
+                                <li style="margin-bottom: 12px;">✓ Evaluation Functions</li>
+                                <li style="margin-bottom: 12px;">✓ Opening/Endgame Books</li>
+                                <li style="margin-bottom: 12px;">✓ Monte Carlo Tree Search</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="caption-area">
+                <strong>🌟 Impact Beyond Games:</strong> These algorithms aren't just for entertainment! They power decision-making in robotics, automated planning, resource allocation, and any scenario where you need to plan ahead against uncertainty or opposition.
+            </div>
+        </div>
+
+        <!-- 12. Practice Challenge -->
+        <div id="slide12" class="slide title-only">
+            <h1>Let's Practice! 🧠</h1>
+            <p class="subtitle">Test Your Understanding</p>
+            <div style="background: rgba(234,88,12,0.1); padding: 30px; border-radius: 15px; margin: 30px 0; text-align: left;">
+                <h3 style="color: #EA580C; margin-bottom: 20px;">🎯 Challenge Questions:</h3>
+                <ol style="font-size: 1.1em; line-height: 1.8; color: #1E293B;">
+                    <li style="margin-bottom: 15px;">Given a game tree with branching factor 3 and depth 4, how many leaf nodes would Minimax explore?</li>
+                    <li style="margin-bottom: 15px;">If Alpha-Beta achieves perfect move ordering, how deep can it search compared to Minimax in the same time?</li>
+                    <li style="margin-bottom: 15px;">At what point does Alpha-Beta prune a branch? What are the α and β values when this happens?</li>
+                    <li style="margin-bottom: 15px;">Why is move ordering crucial for Alpha-Beta's effectiveness?</li>
+                </ol>
+                <div style="background: #059669; color: #FEF7ED; padding: 15px; border-radius: 8px; margin-top: 20px; font-weight: bold;">
+                    💡 Try working through these with the interactive demos above!
+                </div>
+            </div>
+        </div>
+
+        <!-- 13. Summary and Next Steps -->
+        <div id="slide13" class="slide title-content">
+            <h2>Key Takeaways 🎯</h2>
+            <div class="content-area">
+                <div class="highlight-box">
+                    <strong>🧠 Minimax:</strong> Assumes perfect opponent play and finds the best possible outcome through exhaustive search.
+                </div>
+                
+                <div class="accent-box">
+                    <strong>✂️ Alpha-Beta:</strong> Achieves the same result as Minimax but prunes unnecessary branches, often doubling search depth.
+                </div>
+                
+                <h3 style="color:#059669;margin:30px 0 15px 0">Why These Algorithms Matter:</h3>
+                <ul class="content-list">
+                    <li><strong>Foundation:</strong> Core building blocks for game AI and adversarial search</li>
+                    <li><strong>Optimality:</strong> Guarantee finding the best move against perfect opponents</li>
+                    <li><strong>Efficiency:</strong> Alpha-Beta makes deep search tractable for complex games</li>
+                    <li><strong>Versatility:</strong> Apply beyond games to any adversarial decision-making scenario</li>
+                </ul>
+                
+                <div style="background: linear-gradient(135deg, #EA580C, #059669); color: #FEF7ED; padding: 25px; border-radius: 15px; margin: 30px 0;">
+                    <h3 style="margin-bottom: 15px;">🚀 Next Steps in Game AI:</h3>
+                    <p>• Advanced evaluation functions for non-terminal positions<br>
+                    • Handling games with chance elements (dice, cards)<br>
+                    • Dealing with imperfect information<br>
+                    • Monte Carlo Tree Search and modern approaches<br>
+                    • Deep learning integration (AlphaGo, AlphaZero)</p>
+                </div>
+                
+                <p><strong>Remember:</strong> Master these fundamentals, and you'll have the foundation to understand and build sophisticated game AI systems that can compete with human experts!</p>
+            </div>
+        </div>
+
+        <!-- 14. Thank You -->
+        <div id="slide14" class="slide title-slide">
+            <h1 class="float">Thank You! 🙏</h1>
+            <p class="subtitle">Questions & Discussion</p>
+            <p class="author">Professor Dr. Dhaval Patel<br>Ready to dive deeper into AI? 🤖</p>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop">↑</button>
+
+    <script>
+        // Particle System
+        class P{
+            constructor(c){
+                this.c=c;this.x=Math.random()*c.width;this.y=Math.random()*c.height;
+                this.vx=(Math.random()-.5)*.5;this.vy=(Math.random()-.5)*.5;
+                this.s=Math.random()*2+1;this.o=Math.random()*.6+.2;
+            }
+            u(m){
+                this.x+=this.vx;this.y+=this.vy;
+                if(this.x<0||this.x>this.c.width)this.vx*=-1;
+                if(this.y<0||this.y>this.c.height)this.vy*=-1;
+                if(m.x&&m.y){
+                    const d=Math.hypot(this.x-m.x,this.y-m.y);
+                    if(d<60){const f=(60-d)/60,a=Math.atan2(this.y-m.y,this.x-m.x);
+                    this.vx+=Math.cos(a)*f*.3;this.vy+=Math.sin(a)*f*.3;}
+                }
+            }
+            d(ctx){ctx.save();ctx.globalAlpha=this.o;ctx.beginPath();ctx.arc(this.x,this.y,this.s,0,6.28);ctx.fillStyle='rgba(234,88,12,.5)';ctx.fill();ctx.restore();}
+        }
+        class PS{
+            constructor(){this.cv=document.getElementById('particles-canvas');this.ctx=this.cv.getContext('2d');this.ps=[];this.m={x:0,y:0};this.init();}
+            init(){this.r();this.cp();window.addEventListener('resize',()=>{this.r();this.cp();});window.addEventListener('mousemove',e=>{this.m.x=e.clientX;this.m.y=e.clientY;});this.a();}
+            r(){this.cv.width=innerWidth;this.cv.height=innerHeight;this.pc=Math.floor((innerWidth*innerHeight)/12000);}
+            cp(){this.ps=[];for(let i=0;i<this.pc;i++)this.ps.push(new P(this.cv));}
+            a(){this.ctx.clearRect(0,0,this.cv.width,this.cv.height);this.ps.forEach(p=>{p.u(this.m);p.d(this.ctx);});this.dc();requestAnimationFrame(()=>this.a());}
+            dc(){this.ps.forEach((p,i)=>{for(let j=i+1;j<this.ps.length;j++){const o=this.ps[j],d=Math.hypot(p.x-o.x,p.y-o.y);if(d<100){this.ctx.beginPath();this.ctx.strokeStyle=`rgba(30,41,59,${(1-d/100)*.15})`;this.ctx.lineWidth=.5;this.ctx.moveTo(p.x,p.y);this.ctx.lineTo(o.x,o.y);this.ctx.stroke();}}});}
+        }
+        new PS();
+
+        // Slide animations
+        const o=new IntersectionObserver(e=>e.forEach(e=>e.isIntersecting&&e.target.classList.add('visible')),{threshold:.1});
+        document.querySelectorAll('.slide').forEach(s=>o.observe(s));
+        
+        // Navigation and scroll effects
+        const u=()=>{const s=scrollY,d=document.documentElement.scrollHeight-innerHeight,p=s/d;document.getElementById('progress-bar').style.transform=`scaleX(${p})`;document.getElementById('navbar').classList.toggle('scrolled',s>100);document.getElementById('backToTop').classList.toggle('visible',s>300);};
+        addEventListener('scroll',u,{passive:!0});
+        document.getElementById('backToTop').onclick=()=>scrollTo({top:0,behavior:'smooth'});
+        document.querySelectorAll('nav a[href^="#"]').forEach(a=>a.onclick=e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));t&&scrollTo({top:t.offsetTop-80,behavior:'smooth'});});
+        u();
+    </script>
+</body>
+</html>
