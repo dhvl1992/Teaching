@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Management Theory Case Studies</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: #FEF7ED;
+            color: #1E293B;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Particle Background */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: #FEF7ED;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(254, 247, 237, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid #EA580C;
+        }
+
+        nav.scrolled {
+            background: rgba(254, 247, 237, 0.98);
+            box-shadow: 0 2px 20px rgba(234, 88, 12, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #1E293B;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        nav a:hover {
+            background: rgba(234, 88, 12, 0.1);
+            color: #EA580C;
+            transform: translateY(-2px);
+        }
+
+        /* Header */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #1E293B;
+            position: relative;
+            background: linear-gradient(135deg, #FEF7ED 0%, #F3F4F6 100%);
+        }
+
+        .hero-content {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(234, 88, 12, 0.1);
+            color: #1E293B;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: #059669;
+            font-style: italic;
+        }
+
+        /* Content Sections */
+        .section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .level-card {
+            background: #FEF7ED;
+            border-radius: 15px;
+            padding: 3rem;
+            margin: 3rem 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 0.8s ease;
+            border-left: 5px solid #EA580C;
+            border: 1px solid rgba(234, 88, 12, 0.1);
+        }
+
+        .level-card.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .level-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .level-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #059669, #EA580C);
+            color: #FEF7ED;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .level-title {
+            font-size: 2.5rem;
+            color: #1E293B;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .level-subtitle {
+            color: #059669;
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+
+        .case-study {
+            background: rgba(5, 150, 105, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-left: 5px solid #059669;
+        }
+
+        .case-title {
+            font-size: 1.8rem;
+            color: #1E293B;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .case-content {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .theory-box {
+            background: linear-gradient(135deg, #EA580C 0%, #059669 100%);
+            color: #FEF7ED;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theory-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .theory-emoji {
+            font-size: 2.5rem;
+        }
+
+        .theory-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .principle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .principle-card {
+            background: rgba(254, 247, 237, 0.2);
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(254, 247, 237, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .principle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #EA580C, #059669);
+            z-index: 999;
+            transform-origin: left;
+            transform: scaleX(0);
+            transition: transform 0.1s ease;
+        }
+
+        .quote {
+            background: rgba(234, 88, 12, 0.1);
+            border-left: 4px solid #EA580C;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+            font-size: 1.1rem;
+            position: relative;
+            color: #1E293B;
+        }
+
+        .quote::before {
+            content: '"';
+            font-size: 4rem;
+            color: #EA580C;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            opacity: 0.3;
+        }
+
+        .step-list {
+            counter-reset: step-counter;
+        }
+
+        .step {
+            counter-increment: step-counter;
+            position: relative;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            background: rgba(254, 247, 237, 0.7);
+            border-radius: 10px;
+            padding-left: 4rem;
+        }
+
+        .step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #EA580C;
+            color: #FEF7ED;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .maslow-pyramid {
+            background: linear-gradient(135deg, #FEF7ED 0%, #F3F4F6 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px solid #EA580C;
+        }
+
+        .pyramid-level {
+            background: rgba(234, 88, 12, 0.1);
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(234, 88, 12, 0.2);
+            color: #1E293B;
+        }
+
+        .highlight-box {
+            background: #059669;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .accent-box {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+            }
+            
+            .level-card {
+                padding: 2rem;
+                margin: 2rem 0;
+            }
+            
+            .principle-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #EA580C, #059669);
+            color: #FEF7ED;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(234, 88, 12, 0.3);
+        }
+
+        /* Special styling for content areas */
+        .content-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+            color: #1E293B;
+        }
+
+        .content-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #EA580C;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* Two column layout for comparison */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .comparison-item {
+            background: rgba(234, 88, 12, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 4px solid #EA580C;
+        }
+
+        .comparison-item h5 {
+            color: #EA580C;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .systems-flow {
+            background: linear-gradient(135deg, #FEF7ED 0%, #F3F4F6 100%);
+            border: 2px solid #059669;
+            color: #1E293B;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle Background Canvas -->
+    <canvas id="particles-canvas"></canvas>
+    
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progress-bar"></div>
+    
+    <!-- Navigation -->
+    <nav id="navbar">
+        <ul>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#level1">Level 1: Simple</a></li>
+            <li><a href="#level2">Level 2: Growing</a></li>
+            <li><a href="#level3">Level 3: Human</a></li>
+            <li><a href="#level4">Level 4: Complex</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="hero-content">
+            <h1 class="float">Indian Management Theory Case Studies</h1>
+            <p>From Simple to Complex: Practice to Theory Integration</p>
+            <div style="margin-top: 2rem; font-size: 1.1rem; color: #1E293B;">
+                Journey through Indian business history with interactive learning
+            </div>
+        </div>
+    </section>
+
+    <!-- Level 1: Simple Beginning -->
+    <section id="level1" class="section">
+        <div class="container">
+            <div class="level-card">
+                <div class="level-header">
+                    <div class="level-number">LEVEL 1</div>
+                    <h2 class="level-title">The Simple Beginning</h2>
+                    <p class="level-subtitle">Understanding Basic Management Principles</p>
+                </div>
+
+                <div class="case-study">
+                    <h3 class="case-title">🍽️ Case Study: The Village Dhaba to Highway Restaurant Chain</h3>
+                    <div class="case-content">
+                        <div>
+                            <h4><strong>Meet Ram Singh (1960s):</strong></h4>
+                            <ul class="content-list">
+                                <li>Runs a small dhaba near his village</li>
+                                <li>2 employees: his wife (cooking) and son (serving)</li>
+                                <li>No formal management - just family traditions</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4><strong>The Problem:</strong></h4>
+                            <ul class="content-list">
+                                <li>Customers complained about inconsistent taste</li>
+                                <li>Sometimes dal was too salty, sometimes roti was burnt</li>
+                                <li>Service was slow during rush hours</li>
+                                <li>No system to handle money</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4><strong>Ram's Natural Evolution:</strong></h4>
+                            <div class="step-list">
+                                <div class="step">
+                                    <strong>Standardization:</strong> Ram's wife started measuring spices exactly and used same cooking time for each dish. Result: Consistent taste every day.
+                                </div>
+                                <div class="step">
+                                    <strong>Division of Labor:</strong> Wife focused only on cooking, son on serving and billing, Ram on purchase and supervision. Result: Faster service.
+                                </div>
+                                <div class="step">
+                                    <strong>Work Study:</strong> Noticed customers waited longest for rotis, started making rotis in batches during expected rush hours. Result: Reduced waiting time from 15 to 5 minutes.
+                                </div>
+                                <div class="step">
+                                    <strong>Incentive System:</strong> Started giving son extra money during busy days. Result: Son worked more enthusiastically.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="theory-box">
+                    <h3 class="theory-title">
+                        <span class="theory-emoji">🔬</span>
+                        THEORY EXPLANATION: Scientific Management (Frederick W. Taylor, 1856-1915)
+                    </h3>
+                    <div class="theory-content">
+                        <div class="quote">
+                            "Scientific Management is knowing exactly what you want people to do and seeing that they do it in the best and cheapest way possible." - F.W. Taylor
+                        </div>
+
+                        <h4><strong>Taylor's Four Principles Applied by Ram Singh:</strong></h4>
+                        <div class="principle-grid">
+                            <div class="principle-card">
+                                <h5><strong>1. Science, Not Rule of Thumb</strong></h5>
+                                <p><strong>Ram's Application:</strong> Measured exact spices instead of "andaaza" (guesswork)</p>
+                                <p><strong>Theory:</strong> Replace traditional methods with scientifically studied methods</p>
+                            </div>
+                            <div class="principle-card">
+                                <h5><strong>2. Scientific Selection and Training</strong></h5>
+                                <p><strong>Ram's Application:</strong> Assigned specific tasks based on abilities (wife=cooking, son=serving)</p>
+                                <p><strong>Theory:</strong> Select workers scientifically and train them for specific tasks</p>
+                            </div>
+                            <div class="principle-card">
+                                <h5><strong>3. Cooperation Between Management and Workers</strong></h5>
+                                <p><strong>Ram's Application:</strong> Worked with family members to implement new methods</p>
+                                <p><strong>Theory:</strong> Management and workers should cooperate for proper implementation</p>
+                            </div>
+                            <div class="principle-card">
+                                <h5><strong>4. Division of Responsibility</strong></h5>
+                                <p><strong>Ram's Application:</strong> Separated planning (Ram) from execution (wife and son)</p>
+                                <p><strong>Theory:</strong> Management plans and supervises; workers execute</p>
+                            </div>
+                        </div>
+
+                        <p><strong>Why It Worked for Ram:</strong> Eliminated waste, increased efficiency, improved quality, higher profits through satisfied customers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Level 2: Growing Complexity -->
+    <section id="level2" class="section">
+        <div class="container">
+            <div class="level-card">
+                <div class="level-header">
+                    <div class="level-number">LEVEL 2</div>
+                    <h2 class="level-title">Growing Complexity</h2>
+                    <p class="level-subtitle">Classical School in Action</p>
+                </div>
+
+                <div class="case-study">
+                    <h3 class="case-title">🧼 Case Study: Nirma - From Kitchen to Corporate Giant</h3>
+                    <div class="case-content">
+                        <div>
+                            <h4><strong>Karsanbhai Patel's Journey (1969):</strong></h4>
+                            <ul class="content-list">
+                                <li>Chemist working in government job</li>
+                                <li>Made detergent powder in his backyard</li>
+                                <li>Sold door-to-door in Ahmedabad neighborhoods</li>
+                                <li>Price: ₹3 per kg (vs ₹13 for Surf)</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-list">
+                            <div class="step">
+                                <strong>Scientific Study:</strong> Observed poor people couldn't afford expensive Surf detergent. Analyzed that multinationals had high marketing costs and fancy packaging.
+                            </div>
+                            <div class="step">
+                                <strong>Finding "The One Best Way":</strong> Tested different chemical formulations, standardized the exact recipe that cleaned well but cost less.
+                            </div>
+                            <div class="step">
+                                <strong>Scientific Selection and Training:</strong> Hired local people for specific tasks, selected retailers who understood local markets.
+                            </div>
+                            <div class="step">
+                                <strong>Systematic Organization:</strong> Assembly line manufacturing, quality control, systematic distribution coverage.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="theory-box">
+                    <h3 class="theory-title">
+                        <span class="theory-emoji">📋</span>
+                        THEORY EXPLANATION: Administrative Management (Henri Fayol, 1841-1925)
+                    </h3>
+                    <div class="theory-content">
+                        <h4><strong>Fayol's 14 Principles Applied by Nirma:</strong></h4>
+                        <div class="principle-grid">
+                            <div class="principle-card">
+                                <h5><strong>Division of Work</strong></h5>
+                                <p>Separate departments for production, sales, finance, R&D. Specialization increases efficiency.</p>
+                            </div>
+                            <div class="principle-card">
+                                <h5><strong>Unity of Command</strong></h5>
+                                <p>Each worker reported to only one supervisor, avoiding conflicting instructions.</p>
+                            </div>
+                            <div class="principle-card">
+                                <h5><strong>Scalar Chain</strong></h5>
+                                <p>Clear line of authority from top to bottom for faster decision-making.</p>
+                            </div>
+                            <div class="principle-card">
+                                <h5><strong>Unity of Direction</strong></h5>
+                                <p>All activities aimed at same goal - affordable quality detergent.</p>
+                            </div>
+                        </div>
+
+                        <h4><strong>Fayol's Five Functions (POCCC):</strong></h4>
+                        <div class="highlight-box">
+                            <p><strong>Planning:</strong> Market research, production forecasting</p>
+                            <p><strong>Organizing:</strong> Structured departments, defined roles</p>
+                            <p><strong>Commanding:</strong> Direct leadership, clear instructions</p>
+                            <p><strong>Coordinating:</strong> Regular team meetings</p>
+                            <p><strong>Controlling:</strong> Quality checks, performance monitoring</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Level 3: Human Complexity -->
+    <section id="level3" class="section">
+        <div class="container">
+            <div class="level-card">
+                <div class="level-header">
+                    <div class="level-number">LEVEL 3</div>
+                    <h2 class="level-title">Human Complexity</h2>
+                    <p class="level-subtitle">Neo-Classical School Implementation</p>
+                </div>
+
+                <div class="case-study">
+                    <h3 class="case-title">💻 Case Study: Infosys - The People Revolution</h3>
+                    <div class="case-content">
+                        <div>
+                            <h4><strong>The 1980s Context:</strong></h4>
+                            <ul class="content-list">
+                                <li>Software was emerging industry in India</li>
+                                <li>Most Indian companies followed rigid hierarchical structures</li>
+                                <li>Employees treated as "workers," not "knowledge assets"</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4><strong>Narayana Murthy's Revolutionary Innovations:</strong></h4>
+                            <div class="step-list">
+                                <div class="step">
+                                    <strong>Email Culture:</strong> Any employee could email CEO directly. Monthly "Coffee with Murthy" sessions.
+                                </div>
+                                <div class="step">
+                                    <strong>ESOP Revolution:</strong> Employees became shareholders, creating thousands of millionaires.
+                                </div>
+                                <div class="step">
+                                    <strong>Learning Organization:</strong> Mysore training campus, continuous skill development.
+                                </div>
+                                <div class="step">
+                                    <strong>Work-Life Balance:</strong> Family day celebrations, recreational facilities, sabbatical programs.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="theory-box">
+                    <h3 class="theory-title">
+                        <span class="theory-emoji">👥</span>
+                        THEORY EXPLANATION: Neo-Classical School (Human Relations Movement)
+                    </h3>
+                    <div class="theory-content">
+                        <h4><strong>The Hawthorne Studies (Elton Mayo, 1927-1932):</strong></h4>
+                        <div class="quote">
+                            Revolutionary Discovery: Workers motivated by social and psychological factors, not just money and efficiency.
+                        </div>
+
+                        <h4><strong>Maslow's Hierarchy Applied by Infosys:</strong></h4>
+                        <div class="maslow-pyramid">
+                            <div class="pyramid-level">
+                                <strong>5. Self-Actualization:</strong> Innovation projects, learning opportunities, leadership development
+                            </div>
+                            <div class="pyramid-level">
+                                <strong>4. Esteem Needs:</strong> Public recognition, awards, career progression
+                            </div>
+                            <div class="pyramid-level">
+                                <strong>3. Social Needs:</strong> Team building, open culture, "Infoscion" identity
+                            </div>
+                            <div class="pyramid-level">
+                                <strong>2. Safety Needs:</strong> Job security, medical insurance, clear policies
+                            </div>
+                            <div class="pyramid-level">
+                                <strong>1. Physiological:</strong> Competitive salaries, free meals, transportation
+                            </div>
+                        </div>
+
+                        <h4><strong>Theory X vs Theory Y:</strong></h4>
+                        <div class="comparison-grid">
+                            <div class="comparison-item">
+                                <h5><strong>Theory X (Traditional)</strong></h5>
+                                <p>People dislike work and avoid responsibility. Requires strict control and supervision.</p>
+                            </div>
+                            <div class="comparison-item">
+                                <h5><strong>Theory Y (Infosys)</strong></h5>
+                                <p>People find work natural and seek responsibility. Participative management and trust-based.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Level 4: Systemic Complexity -->
+    <section id="level4" class="section">
+        <div class="container">
+            <div class="level-card">
+                <div class="level-header">
+                    <div class="level-number">LEVEL 4</div>
+                    <h2 class="level-title">Systemic Complexity</h2>
+                    <p class="level-subtitle">Modern Management Approaches</p>
+                </div>
+
+                <div class="case-study">
+                    <h3 class="case-title">🏭 Case Study: Reliance Industries - The Systems Mastermind</h3>
+                    <div class="case-content">
+                        <div>
+                            <h4><strong>Dhirubhai Ambani's Evolution:</strong></h4>
+                            <div class="step-list">
+                                <div class="step">
+                                    <strong>Phase 1 (1960s):</strong> Simple spice trading - Linear thinking: Buy low, sell high
+                                </div>
+                                <div class="step">
+                                    <strong>Phase 2 (1970s-80s):</strong> Entered textiles, realized raw material prices affect profits
+                                </div>
+                                <div class="step">
+                                    <strong>Phase 3 (1990s-2000s):</strong> Created integrated petrochemical ecosystem
+                                </div>
+                                <div class="step">
+                                    <strong>Phase 4 (2010s):</strong> Digital transformation with Jio launch
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="systems-flow">
+                            <h4><strong>The Petrochemical Ecosystem:</strong></h4>
+                            <div style="font-size: 1.1rem; margin: 1rem 0;">
+                                Crude Oil → Refineries → Petrochemicals → Polymers → Fibers → Textiles → Retail
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="theory-box">
+                    <h3 class="theory-title">
+                        <span class="theory-emoji">🌐</span>
+                        THEORY EXPLANATION: Modern Management Approaches
+                    </h3>
+                    <div class="theory-content">
+                        <h4><strong>Systems Theory (1950s onwards):</strong></h4>
+                        <div class="principle-grid">
+                            <div class="principle-card">
+                                <h5><strong>Open System</strong></h5>
+                                <p>Continuously monitored oil prices, government policies, technology changes</p>
+                            </div>
+                            <div class="principle-card">
+                                <h5><strong>Synergy</strong></h5>
+                                <p>Oil + Chemicals + Retail + Telecom = Integrated ecosystem</p>
+                            </div>
+                            <div class="principle-card">
+                                <h5><strong>Feedback Loop</strong></h5>
+                                <p>Market response influences future inputs and processes</p>
+                            </div>
+                            <div class="principle-card">
+                                <h5><strong>Subsystems</strong></h5>
+                                <p>Technical, Social, Economic, Environmental systems working together</p>
+                            </div>
+                        </div>
+
+                        <h4><strong>Contingency Theory: "It Depends"</strong></h4>
+                        <div class="highlight-box">
+                            <p><strong>License Raj Era:</strong> Relationship-based strategy</p>
+                            <p><strong>Liberalization Era:</strong> Efficiency-based strategy</p>
+                            <p><strong>Digital Era:</strong> Innovation-based strategy</p>
+                        </div>
+
+                        <h4><strong>Quantitative Management:</strong></h4>
+                        <p>Used mathematical models, statistical analysis, operations research, and decision trees for optimal decision-making.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // Parallax Particle System
+        class ParticleSystem {
+            constructor() {
+                this.canvas = document.getElementById('particles-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.scrollY = 0;
+                this.resize();
+                this.createParticles();
+                this.animate();
+                
+                window.addEventListener('resize', () => this.resize());
+                window.addEventListener('scroll', () => {
+                    this.scrollY = window.scrollY;
+                }, { passive: true });
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            createParticles() {
+                const numParticles = Math.floor((window.innerWidth * window.innerHeight) / 12000);
+                this.particles = [];
+                
+                for (let i = 0; i < numParticles; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        baseX: Math.random() * this.canvas.width,
+                        baseY: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.4,
+                        vy: (Math.random() - 0.5) * 0.4,
+                        size: Math.random() * 2 + 0.8,
+                        opacity: Math.random() * 0.4 + 0.2,
+                        parallaxSpeed: Math.random() * 0.5 + 0.1,
+                        layer: Math.floor(Math.random() * 3) + 1 // 1, 2, or 3 layers for depth
+                    });
+                }
+            }
+
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.particles.forEach(particle => {
+                    // Apply parallax effect based on scroll and layer
+                    const parallaxOffset = this.scrollY * particle.parallaxSpeed * (particle.layer * 0.3);
+                    
+                    particle.x += particle.vx;
+                    particle.y += particle.vy - (parallaxOffset * 0.001);
+                    
+                    // Boundary collision
+                    if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+                    
+                    // Wrap particles that go off screen due to parallax
+                    if (particle.y < -10) particle.y = this.canvas.height + 10;
+                    if (particle.y > this.canvas.height + 10) particle.y = -10;
+                    
+                    // Draw particle with dark blue color and layer-based opacity
+                    const layerOpacity = particle.opacity * (1 - (particle.layer - 1) * 0.2);
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    this.ctx.fillStyle = `rgba(30, 41, 59, ${layerOpacity})`; // Dark blue #1E293B
+                    this.ctx.fill();
+                });
+                
+                // Draw connections between nearby particles with dark blue
+                this.particles.forEach((particle, i) => {
+                    for (let j = i + 1; j < this.particles.length; j++) {
+                        const other = this.particles[j];
+                        const dist = Math.hypot(particle.x - other.x, particle.y - other.y);
+                        
+                        if (dist < 100) {
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(particle.x, particle.y);
+                            this.ctx.lineTo(other.x, other.y);
+                            const connectionOpacity = 0.1 * (1 - dist / 100) * Math.min(particle.opacity, other.opacity);
+                            this.ctx.strokeStyle = `rgba(30, 41, 59, ${connectionOpacity})`; // Dark blue connections
+                            this.ctx.lineWidth = 0.5;
+                            this.ctx.stroke();
+                        }
+                    }
+                });
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // Initialize particles
+        new ParticleSystem();
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all level cards
+        document.querySelectorAll('.level-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Scroll Progress Bar
+        function updateProgressBar() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = scrollTop / docHeight;
+            
+            const progressBar = document.getElementById('progress-bar');
+            progressBar.style.transform = `scaleX(${scrollPercent})`;
+        }
+
+        // Navigation effects
+        function updateNavigation() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+
+        // Back to top button
+        function updateBackToTop() {
+            const backToTop = document.getElementById('backToTop');
+            if (window.scrollY > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offsetTop = target.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Main scroll event listener
+        window.addEventListener('scroll', () => {
+            updateProgressBar();
+            updateNavigation();
+            updateBackToTop();
+        }, { passive: true });
+
+        // Mouse movement effect for hero (reduced effect)
+        document.addEventListener('mousemove', (e) => {
+            const hero = document.querySelector('.hero-content');
+            if (hero) {
+                const { clientX, clientY } = e;
+                const { innerWidth, innerHeight } = window;
+                
+                const x = (clientX / innerWidth - 0.5) * 5;
+                const y = (clientY / innerHeight - 0.5) * 5;
+                
+                hero.style.transform = `translate(${x}px, ${y}px)`;
+            }
+        });
+
+        // Initialize all animations
+        document.addEventListener('DOMContentLoaded', () => {
+            updateProgressBar();
+            updateNavigation();
+            updateBackToTop();
+        });
+    </script>
+</body>
+</html>
