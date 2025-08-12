@@ -507,129 +507,128 @@
             <div class="code-section">
                 <div class="code-block">
                     <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-<pre># Simple Minimax - Minimal Code (No Functions)
+<pre># Simple Minimax - Minimal Code (No Functions or Classes)
 
 # Board: 9 cells, '' = empty, 'X' = human, 'O' = AI
 b = [''] * 9
 
 # Check winner - all winning combinations
 wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
-winner = None
-for w in wins:
-    if b[w[0]] == b[w[1]] == b[w[2]] != '':
-        winner = b[w[0]]
-
-# Minimax recursive logic (inline)
-scores = []
-for i in range(9):
-    if b[i] == '':  # Try AI move
-        b[i] = 'O'
-        
-        # Check if AI wins
-        ai_wins = False
-        for w in wins:
-            if b[w[0]] == b[w[1]] == b[w[2]] == 'O':
-                ai_wins = True
-        if ai_wins:
-            scores.append(10)
-            b[i] = ''
-            continue
-            
-        # Try all human responses
-        min_score = 999
-        for j in range(9):
-            if b[j] == '':  # Human move
-                b[j] = 'X'
-                
-                # Check if human wins
-                human_wins = False
-                for w in wins:
-                    if b[w[0]] == b[w[1]] == b[w[2]] == 'X':
-                        human_wins = True
-                if human_wins:
-                    min_score = -10
-                else:
-                    min_score = min(min_score, 0)  # Draw
-                
-                b[j] = ''  # Undo
-        
-        scores.append(min_score)
-        b[i] = ''  # Undo
-
-# Find best move
-best_move = scores.index(max(scores))
-print(f"AI plays: {best_move}")
-</pre>
-                </div>
-            </div>
-
-            <div class="code-section">
-                <div class="code-block">
-                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-<pre># Complete Minimax Game - Ultra Simple
-
-# Setup
-b = [''] * 9  # Empty board
-wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
 
 # Game loop
+print("Welcome to Tic-Tac-Toe!")
+
+# print_board function inline
+print("-------------")
+for i in range(0, 9, 3):
+    print(f"| {b[i] or ' '} | {b[i+1] or ' '} | {b[i+2] or ' '} |")
+print("-------------")
+
 while True:
-    # Show board
-    for i in range(0,9,3):
-        print(f" {b[i] if b[i] else i} | {b[i+1] if b[i+1] else i+1} | {b[i+2] if b[i+2] else i+2} ")
-        if i < 6: print("-----------")
-    
     # Human move
-    move = int(input("Your move (0-8): "))
-    if b[move] == '': b[move] = 'X'
-    
-    # Check win/draw
-    game_over = False
+    while True:
+        try:
+            move = int(input("Enter your move (0-8): "))
+            if 0 <= move <= 8 and b[move] == '':
+                b[move] = 'X'
+                break
+            else:
+                print("Invalid move. Try again.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+    # print_board function inline
+    print("-------------")
+    for i in range(0, 9, 3):
+        print(f"| {b[i] or ' '} | {b[i+1] or ' '} | {b[i+2] or ' '} |")
+    print("-------------")
+
+    # check_winner function inline
+    winner = None
     for w in wins:
         if b[w[0]] == b[w[1]] == b[w[2]] != '':
-            print(f"{b[w[0]]} wins!"); game_over = True
-    if '' not in b: print("Draw!"); game_over = True
-    if game_over: break
-    
-    # AI move - Simple Minimax
-    best = -999; best_move = 0
+            winner = b[w[0]]
+            break
+    if '' not in b and winner is None:
+        winner = 'Draw'
+
+    if winner:
+        if winner == 'Draw':
+            print("It's a draw!")
+        else:
+            print(f"Winner: {winner}")
+        break
+
+    # AI move
+    print("AI is thinking...")
+
+    # find_best_move and minimax inline
+    best_score = -float('inf')
+    best_move = -1
+
     for i in range(9):
         if b[i] == '':
-            b[i] = 'O'  # Try AI move
-            
-            # AI win check
-            score = 0
-            for w in wins:
-                if b[w[0]] == b[w[1]] == b[w[2]] == 'O': score = 10
-            
-            # If not AI win, check human responses
-            if score == 0:
-                worst = 999
-                for j in range(9):
-                    if b[j] == '':
-                        b[j] = 'X'
-                        human_score = 0
-                        for w in wins:
-                            if b[w[0]] == b[w[1]] == b[w[2]] == 'X': human_score = -10
-                        worst = min(worst, human_score)
-                        b[j] = ''
-                score = worst if worst != 999 else 0
-            
-            if score > best: best = score; best_move = i
-            b[i] = ''  # Undo
-    
+            b[i] = 'O'
+            # minimax inline (simulated recursion with depth 1 for simplicity)
+            score = float('inf') # Simulate human's turn
+            for j in range(9):
+                if b[j] == '':
+                    b[j] = 'X'
+                    # check_winner inline
+                    current_winner = None
+                    for w in wins:
+                        if b[w[0]] == b[w[1]] == b[w[2]] != '':
+                            current_winner = b[w[0]]
+                            break
+                    if '' not in b and current_winner is None:
+                        current_winner = 'Draw'
+
+                    if current_winner == 'O':
+                        score = min(score, 10)
+                    elif current_winner == 'X':
+                        score = min(score, -10)
+                    elif current_winner == 'Draw':
+                        score = min(score, 0)
+                    else:
+                        score = min(score, 0) # Neutral score for non-terminal states at depth 2
+
+                    b[j] = '' # backtrack
+
+            b[i] = '' # backtrack
+
+            if score > best_score:
+                best_score = score
+                best_move = i
+
     b[best_move] = 'O'
     print(f"AI plays: {best_move}")
-    
-    # Check win again
+
+    # print_board function inline
+    print("-------------")
+    for i in range(0, 9, 3):
+        print(f"| {b[i] or ' '} | {b[i+1] or ' '} | {b[i+2] or ' '} |")
+    print("-------------")
+
+    # check_winner function inline
+    winner = None
     for w in wins:
         if b[w[0]] == b[w[1]] == b[w[2]] != '':
-            print(f"{b[w[0]]} wins!"); game_over = True
-    if '' not in b: print("Draw!"); game_over = True
-    if game_over: break
+            winner = b[w[0]]
+            break
+    if '' not in b and winner is None:
+        winner = 'Draw'
+
+    if winner:
+        if winner == 'Draw':
+            print("It's a draw!")
+        else:
+            print(f"Winner: {winner}")
+        break
 </pre>
                 </div>
             </div>
+
+          
         </div>
     </div>
 
