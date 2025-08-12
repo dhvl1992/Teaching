@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Principles - Complete Course</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:Georgia,serif;background:#FEF7ED;color:#1E293B;line-height:1.6;overflow-x:hidden}
+        #particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1}
+        nav{position:fixed;top:0;width:100%;background:rgba(254,247,237,.95);backdrop-filter:blur(10px);z-index:1000;padding:1rem 2rem;transition:all .3s;border-bottom:2px solid #EA580C}
+        nav.scrolled{background:rgba(254,247,237,.98);box-shadow:0 2px 20px rgba(234,88,12,.1)}
+        nav ul{list-style:none;display:flex;justify-content:center;flex-wrap:wrap;gap:1rem}
+        nav a{color:#1E293B;text-decoration:none;font-weight:600;transition:all .3s;padding:.5rem .8rem;border-radius:20px;font-size:0.8em}
+        nav a:hover{background:rgba(234,88,12,.1);color:#EA580C;transform:translateY(-2px)}
+        .progress-bar{position:fixed;top:80px;left:0;height:4px;background:linear-gradient(90deg,#EA580C,#059669);z-index:999;transform-origin:left;transform:scaleX(0);transition:transform .1s}
+        .container{max-width:1200px;margin:0 auto;padding:20px}
+        .slide{background:#FEF7ED;margin-bottom:30px;padding:40px;border-radius:15px;border-left:5px solid #EA580C;box-shadow:0 8px 25px rgba(0,0,0,.1);transition:all .8s;min-height:500px;transform:translateY(50px);opacity:0}
+        .slide.visible{transform:translateY(0);opacity:1}
+        .slide:hover{transform:translateY(-5px)}
+        
+        /* All Slide Types */
+        .title-slide{background:#1E293B;color:#FEF7ED;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
+        .title-slide h1{font-size:3.5em;margin-bottom:30px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+        .title-slide .subtitle{font-size:1.6em;opacity:.9;font-style:italic;margin-bottom:20px}
+        .title-slide .author{font-size:1.2em;opacity:.8}
+        
+        .title-content h2,.two-content h2,.comparison h2,.content-caption h2,.picture-caption h2{font-size:2.2em;color:#1E293B;margin-bottom:30px;padding-bottom:10px;border-bottom:3px solid #EA580C}
+        .content-area{font-size:1.1em;line-height:1.8}
+        .content-list{list-style:none}
+        .content-list li{position:relative;padding-left:30px;margin-bottom:15px}
+        .content-list li::before{content:"→";position:absolute;left:0;color:#EA580C;font-weight:bold;font-size:1.2em}
+        
+        .section-header{background:linear-gradient(135deg,#059669,#EA580C);color:#FEF7ED;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
+        .section-header h1{font-size:3em;margin-bottom:20px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+        .section-header .section-subtitle{font-size:1.4em;opacity:.9}
+        
+        .two-content{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+        .two-content h2{grid-column:1/-1}
+        .content-column{padding:20px;background:rgba(5,150,105,.05);border-radius:10px}
+        .content-column h3{font-size:1.6em;color:#059669;margin-bottom:15px}
+        
+        .comparison{position:relative}
+        .comparison h2{text-align:center}
+        .comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:40px}
+        .comparison-item{text-align:center;padding:30px;border-radius:15px;background:rgba(234,88,12,.1)}
+        .comparison-item h3{font-size:1.8em;color:#EA580C;margin-bottom:20px}
+        .vs-divider{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#EA580C;color:#FEF7ED;padding:10px 20px;border-radius:50px;font-weight:bold;font-size:1.2em}
+        
+        .title-only{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+        .title-only h1{font-size:3em;color:#1E293B;margin-bottom:20px}
+        .title-only .subtitle{font-size:1.4em;color:#059669;font-style:italic}
+        
+        .content-caption{display:grid;grid-template-rows:auto 1fr auto;gap:30px}
+        .main-content-area{background:linear-gradient(45deg,#059669,#EA580C);border:2px dashed #1E293B;border-radius:15px;padding:60px 40px;text-align:center;color:#FEF7ED;font-weight:bold;font-size:1.2em;display:flex;align-items:center;justify-content:center;flex-direction:column}
+        .caption-area{background:rgba(5,150,105,.1);padding:20px;border-radius:10px;border-left:4px solid #059669}
+        
+        .picture-caption{display:grid;grid-template-columns:2fr 1fr;gap:40px;align-items:start}
+        .picture-caption h2{grid-column:1/-1}
+        .picture-area{background:linear-gradient(45deg,#059669,#EA580C);border:2px dashed #1E293B;border-radius:15px;padding:100px 20px;text-align:center;color:#FEF7ED;font-weight:bold;min-height:300px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+        .caption-sidebar{background:rgba(234,88,12,.1);padding:30px;border-radius:15px;border-left:4px solid #EA580C}
+        .caption-sidebar h3{color:#EA580C;margin-bottom:15px;font-size:1.4em}
+        
+        /* Timeline */
+        .timeline{padding:20px 0}
+        .timeline h2{font-size:2.2em;color:#1E293B;margin-bottom:40px;padding-bottom:10px;border-bottom:3px solid #EA580C;text-align:center}
+        .timeline-container{position:relative;padding:20px 0}
+        .timeline-line{position:absolute;left:50%;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#EA580C,#059669);transform:translateX(-50%)}
+        .timeline-item{position:relative;margin:40px 0;display:flex;align-items:center}
+        .timeline-item:nth-child(odd){flex-direction:row}
+        .timeline-item:nth-child(even){flex-direction:row-reverse}
+        .timeline-content{background:rgba(234,88,12,.05);padding:25px;border-radius:15px;width:45%;border-left:4px solid #EA580C;box-shadow:0 4px 15px rgba(0,0,0,.1)}
+        .timeline-date{position:absolute;left:50%;transform:translateX(-50%);background:#EA580C;color:#FEF7ED;padding:8px 16px;border-radius:20px;font-weight:bold;z-index:2}
+        .timeline-content h4{color:#1E293B;font-size:1.4em;margin-bottom:10px}
+        
+        /* Statistics */
+        .stats-slide h2{font-size:2.2em;color:#1E293B;margin-bottom:40px;padding-bottom:10px;border-bottom:3px solid #EA580C;text-align:center}
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;margin:30px 0}
+        .stat-card{background:linear-gradient(135deg,#EA580C,#059669);color:#FEF7ED;padding:40px 30px;border-radius:20px;text-align:center;box-shadow:0 10px 30px rgba(234,88,12,.2);transition:transform .3s}
+        .stat-card:hover{transform:translateY(-10px)}
+        .stat-number{font-size:3.5em;font-weight:bold;line-height:1;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+        .stat-label{font-size:1.2em;opacity:.9;font-weight:600}
+        .stat-description{font-size:.9em;opacity:.8;margin-top:15px;line-height:1.4}
+        
+        /* Utility Classes */
+        .highlight-box{background:#059669;color:#FEF7ED;padding:20px;border-radius:10px;margin:20px 0;font-weight:bold}
+        .accent-box{background:#EA580C;color:#FEF7ED;padding:20px;border-radius:10px;margin:20px 0;font-style:italic}
+        .emphasis{background:#EA580C;color:#FEF7ED;padding:4px 8px;border-radius:5px;font-weight:bold;display:inline-block}
+        .back-to-top{position:fixed;bottom:30px;right:30px;background:linear-gradient(45deg,#EA580C,#059669);color:#FEF7ED;border:none;border-radius:50%;width:60px;height:60px;font-size:1.5rem;cursor:pointer;opacity:0;transition:all .3s;z-index:1000}
+        .back-to-top.visible{opacity:1}
+        .back-to-top:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(234,88,12,.3)}
+        .float{animation:float 3s ease-in-out infinite}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+        .principle-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin:30px 0}
+        .principle-card{background:rgba(5,150,105,.05);padding:25px;border-radius:15px;border-left:4px solid #EA580C;transition:transform .3s}
+        .principle-card:hover{transform:translateY(-5px)}
+        .principle-card h4{color:#EA580C;font-size:1.3em;margin-bottom:10px}
+        @media (max-width:768px){
+            nav{display:none}
+            .container{padding:10px}
+            .slide{padding:20px;min-height:400px}
+            .title-slide h1{font-size:2.5em}
+            .two-content,.comparison-grid,.picture-caption{grid-template-columns:1fr;gap:20px}
+            .vs-divider{display:none}
+            .timeline-line{display:none}
+            .timeline-content{width:100%;margin:20px 0}
+            .timeline-item{flex-direction:column!important}
+            .timeline-date{position:static;transform:none;margin:10px 0}
+            .stats-grid{grid-template-columns:1fr;gap:20px}
+            .stat-number{font-size:3em}
+            .principle-grid{grid-template-columns:1fr}
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <div class="progress-bar" id="progress-bar"></div>
+    
+    <nav id="navbar">
+        <ul>
+            <li><a href="#slide1">Title</a></li>
+            <li><a href="#slide2">Overview</a></li>
+            <li><a href="#slide3">Taylor's Elements</a></li>
+            <li><a href="#slide4">Scientific Methods</a></li>
+            <li><a href="#slide5">Case Study</a></li>
+            <li><a href="#slide6">Problems</a></li>
+            <li><a href="#slide7">Fayol's Activities</a></li>
+            <li><a href="#slide8">14 Principles</a></li>
+            <li><a href="#slide9">Key Principles</a></li>
+            <li><a href="#slide10">Systems Approach</a></li>
+            <li><a href="#slide11">Evolution</a></li>
+            <li><a href="#slide12">Modern Stats</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- 1. Title Slide -->
+        <div id="slide1" class="slide title-slide">
+            <h1 class="float">Management Principles</h1>
+            <p class="subtitle">Taylor, Fayol & Systems Approach</p>
+            <p class="author">Complete Course with Indian Examples • Engineering Students</p>
+        </div>
+
+        <!-- 2. Course Overview -->
+        <div id="slide2" class="slide title-content">
+            <h2>Course Overview</h2>
+            <div class="content-area">
+                <p>Welcome to Management Principles! This course covers <span class="emphasis">foundational concepts</span> that every engineer-manager needs to understand.</p>
+                
+                <div class="highlight-box">
+                    <strong>Learning Objectives:</strong> Master classical management theories through real Indian business examples
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Scientific Management:</strong> Taylor's revolutionary approach to work efficiency</li>
+                    <li><strong>Administrative Theory:</strong> Fayol's management activities and 14 principles</li>
+                    <li><strong>Systems Approach:</strong> Modern holistic view of organizations</li>
+                    <li><strong>Real Applications:</strong> ISRO, Tata Group, Infosys, Flipkart case studies</li>
+                    <li><strong>Critical Analysis:</strong> Benefits, limitations, and modern relevance</li>
+                </ul>
+                
+                <p><strong>Memory Tricks Included:</strong> SSTMDM for Taylor, POCCC for Fayol, DASU REUS SICS for 14 principles!</p>
+            </div>
+        </div>
+
+        <!-- 3. Scientific Management Section Header -->
+        <div id="slide3" class="slide section-header">
+            <h1>Scientific Management</h1>
+            <p class="section-subtitle">Frederick Winslow Taylor's Revolutionary Approach</p>
+        </div>
+
+        <!-- 4. Taylor's Elements with Methods -->
+        <div id="slide4" class="slide content-caption">
+            <h2>Taylor's 6 Elements - "SSTMDM"</h2>
+            <div class="main-content-area">
+                <strong>Smart Students Think More, Do More</strong><br><br>
+                <em>🔬 Scientific determination of the Task</em><br>
+                <em>👥 Scientific Selection of workers</em><br>
+                <em>🎓 Scientific Training</em><br>
+                <em>⏱️ Time and Motion study</em><br>
+                <em>💰 Differential payment system</em><br>
+                <em>🤝 Mental revolution</em>
+            </div>
+            <div class="caption-area">
+                <p><strong>Core Philosophy:</strong> Replace "rule of thumb" methods with scientific approaches to find the "one best way" to perform every job.</p>
+                <div class="accent-box">
+                    <strong>Key Insight:</strong> Scientific management isn't about making people work harder - it's about making work smarter and more efficient for everyone's benefit.
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Case Study - Mumbai Dabbawalas -->
+        <div id="slide5" class="slide picture-caption">
+            <h2>Case Study: Mumbai Dabbawalas</h2>
+            <div class="picture-area">
+                <div style="text-align:center; font-size:1.3em;">
+                    🏠 PICKUP → 🚉 SORTING → 🚊 TRANSPORT<br><br>
+                    🔄 HUB TRANSFER → 🚴 DELIVERY<br><br>
+                    <span style="font-size:2em;">99.999%</span><br>
+                    <strong>ACCURACY RATE</strong>
+                </div>
+            </div>
+            <div class="caption-sidebar">
+                <h3>Scientific Management Applied</h3>
+                <ul class="content-list">
+                    <li><strong>Task Breakdown:</strong> 5 distinct micro-operations</li>
+                    <li><strong>Time Study:</strong> Every step precisely timed to train schedules</li>
+                    <li><strong>Standardization:</strong> Color-coded system for routing</li>
+                    <li><strong>Scientific Training:</strong> 6-month apprenticeship program</li>
+                    <li><strong>Team Incentives:</strong> Profit-sharing based on accuracy</li>
+                </ul>
+                <div class="highlight-box">
+                    <strong>Result:</strong> Better than Six Sigma performance with minimal technology!
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Problems with Scientific Management -->
+        <div id="slide6" class="slide comparison">
+            <h2>Criticisms of Scientific Management</h2>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>👔 Employers' Concerns</h3>
+                    <ul class="content-list">
+                        <li><strong>High setup costs:</strong> Expensive specialists and equipment</li>
+                        <li><strong>Management resistance:</strong> Managers fear losing authority</li>
+                        <li><strong>Implementation time:</strong> Long payback period</li>
+                    </ul>
+                    <div class="accent-box">
+                        <strong>Example:</strong> Maruti Suzuki's ₹500+ crore initial investment in scientific methods
+                    </div>
+                </div>
+                <div class="comparison-item">
+                    <h3>👷 Workers' Concerns</h3>
+                    <ul class="content-list">
+                        <li><strong>Dehumanization:</strong> Treated like machines</li>
+                        <li><strong>Job insecurity:</strong> Fear of efficiency-driven layoffs</li>
+                        <li><strong>Loss of craftsmanship:</strong> Skilled work becomes routine</li>
+                    </ul>
+                    <div class="highlight-box">
+                        <strong>Example:</strong> Textile industry strikes in 1920s Mumbai mills
+                    </div>
+                </div>
+            </div>
+            <div class="vs-divider">VS</div>
+        </div>
+
+        <!-- 7. Fayol's Management Activities -->
+        <div id="slide7" class="slide title-content">
+            <h2>Fayol's 5 Management Activities - "POCCC"</h2>
+            <div class="content-area">
+                <p><strong>Memory Trick:</strong> <span class="emphasis">Plan Organize Command Coordinate Control</span></p>
+                
+                <div class="principle-grid">
+                    <div class="principle-card">
+                        <h4>📋 Planning</h4>
+                        <p><strong>Example:</strong> Reliance Jio's 3-year launch plan (2013-2016) with ₹2.5 lakh crore investment to become India's largest telecom operator.</p>
+                    </div>
+                    <div class="principle-card">
+                        <h4>🏗️ Organizing</h4>
+                        <p><strong>Example:</strong> ISRO's Mars Mission structure - Mission Director, Project Teams, Resource allocation across multiple centers.</p>
+                    </div>
+                    <div class="principle-card">
+                        <h4>👨‍💼 Command (Leading)</h4>
+                        <p><strong>Example:</strong> Ratan Tata's leadership during 26/11 attacks - clear vision, employee motivation, crisis decisions.</p>
+                    </div>
+                    <div class="principle-card">
+                        <h4>🔗 Coordination</h4>
+                        <p><strong>Example:</strong> Indian Railways coordinating 12,000+ daily trains across operations, maintenance, commercial, and security departments.</p>
+                    </div>
+                    <div class="principle-card">
+                        <h4>✅ Control</h4>
+                        <p><strong>Example:</strong> Domino's 30-minute delivery tracking - real-time monitoring, performance measurement, corrective actions.</p>
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Integration:</strong> All five activities happen simultaneously and are interconnected - you can't skip any one!
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. Fayol's 14 Principles Section -->
+        <div id="slide8" class="slide section-header">
+            <h1>Fayol's 14 Principles</h1>
+            <p class="section-subtitle">Universal Guidelines for Management</p>
+        </div>
+
+        <!-- 9. Key Principles Detailed -->
+        <div id="slide9" class="slide two-content">
+            <h2>Key Principles with Indian Examples</h2>
+            <div class="content-column">
+                <h3>🔧 Division of Work</h3>
+                <p><strong>Indian Railways:</strong> Specialization into Station Masters (operations), Commercial Clerks (ticketing), Technical Staff (maintenance), RPF (security).</p>
+                
+                <h3>⚖️ Unity of Command</h3>
+                <p><strong>Indian Army:</strong> Clear chain of command ensures every soldier receives orders from only one superior - eliminates confusion and conflicting instructions.</p>
+                
+                <h3>💰 Fair Remuneration</h3>
+                <p><strong>Zerodha:</strong> Above-market salaries (20-30% higher), profit-sharing for all employees, merit-based transparent decisions.</p>
+                
+                <h3>🤝 Esprit de Corps</h3>
+                <p><strong>Indian Cricket Team:</strong> MS Dhoni's leadership transformed regional conflicts into unified team spirit, leading to 2007 T20 and 2011 World Cup victories.</p>
+            </div>
+            <div class="content-column">
+                <h3>📊 Order</h3>
+                <p><strong>Mumbai Dabbawalas:</strong> Color-coded tiffin boxes, designated sorting stations, specific train compartments, fixed delivery routes.</p>
+                
+                <h3>⚖️ Equity</h3>
+                <p><strong>Tata Group (2008 crisis):</strong> No layoffs during economic slowdown, maintained salaries, provided counseling and family support during stress.</p>
+                
+                <h3>🏠 Stability of Tenure</h3>
+                <p><strong>TCS:</strong> No-layoff policy, retraining programs, internal mobility, clear career paths resulting in 10-12% attrition vs industry 18-20%.</p>
+                
+                <h3>💡 Initiative</h3>
+                <p><strong>3M India:</strong> "15% time" policy allows employees to spend time on personal projects, leading to 50+ patents and 30% revenue from new products.</p>
+            </div>
+        </div>
+
+        <!-- 10. Systems Approach -->
+        <div id="slide10" class="slide content-caption">
+            <h2>Systems Approach to Management</h2>
+            <div class="main-content-area">
+                <strong>ORGANIZATION = COMPLEX SYSTEM</strong><br><br>
+                <div style="font-size:1.1em;">
+                    🔄 INPUTS → TRANSFORMATION → OUTPUTS<br>
+                    ↑______ FEEDBACK ______↓
+                </div><br>
+                <em>Interconnected parts working together</em>
+            </div>
+            <div class="caption-area">
+                <p><strong>Flipkart E-commerce System Example:</strong></p>
+                <ul class="content-list">
+                    <li><strong>Inputs:</strong> Technology, inventory, delivery partners, customer data</li>
+                    <li><strong>Transformation:</strong> Order processing, warehouse operations, logistics coordination</li>
+                    <li><strong>Outputs:</strong> Delivered products, customer satisfaction, market insights</li>
+                    <li><strong>Feedback:</strong> Customer reviews, sales data, delivery performance metrics</li>
+                </ul>
+                <div class="accent-box">
+                    <strong>Key Insight:</strong> The whole system creates more value than the sum of individual parts - this is called <strong>Synergy</strong>.
+                </div>
+            </div>
+        </div>
+
+        <!-- 11. Timeline - Evolution of Management -->
+        <div id="slide11" class="slide timeline">
+            <h2>Evolution of Management Thought</h2>
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">1880s-1911</div>
+                    <div class="timeline-content">
+                        <h4>Taylor's Scientific Management</h4>
+                        <p>Focus on individual worker efficiency through scientific methods. Time and motion studies, differential payment systems. Applied today in manufacturing and operations.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">1916</div>
+                    <div class="timeline-content">
+                        <h4>Fayol's Administrative Theory</h4>
+                        <p>Management as universal process - POCCC activities and 14 principles. Focus on management functions rather than just worker productivity. Foundation of modern management education.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">1950s-60s</div>
+                    <div class="timeline-content">
+                        <h4>Systems Approach</h4>
+                        <p>Organizations as open systems interacting with environment. Holistic view considering all stakeholders. Applied in complexity management and digital transformation.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">Modern Era</div>
+                    <div class="timeline-content">
+                        <h4>Indian Applications</h4>
+                        <p>Successful adaptation in ISRO (scientific management), Tata Group (Fayol's principles), Flipkart (systems approach). Demonstrates universal relevance of classical theories.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. Modern Statistics and Key Takeaways -->
+        <div id="slide12" class="slide stats-slide">
+            <h2>Impact & Modern Relevance</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">99.99%</div>
+                    <div class="stat-label">Dabbawala Accuracy</div>
+                    <div class="stat-description">Scientific management delivers Six Sigma performance even with minimal technology</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-number">₹450</div>
+                    <div class="stat-label">Crores ISRO Mars Cost</div>
+                    <div class="stat-description">Scientific planning and systems approach made Mars mission cheaper than Hollywood movie</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-number">14</div>
+                    <div class="stat-label">Fayol's Principles</div>
+                    <div class="stat-description">Universal guidelines still applied in modern organizations worldwide</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-number">100M+</div>
+                    <div class="stat-label">Jio Customers</div>
+                    <div class="stat-description">Fayol's POCCC planning approach achieved fastest telecom growth in history</div>
+                </div>
+            </div>
+            
+            <div class="highlight-box" style="margin-top:40px;">
+                <strong>Key Takeaways for Future Engineers:</strong><br>
+                • These "old" theories form the foundation of modern management<br>
+                • Indian companies successfully adapt these principles to local conditions<br>
+                • Understanding these basics helps you organize work, manage teams, and see the big picture<br>
+                • Whether you join IT (Infosys), manufacturing (Tata Motors), or start your own business - these concepts will be invaluable!
+            </div>
+        </div>
+
+        <!-- 13. Self-Assessment Quiz -->
+        <div id="slide13" class="slide title-content">
+            <h2>🎓 Quick Self-Assessment Quiz</h2>
+            <div class="content-area">
+                <p><strong>Test your understanding with these questions:</strong></p>
+                
+                <div class="principle-grid">
+                    <div class="principle-card">
+                        <h4>Question 1</h4>
+                        <p>Which Taylor element is best demonstrated by Mumbai Dabbawalas achieving 99.999% accuracy?</p>
+                        <small><em>Answer: Time and Motion Study with Standardization</em></small>
+                    </div>
+                    <div class="principle-card">
+                        <h4>Question 2</h4>
+                        <p>What does Fayol's "Unity of Command" principle mean?</p>
+                        <small><em>Answer: Each employee should receive orders from only one superior</em></small>
+                    </div>
+                    <div class="principle-card">
+                        <h4>Question 3</h4>
+                        <p>Which Indian example best demonstrates "Synergy" in systems approach?</p>
+                        <small><em>Answer: IPL creating value greater than sum of individual teams</em></small>
+                    </div>
+                    <div class="principle-card">
+                        <h4>Question 4</h4>
+                        <p>Memory trick "POCCC" represents which management concept?</p>
+                        <small><em>Answer: Fayol's 5 Management Activities</em></small>
+                    </div>
+                </div>
+                
+                <div class="accent-box">
+                    <strong>Final Note:</strong> These management principles might seem historical, but they're the building blocks of every successful organization. Master these foundations, and you'll be better prepared to lead teams and manage projects in any field you choose! 🚀
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop">↑</button>
+
+    <script>
+        class P{
+            constructor(c){
+                this.c=c;this.x=Math.random()*c.width;this.y=Math.random()*c.height;
+                this.vx=(Math.random()-.5)*.5;this.vy=(Math.random()-.5)*.5;
+                this.s=Math.random()*2+1;this.o=Math.random()*.6+.2;
+            }
+            u(m){
+                this.x+=this.vx;this.y+=this.vy;
+                if(this.x<0||this.x>this.c.width)this.vx*=-1;
+                if(this.y<0||this.y>this.c.height)this.vy*=-1;
+                if(m.x&&m.y){
+                    const d=Math.hypot(this.x-m.x,this.y-m.y);
+                    if(d<60){const f=(60-d)/60,a=Math.atan2(this.y-m.y,this.x-m.x);
+                    this.vx+=Math.cos(a)*f*.3;this.vy+=Math.sin(a)*f*.3;}
+                }
+            }
+            d(ctx){ctx.save();ctx.globalAlpha=this.o;ctx.beginPath();ctx.arc(this.x,this.y,this.s,0,6.28);ctx.fillStyle='rgba(234,88,12,.5)';ctx.fill();ctx.restore();}
+        }
+        class PS{
+            constructor(){this.cv=document.getElementById('particles-canvas');this.ctx=this.cv.getContext('2d');this.ps=[];this.m={x:0,y:0};this.init();}
+            init(){this.r();this.cp();window.addEventListener('resize',()=>{this.r();this.cp();});window.addEventListener('mousemove',e=>{this.m.x=e.clientX;this.m.y=e.clientY;});this.a();}
+            r(){this.cv.width=innerWidth;this.cv.height=innerHeight;this.pc=Math.floor((innerWidth*innerHeight)/12000);}
+            cp(){this.ps=[];for(let i=0;i<this.pc;i++)this.ps.push(new P(this.cv));}
+            a(){this.ctx.clearRect(0,0,this.cv.width,this.cv.height);this.ps.forEach(p=>{p.u(this.m);p.d(this.ctx);});this.dc();requestAnimationFrame(()=>this.a());}
+            dc(){this.ps.forEach((p,i)=>{for(let j=i+1;j<this.ps.length;j++){const o=this.ps[j],d=Math.hypot(p.x-o.x,p.y-o.y);if(d<100){this.ctx.beginPath();this.ctx.strokeStyle=`rgba(30,41,59,${(1-d/100)*.15})`;this.ctx.lineWidth=.5;this.ctx.moveTo(p.x,p.y);this.ctx.lineTo(o.x,o.y);this.ctx.stroke();}}});}
+        }
+        new PS();
+        const o=new IntersectionObserver(e=>e.forEach(e=>e.isIntersecting&&e.target.classList.add('visible')),{threshold:.1});
+        document.querySelectorAll('.slide').forEach(s=>o.observe(s));
+        const u=()=>{const s=scrollY,d=document.documentElement.scrollHeight-innerHeight,p=s/d;document.getElementById('progress-bar').style.transform=`scaleX(${p})`;document.getElementById('navbar').classList.toggle('scrolled',s>100);document.getElementById('backToTop').classList.toggle('visible',s>300);};
+        addEventListener('scroll',u,{passive:!0});
+        document.getElementById('backToTop').onclick=()=>scrollTo({top:0,behavior:'smooth'});
+        document.querySelectorAll('nav a[href^="#"]').forEach(a=>a.onclick=e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));t&&scrollTo({top:t.offsetTop-80,behavior:'smooth'});});
+        u();
+    </script>
+</body>
+</html>
