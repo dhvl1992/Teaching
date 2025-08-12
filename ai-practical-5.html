@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimax & Alpha-Beta Pruning - Tic-Tac-Toe AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh;
+            color: #1E293B;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+            gap: 2px;
+        }
+
+        .panel {
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .left-panel {
+            background: #FEF7ED;
+        }
+
+        .right-panel {
+            background: #1E293B;
+            color: #FEF7ED;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px;
+            background: #1E293B;
+            color: #FEF7ED;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .header:hover {
+            transform: translateY(-5px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .section {
+            background: #FEF7ED;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+        }
+
+        .theory-section {
+            background: rgba(5, 150, 105, 0.05);
+            border-left: 5px solid #059669;
+        }
+
+        .section h2 {
+            font-size: 2.2em;
+            color: #1E293B;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .theory-section h2 {
+            border-bottom: 3px solid #059669;
+        }
+
+        .section h3 {
+            font-size: 1.4em;
+            color: #1E293B;
+            margin: 20px 0 10px 0;
+        }
+
+        .code-section {
+            background: #0F172A;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            position: relative;
+            border-left: 5px solid #059669;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .code-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .code-block {
+            background: #000;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            color: #FEF7ED;
+        }
+
+        .game-container {
+            background: #FEF7ED;
+            border: 2px solid #EA580C;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3px;
+            max-width: 300px;
+            margin: 0 auto;
+            background: #1E293B;
+            border-radius: 10px;
+            padding: 3px;
+        }
+
+        .cell {
+            background: #FEF7ED;
+            border: none;
+            font-size: 2em;
+            font-weight: bold;
+            color: #1E293B;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80px;
+            border-radius: 5px;
+        }
+
+        .cell:hover {
+            background: #F97316;
+            color: #FEF7ED;
+            transform: scale(1.05);
+        }
+
+        .cell.x {
+            color: #EA580C;
+            background: #FEF3C7;
+        }
+
+        .cell.o {
+            color: #059669;
+            background: #D1FAE5;
+        }
+
+        .cell:disabled {
+            cursor: not-allowed;
+        }
+
+        .game-status {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.3em;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(234, 88, 12, 0.1);
+            border: 2px solid #EA580C;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: #EA580C;
+            color: #FEF7ED;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-family: Georgia, serif;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(234, 88, 12, 0.3);
+        }
+
+        .btn:hover {
+            background: #DC2626;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(234, 88, 12, 0.4);
+        }
+
+        .btn:disabled {
+            background: #9CA3AF;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .algorithm-steps {
+            background: rgba(5, 150, 105, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            display: none;
+            border-left: 5px solid #059669;
+            border: 2px solid #059669;
+        }
+
+        .algorithm-steps.show {
+            display: block;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: rgba(234, 88, 12, 0.05);
+            border: 2px solid #EA580C;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border-left: 5px solid #EA580C;
+        }
+
+        .stat-box h4 {
+            color: #EA580C;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #1E293B;
+        }
+
+        .formula {
+            background: #1E293B;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 16px;
+            border-left: 5px solid #EA580C;
+            box-shadow: 0 4px 15px rgba(30, 41, 59, 0.3);
+        }
+
+        .highlight-box {
+            background: #059669;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+            border-left: 5px solid #047857;
+        }
+
+        .accent-box {
+            background: #EA580C;
+            color: #FEF7ED;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-style: italic;
+            border-left: 5px solid #DC2626;
+        }
+
+        .content-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-list li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 12px;
+        }
+
+        .content-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #EA580C;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #EA580C;
+            color: #FEF7ED;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: Georgia, serif;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #DC2626;
+        }
+
+        .game-tree {
+            background: #ffffff;
+            border: 2px solid #E2E8F0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .difficulty-selector {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .difficulty-selector label {
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .difficulty-selector select {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 2px solid #EA580C;
+            font-family: Georgia, serif;
+            font-size: 1em;
+        }
+
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: 1fr; }
+            .panel { padding: 20px; }
+            .header h1 { font-size: 2em; }
+            .section { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Panel -->
+        <div class="panel left-panel">
+            <div class="header">
+                <h1>🎮 Minimax Algorithm</h1>
+                <p>Tic-Tac-Toe AI with Alpha-Beta Pruning</p>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Aim</h2>
+                <p><strong>To implement and understand the Minimax algorithm with Alpha-Beta Pruning for creating an unbeatable Tic-Tac-Toe AI that makes optimal decisions.</strong></p>
+                
+                <div class="highlight-box">
+                    <strong>Objective:</strong> Demonstrate how game tree search algorithms like Minimax can evaluate all possible game states to make optimal moves, and how Alpha-Beta Pruning optimizes this process by eliminating unnecessary branches.
+                </div>
+            </div>
+
+            <div class="section theory-section">
+                <h2>📚 Theory: Game Tree Search</h2>
+                
+                <h3>What is Minimax?</h3>
+                <p>Minimax is a decision-making algorithm for turn-based games that assumes both players play optimally:</p>
+                <ul class="content-list">
+                    <li><strong>Maximizing Player:</strong> Tries to get the highest score (AI)</li>
+                    <li><strong>Minimizing Player:</strong> Tries to get the lowest score (Human)</li>
+                    <li><strong>Game Tree:</strong> Explores all possible future game states</li>
+                </ul>
+
+                <div class="formula">
+                    Minimax(node) = max(children) if maximizing<br>
+                    Minimax(node) = min(children) if minimizing
+                </div>
+
+                <h3>Alpha-Beta Pruning:</h3>
+                <div style="margin: 15px 0;">
+                    <strong>Alpha (α):</strong> Best value maximizer can guarantee (lower bound)
+                </div>
+                <div style="margin: 15px 0;">
+                    <strong>Beta (β):</strong> Best value minimizer can guarantee (upper bound)
+                </div>
+                <div style="margin: 15px 0;">
+                    <strong>Pruning:</strong> If α ≥ β, stop exploring (cut-off occurs)
+                </div>
+
+                <h3>Algorithm Properties:</h3>
+                <ul class="content-list">
+                    <li><strong>Optimal:</strong> Finds the best possible move</li>
+                    <li><strong>Complete:</strong> Always terminates for finite games</li>
+                    <li><strong>Efficient:</strong> Alpha-Beta reduces search space by ~50%</li>
+                    <li><strong>Perfect Play:</strong> AI never loses if it goes first</li>
+                </ul>
+
+                <div class="accent-box">
+                    <strong>Scoring System:</strong> Win = +10, Lose = -10, Draw = 0. The AI maximizes score while assuming human minimizes it.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎲 Interactive Tic-Tac-Toe Game</h2>
+                <div class="game-container">
+                    <h3 style="text-align: center; color: #1E293B; margin-bottom: 20px;">Play Against AI</h3>
+                    
+                    <div class="difficulty-selector">
+                        <label for="difficulty">AI Difficulty:</label>
+                        <select id="difficulty">
+                            <option value="easy">Easy (Random moves)</option>
+                            <option value="medium">Medium (Some strategy)</option>
+                            <option value="hard" selected>Hard (Minimax AI)</option>
+                            <option value="impossible">Impossible (Minimax + Alpha-Beta)</option>
+                        </select>
+                    </div>
+
+                    <div class="game-status" id="gameStatus">Your turn! Click any cell to play as X</div>
+                    
+                    <div class="game-board" id="gameBoard">
+                        <button class="cell" data-index="0"></button>
+                        <button class="cell" data-index="1"></button>
+                        <button class="cell" data-index="2"></button>
+                        <button class="cell" data-index="3"></button>
+                        <button class="cell" data-index="4"></button>
+                        <button class="cell" data-index="5"></button>
+                        <button class="cell" data-index="6"></button>
+                        <button class="cell" data-index="7"></button>
+                        <button class="cell" data-index="8"></button>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-box">
+                            <h4>Nodes Evaluated</h4>
+                            <div class="stat-value" id="nodesEvaluated">0</div>
+                        </div>
+                        <div class="stat-box">
+                            <h4>Branches Pruned</h4>
+                            <div class="stat-value" id="branchesPruned">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="btn" onclick="newGame()">🆕 New Game</button>
+                        <button class="btn" onclick="showAlgorithm()">🔍 Show AI Thinking</button>
+                        <button class="btn" onclick="autoPlay()">🤖 AI vs AI</button>
+                    </div>
+                    
+                    <div class="algorithm-steps" id="algorithmSteps"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="panel right-panel">
+            <div class="header">
+                <h2>💻 Minimax Implementation</h2>
+            </div>
+
+            <div class="code-section">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre># Simple Minimax - Minimal Code (No Functions)
+
+# Board: 9 cells, '' = empty, 'X' = human, 'O' = AI
+b = [''] * 9
+
+# Check winner - all winning combinations
+wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
+winner = None
+for w in wins:
+    if b[w[0]] == b[w[1]] == b[w[2]] != '':
+        winner = b[w[0]]
+
+# Minimax recursive logic (inline)
+scores = []
+for i in range(9):
+    if b[i] == '':  # Try AI move
+        b[i] = 'O'
+        
+        # Check if AI wins
+        ai_wins = False
+        for w in wins:
+            if b[w[0]] == b[w[1]] == b[w[2]] == 'O':
+                ai_wins = True
+        if ai_wins:
+            scores.append(10)
+            b[i] = ''
+            continue
+            
+        # Try all human responses
+        min_score = 999
+        for j in range(9):
+            if b[j] == '':  # Human move
+                b[j] = 'X'
+                
+                # Check if human wins
+                human_wins = False
+                for w in wins:
+                    if b[w[0]] == b[w[1]] == b[w[2]] == 'X':
+                        human_wins = True
+                if human_wins:
+                    min_score = -10
+                else:
+                    min_score = min(min_score, 0)  # Draw
+                
+                b[j] = ''  # Undo
+        
+        scores.append(min_score)
+        b[i] = ''  # Undo
+
+# Find best move
+best_move = scores.index(max(scores))
+print(f"AI plays: {best_move}")
+</pre>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre># Complete Minimax Game - Ultra Simple
+
+# Setup
+b = [''] * 9  # Empty board
+wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
+
+# Game loop
+while True:
+    # Show board
+    for i in range(0,9,3):
+        print(f" {b[i] if b[i] else i} | {b[i+1] if b[i+1] else i+1} | {b[i+2] if b[i+2] else i+2} ")
+        if i < 6: print("-----------")
+    
+    # Human move
+    move = int(input("Your move (0-8): "))
+    if b[move] == '': b[move] = 'X'
+    
+    # Check win/draw
+    game_over = False
+    for w in wins:
+        if b[w[0]] == b[w[1]] == b[w[2]] != '':
+            print(f"{b[w[0]]} wins!"); game_over = True
+    if '' not in b: print("Draw!"); game_over = True
+    if game_over: break
+    
+    # AI move - Simple Minimax
+    best = -999; best_move = 0
+    for i in range(9):
+        if b[i] == '':
+            b[i] = 'O'  # Try AI move
+            
+            # AI win check
+            score = 0
+            for w in wins:
+                if b[w[0]] == b[w[1]] == b[w[2]] == 'O': score = 10
+            
+            # If not AI win, check human responses
+            if score == 0:
+                worst = 999
+                for j in range(9):
+                    if b[j] == '':
+                        b[j] = 'X'
+                        human_score = 0
+                        for w in wins:
+                            if b[w[0]] == b[w[1]] == b[w[2]] == 'X': human_score = -10
+                        worst = min(worst, human_score)
+                        b[j] = ''
+                score = worst if worst != 999 else 0
+            
+            if score > best: best = score; best_move = i
+            b[i] = ''  # Undo
+    
+    b[best_move] = 'O'
+    print(f"AI plays: {best_move}")
+    
+    # Check win again
+    for w in wins:
+        if b[w[0]] == b[w[1]] == b[w[2]] != '':
+            print(f"{b[w[0]]} wins!"); game_over = True
+    if '' not in b: print("Draw!"); game_over = True
+    if game_over: break
+</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let currentPlayer = 'X'; // Human is X, AI is O
+        let gameActive = true;
+        let nodesEvaluated = 0;
+        let branchesPruned = 0;
+        let showSteps = false;
+
+        const winningCombinations = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+            [0, 4, 8], [2, 4, 6] // diagonals
+        ];
+
+        function initializeGame() {
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach((cell, index) => {
+                cell.addEventListener('click', () => handleCellClick(index));
+            });
+            updateDisplay();
+        }
+
+        function handleCellClick(index) {
+            if (board[index] !== '' || !gameActive || currentPlayer !== 'X') return;
+            
+            makeMove(index, 'X');
+            if (gameActive) {
+                setTimeout(() => {
+                    aiMove();
+                }, 500);
+            }
+        }
+
+        function makeMove(index, player) {
+            board[index] = player;
+            updateDisplay();
+            
+            if (checkWinner()) {
+                const winner = checkWinner();
+                document.getElementById('gameStatus').textContent = 
+                    winner === 'X' ? '🎉 You Win!' : 
+                    winner === 'O' ? '🤖 AI Wins!' : 
+                    '🤝 It\'s a Draw!';
+                gameActive = false;
+                return;
+            }
+            
+            if (isBoardFull()) {
+                document.getElementById('gameStatus').textContent = '🤝 It\'s a Draw!';
+                gameActive = false;
+                return;
+            }
+            
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            updateGameStatus();
+        }
+
+        function aiMove() {
+            if (!gameActive) return;
+            
+            const difficulty = document.getElementById('difficulty').value;
+            let move;
+            
+            nodesEvaluated = 0;
+            branchesPruned = 0;
+            
+            const stepDiv = document.getElementById('algorithmSteps');
+            if (showSteps) {
+                stepDiv.innerHTML = '';
+                stepDiv.classList.add('show');
+            }
+            
+            switch (difficulty) {
+                case 'easy':
+                    move = getRandomMove();
+                    break;
+                case 'medium':
+                    move = getMediumMove();
+                    break;
+                case 'hard':
+                    move = minimaxMove(false); // Without alpha-beta
+                    break;
+                case 'impossible':
+                    move = minimaxMove(true); // With alpha-beta
+                    break;
+            }
+            
+            if (showSteps) {
+                stepDiv.innerHTML += `<br><strong>🎯 AI Decision: Position ${move}</strong><br>`;
+                stepDiv.innerHTML += `📊 Total nodes evaluated: ${nodesEvaluated}<br>`;
+                stepDiv.innerHTML += `✂️ Branches pruned: ${branchesPruned}<br>`;
+            }
+            
+            updateStats();
+            makeMove(move, 'O');
+        }
+
+        // Standard Minimax Implementation (Readymade)
+        function minimaxMove(useAlphaBeta) {
+            return useAlphaBeta ? findBestMoveAlphaBeta([...board]) : findBestMove([...board]);
+        }
+
+        function minimax(testBoard, depth, maximizingPlayer) {
+            nodesEvaluated++;
+            
+            if (showSteps && depth < 3) {
+                const indent = '  '.repeat(depth);
+                const player = maximizingPlayer ? 'AI(O)' : 'Human(X)';
+                document.getElementById('algorithmSteps').innerHTML += 
+                    `${indent}Depth ${depth}: ${player} turn<br>`;
+            }
+            
+            // Terminal node evaluation
+            const result = checkWinnerArray(testBoard);
+            if (result === 'O') return 10 - depth;  // AI wins (prefer quicker wins)
+            if (result === 'X') return depth - 10;  // Human wins (prefer slower losses)
+            if (isBoardFullArray(testBoard)) return 0;  // Draw
+            
+            if (maximizingPlayer) {  // AI's turn
+                let maxEval = -1000;
+                for (let i = 0; i < 9; i++) {
+                    if (testBoard[i] === '') {
+                        testBoard[i] = 'O';  // AI move
+                        const evalScore = minimax(testBoard, depth + 1, false);
+                        testBoard[i] = '';   // Undo move
+                        maxEval = Math.max(maxEval, evalScore);
+                    }
+                }
+                return maxEval;
+            } else {  // Human's turn
+                let minEval = 1000;
+                for (let i = 0; i < 9; i++) {
+                    if (testBoard[i] === '') {
+                        testBoard[i] = 'X';  // Human move
+                        const evalScore = minimax(testBoard, depth + 1, true);
+                        testBoard[i] = '';   // Undo move
+                        minEval = Math.min(minEval, evalScore);
+                    }
+                }
+                return minEval;
+            }
+        }
+
+        function findBestMove(testBoard) {
+            let bestVal = -1000;
+            let bestMove = -1;
+            
+            for (let i = 0; i < 9; i++) {
+                if (testBoard[i] === '') {
+                    testBoard[i] = 'O';  // AI move
+                    const moveVal = minimax(testBoard, 0, false);
+                    testBoard[i] = '';   // Undo move
+                    
+                    if (showSteps) {
+                        document.getElementById('algorithmSteps').innerHTML += 
+                            `Position ${i}: Score = ${moveVal}<br>`;
+                    }
+                    
+                    if (moveVal > bestVal) {
+                        bestMove = i;
+                        bestVal = moveVal;
+                    }
+                }
+            }
+            return bestMove;
+        }
+
+        function minimaxAlphaBeta(testBoard, depth, alpha, beta, maximizingPlayer) {
+            nodesEvaluated++;
+            
+            const result = checkWinnerArray(testBoard);
+            if (result === 'O') return 10 - depth;
+            if (result === 'X') return depth - 10;
+            if (isBoardFullArray(testBoard)) return 0;
+            
+            if (maximizingPlayer) {
+                let maxEval = -1000;
+                for (let i = 0; i < 9; i++) {
+                    if (testBoard[i] === '') {
+                        testBoard[i] = 'O';
+                        const evalScore = minimaxAlphaBeta(testBoard, depth + 1, alpha, beta, false);
+                        testBoard[i] = '';
+                        maxEval = Math.max(maxEval, evalScore);
+                        alpha = Math.max(alpha, evalScore);
+                        if (beta <= alpha) {
+                            branchesPruned++;
+                            if (showSteps && depth < 2) {
+                                document.getElementById('algorithmSteps').innerHTML += 
+                                    `✂️ Beta cutoff at position ${i}<br>`;
+                            }
+                            break;  // Beta cutoff
+                        }
+                    }
+                }
+                return maxEval;
+            } else {
+                let minEval = 1000;
+                for (let i = 0; i < 9; i++) {
+                    if (testBoard[i] === '') {
+                        testBoard[i] = 'X';
+                        const evalScore = minimaxAlphaBeta(testBoard, depth + 1, alpha, beta, true);
+                        testBoard[i] = '';
+                        minEval = Math.min(minEval, evalScore);
+                        beta = Math.min(beta, evalScore);
+                        if (beta <= alpha) {
+                            branchesPruned++;
+                            break;  // Alpha cutoff
+                        }
+                    }
+                }
+                return minEval;
+            }
+        }
+
+        function findBestMoveAlphaBeta(testBoard) {
+            let bestVal = -1000;
+            let bestMove = -1;
+            
+            for (let i = 0; i < 9; i++) {
+                if (testBoard[i] === '') {
+                    testBoard[i] = 'O';
+                    const moveVal = minimaxAlphaBeta(testBoard, 0, -1000, 1000, false);
+                    testBoard[i] = '';
+                    
+                    if (showSteps) {
+                        document.getElementById('algorithmSteps').innerHTML += 
+                            `Position ${i}: Score = ${moveVal}<br>`;
+                    }
+                    
+                    if (moveVal > bestVal) {
+                        bestMove = i;
+                        bestVal = moveVal;
+                    }
+                }
+            }
+            return bestMove;
+        }
+
+        function checkWinnerArray(testBoard) {
+            for (const combo of winningCombinations) {
+                const [a, b, c] = combo;
+                if (testBoard[a] && testBoard[a] === testBoard[b] && testBoard[a] === testBoard[c]) {
+                    return testBoard[a];
+                }
+            }
+            return null;
+        }
+
+        function getRandomMove() {
+            const availableMoves = getAvailableMoves();
+            return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+        }
+
+        function getMediumMove() {
+            // Try to win or block human win
+            for (const move of getAvailableMoves()) {
+                // Try to win
+                board[move] = 'O';
+                if (checkWinner() === 'O') {
+                    board[move] = '';
+                    return move;
+                }
+                board[move] = '';
+                
+                // Try to block human win
+                board[move] = 'X';
+                if (checkWinner() === 'X') {
+                    board[move] = '';
+                    return move;
+                }
+                board[move] = '';
+            }
+            return getRandomMove();
+        }
+
+        function getAvailableMoves() {
+            return board.map((cell, index) => cell === '' ? index : null).filter(index => index !== null);
+        }
+
+        function getAvailableMovesArray(testBoard) {
+            return testBoard.map((cell, index) => cell === '' ? index : null).filter(index => index !== null);
+        }
+
+        function isBoardFull() {
+            return board.every(cell => cell !== '');
+        }
+
+        function isBoardFullArray(testBoard) {
+            return testBoard.every(cell => cell !== '');
+        }
+
+        function checkWinner() {
+            for (const combo of winningCombinations) {
+                const [a, b, c] = combo;
+                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    return board[a];
+                }
+            }
+            return isBoardFull() ? 'Draw' : null;
+        }
+
+        function updateDisplay() {
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach((cell, index) => {
+                cell.textContent = board[index];
+                cell.className = `cell ${board[index].toLowerCase()}`;
+                cell.disabled = board[index] !== '' || !gameActive;
+            });
+        }
+
+        function updateGameStatus() {
+            if (gameActive) {
+                document.getElementById('gameStatus').textContent = 
+                    currentPlayer === 'X' ? 'Your turn! Click a cell' : '🤖 AI is thinking...';
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('nodesEvaluated').textContent = nodesEvaluated;
+            document.getElementById('branchesPruned').textContent = branchesPruned;
+        }
+
+        function newGame() {
+            board = ['', '', '', '', '', '', '', '', ''];
+            currentPlayer = 'X';
+            gameActive = true;
+            showSteps = false;
+            document.getElementById('algorithmSteps').classList.remove('show');
+            updateDisplay();
+            updateGameStatus();
+            updateStats();
+        }
+
+        function showAlgorithm() {
+            showSteps = !showSteps;
+            if (!showSteps) {
+                document.getElementById('algorithmSteps').classList.remove('show');
+            }
+        }
+
+        function autoPlay() {
+            newGame();
+            currentPlayer = 'O'; // AI starts
+            gameActive = true;
+            document.getElementById('gameStatus').textContent = '🤖 AI vs AI - Watch them play!';
+            
+            function playMove() {
+                if (!gameActive) return;
+                
+                if (currentPlayer === 'O') {
+                    aiMove();
+                } else {
+                    // Second AI (playing as X) - use medium difficulty for variety
+                    const move = getMediumMove();
+                    makeMove(move, 'X');
+                }
+                
+                if (gameActive) {
+                    setTimeout(playMove, 1500);
+                }
+            }
+            
+            setTimeout(playMove, 1000);
+        }
+
+        function copyCode(button) {
+            const code = button.nextElementSibling.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                button.textContent = 'Copied!';
+                setTimeout(() => button.textContent = 'Copy', 2000);
+            });
+        }
+
+        // Initialize the game when page loads
+        document.addEventListener('DOMContentLoaded', initializeGame);
+    </script>
+</body>
+</html>
