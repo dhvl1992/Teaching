@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Management Theory - Complete Academic Guide</title>
+    <title>Management Principles - Balanced Learning Guide</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:Georgia,serif;background:#FEF7ED;color:#1E293B;line-height:1.6;overflow-x:hidden}
         #particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1}
-        nav{position:fixed;top:0;width:100%;background:rgba(254,247,237,.95);backdrop-filter:blur(10px);z-index:1000;padding:0.8rem 1.2rem;transition:all .3s;border-bottom:2px solid #EA580C}
+        nav{position:fixed;top:0;width:100%;background:rgba(254,247,237,.95);backdrop-filter:blur(10px);z-index:1000;padding:1rem 1.5rem;transition:all .3s;border-bottom:2px solid #EA580C}
         nav.scrolled{background:rgba(254,247,237,.98);box-shadow:0 2px 20px rgba(234,88,12,.1)}
-        nav ul{list-style:none;display:flex;justify-content:center;flex-wrap:wrap;gap:0.6rem}
-        nav a{color:#1E293B;text-decoration:none;font-weight:600;transition:all .3s;padding:.3rem .5rem;border-radius:12px;font-size:0.7em}
+        nav ul{list-style:none;display:flex;justify-content:center;flex-wrap:wrap;gap:0.8rem}
+        nav a{color:#1E293B;text-decoration:none;font-weight:600;transition:all .3s;padding:.4rem .7rem;border-radius:15px;font-size:0.75em}
         nav a:hover{background:rgba(234,88,12,.1);color:#EA580C;transform:translateY(-2px)}
-        .progress-bar{position:fixed;top:70px;left:0;height:4px;background:linear-gradient(90deg,#EA580C,#059669);z-index:999;transform-origin:left;transform:scaleX(0);transition:transform .1s}
+        .progress-bar{position:fixed;top:75px;left:0;height:4px;background:linear-gradient(90deg,#EA580C,#059669);z-index:999;transform-origin:left;transform:scaleX(0);transition:transform .1s}
         .container{max-width:1200px;margin:0 auto;padding:20px}
-        .slide{background:#FEF7ED;margin-bottom:30px;padding:35px;border-radius:15px;border-left:5px solid #EA580C;box-shadow:0 8px 25px rgba(0,0,0,.1);transition:all .8s;min-height:500px;transform:translateY(50px);opacity:0}
+        .slide{background:#FEF7ED;margin-bottom:30px;padding:40px;border-radius:15px;border-left:5px solid #EA580C;box-shadow:0 8px 25px rgba(0,0,0,.1);transition:all .8s;min-height:500px;transform:translateY(50px);opacity:0}
         .slide.visible{transform:translateY(0);opacity:1}
         .slide:hover{transform:translateY(-5px)}
         
@@ -26,68 +26,67 @@
         .title-slide .author{font-size:1.2em;opacity:.8}
         
         .title-content h2,.two-content h2,.comparison h2,.content-caption h2,.picture-caption h2{font-size:2.2em;color:#1E293B;margin-bottom:30px;padding-bottom:10px;border-bottom:3px solid #EA580C}
-        .content-area{font-size:1.05em;line-height:1.8}
+        .content-area{font-size:1.1em;line-height:1.8}
         .content-list{list-style:none}
-        .content-list li{position:relative;padding-left:30px;margin-bottom:12px}
+        .content-list li{position:relative;padding-left:30px;margin-bottom:15px}
         .content-list li::before{content:"→";position:absolute;left:0;color:#EA580C;font-weight:bold;font-size:1.2em}
         
         .section-header{background:linear-gradient(135deg,#059669,#EA580C);color:#FEF7ED;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
         .section-header h1{font-size:3em;margin-bottom:20px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
         .section-header .section-subtitle{font-size:1.4em;opacity:.9}
         
-        .two-content{display:grid;grid-template-columns:1fr 1fr;gap:35px;align-items:start}
+        .two-content{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
         .two-content h2{grid-column:1/-1}
         .content-column{padding:20px;background:rgba(5,150,105,.05);border-radius:10px}
-        .content-column h3{font-size:1.5em;color:#059669;margin-bottom:15px}
+        .content-column h3{font-size:1.6em;color:#059669;margin-bottom:15px}
         
         .comparison{position:relative}
         .comparison h2{text-align:center}
-        .comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:35px;margin-top:35px}
-        .comparison-item{text-align:center;padding:25px;border-radius:15px;background:rgba(234,88,12,.1)}
-        .comparison-item h3{font-size:1.7em;color:#EA580C;margin-bottom:20px}
+        .comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:40px}
+        .comparison-item{text-align:center;padding:30px;border-radius:15px;background:rgba(234,88,12,.1)}
+        .comparison-item h3{font-size:1.8em;color:#EA580C;margin-bottom:20px}
         .vs-divider{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#EA580C;color:#FEF7ED;padding:10px 20px;border-radius:50px;font-weight:bold;font-size:1.2em}
         
         .title-only{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
         .title-only h1{font-size:3em;color:#1E293B;margin-bottom:20px}
         .title-only .subtitle{font-size:1.4em;color:#059669;font-style:italic}
         
-        .content-caption{display:grid;grid-template-rows:auto 1fr auto;gap:25px}
-        .main-content-area{background:linear-gradient(45deg,#059669,#EA580C);border:2px dashed #1E293B;border-radius:15px;padding:45px 25px;text-align:center;color:#FEF7ED;font-weight:bold;font-size:1.05em;display:flex;align-items:center;justify-content:center;flex-direction:column}
+        .content-caption{display:grid;grid-template-rows:auto 1fr auto;gap:30px}
+        .main-content-area{background:linear-gradient(45deg,#059669,#EA580C);border:2px dashed #1E293B;border-radius:15px;padding:60px 40px;text-align:center;color:#FEF7ED;font-weight:bold;font-size:1.2em;display:flex;align-items:center;justify-content:center;flex-direction:column}
         .caption-area{background:rgba(5,150,105,.1);padding:20px;border-radius:10px;border-left:4px solid #059669}
         
-        .picture-caption{display:grid;grid-template-columns:1.8fr 1.2fr;gap:35px;align-items:start}
+        .picture-caption{display:grid;grid-template-columns:2fr 1fr;gap:40px;align-items:start}
         .picture-caption h2{grid-column:1/-1}
-        .picture-area{background:rgba(30,41,59,.05);border:2px solid #1E293B;border-radius:15px;padding:30px 20px;text-align:left;color:#1E293B;min-height:250px}
-        .caption-sidebar{background:rgba(234,88,12,.1);padding:22px;border-radius:15px;border-left:4px solid #EA580C}
-        .caption-sidebar h3{color:#EA580C;margin-bottom:15px;font-size:1.3em}
+        .picture-area{background:linear-gradient(45deg,#059669,#EA580C);border:2px dashed #1E293B;border-radius:15px;padding:80px 20px;text-align:center;color:#FEF7ED;font-weight:bold;min-height:300px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+        .caption-sidebar{background:rgba(234,88,12,.1);padding:30px;border-radius:15px;border-left:4px solid #EA580C}
+        .caption-sidebar h3{color:#EA580C;margin-bottom:15px;font-size:1.4em}
         
         /* Timeline */
         .timeline{padding:20px 0}
         .timeline h2{font-size:2.2em;color:#1E293B;margin-bottom:40px;padding-bottom:10px;border-bottom:3px solid #EA580C;text-align:center}
         .timeline-container{position:relative;padding:20px 0}
         .timeline-line{position:absolute;left:50%;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#EA580C,#059669);transform:translateX(-50%)}
-        .timeline-item{position:relative;margin:35px 0;display:flex;align-items:center}
+        .timeline-item{position:relative;margin:40px 0;display:flex;align-items:center}
         .timeline-item:nth-child(odd){flex-direction:row}
         .timeline-item:nth-child(even){flex-direction:row-reverse}
         .timeline-content{background:rgba(234,88,12,.05);padding:25px;border-radius:15px;width:45%;border-left:4px solid #EA580C;box-shadow:0 4px 15px rgba(0,0,0,.1)}
         .timeline-date{position:absolute;left:50%;transform:translateX(-50%);background:#EA580C;color:#FEF7ED;padding:8px 16px;border-radius:20px;font-weight:bold;z-index:2}
-        .timeline-content h4{color:#1E293B;font-size:1.3em;margin-bottom:10px}
+        .timeline-content h4{color:#1E293B;font-size:1.4em;margin-bottom:10px}
         
         /* Statistics */
         .stats-slide h2{font-size:2.2em;color:#1E293B;margin-bottom:40px;padding-bottom:10px;border-bottom:3px solid #EA580C;text-align:center}
-        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:25px;margin:30px 0}
-        .stat-card{background:linear-gradient(135deg,#EA580C,#059669);color:#FEF7ED;padding:35px 25px;border-radius:20px;text-align:center;box-shadow:0 10px 30px rgba(234,88,12,.2);transition:transform .3s}
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;margin:30px 0}
+        .stat-card{background:linear-gradient(135deg,#EA580C,#059669);color:#FEF7ED;padding:40px 30px;border-radius:20px;text-align:center;box-shadow:0 10px 30px rgba(234,88,12,.2);transition:transform .3s}
         .stat-card:hover{transform:translateY(-10px)}
-        .stat-number{font-size:3em;font-weight:bold;line-height:1;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
-        .stat-label{font-size:1.1em;opacity:.9;font-weight:600}
-        .stat-description{font-size:.85em;opacity:.8;margin-top:12px;line-height:1.4}
+        .stat-number{font-size:3.5em;font-weight:bold;line-height:1;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+        .stat-label{font-size:1.2em;opacity:.9;font-weight:600}
+        .stat-description{font-size:.9em;opacity:.8;margin-top:15px;line-height:1.4}
         
-        /* Theory-specific classes */
-        .theory-box{background:rgba(30,41,59,.08);padding:22px;border-radius:12px;border-left:4px solid #1E293B;margin:18px 0;font-size:1.02em}
-        .definition-box{background:rgba(234,88,12,.12);padding:20px;border-radius:10px;border:2px dashed #EA580C;margin:15px 0;font-weight:600}
+        /* Balanced content classes */
         .concept-box{background:rgba(5,150,105,.08);padding:20px;border-radius:10px;border-left:4px solid #059669;margin:15px 0}
-        .critical-analysis{background:rgba(120,53,15,.08);padding:20px;border-radius:10px;border:1px solid #78350F;margin:15px 0}
-        .theoretical-framework{background:#FFF;padding:25px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.08);margin:20px 0;border-left:5px solid #059669}
+        .example-box{background:rgba(234,88,12,.08);padding:20px;border-radius:10px;border-left:4px solid #EA580C;margin:15px 0}
+        .story-box{background:rgba(168,85,247,.08);padding:20px;border-radius:10px;border-left:4px solid #A855F7;margin:15px 0}
+        .key-insight{background:#1E293B;color:#FEF7ED;padding:20px;border-radius:10px;margin:20px 0;font-weight:600}
         
         /* Utility Classes */
         .highlight-box{background:#059669;color:#FEF7ED;padding:20px;border-radius:10px;margin:20px 0;font-weight:bold}
@@ -98,15 +97,14 @@
         .back-to-top:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(234,88,12,.3)}
         .float{animation:float 3s ease-in-out infinite}
         @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-        .principle-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin:25px 0}
-        .principle-card{background:rgba(5,150,105,.05);padding:20px;border-radius:12px;border-left:4px solid #EA580C;transition:transform .3s}
+        .principle-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:25px;margin:30px 0}
+        .principle-card{background:rgba(5,150,105,.05);padding:25px;border-radius:15px;border-left:4px solid #EA580C;transition:transform .3s}
         .principle-card:hover{transform:translateY(-5px)}
-        .principle-card h4{color:#EA580C;font-size:1.2em;margin-bottom:10px}
-        .table-responsive{overflow-x:auto;margin:20px 0}
-        .comparison-table{width:100%;border-collapse:collapse;background:#FFF;box-shadow:0 2px 10px rgba(0,0,0,.1)}
-        .comparison-table th,.comparison-table td{padding:12px;text-align:left;border:1px solid #ddd;font-size:0.95em}
-        .comparison-table th{background:#EA580C;color:#FEF7ED;font-weight:bold}
-        .comparison-table tr:nth-child(even){background:#f9f9f9}
+        .principle-card h4{color:#EA580C;font-size:1.3em;margin-bottom:15px}
+        .simple-table{width:100%;border-collapse:collapse;margin:20px 0;background:#FFF;box-shadow:0 2px 10px rgba(0,0,0,.1)}
+        .simple-table th,.simple-table td{padding:15px;text-align:left;border:1px solid #ddd}
+        .simple-table th{background:#EA580C;color:#FEF7ED;font-weight:bold}
+        .simple-table tr:nth-child(even){background:#f9f9f9}
         @media (max-width:768px){
             nav{display:none}
             .container{padding:10px}
@@ -119,10 +117,8 @@
             .timeline-item{flex-direction:column!important}
             .timeline-date{position:static;transform:none;margin:10px 0}
             .stats-grid{grid-template-columns:1fr;gap:20px}
-            .stat-number{font-size:2.5em}
+            .stat-number{font-size:3em}
             .principle-grid{grid-template-columns:1fr}
-            .comparison-table{font-size:0.8em}
-            .picture-caption{grid-template-columns:1fr}
         }
     </style>
 </head>
@@ -132,813 +128,572 @@
     
     <nav id="navbar">
         <ul>
-            <li><a href="#slide1">Title</a></li>
-            <li><a href="#slide2">Introduction</a></li>
-            <li><a href="#slide3">Taylor Theory</a></li>
-            <li><a href="#slide4">Elements Theory</a></li>
-            <li><a href="#slide5">Time Motion</a></li>
-            <li><a href="#slide6">Payment Training</a></li>
-            <li><a href="#slide7">Followers</a></li>
-            <li><a href="#slide8">Criticisms</a></li>
-            <li><a href="#slide9">Fayol Theory</a></li>
-            <li><a href="#slide10">Activities</a></li>
-            <li><a href="#slide11">14 Principles Part I</a></li>
-            <li><a href="#slide12">14 Principles Part II</a></li>
-            <li><a href="#slide13">Systems Theory</a></li>
-            <li><a href="#slide14">Open Systems</a></li>
-            <li><a href="#slide15">Comparison</a></li>
-            <li><a href="#slide16">Exam Guide</a></li>
+            <li><a href="#slide1">Start</a></li>
+            <li><a href="#slide2">Why Study?</a></li>
+            <li><a href="#slide3">Taylor Story</a></li>
+            <li><a href="#slide4">6 Elements</a></li>
+            <li><a href="#slide5">Time Study</a></li>
+            <li><a href="#slide6">Case Study</a></li>
+            <li><a href="#slide7">Problems</a></li>
+            <li><a href="#slide8">Fayol Story</a></li>
+            <li><a href="#slide9">5 Activities</a></li>
+            <li><a href="#slide10">14 Principles</a></li>
+            <li><a href="#slide11">Systems Think</a></li>
+            <li><a href="#slide12">Compare All</a></li>
+            <li><a href="#slide13">Modern Use</a></li>
+            <li><a href="#slide14">Key Takeaways</a></li>
         </ul>
     </nav>
 
     <div class="container">
         <!-- 1. Title Slide -->
         <div id="slide1" class="slide title-slide">
-            <h1 class="float">Management Theory</h1>
-            <p class="subtitle">Comprehensive Academic Framework</p>
-            <p class="author">Classical Theories • Theoretical Analysis • Exam Preparation</p>
+            <h1 class="float">Management Principles</h1>
+            <p class="subtitle">Understanding Through Stories & Examples</p>
+            <p class="author">Learn • Understand • Apply • Succeed</p>
         </div>
 
-        <!-- 2. Theoretical Introduction -->
+        <!-- 2. Why Study Management? -->
         <div id="slide2" class="slide title-content">
-            <h2>Theoretical Foundation of Management</h2>
+            <h2>Why Should You Care About Management?</h2>
             <div class="content-area">
-                <div class="definition-box">
-                    <strong>Management Theory:</strong> A systematic framework of principles, concepts, and practices that explain how organizations function and how managers can effectively coordinate resources to achieve organizational objectives.
+                <div class="story-box">
+                    <h4>🚀 The Smartphone Revolution Story</h4>
+                    <p>Think about your smartphone. It has millions of components made by thousands of companies across dozens of countries, all working together perfectly. How does this happen? <strong>Management principles!</strong></p>
                 </div>
                 
-                <div class="theoretical-framework">
-                    <h4>📚 Evolution of Management Thought:</h4>
-                    <p>Management theory evolved through distinct phases, each addressing limitations of previous approaches and responding to changing organizational environments. The progression represents increasingly sophisticated understanding of human behavior, organizational complexity, and environmental dynamics.</p>
-                    
-                    <ul class="content-list">
-                        <li><strong>Classical School (1890-1940):</strong> Scientific Management (Taylor), Administrative Theory (Fayol), Bureaucratic Theory (Weber)</li>
-                        <li><strong>Behavioral School (1930-1950):</strong> Human Relations Movement, Hawthorne Studies</li>
-                        <li><strong>Modern School (1950-present):</strong> Systems Approach, Contingency Theory, Organizational Behavior</li>
-                    </ul>
-                </div>
+                <p>Whether you become an engineer, start your own company, or lead a team, you'll need to <span class="emphasis">organize work and coordinate people</span>. That's what management is all about.</p>
                 
                 <div class="concept-box">
-                    <h4>🎯 Theoretical Objectives:</h4>
+                    <h4>What You'll Learn:</h4>
                     <ul class="content-list">
-                        <li><strong>Descriptive Function:</strong> Explain how organizations actually operate</li>
-                        <li><strong>Predictive Function:</strong> Forecast outcomes of management decisions</li>
-                        <li><strong>Prescriptive Function:</strong> Recommend best practices for effectiveness</li>
-                        <li><strong>Analytical Function:</strong> Provide frameworks for problem-solving</li>
+                        <li><strong>Scientific Management:</strong> How to make work more efficient (like optimizing your study routine)</li>
+                        <li><strong>Administrative Principles:</strong> How to organize and lead people effectively</li>
+                        <li><strong>Systems Thinking:</strong> How to see the big picture and connections</li>
                     </ul>
                 </div>
                 
-                <div class="critical-analysis">
-                    <strong>Theoretical Significance:</strong> Management theories provide conceptual tools for understanding complex organizational phenomena, guide decision-making processes, and establish foundation for professional management education and practice.
+                <div class="example-box">
+                    <h4>Real Impact:</h4>
+                    <p><strong>Mumbai Dabbawalas</strong> use these principles to deliver 200,000 lunch boxes daily with 99.999% accuracy - better than most software systems! <strong>ISRO</strong> used them to reach Mars for less money than a Hollywood movie costs.</p>
+                </div>
+                
+                <div class="key-insight">
+                    <strong>Key Insight:</strong> These aren't just "old theories" - they're practical tools that help real people solve real problems every day.
                 </div>
             </div>
         </div>
 
-        <!-- 3. Scientific Management Theory -->
+        <!-- 3. Taylor's Story -->
         <div id="slide3" class="slide section-header">
-            <h1>Scientific Management Theory</h1>
-            <p class="section-subtitle">Frederick Winslow Taylor (1856-1915)</p>
+            <h1>The Taylor Revolution</h1>
+            <p class="section-subtitle">How One Engineer Changed the World of Work</p>
         </div>
 
-        <!-- 4. Theoretical Elements of Scientific Management -->
-        <div id="slide4" class="slide picture-caption">
-            <h2>Theoretical Framework: Taylor's Scientific Management</h2>
-            <div class="picture-area">
-                <div class="theoretical-framework">
-                    <h4>🔬 Core Theoretical Assumptions:</h4>
-                    <ul class="content-list">
-                        <li><strong>Economic Rationality:</strong> Workers primarily motivated by financial incentives</li>
-                        <li><strong>Scientific Method:</strong> Systematic observation and measurement can optimize work</li>
-                        <li><strong>Division of Labor:</strong> Specialization increases efficiency and expertise</li>
-                        <li><strong>Standardization:</strong> Best practices can be scientifically determined and replicated</li>
-                        <li><strong>Management-Worker Cooperation:</strong> Mutual benefit through scientific methods</li>
-                    </ul>
-                    
-                    <div class="definition-box">
-                        <strong>Paradigm Shift:</strong> From traditional "rule of thumb" methods to systematic, scientifically-based management practices.
+        <!-- 4. Taylor's 6 Elements with Stories -->
+        <div id="slide4" class="slide title-content">
+            <h2>Taylor's Big Idea: Work Smarter, Not Harder</h2>
+            <div class="content-area">
+                <div class="concept-box">
+                    <h4>🤔 The Problem Taylor Saw:</h4>
+                    <p>In the 1880s, workers basically guessed how to do their jobs. No standards, no training, no systematic approach. It was like everyone cooking without recipes - some good results, mostly chaos!</p>
+                </div>
+
+                <div class="story-box">
+                    <h4>Taylor's Solution: The "One Best Way"</h4>
+                    <p>Taylor believed there was a scientifically best way to do every job. Just like there's a best way to solve a math problem, there should be a best way to make a product or deliver a service.</p>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Memory Trick: "SSTMDM" = Smart Students Think More, Do More</strong>
+                </div>
+
+                <div class="principle-grid">
+                    <div class="principle-card">
+                        <h4>1. 🔬 Scientific Task Study</h4>
+                        <p><strong>Concept:</strong> Break big jobs into small pieces, study each piece, find the best way.</p>
+                        <div class="example-box">
+                            <strong>ISRO Example:</strong> Mars mission wasn't just "go to Mars." It was broken into thousands of specific tasks - fuel calculations, navigation programming, communication protocols. Each task was studied scientifically. Result: Mission succeeded for just ₹450 crores!
+                        </div>
                     </div>
+
+                    <div class="principle-card">
+                        <h4>2. 👥 Right Person, Right Job</h4>
+                        <p><strong>Concept:</strong> Choose people based on their abilities, not politics or favoritism.</p>
+                        <div class="example-box">
+                            <strong>Indian Railways:</strong> To become a train driver, you need physical fitness tests, psychological assessments, and technical exams. They don't just hire anyone - they scientifically match person to job.
+                        </div>
+                    </div>
+
+                    <div class="principle-card">
+                        <h4>3. 🎓 Proper Training</h4>
+                        <p><strong>Concept:</strong> Teach people the right way systematically, don't just hope they figure it out.</p>
+                        <div class="example-box">
+                            <strong>Infosys:</strong> New engineers don't jump straight into projects. They spend 3 months in systematic training at Mysore campus, learning standardized methods.
+                        </div>
+                    </div>
+
+                    <div class="principle-card">
+                        <h4>4. ⏱️ Time & Motion Study</h4>
+                        <p><strong>Concept:</strong> Study how people move and work, eliminate waste, optimize timing.</p>
+                        <div class="example-box">
+                            <strong>Mumbai Dabbawalas:</strong> Every movement is timed and optimized - from collecting tiffins to train transfers. This precision gives them 99.999% accuracy.
+                        </div>
+                    </div>
+
+                    <div class="principle-card">
+                        <h4>5. 💰 Pay for Performance</h4>
+                        <p><strong>Concept:</strong> Reward people based on how well they perform, not just showing up.</p>
+                        <div class="example-box">
+                            <strong>Flipkart:</strong> During Big Billion Days, warehouse workers get bonuses for meeting targets, quality bonuses for zero errors, and team bonuses for overall performance.
+                        </div>
+                    </div>
+
+                    <div class="principle-card">
+                        <h4>6. 🤝 Mental Revolution</h4>
+                        <p><strong>Concept:</strong> Change from "us vs them" to "let's work together to make things better for everyone."</p>
+                        <div class="example-box">
+                            <strong>Tata Group:</strong> During 26/11 Mumbai attacks, Tata employees and management worked together to protect guests, putting collective good above individual safety.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Time and Motion Study Deep Dive -->
+        <div id="slide5" class="slide content-caption">
+            <h2>Time & Motion Study: The Art of Eliminating Waste</h2>
+            <div class="main-content-area">
+                <strong>TWO SIMPLE QUESTIONS:</strong><br><br>
+                ⏰ How long should this take?<br>
+                🎯 What movements are necessary?<br><br>
+                <em>Eliminate waste, optimize flow</em>
+            </div>
+            <div class="caption-area">
+                <div class="concept-box">
+                    <h4>The Basic Idea:</h4>
+                    <p><strong>Time Study:</strong> Find the standard time needed for a task (like timing how long it takes to solve different types of math problems).</p>
+                    <p><strong>Motion Study:</strong> Eliminate unnecessary movements (like organizing your desk so everything you need is within reach).</p>
+                </div>
+                
+                <div class="story-box">
+                    <h4>🍕 Domino's 30-Minute Story:</h4>
+                    <p>How does Domino's consistently deliver pizza in 30 minutes?</p>
+                    <ul class="content-list">
+                        <li>Kitchen layout designed for minimum walking</li>
+                        <li>Ingredients placed within arm's reach</li>
+                        <li>Assembly-line pizza making</li>
+                        <li>GPS-optimized delivery routes</li>
+                        <li>Every step timed and practiced</li>
+                    </ul>
+                </div>
+                
+                <div class="key-insight">
+                    <strong>Modern Application:</strong> This is why your favorite apps are so smooth to use - every tap, swipe, and screen has been time-and-motion optimized!
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Dabbawalas Case Study -->
+        <div id="slide6" class="slide picture-caption">
+            <h2>Case Study: Mumbai Dabbawalas - Scientific Management in Action</h2>
+            <div class="picture-area">
+                <div style="text-align:center; font-size:1.4em;">
+                    🏠 → 🚉 → 🚊 → 🔄 → 🚴 → 🏢<br><br>
+                    <strong>200,000 tiffins daily</strong><br>
+                    <strong>99.999% accuracy</strong><br><br>
+                    <em>Better than Six Sigma!</em>
                 </div>
             </div>
             <div class="caption-sidebar">
-                <h3>Six Elements Framework</h3>
-                <div class="theory-box">
-                    <h4>Memory: SSTMDM</h4>
-                    <ul class="content-list">
-                        <li><strong>S</strong>cientific Task Determination</li>
-                        <li><strong>S</strong>cientific Selection</li>
-                        <li><strong>T</strong>raining</li>
-                        <li><strong>M</strong>otion Study</li>
-                        <li><strong>D</strong>ifferential Payment</li>
-                        <li><strong>M</strong>ental Revolution</li>
-                    </ul>
+                <h3>How They Apply Taylor's Ideas</h3>
+                
+                <div class="concept-box">
+                    <h4>🔬 Scientific Task Breakdown:</h4>
+                    <p>Complex delivery broken into 5 simple steps: Pickup → Sort → Transport → Transfer → Deliver</p>
                 </div>
-                <p><strong>Application:</strong> ISRO's systematic approach to Mars Mission demonstrates scientific task determination in practice.</p>
+                
+                <div class="example-box">
+                    <h4>⏱️ Time Study:</h4>
+                    <p>Every step timed to match train schedules. No wasted time, perfect coordination.</p>
+                </div>
+                
+                <div class="story-box">
+                    <h4>🎯 Motion Optimization:</h4>
+                    <p>Color-coded tiffins, specific bicycle routes, optimized sorting methods.</p>
+                </div>
+                
+                <div class="key-insight">
+                    <strong>The Magic:</strong> Low-tech system using high-efficiency principles. Proves that good management beats expensive technology!
+                </div>
             </div>
         </div>
 
-        <!-- 5. Time and Motion Study Theory -->
-        <div id="slide5" class="slide title-content">
-            <h2>Time and Motion Study - Theoretical Analysis</h2>
-            <div class="content-area">
-                <div class="theoretical-framework">
-                    <h4>🎯 Conceptual Foundation:</h4>
-                    <p>Time and Motion Study represents Taylor's attempt to apply scientific methodology to work analysis, based on the premise that there exists "one best way" to perform any given task that can be discovered through systematic investigation.</p>
-                </div>
-
-                <div class="two-content" style="display:grid;grid-template-columns:1fr 1fr;gap:25px;">
-                    <div class="content-column">
-                        <h3>Time Study Theory</h3>
-                        <div class="concept-box">
-                            <h4>Theoretical Components:</h4>
-                            <ul class="content-list">
-                                <li><strong>Work Measurement:</strong> Quantification of human effort</li>
-                                <li><strong>Standard Time:</strong> Benchmark for performance evaluation</li>
-                                <li><strong>Allowances:</strong> Rest, delay, and personal time factors</li>
-                                <li><strong>Performance Rating:</strong> Skill and effort assessment</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="definition-box">
-                            <strong>Formula:</strong> Standard Time = (Observed Time × Rating Factor) + Allowances
-                        </div>
+        <!-- 7. Problems with Scientific Management -->
+        <div id="slide7" class="slide comparison">
+            <h2>The Dark Side: What Went Wrong?</h2>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>😟 Human Problems</h3>
+                    <div class="concept-box">
+                        <h4>The Issues:</h4>
+                        <ul class="content-list">
+                            <li><strong>Felt like robots:</strong> Repetitive work became boring</li>
+                            <li><strong>Job fears:</strong> "If I work faster, will I lose my job?"</li>
+                            <li><strong>Lost creativity:</strong> No room for personal ideas</li>
+                        </ul>
                     </div>
                     
-                    <div class="content-column">
-                        <h3>Motion Study Theory</h3>
+                    <div class="example-box">
+                        <strong>Real Example:</strong> 1920s textile workers in Mumbai went on strike because they felt like machines, not humans.
+                    </div>
+                </div>
+                
+                <div class="comparison-item">
+                    <h3>💡 Lessons Learned</h3>
+                    <div class="concept-box">
+                        <h4>What We Know Now:</h4>
+                        <ul class="content-list">
+                            <li><strong>People need meaning:</strong> Not just money motivates</li>
+                            <li><strong>Social connections matter:</strong> Teamwork is important</li>
+                            <li><strong>Balance is key:</strong> Efficiency + human satisfaction</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="story-box">
+                        <strong>Modern Solution:</strong> Companies like Google use scientific methods but also give employees 20% time for creative projects.
+                    </div>
+                </div>
+            </div>
+            <div class="vs-divider">BUT</div>
+        </div>
+
+        <!-- 8. Fayol's Story -->
+        <div id="slide8" class="slide section-header">
+            <h1>Fayol's Management Framework</h1>
+            <p class="section-subtitle">The Art of Managing People and Organizations</p>
+        </div>
+
+        <!-- 9. Fayol's 5 Activities -->
+        <div id="slide9" class="slide title-content">
+            <h2>Fayol's Simple Truth: What All Managers Do</h2>
+            <div class="content-area">
+                <div class="story-box">
+                    <h4>🎭 Think of a School Play Director:</h4>
+                    <p>A play director <strong>plans</strong> the play, <strong>organizes</strong> actors and props, <strong>commands</strong> during rehearsals, <strong>coordinates</strong> everyone's efforts, and <strong>controls</strong> the final performance. That's exactly what Fayol said all managers do!</p>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Memory Trick: "POCCC" = Plan, Organize, Command, Coordinate, Control</strong>
+                </div>
+
+                <div class="principle-grid">
+                    <div class="principle-card">
+                        <h4>📋 Planning: Think Ahead</h4>
                         <div class="concept-box">
-                            <h4>Theoretical Elements:</h4>
-                            <ul class="content-list">
-                                <li><strong>Therbligs:</strong> Basic motion elements (Gilbreth contribution)</li>
-                                <li><strong>Economy of Movement:</strong> Minimum effort principle</li>
-                                <li><strong>Workplace Design:</strong> Spatial optimization theory</li>
-                                <li><strong>Fatigue Minimization:</strong> Physiological efficiency</li>
-                            </ul>
+                            <strong>What it means:</strong> Decide what you want to achieve and how you'll get there.
                         </div>
-                        
-                        <div class="definition-box">
-                            <strong>Principle:</strong> Eliminate, combine, rearrange, and simplify work motions
+                        <div class="example-box">
+                            <strong>Reliance Jio Example:</strong> Spent 3 years planning their 4G launch - where to put towers, how to price services, when to launch. Result: 100 million customers in record time!
+                        </div>
+                    </div>
+
+                    <div class="principle-card">
+                        <h4>🏗️ Organizing: Get Set Up</h4>
+                        <div class="concept-box">
+                            <strong>What it means:</strong> Arrange people and resources so work can happen smoothly.
+                        </div>
+                        <div class="example-box">
+                            <strong>ISRO Example:</strong> For Mars mission, they organized teams across different cities - spacecraft team in Bangalore, launch team in Sriharikota, tracking team in Pune.
+                        </div>
+                    </div>
+
+                    <div class="principle-card">
+                        <h4>👨‍💼 Command: Lead the Way</h4>
+                        <div class="concept-box">
+                            <strong>What it means:</strong> Guide and motivate people to do their best work.
+                        </div>
+                        <div class="example-box">
+                            <strong>Ratan Tata Example:</strong> During 26/11 crisis, he provided clear direction, motivated employees, and made tough decisions under pressure.
+                        </div>
+                    </div>
+
+                    <div class="principle-card">
+                        <h4>🔗 Coordinate: Work Together</h4>
+                        <div class="concept-box">
+                            <strong>What it means:</strong> Make sure different teams work in harmony, not against each other.
+                        </div>
+                        <div class="example-box">
+                            <strong>Indian Railways:</strong> Coordinates 12,000+ trains daily - operations, maintenance, commercial, and security teams all working together.
+                        </div>
+                    </div>
+
+                    <div class="principle-card">
+                        <h4>✅ Control: Check and Correct</h4>
+                        <div class="concept-box">
+                            <strong>What it means:</strong> Monitor progress and fix problems when things go off track.
+                        </div>
+                        <div class="example-box">
+                            <strong>Domino's Example:</strong> Real-time tracking of pizza delivery, automatic alerts if delays occur, immediate corrective action.
                         </div>
                     </div>
                 </div>
 
-                <div class="critical-analysis">
-                    <h4>Theoretical Limitations:</h4>
-                    <p><strong>Mechanistic View:</strong> Treats humans as machines, ignoring psychological and social factors. <strong>Reductionism:</strong> Oversimplifies complex work processes. <strong>Individual Focus:</strong> Neglects group dynamics and organizational context.</p>
-                    <p><strong>Modern Application:</strong> Mumbai Dabbawalas achieve 99.999% accuracy through time-motion optimization.</p>
+                <div class="key-insight">
+                    <strong>Universal Truth:</strong> Whether you're managing a cricket team, planning a college fest, or running a startup - you'll use all five activities!
                 </div>
             </div>
         </div>
 
-        <!-- 6. Differential Payment and Training Theory -->
-        <div id="slide6" class="slide two-content">
-            <h2>Theoretical Analysis: Payment Systems and Training</h2>
+        <!-- 10. Fayol's 14 Principles Simplified -->
+        <div id="slide10" class="slide two-content">
+            <h2>Fayol's 14 Universal Rules (Made Simple)</h2>
             <div class="content-column">
-                <h3>Differential Payment Theory</h3>
-                <div class="theoretical-framework">
-                    <h4>Economic Theory Foundation:</h4>
-                    <p>Based on <strong>marginal productivity theory</strong> and <strong>incentive theory</strong> - compensation should reflect individual contribution to organizational output.</p>
-                </div>
-
                 <div class="concept-box">
-                    <h4>Theoretical Principles:</h4>
-                    <ul class="content-list">
-                        <li><strong>Performance-Pay Link:</strong> Direct correlation between output and compensation</li>
-                        <li><strong>Motivation Theory:</strong> Financial incentives drive behavior modification</li>
-                        <li><strong>Equity Theory:</strong> Rewards should match contribution levels</li>
-                        <li><strong>Efficiency Wages:</strong> Higher pay for higher productivity</li>
-                    </ul>
+                    <h4>🧠 Memory Trick: "DASU REUS SICS"</h4>
+                    <p>Division, Authority, Scalar, Unity Command, Remuneration, Equity, Unity Direction, Stability, Subordination, Initiative, Centralization, Sprit de Corps</p>
                 </div>
 
-                <div class="definition-box">
-                    <strong>Taylor's System:</strong> Low rate for below-standard performance, high rate for above-standard performance - no middle ground.
+                <div class="principle-card">
+                    <h4>🔧 Division of Work</h4>
+                    <p><strong>Simple idea:</strong> Let people specialize in what they're good at.</p>
+                    <p><strong>Example:</strong> In restaurants, someone cooks, someone serves, someone handles cash. Everyone gets really good at their part.</p>
                 </div>
 
-                <div class="critical-analysis">
-                    <strong>Theoretical Issues:</strong> Assumes purely economic motivation, ignores intrinsic satisfaction, may create unhealthy competition.
+                <div class="principle-card">
+                    <h4>⚖️ Authority = Responsibility</h4>
+                    <p><strong>Simple idea:</strong> If you give someone power, they must be accountable for results.</p>
+                    <p><strong>Example:</strong> ISRO mission director had authority to spend ₹450 crores but was responsible for mission success.</p>
+                </div>
+
+                <div class="principle-card">
+                    <h4>👨‍💼 One Boss Rule</h4>
+                    <p><strong>Simple idea:</strong> Each person should get orders from only one boss to avoid confusion.</p>
+                    <p><strong>Example:</strong> In Indian Army, every soldier knows exactly who gives them orders - no confusion, quick decisions.</p>
+                </div>
+
+                <div class="principle-card">
+                    <h4>💰 Fair Pay</h4>
+                    <p><strong>Simple idea:</strong> Pay people fairly based on their contribution.</p>
+                    <p><strong>Example:</strong> Zerodha pays above-market salaries and shares profits with all employees, leading to high satisfaction and low turnover.</p>
                 </div>
             </div>
             
             <div class="content-column">
-                <h3>Scientific Training Theory</h3>
-                <div class="theoretical-framework">
-                    <h4>Learning Theory Foundation:</h4>
-                    <p>Based on <strong>behaviorist learning theory</strong> - systematic instruction and practice lead to skill acquisition and performance improvement.</p>
+                <div class="principle-card">
+                    <h4>📊 Order & Organization</h4>
+                    <p><strong>Simple idea:</strong> Everything should have its proper place.</p>
+                    <p><strong>Example:</strong> Mumbai Dabbawalas use color coding and specific routes - systematic organization leads to amazing efficiency.</p>
                 </div>
 
+                <div class="principle-card">
+                    <h4>⚖️ Treat People Fairly</h4>
+                    <p><strong>Simple idea:</strong> Be fair and just with everyone, but fair doesn't always mean identical.</p>
+                    <p><strong>Example:</strong> Tata Group's inclusive policies - different support for different needs, but fair treatment for all.</p>
+                </div>
+
+                <div class="principle-card">
+                    <h4>🏠 Job Security</h4>
+                    <p><strong>Simple idea:</strong> Give people stability so they can develop skills and loyalty.</p>
+                    <p><strong>Example:</strong> TCS's no-layoff policy creates loyal, skilled workforce with lower turnover than competitors.</p>
+                </div>
+
+                <div class="principle-card">
+                    <h4>💡 Encourage Ideas</h4>
+                    <p><strong>Simple idea:</strong> Let people use their creativity and initiative.</p>
+                    <p><strong>Example:</strong> 3M India's "15% time" policy allows employees to work on personal projects, leading to innovations and patents.</p>
+                </div>
+
+                <div class="principle-card">
+                    <h4>🤝 Team Spirit</h4>
+                    <p><strong>Simple idea:</strong> Build unity and team spirit - "together we're stronger."</p>
+                    <p><strong>Example:</strong> Indian cricket team's transformation under MS Dhoni - from individual stars to unified team, leading to World Cup victories.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 11. Systems Thinking -->
+        <div id="slide11" class="slide content-caption">
+            <h2>Systems Thinking: Seeing the Big Picture</h2>
+            <div class="main-content-area">
+                <strong>EVERYTHING IS CONNECTED</strong><br><br>
+                🔄 INPUT → PROCESS → OUTPUT<br>
+                ↑_______ FEEDBACK _______↓<br><br>
+                <em>Like the human body - all parts work together</em>
+            </div>
+            <div class="caption-area">
+                <div class="story-box">
+                    <h4>🌐 The WhatsApp Message Journey:</h4>
+                    <p>When you send a WhatsApp message, it travels through dozens of systems - your phone, cell tower, internet backbone, servers, recipient's network, their phone. All working together seamlessly. That's systems thinking!</p>
+                </div>
+                
                 <div class="concept-box">
-                    <h4>Theoretical Components:</h4>
+                    <h4>Key Systems Ideas:</h4>
                     <ul class="content-list">
-                        <li><strong>Skill Development:</strong> Progressive competency building</li>
-                        <li><strong>Standardization:</strong> Consistent training methods</li>
-                        <li><strong>Performance Measurement:</strong> Objective assessment criteria</li>
-                        <li><strong>Continuous Improvement:</strong> Iterative skill enhancement</li>
-                    </ul>
-                </div>
-
-                <div class="definition-box">
-                    <strong>4-Step Method:</strong> Show, Explain, Practice, Evaluate - systematic instruction process.
-                </div>
-
-                <div class="critical-analysis">
-                    <strong>Modern Evolution:</strong> Infosys training model demonstrates systematic approach - 3-month program for 14,000 trainees annually.
-                </div>
-            </div>
-        </div>
-
-        <!-- 7. Followers Theory -->
-        <div id="slide7" class="slide title-content">
-            <h2>Theoretical Contributions of Taylor's Followers</h2>
-            <div class="content-area">
-                <div class="theoretical-framework">
-                    <h4>📈 Theoretical Extensions and Refinements:</h4>
-                    <p>Taylor's followers developed specialized theories that addressed specific limitations and expanded the scope of scientific management principles.</p>
-                </div>
-
-                <div class="principle-grid">
-                    <div class="principle-card">
-                        <h4>Henry L. Gantt - Planning Theory</h4>
-                        <div class="concept-box">
-                            <strong>Theoretical Contributions:</strong>
-                            <ul class="content-list">
-                                <li><strong>Visual Management Theory:</strong> Graphical representation of project progress</li>
-                                <li><strong>Task-Bonus System:</strong> Humanitarian approach to incentives</li>
-                                <li><strong>Industrial Democracy:</strong> Worker participation in planning</li>
-                            </ul>
-                        </div>
-                        <p><strong>Application:</strong> Delhi Metro construction scheduling</p>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>Gilbreths - Motion Study Theory</h4>
-                        <div class="concept-box">
-                            <strong>Theoretical Framework:</strong>
-                            <ul class="content-list">
-                                <li><strong>Micromotion Study:</strong> Detailed movement analysis</li>
-                                <li><strong>Therbligs Theory:</strong> 18 basic hand movements</li>
-                                <li><strong>Fatigue Study:</strong> Physiological efficiency optimization</li>
-                            </ul>
-                        </div>
-                        <p><strong>Application:</strong> Surgical procedures optimization in Apollo Hospitals</p>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>Carl Barth - Mathematical Management</h4>
-                        <div class="concept-box">
-                            <strong>Theoretical Focus:</strong>
-                            <ul class="content-list">
-                                <li><strong>Quantitative Analysis:</strong> Mathematical optimization of operations</li>
-                                <li><strong>Slide Rule Development:</strong> Calculation tools for precision</li>
-                                <li><strong>Technical Standards:</strong> Engineering-based management</li>
-                            </ul>
-                        </div>
-                        <p><strong>Application:</strong> BHEL precision manufacturing standards</p>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>Harrington Emerson - Efficiency Theory</h4>
-                        <div class="concept-box">
-                            <strong>Organizational Theory:</strong>
-                            <ul class="content-list">
-                                <li><strong>12 Principles of Efficiency:</strong> Comprehensive organizational framework</li>
-                                <li><strong>Line-Staff Theory:</strong> Authority and advisory separation</li>
-                                <li><strong>Waste Elimination:</strong> Systematic efficiency improvement</li>
-                            </ul>
-                        </div>
-                        <p><strong>Application:</strong> Modern consulting methodologies</p>
-                    </div>
-                </div>
-
-                <div class="critical-analysis">
-                    <h4>Theoretical Evolution:</h4>
-                    <p><strong>Integration:</strong> Followers addressed Taylor's narrow focus by expanding to planning (Gantt), human factors (Gilbreths), quantitative methods (Barth), and organizational efficiency (Emerson). Their contributions laid foundation for modern operations research and project management.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 8. Criticisms Theory -->
-        <div id="slide8" class="slide title-content">
-            <h2>Theoretical Criticisms of Scientific Management</h2>
-            <div class="content-area">
-                <div class="theoretical-framework">
-                    <h4>🔍 Multi-Perspective Critical Analysis:</h4>
-                    <p>Scientific Management faced systematic criticism from multiple stakeholder groups, each challenging different theoretical assumptions and practical implications of the approach.</p>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="comparison-table">
-                        <thead>
-                            <tr>
-                                <th>Perspective</th>
-                                <th>Theoretical Criticism</th>
-                                <th>Conceptual Issues</th>
-                                <th>Alternative Theory Suggested</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Employers</strong></td>
-                                <td>Implementation costs, management skill requirements, organizational resistance</td>
-                                <td>Theory assumes rational economic actors, ignores organizational politics</td>
-                                <td>Contingency approach based on situational factors</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Workers</strong></td>
-                                <td>Dehumanization, job security concerns, skill degradation</td>
-                                <td>Mechanistic view of humans, ignores job satisfaction and autonomy needs</td>
-                                <td>Human Relations Theory, participative management</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Psychologists</strong></td>
-                                <td>Social factors ignored, uniform motivation assumed, psychological needs neglected</td>
-                                <td>Behaviorist assumptions, reductionist human model, individual focus</td>
-                                <td>Motivation theory, group dynamics, organizational behavior</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="concept-box">
-                    <h4>Fundamental Theoretical Limitations:</h4>
-                    <ul class="content-list">
-                        <li><strong>Economic Determinism:</strong> Overemphasis on financial motivation</li>
-                        <li><strong>Mechanistic Paradigm:</strong> Machine metaphor for human behavior</li>
-                        <li><strong>Methodological Individualism:</strong> Ignores social and organizational context</li>
-                        <li><strong>Static Efficiency:</strong> Assumes stable environment and technology</li>
-                        <li><strong>Authoritarian Structure:</strong> Top-down control contradicts human autonomy</li>
-                    </ul>
-                </div>
-
-                <div class="critical-analysis">
-                    <h4>Theoretical Legacy and Evolution:</h4>
-                    <p><strong>Dialectical Development:</strong> Criticisms led to development of Human Relations Movement (Mayo), Motivation Theory (Maslow, McGregor), and Systems Theory. <strong>Synthesis:</strong> Modern management integrates efficiency focus with human factors considerations.</p>
-                    <p><strong>Indian Context:</strong> Textile industry resistance (1920s), IT sector evolution from mechanistic to human-centered approaches.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 9. Fayol's Administrative Theory -->
-        <div id="slide9" class="slide section-header">
-            <h1>Administrative Theory</h1>
-            <p class="section-subtitle">Henri Fayol (1841-1925) - Universal Management Principles</p>
-        </div>
-
-        <!-- 10. Fayol's Activities Theory -->
-        <div id="slide10" class="slide title-content">
-            <h2>Fayol's Management Activities - Theoretical Framework</h2>
-            <div class="content-area">
-                <div class="definition-box">
-                    <strong>Administrative Theory:</strong> Management is a distinct universal process consisting of specific functions that can be analyzed, taught, and improved through systematic study.
-                </div>
-
-                <div class="theoretical-framework">
-                    <h4>🏛️ Theoretical Foundations:</h4>
-                    <p><strong>Universality Principle:</strong> Management functions are universal across all organizations, regardless of size, type, or purpose. <strong>Process Approach:</strong> Management is a continuous process of interrelated activities. <strong>Functional Analysis:</strong> Complex management process can be broken into distinct, analyzable functions.</p>
-                </div>
-
-                <div class="concept-box">
-                    <h4>POCCC Framework - Theoretical Analysis:</h4>
-                    <p><strong>Memory Aid:</strong> Plan, Organize, Command, Coordinate, Control</p>
-                </div>
-
-                <div class="principle-grid">
-                    <div class="principle-card">
-                        <h4>1. Planning (Prévoyance)</h4>
-                        <div class="theory-box">
-                            <strong>Theory:</strong> Future-oriented decision-making involving forecasting, goal-setting, and strategy formulation.
-                            <br><strong>Components:</strong> Forecasting, objectives, policies, procedures, programs, budgets.
-                            <br><strong>Principle:</strong> Good plan = unity, continuity, flexibility, precision.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>2. Organizing (Organisation)</h4>
-                        <div class="theory-box">
-                            <strong>Theory:</strong> Structural arrangement of resources and relationships to implement plans effectively.
-                            <br><strong>Elements:</strong> Job design, departmentation, authority delegation, span of control.
-                            <br><strong>Principle:</strong> Structure follows strategy and facilitates coordination.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>3. Command (Commandement)</h4>
-                        <div class="theory-box">
-                            <strong>Theory:</strong> Leadership function involving direction, motivation, and guidance of human resources.
-                            <br><strong>Aspects:</strong> Authority exercise, communication, motivation, decision-making.
-                            <br><strong>Principle:</strong> Personal qualities and knowledge of business and subordinates essential.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>4. Coordination (Coordination)</h4>
-                        <div class="theory-box">
-                            <strong>Theory:</strong> Harmonization of activities and efforts to ensure unity of action toward common objectives.
-                            <br><strong>Types:</strong> Horizontal, vertical, internal, external coordination mechanisms.
-                            <br><strong>Principle:</strong> Synchronization of timing, effort, and information flow.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>5. Control (Contrôle)</h4>
-                        <div class="theory-box">
-                            <strong>Theory:</strong> Monitoring and corrective action to ensure conformity between plans and actual performance.
-                            <br><strong>Process:</strong> Standards, measurement, comparison, correction, follow-up.
-                            <br><strong>Principle:</strong> Control must be timely, economical, and lead to corrective action.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="critical-analysis">
-                    <h4>Theoretical Significance:</h4>
-                    <p><strong>Process Innovation:</strong> First systematic analysis of management as distinct professional function. <strong>Educational Impact:</strong> Established foundation for management education and training. <strong>Practical Application:</strong> Reliance Jio's strategic planning exemplifies integrated POCCC approach.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 11. Fayol's 14 Principles - Part I -->
-        <div id="slide11" class="slide picture-caption">
-            <h2>Fayol's 14 Principles - Theoretical Analysis (Part I)</h2>
-            <div class="picture-area">
-                <div class="theoretical-framework">
-                    <h4>🏛️ Principles 1-7: Structural and Operational Theory</h4>
-                    
-                    <div class="definition-box">
-                        <strong>Memory: DASU REU</strong><br>
-                        Division, Authority, Scalar, Unity Command, Remuneration, Equity, Unity Direction
-                    </div>
-
-                    <ol style="padding-left:20px;">
-                        <li><strong>Division of Work:</strong> Specialization theory - limits scope of attention, increases dexterity and expertise</li>
-                        <li><strong>Authority & Responsibility:</strong> Power-accountability equilibrium theory - authority must equal responsibility</li>
-                        <li><strong>Discipline:</strong> Organizational order theory - respect for agreements and organizational norms</li>
-                        <li><strong>Unity of Command:</strong> Single source authority theory - eliminates confusion and conflict</li>
-                        <li><strong>Unity of Direction:</strong> Single plan theory - one head and one plan for activities with same objective</li>
-                        <li><strong>Subordination of Individual Interest:</strong> Collective interest theory - organizational goals supersede individual goals</li>
-                        <li><strong>Remuneration:</strong> Fair compensation theory - motivates performance and ensures satisfaction</li>
-                    </ol>
-                </div>
-            </div>
-            <div class="caption-sidebar">
-                <h3>Theoretical Applications</h3>
-                <div class="concept-box">
-                    <h4>Indian Examples:</h4>
-                    <ul class="content-list">
-                        <li><strong>Division:</strong> Indian Railways specialization</li>
-                        <li><strong>Authority:</strong> ISRO mission structure</li>
-                        <li><strong>Unity Command:</strong> Army hierarchy</li>
-                        <li><strong>Remuneration:</strong> TCS compensation system</li>
+                        <li><strong>Holism:</strong> The whole is greater than sum of parts (like a cricket team vs individual players)</li>
+                        <li><strong>Interdependence:</strong> Everything affects everything else</li>
+                        <li><strong>Synergy:</strong> 1+1 can equal 3 when things work together well</li>
+                        <li><strong>Feedback:</strong> Results influence future inputs</li>
                     </ul>
                 </div>
                 
-                <div class="critical-analysis">
-                    <strong>Theoretical Note:</strong> These principles reflect classical organizational theory emphasizing hierarchy, specialization, and formal structure.
+                <div class="example-box">
+                    <h4>Flipkart Example:</h4>
+                    <p><strong>Inputs:</strong> Products, technology, delivery partners<br>
+                    <strong>Process:</strong> Order management, warehousing, logistics<br>
+                    <strong>Outputs:</strong> Delivered products, customer satisfaction<br>
+                    <strong>Feedback:</strong> Reviews, ratings, repeat purchases</p>
                 </div>
             </div>
         </div>
 
-        <!-- 12. Fayol's 14 Principles - Part II -->
+        <!-- 12. Comparison of All Approaches -->
         <div id="slide12" class="slide title-content">
-            <h2>Fayol's 14 Principles - Theoretical Analysis (Part II)</h2>
+            <h2>Putting It All Together: Three Different Lenses</h2>
             <div class="content-area">
-                <div class="theoretical-framework">
-                    <h4>🔄 Principles 8-14: Dynamic and Human-Centered Theory</h4>
-                    <div class="definition-box">
-                        <strong>Memory: S SICS</strong><br>
-                        Stability, Subordination, Initiative, Centralization, Scalar chain
-                    </div>
+                <div class="story-box">
+                    <h4>🎯 Think of Building a Cricket Team:</h4>
+                    <p><strong>Taylor's approach:</strong> Focus on each player's technique - perfect batting stance, bowling action, fielding positions.</p>
+                    <p><strong>Fayol's approach:</strong> Focus on team management - captain's leadership, coordination between players, game strategy.</p>
+                    <p><strong>Systems approach:</strong> Focus on everything - players, management, fans, weather, pitch conditions, and how they all interact.</p>
                 </div>
 
-                <div class="principle-grid">
-                    <div class="principle-card">
-                        <h4>8. Centralization</h4>
-                        <div class="concept-box">
-                            <strong>Theory:</strong> Optimal balance between central control and decentralization based on organizational needs.
-                            <br><strong>Contingency:</strong> Degree depends on size, complexity, and environmental factors.
-                        </div>
-                    </div>
+                <table class="simple-table">
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Taylor (Scientific)</th>
+                            <th>Fayol (Administrative)</th>
+                            <th>Systems (Holistic)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Focus</strong></td>
+                            <td>Individual efficiency</td>
+                            <td>Overall management</td>
+                            <td>Big picture connections</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Main Question</strong></td>
+                            <td>"How to do work better?"</td>
+                            <td>"How to manage better?"</td>
+                            <td>"How do things connect?"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Best For</strong></td>
+                            <td>Improving specific processes</td>
+                            <td>Organizing people and structure</td>
+                            <td>Understanding complexity</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Indian Example</strong></td>
+                            <td>Dabbawalas' efficiency</td>
+                            <td>Indian Railways management</td>
+                            <td>Flipkart's ecosystem</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                    <div class="principle-card">
-                        <h4>9. Scalar Chain</h4>
-                        <div class="concept-box">
-                            <strong>Theory:</strong> Hierarchical communication and authority chain from top to bottom.
-                            <br><strong>Gang Plank:</strong> Horizontal communication allowed for efficiency while maintaining hierarchy.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>10. Order</h4>
-                        <div class="concept-box">
-                            <strong>Theory:</strong> Systematic arrangement of resources and people for maximum efficiency.
-                            <br><strong>Types:</strong> Material order (things) and social order (people) both essential.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>11. Equity</h4>
-                        <div class="concept-box">
-                            <strong>Theory:</strong> Fair and just treatment combining kindness with justice.
-                            <br><strong>Distinction:</strong> Equity (fair treatment) vs Equality (identical treatment).
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>12. Stability of Tenure</h4>
-                        <div class="concept-box">
-                            <strong>Theory:</strong> Job security promotes skill development and organizational commitment.
-                            <br><strong>Balance:</strong> Stability vs flexibility for organizational adaptation.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>13. Initiative</h4>
-                        <div class="concept-box">
-                            <strong>Theory:</strong> Employee empowerment to conceive and execute ideas within authority limits.
-                            <br><strong>Innovation:</strong> Encourages creativity while maintaining organizational control.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>14. Esprit de Corps</h4>
-                        <div class="concept-box">
-                            <strong>Theory:</strong> Team spirit and unity enhance organizational effectiveness.
-                            <br><strong>Social Theory:</strong> Group cohesion improves individual and collective performance.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="critical-analysis">
-                    <h4>Theoretical Synthesis:</h4>
-                    <p><strong>Evolutionary Significance:</strong> Fayol's principles bridge classical (mechanistic) and human relations (organic) approaches. <strong>Universality:</strong> Principles remain relevant across cultures and time periods with contextual adaptation. <strong>Integration:</strong> Modern organizations apply these principles through contemporary frameworks like organizational culture, employee engagement, and strategic management.</p>
+                <div class="key-insight">
+                    <strong>The Modern Reality:</strong> Successful organizations today use ALL THREE approaches. They optimize individual processes (Taylor), maintain good management structure (Fayol), and think about the big picture (Systems).
                 </div>
             </div>
         </div>
 
-        <!-- 13. Systems Theory -->
-        <div id="slide13" class="slide section-header">
-            <h1>Systems Approach Theory</h1>
-            <p class="section-subtitle">Holistic Organizational Perspective</p>
+        <!-- 13. Modern Applications -->
+        <div id="slide13" class="slide title-content">
+            <h2>How These Ideas Shape Your Digital World</h2>
+            <div class="content-area">
+                <div class="principle-grid">
+                    <div class="principle-card">
+                        <h4>📱 Your Favorite Apps</h4>
+                        <div class="story-box">
+                            <p><strong>Taylor's influence:</strong> Every tap, swipe, and screen transition is time-and-motion optimized for speed and ease.</p>
+                            <p><strong>Fayol's influence:</strong> App development teams use planning, organizing, coordinating to create seamless experiences.</p>
+                            <p><strong>Systems influence:</strong> Apps connect with payment systems, social networks, cloud storage - all working as integrated ecosystem.</p>
+                        </div>
+                    </div>
+
+                    <div class="principle-card">
+                        <h4>🚗 Ride-Sharing Services</h4>
+                        <div class="example-box">
+                            <p><strong>Scientific Management:</strong> Route optimization, driver efficiency metrics, pricing algorithms.</p>
+                            <p><strong>Administrative Principles:</strong> Driver management, customer service organization, quality control.</p>
+                            <p><strong>Systems Thinking:</strong> Integration of GPS, payments, ratings, traffic data, supply-demand balancing.</p>
+                        </div>
+                    </div>
+
+                    <div class="principle-card">
+                        <h4>🛒 E-commerce</h4>
+                        <div class="concept-box">
+                            <p><strong>Amazon/Flipkart success comes from:</strong></p>
+                            <ul class="content-list">
+                                <li>Warehouse efficiency (Taylor)</li>
+                                <li>Organizational structure (Fayol)</li>
+                                <li>Ecosystem integration (Systems)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="principle-card">
+                        <h4>🎮 Gaming Industry</h4>
+                        <div class="story-box">
+                            <p>Game development uses all three approaches - optimized code (Taylor), project management (Fayol), and understanding player behavior within gaming ecosystems (Systems).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>Your Future Career:</strong> Whether you become a software engineer, product manager, entrepreneur, or team leader, you'll use these principles every day - often without realizing it!
+                </div>
+            </div>
         </div>
 
-        <!-- 14. Open Systems Theory -->
+        <!-- 14. Key Takeaways -->
         <div id="slide14" class="slide title-content">
-            <h2>Systems Theory - Comprehensive Theoretical Framework</h2>
+            <h2>🎯 What You Should Remember</h2>
             <div class="content-area">
-                <div class="definition-box">
-                    <strong>Systems Theory:</strong> Organizations are complex, interconnected systems that interact with their environment through input-transformation-output processes, characterized by interdependence, synergy, and dynamic equilibrium.
-                </div>
-
-                <div class="theoretical-framework">
-                    <h4>🌐 General Systems Theory Foundation:</h4>
-                    <p><strong>Ludwig von Bertalanffy's Contribution:</strong> Developed General Systems Theory as reaction against reductionism. <strong>Holistic Paradigm:</strong> Emphasis on relationships, patterns, and context rather than isolated elements. <strong>Interdisciplinary Approach:</strong> Applicable across biological, social, and organizational systems.</p>
-                </div>
-
                 <div class="concept-box">
-                    <h4>Key Theoretical Concepts:</h4>
+                    <h4>🔑 The Big Ideas:</h4>
                     <ul class="content-list">
-                        <li><strong>System:</strong> Set of interrelated components working toward common purpose</li>
-                        <li><strong>Subsystem:</strong> System components that are themselves systems</li>
-                        <li><strong>Suprasystem:</strong> Larger system of which organization is a component</li>
-                        <li><strong>Boundary:</strong> Demarcation between system and environment</li>
-                        <li><strong>Interface:</strong> Point of contact between system and environment</li>
+                        <li><strong>Scientific Management:</strong> There's usually a better way to do things - study, measure, optimize</li>
+                        <li><strong>Administrative Principles:</strong> Good management has universal patterns - plan, organize, lead, coordinate, control</li>
+                        <li><strong>Systems Thinking:</strong> Everything connects to everything else - see the big picture</li>
                     </ul>
                 </div>
 
-                <div class="two-content" style="display:grid;grid-template-columns:1fr 1fr;gap:25px;">
-                    <div class="content-column">
-                        <h3>Closed Systems Theory</h3>
-                        <div class="theory-box">
-                            <h4>Characteristics:</h4>
-                            <ul class="content-list">
-                                <li>Self-contained operation</li>
-                                <li>No environmental interaction</li>
-                                <li>Predictable outcomes</li>
-                                <li>Entropy tendency</li>
-                                <li>Theoretical construct</li>
-                            </ul>
-                        </div>
-                        <div class="critical-analysis">
-                            <strong>Reality:</strong> Pure closed systems don't exist in organizations - all organizations interact with environment.
-                        </div>
-                    </div>
-                    
-                    <div class="content-column">
-                        <h3>Open Systems Theory</h3>
-                        <div class="theory-box">
-                            <h4>Characteristics:</h4>
-                            <ul class="content-list">
-                                <li>Environmental interaction</li>
-                                <li>Input-output exchange</li>
-                                <li>Adaptive capacity</li>
-                                <li>Negative entropy</li>
-                                <li>Dynamic equilibrium</li>
-                            </ul>
-                        </div>
-                        <div class="critical-analysis">
-                            <strong>Application:</strong> Most organizational systems are open - Flipkart's e-commerce ecosystem exemplifies open system characteristics.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="concept-box">
-                    <h4>Open System Properties - Theoretical Analysis:</h4>
-                    <ul class="content-list">
-                        <li><strong>Holism:</strong> Whole greater than sum of parts - emergent properties arise from interaction</li>
-                        <li><strong>Synergy:</strong> Combined effect exceeds individual effects - 2+2=5 principle</li>
-                        <li><strong>Equifinality:</strong> Multiple paths to same outcome - alternative strategies possible</li>
-                        <li><strong>Dynamic Equilibrium:</strong> Continuous adaptation to maintain stability</li>
-                        <li><strong>Hierarchy:</strong> Nested systems within systems structure</li>
-                        <li><strong>Differentiation:</strong> Specialized subsystem development</li>
-                        <li><strong>Integration:</strong> Coordination mechanisms across subsystems</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- 15. Comparative Theoretical Analysis -->
-        <div id="slide15" class="slide title-content">
-            <h2>Comparative Theoretical Analysis</h2>
-            <div class="content-area">
-                <div class="theoretical-framework">
-                    <h4>🔍 Paradigmatic Comparison of Management Theories:</h4>
-                    <p>Each theoretical approach represents distinct paradigm with specific assumptions about human nature, organizational structure, and environmental relationships.</p>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="comparison-table">
-                        <thead>
-                            <tr>
-                                <th>Theoretical Dimension</th>
-                                <th>Scientific Management</th>
-                                <th>Administrative Theory</th>
-                                <th>Systems Approach</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Philosophical Foundation</strong></td>
-                                <td>Positivism, Economic Rationality</td>
-                                <td>Structural Functionalism</td>
-                                <td>Systems Theory, Holism</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Human Nature Assumption</strong></td>
-                                <td>Economic Man, Individual Focus</td>
-                                <td>Administrative Man, Role Focus</td>
-                                <td>Complex Man, Contextual</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Organizational Metaphor</strong></td>
-                                <td>Machine (Mechanical)</td>
-                                <td>Hierarchy (Structural)</td>
-                                <td>Organism (Biological)</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Primary Focus</strong></td>
-                                <td>Efficiency, Productivity</td>
-                                <td>Order, Coordination</td>
-                                <td>Adaptation, Survival</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Environmental View</strong></td>
-                                <td>Stable, Controllable</td>
-                                <td>Stable, Manageable</td>
-                                <td>Dynamic, Uncertain</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Change Orientation</strong></td>
-                                <td>Optimization of Current</td>
-                                <td>Planned, Structured</td>
-                                <td>Continuous Adaptation</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Success Criteria</strong></td>
-                                <td>Maximum Output</td>
-                                <td>Organizational Order</td>
-                                <td>Environmental Fit</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="concept-box">
-                    <h4>Theoretical Evolution and Integration:</h4>
-                    <ul class="content-list">
-                        <li><strong>Sequential Development:</strong> Each theory addresses limitations of predecessors</li>
-                        <li><strong>Paradigm Shifts:</strong> From mechanistic to organic to systemic worldviews</li>
-                        <li><strong>Complementary Perspectives:</strong> Modern management integrates insights from all approaches</li>
-                        <li><strong>Contingency Integration:</strong> Application depends on situational factors</li>
-                    </ul>
-                </div>
-
-                <div class="critical-analysis">
-                    <h4>Contemporary Theoretical Synthesis:</h4>
-                    <p><strong>Neo-Classical Integration:</strong> Modern organizations combine Taylor's efficiency focus with Fayol's structural clarity and Systems' environmental responsiveness. <strong>Contingency Theory:</strong> Best approach depends on technology, environment, and organizational factors. <strong>Indian Applications:</strong> Successful organizations like TCS integrate scientific methods (efficiency), administrative principles (structure), and systems thinking (adaptation).</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 16. Exam Preparation Guide -->
-        <div id="slide16" class="slide title-content">
-            <h2>🎓 Theory Exam Preparation Guide</h2>
-            <div class="content-area">
-                <div class="theoretical-framework">
-                    <h4>📚 Essential Theoretical Knowledge for Exams:</h4>
-                    <p>Theory exams require comprehensive understanding of concepts, ability to analyze critically, compare different approaches, and apply theoretical frameworks to practical situations.</p>
-                </div>
-
-                <div class="principle-grid">
-                    <div class="principle-card">
-                        <h4>Key Theoretical Concepts</h4>
-                        <div class="theory-box">
-                            <strong>Definitions to Master:</strong>
-                            <ul class="content-list">
-                                <li>Scientific Management Theory</li>
-                                <li>Administrative Theory</li>
-                                <li>Systems Theory</li>
-                                <li>Open vs Closed Systems</li>
-                                <li>Synergy, Holism, Equifinality</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>Theoretical Frameworks</h4>
-                        <div class="theory-box">
-                            <strong>Structures to Remember:</strong>
-                            <ul class="content-list">
-                                <li>SSTMDM (Taylor's Elements)</li>
-                                <li>POCCC (Fayol's Activities)</li>
-                                <li>14 Principles (DASU REUS SICS)</li>
-                                <li>Input-Process-Output Model</li>
-                                <li>Criticism Framework (3 Perspectives)</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>Critical Analysis Skills</h4>
-                        <div class="theory-box">
-                            <strong>Analytical Approaches:</strong>
-                            <ul class="content-list">
-                                <li>Compare and contrast theories</li>
-                                <li>Analyze strengths and limitations</li>
-                                <li>Evaluate relevance to modern context</li>
-                                <li>Synthesize different perspectives</li>
-                                <li>Apply theories to case studies</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>Exam Answer Structure</h4>
-                        <div class="theory-box">
-                            <strong>Theory Answer Format:</strong>
-                            <ul class="content-list">
-                                <li>Definition and theoretical foundation</li>
-                                <li>Key components/elements</li>
-                                <li>Theoretical assumptions</li>
-                                <li>Critical analysis</li>
-                                <li>Practical applications/examples</li>
-                                <li>Modern relevance/evolution</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="concept-box">
-                    <h4>Sample Theory Questions:</h4>
-                    <ul class="content-list">
-                        <li><strong>Analytical:</strong> "Critically evaluate the theoretical assumptions of Scientific Management"</li>
-                        <li><strong>Comparative:</strong> "Compare the theoretical foundations of Taylor and Fayol's approaches"</li>
-                        <li><strong>Applied:</strong> "Analyze how Systems Theory addresses limitations of Classical theories"</li>
-                        <li><strong>Synthesis:</strong> "Discuss the evolution of management thought from mechanistic to organic paradigms"</li>
-                    </ul>
+                <div class="story-box">
+                    <h4>🚀 For Your Success:</h4>
+                    <p><strong>In college:</strong> Use Taylor's methods to optimize your study routine. Use Fayol's principles to organize group projects. Use systems thinking to see how different subjects connect.</p>
+                    <p><strong>In career:</strong> Whether you're coding, managing, or leading, these principles will help you be more effective and successful.</p>
                 </div>
 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-number">3</div>
-                        <div class="stat-label">Major Theories</div>
-                        <div class="stat-description">Scientific, Administrative, Systems approaches</div>
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">Taylor Elements</div>
+                        <div class="stat-description">SSTMDM - Scientific approach to work</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-number">25</div>
-                        <div class="stat-label">Core Concepts</div>
-                        <div class="stat-description">Essential theoretical elements to master</div>
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">Fayol Activities</div>
+                        <div class="stat-description">POCCC - Universal management functions</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">14</div>
                         <div class="stat-label">Universal Principles</div>
-                        <div class="stat-description">Fayol's management principles</div>
+                        <div class="stat-description">DASU REUS SICS - Timeless guidelines</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">∞</div>
                         <div class="stat-label">Applications</div>
-                        <div class="stat-description">Unlimited practical relevance</div>
+                        <div class="stat-description">Endless ways to apply these ideas</div>
                     </div>
                 </div>
 
-                <div class="accent-box">
-                    <strong>Theory Exam Success Strategy:</strong> Master theoretical foundations, understand conceptual relationships, practice critical analysis, develop synthesis skills, and connect classical theories to contemporary management challenges. Focus on understanding WHY theories developed, not just WHAT they contain. 🎯
+                <div class="key-insight">
+                    <strong>Final Thought:</strong> These aren't just academic theories - they're practical tools that have helped build the modern world. From Mumbai's dabbawalas to Silicon Valley startups, from ISRO's Mars mission to your favorite app, these principles are everywhere. Now you have the tools to see them, understand them, and use them! 🌟
                 </div>
             </div>
         </div>
