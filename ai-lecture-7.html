@@ -113,17 +113,20 @@
             <li><a href="#slide1">Introduction</a></li>
             <li><a href="#slide2">What is AI Planning?</a></li>
             <li><a href="#slide3">Core Components</a></li>
-            <li><a href="#slide4">Planning Approaches</a></li>
             <li><a href="#slide5">Forward Planning</a></li>
             <li><a href="#slide6">Backward Planning</a></li>
             <li><a href="#slide7">Forward vs Backward</a></li>
-            <li><a href="#slide8">Advanced Methods</a></li>
             <li><a href="#slide9">Goal Stack</a></li>
             <li><a href="#slide10">Plan Space</a></li>
             <li><a href="#slide11">HTN Planning</a></li>
-            <li><a href="#slide12">Evolution</a></li>
-            <li><a href="#slide13">Key Takeaways</a></li>
-            <li><a href="#slide14">Questions</a></li>
+            <li><a href="#slide14">Refinement</a></li>
+            <li><a href="#slide15">Planning vs Problem Solving</a></li>
+            <li><a href="#slide16">Blocks World</a></li>
+            <li><a href="#slide17">A* Algorithm</a></li>
+            <li><a href="#slide18">STRIPS</a></li>
+            <li><a href="#slide20">Real-World</a></li>
+            <li><a href="#slide21">Tools</a></li>
+            <li><a href="#slide22">Questions</a></li>
         </ul>
     </nav>
 
@@ -190,14 +193,14 @@
             </div>
         </div>
 
-        <!-- 5. Section Header -->
-        <div id="slide5" class="slide section-header">
+        <!-- 4. Section Header -->
+        <div id="slide4" class="slide section-header">
             <h1>Planning Approaches</h1>
             <p class="section-subtitle">Different Ways to Solve the Puzzle</p>
         </div>
 
-        <!-- 6. Title and Content -->
-        <div id="slide6" class="slide title-content">
+        <!-- 5. Title and Content -->
+        <div id="slide5" class="slide title-content">
             <h2>Forward Planning (Progression)</h2>
             <div class="content-area">
                 <p><span class="emphasis">Forward Planning</span> is like following a recipe step-by-step - you start with your ingredients (initial state) and work forward until you have a delicious meal (goal state)!</p>
@@ -226,8 +229,8 @@
             </div>
         </div>
 
-        <!-- 7. Title and Content -->
-        <div id="slide7" class="slide title-content">
+        <!-- 6. Title and Content -->
+        <div id="slide6" class="slide title-content">
             <h2>Backward Planning (Regression)</h2>
             <div class="content-area">
                 <p><span class="emphasis">Backward Planning</span> is like being a detective - you start with the "crime scene" (goal state) and work backward to figure out what must have happened to get there!</p>
@@ -256,8 +259,8 @@
             </div>
         </div>
 
-        <!-- 8. Comparison -->
-        <div id="slide8" class="slide comparison">
+        <!-- 7. Comparison -->
+        <div id="slide7" class="slide comparison">
             <h2>Forward vs Backward Planning</h2>
             <div class="comparison-grid">
                 <div class="comparison-item">
@@ -286,14 +289,14 @@
             <div class="vs-divider">VS</div>
         </div>
 
-        <!-- 9. Section Header -->
-        <div id="slide9" class="slide section-header">
+        <!-- 8. Section Header -->
+        <div id="slide8" class="slide section-header">
             <h1>Advanced Planning Methods</h1>
             <p class="section-subtitle">When Simple Isn't Enough</p>
         </div>
 
-        <!-- 10. Title and Content -->
-        <div id="slide10" class="slide title-content">
+        <!-- 9. Title and Content -->
+        <div id="slide9" class="slide title-content">
             <h2>Goal Stack Planning (STRIPS)</h2>
             <div class="content-area">
                 <p><span class="emphasis">Goal Stack Planning</span> is like organizing your to-do list as a stack of sticky notes - you always work on the top note first!</p>
@@ -325,8 +328,8 @@
             </div>
         </div>
 
-        <!-- 11. Title and Content -->
-        <div id="slide11" class="slide title-content">
+        <!-- 10. Title and Content -->
+        <div id="slide10" class="slide title-content">
             <h2>Plan Space Planning (Partial-Order)</h2>
             <div class="content-area">
                 <p><span class="emphasis">Plan Space Planning</span> is like being a flexible project manager - you don't commit to a rigid schedule until you absolutely have to!</p>
@@ -358,8 +361,8 @@
             </div>
         </div>
 
-        <!-- 12. Title and Content -->
-        <div id="slide12" class="slide title-content">
+        <!-- 11. Title and Content -->
+        <div id="slide11" class="slide title-content">
             <h2>Hierarchical Task Network (HTN) Planning</h2>
             <div class="content-area">
                 <p><span class="emphasis">HTN Planning</span> is like following your grandmother's cooking wisdom - it uses expert knowledge about how to break down complex tasks into manageable steps!</p>
@@ -391,8 +394,8 @@
             </div>
         </div>
 
-        <!-- 13. Timeline -->
-        <div id="slide13" class="slide timeline">
+        <!-- 12. Timeline -->
+        <div id="slide12" class="slide timeline">
             <h2>Evolution of AI Planning</h2>
             <div class="timeline-container">
                 <div class="timeline-line"></div>
@@ -431,8 +434,8 @@
             </div>
         </div>
 
-        <!-- 14. Statistics -->
-        <div id="slide14" class="slide stats-slide">
+        <!-- 13. Statistics -->
+        <div id="slide13" class="slide stats-slide">
             <h2>Key Insights About AI Planning</h2>
             <div class="stats-grid">
                 <div class="stat-card">
@@ -461,8 +464,255 @@
             </div>
         </div>
 
-        <!-- 15. Title Only -->
-        <div id="slide15" class="slide title-only">
+        <!-- 14. Title and Content -->
+        <div id="slide14" class="slide title-content">
+            <h2>Refinement in Planning</h2>
+            <div class="content-area">
+                <p><span class="emphasis">Refinement</span> is like gradually adding more detail to a rough sketch until you have a complete, detailed drawing!</p>
+                
+                <div class="highlight-box">
+                    <strong>What is Refinement?</strong><br>
+                    The process of taking a partial or abstract plan and adding more details, constraints, or specificity to make it more complete and executable.
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Operator Refinement:</strong> Breaking down abstract actions into concrete, executable steps</li>
+                    <li><strong>Variable Refinement:</strong> Replacing general variables with specific values</li>
+                    <li><strong>Temporal Refinement:</strong> Adding timing constraints and scheduling details</li>
+                    <li><strong>Resource Refinement:</strong> Specifying exact resources needed</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Example:</strong> Planning a Trip<br>
+                    🔸 <strong>Abstract Plan:</strong> "Travel to Paris"<br>
+                    🔸 <strong>Refined Plan:</strong> "Book flight AA123 on July 15th → Check into Hotel Le Bristol → Take Metro Line 1 to Louvre"
+                </div>
+                
+                <p>Refinement allows planners to work at different levels of abstraction, making complex planning more manageable!</p>
+            </div>
+        </div>
+
+        <!-- 15. Title and Content -->
+        <div id="slide15" class="slide title-content">
+            <h2>Planning vs Problem Solving</h2>
+            <div class="content-area">
+                <p>Understanding the difference between <span class="emphasis">Planning</span> and <span class="emphasis">Problem Solving</span> is crucial for grasping AI's problem-solving landscape!</p>
+                
+                <div class="highlight-box">
+                    <strong>Key Distinction:</strong><br>
+                    Problem Solving finds A solution, Planning finds THE BEST sequence of actions considering future consequences.
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Problem Solving:</strong> "How do I get from A to B?" (focus on reaching goal)</li>
+                    <li><strong>Planning:</strong> "What's the best way to get from A to B considering time, cost, and other activities?" (focus on optimal sequence)</li>
+                    <li><strong>Problem Solving:</strong> Often deals with immediate, single-step decisions</li>
+                    <li><strong>Planning:</strong> Considers multi-step sequences and their interactions</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Real-world Analogy:</strong><br>
+                    🔸 <strong>Problem Solving:</strong> Finding any route to work when you're late<br>
+                    🔸 <strong>Planning:</strong> Designing your entire daily schedule considering meetings, traffic, errands, and personal time
+                </div>
+                
+                <p>Planning involves more sophisticated reasoning about actions, states, and goals over time!</p>
+            </div>
+        </div>
+
+        <!-- 15. Title and Content -->
+        <div id="slide15" class="slide title-content">
+            <h2>Planning vs Problem Solving</h2>
+            <div class="content-area">
+                <p>Understanding the difference between <span class="emphasis">Planning</span> and <span class="emphasis">Problem Solving</span> is crucial for grasping AI's problem-solving landscape!</p>
+                
+                <div class="highlight-box">
+                    <strong>Key Distinction:</strong><br>
+                    Problem Solving finds A solution, Planning finds THE BEST sequence of actions considering future consequences.
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Problem Solving:</strong> "How do I get from A to B?" (focus on reaching goal)</li>
+                    <li><strong>Planning:</strong> "What's the best way to get from A to B considering time, cost, and other activities?" (focus on optimal sequence)</li>
+                    <li><strong>Problem Solving:</strong> Often deals with immediate, single-step decisions</li>
+                    <li><strong>Planning:</strong> Considers multi-step sequences and their interactions</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Real-world Analogy:</strong><br>
+                    🔸 <strong>Problem Solving:</strong> Finding any route to work when you're late<br>
+                    🔸 <strong>Planning:</strong> Designing your entire daily schedule considering meetings, traffic, errands, and personal time
+                </div>
+                
+                <p>Planning involves more sophisticated reasoning about actions, states, and goals over time!</p>
+            </div>
+        </div>
+
+        <!-- 16. Title and Content -->
+        <div id="slide16" class="slide title-content">
+            <h2>The Blocks World Problem</h2>
+            <div class="content-area">
+                <p>The <span class="emphasis">Blocks World</span> is like the "Hello World" of AI planning - a simple but powerful way to understand planning concepts!</p>
+                
+                <div class="highlight-box">
+                    <strong>The Setup:</strong><br>
+                    🧱 You have colored blocks on a table<br>
+                    🤖 A robot arm that can pick up and move blocks<br>
+                    🎯 Goal: Arrange blocks in a specific configuration
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>States:</strong> Which block is on which block, which blocks are clear</li>
+                    <li><strong>Actions:</strong> PICKUP(block), PUTDOWN(block), STACK(block1, block2), UNSTACK(block1, block2)</li>
+                    <li><strong>Preconditions:</strong> "To stack A on B, both A and B must be clear"</li>
+                    <li><strong>Effects:</strong> "After stacking A on B, A is on B, and B is no longer clear"</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Classic Example:</strong> The Sussman Anomaly<br>
+                    Goal: A on B, B on C<br>
+                    ❌ If you put A on B first, you can't move B!<br>
+                    ✅ Must plan the sequence carefully: First ensure B can be moved to C
+                </div>
+                
+                <p>This simple domain reveals deep insights about goal interaction and planning complexity!</p>
+            </div>
+        </div>
+
+        <!-- 17. Title and Content -->
+        <div id="slide17" class="slide title-content">
+            <h2>A* Algorithm in Planning</h2>
+            <div class="content-area">
+                <p><span class="emphasis">A* Algorithm</span> is like having a smart GPS that considers both distance traveled and estimated distance remaining!</p>
+                
+                <div class="highlight-box">
+                    <strong>A* Formula: f(n) = g(n) + h(n)</strong><br>
+                    🔸 <strong>g(n):</strong> Actual cost from start to current state<br>
+                    🔸 <strong>h(n):</strong> Heuristic estimate from current to goal<br>
+                    🔸 <strong>f(n):</strong> Total estimated cost of path through n
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Admissible Heuristic:</strong> Never overestimates the actual cost</li>
+                    <li><strong>Optimal:</strong> Guarantees finding the best solution (if heuristic is admissible)</li>
+                    <li><strong>Efficient:</strong> Explores fewer nodes than uninformed search</li>
+                    <li><strong>Complete:</strong> Will find a solution if one exists</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Planning Example:</strong> Robot Navigation<br>
+                    🔸 <strong>g(n):</strong> Distance already traveled<br>
+                    🔸 <strong>h(n):</strong> Straight-line distance to goal (admissible because robot can't teleport!)<br>
+                    🔸 Result: Finds shortest path efficiently
+                </div>
+                
+                <p>A* is crucial in planning because it balances exploration efficiency with solution optimality!</p>
+            </div>
+        </div>
+
+        <!-- 18. Title and Content -->
+        <div id="slide18" class="slide title-content">
+            <h2>STRIPS Operators in Detail</h2>
+            <div class="content-area">
+                <p><span class="emphasis">STRIPS Operators</span> are like precise recipe instructions that specify exactly what ingredients you need and what you'll get!</p>
+                
+                <div class="highlight-box">
+                    <strong>STRIPS Operator Structure:</strong><br>
+                    📋 <strong>Action Name:</strong> What you're doing<br>
+                    🔍 <strong>Preconditions:</strong> What must be true before<br>
+                    ➕ <strong>Add List:</strong> What becomes true after<br>
+                    ➖ <strong>Delete List:</strong> What becomes false after
+                </div>
+                
+                <div class="accent-box">
+                    <strong>Example: STACK(X, Y) in Blocks World</strong><br>
+                    <strong>Preconditions:</strong> CLEAR(X), CLEAR(Y), HOLDING(X)<br>
+                    <strong>Add List:</strong> ON(X, Y), ARMEMPTY<br>
+                    <strong>Delete List:</strong> CLEAR(Y), HOLDING(X)
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Closed World Assumption:</strong> If something isn't mentioned, it doesn't change</li>
+                    <li><strong>Deterministic:</strong> Same action in same state always produces same result</li>
+                    <li><strong>Atomic:</strong> Actions are indivisible units</li>
+                    <li><strong>Instantaneous:</strong> No time duration considered</li>
+                </ul>
+                
+                <p>STRIPS representation forms the foundation for most classical planning systems!</p>
+            </div>
+        </div>
+
+        <!-- 19. Section Header -->
+        <div id="slide19" class="slide section-header">
+            <h1>Modern Planning Challenges</h1>
+            <p class="section-subtitle">What Fresher Engineers Should Know</p>
+        </div>
+
+        <!-- 20. Title and Content -->
+        <div id="slide20" class="slide title-content">
+            <h2>Real-World Planning Challenges</h2>
+            <div class="content-area">
+                <p>Moving from textbook examples to real-world applications presents exciting <span class="emphasis">challenges and opportunities</span> for engineers!</p>
+                
+                <ul class="content-list">
+                    <li><strong>Uncertainty:</strong> Real world is unpredictable - weather, traffic, equipment failures</li>
+                    <li><strong>Scale:</strong> Industrial planning problems can have millions of variables</li>
+                    <li><strong>Time Pressure:</strong> Plans often need to be generated in real-time</li>
+                    <li><strong>Dynamic Environments:</strong> Conditions change while executing plans</li>
+                    <li><strong>Multi-Objectives:</strong> Optimize cost, time, quality, and safety simultaneously</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <strong>Modern Applications:</strong><br>
+                    🚗 <strong>Autonomous Vehicles:</strong> Real-time path planning with dynamic obstacles<br>
+                    🏭 <strong>Manufacturing:</strong> Production scheduling with resource constraints<br>
+                    🚁 <strong>Drone Delivery:</strong> Multi-drone coordination and path optimization<br>
+                    🎮 <strong>Game AI:</strong> NPCs that plan complex behaviors
+                </div>
+                
+                <div class="accent-box">
+                    <strong>Career Insight:</strong> Most AI planning jobs today involve hybrid systems that combine classical planning with machine learning, optimization, and domain-specific heuristics!
+                </div>
+                
+                <p>Understanding these challenges prepares you for real-world AI engineering roles!</p>
+            </div>
+        </div>
+
+        <!-- 21. Title and Content -->
+        <div id="slide21" class="slide title-content">
+            <h2>Planning Tools & Technologies</h2>
+            <div class="content-area">
+                <p>As a <span class="emphasis">fresher engineer</span>, knowing the tools and technologies in AI planning gives you a competitive edge!</p>
+                
+                <div class="highlight-box">
+                    <strong>Planning Languages & Standards:</strong><br>
+                    📝 <strong>PDDL:</strong> Planning Domain Definition Language - the "SQL of planning"<br>
+                    🔧 <strong>STRIPS:</strong> Classic representation still widely used<br>
+                    ⚡ <strong>ADL:</strong> Action Description Language for complex domains
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Planning Software:</strong> Fast Downward, FF, LPGP, SHOP2</li>
+                    <li><strong>Libraries:</strong> PDDL4J (Java), Planning.py (Python), OPTIC</li>
+                    <li><strong>Integration:</strong> ROS (Robot Operating System) planning frameworks</li>
+                    <li><strong>Cloud Services:</strong> AWS RoboMaker, Google Cloud AI Planning</li>
+                    <li><strong>Visualization:</strong> VAL (validator), planviz for plan visualization</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Getting Started:</strong><br>
+                    1. Learn PDDL syntax and semantics<br>
+                    2. Try planning competitions (IPC - International Planning Competition)<br>
+                    3. Implement basic planners in Python<br>
+                    4. Explore planning in game development or robotics projects
+                </div>
+                
+                <p>Hands-on experience with these tools makes you immediately valuable to employers!</p>
+            </div>
+        </div>
+
+        <!-- 22. Title Only -->
+        <div id="slide22" class="slide title-only">
             <h1>Questions & Discussion</h1>
             <p class="subtitle">Let's explore AI planning together!</p>
         </div>
