@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Planning Paradigms - Interactive Lecture</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:Georgia,serif;background:#FEF7ED;color:#1E293B;line-height:1.6;overflow-x:hidden}
+        #particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1}
+        nav{position:fixed;top:0;width:100%;background:rgba(254,247,237,.95);backdrop-filter:blur(10px);z-index:1000;padding:1rem 2rem;transition:all .3s;border-bottom:2px solid #EA580C}
+        nav.scrolled{background:rgba(254,247,237,.98);box-shadow:0 2px 20px rgba(234,88,12,.1)}
+        nav ul{list-style:none;display:flex;justify-content:center;flex-wrap:wrap;gap:1.5rem}
+        nav a{color:#1E293B;text-decoration:none;font-weight:600;transition:all .3s;padding:.5rem 1rem;border-radius:25px;font-size:0.9em}
+        nav a:hover{background:rgba(234,88,12,.1);color:#EA580C;transform:translateY(-2px)}
+        .progress-bar{position:fixed;top:80px;left:0;height:4px;background:linear-gradient(90deg,#EA580C,#059669);z-index:999;transform-origin:left;transform:scaleX(0);transition:transform .1s}
+        .container{max-width:1200px;margin:0 auto;padding:20px}
+        .slide{background:#FEF7ED;margin-bottom:30px;padding:40px;border-radius:15px;border-left:5px solid #EA580C;box-shadow:0 8px 25px rgba(0,0,0,.1);transition:all .8s;min-height:500px;transform:translateY(50px);opacity:0}
+        .slide.visible{transform:translateY(0);opacity:1}
+        .slide:hover{transform:translateY(-5px)}
+        
+        /* All Slide Types */
+        .title-slide{background:#1E293B;color:#FEF7ED;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
+        .title-slide h1{font-size:3.5em;margin-bottom:30px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+        .title-slide .subtitle{font-size:1.6em;opacity:.9;font-style:italic;margin-bottom:20px}
+        .title-slide .author{font-size:1.2em;opacity:.8}
+        
+        .title-content h2,.two-content h2,.comparison h2,.content-caption h2,.picture-caption h2{font-size:2.2em;color:#1E293B;margin-bottom:30px;padding-bottom:10px;border-bottom:3px solid #EA580C}
+        .content-area{font-size:1.1em;line-height:1.8}
+        .content-list{list-style:none}
+        .content-list li{position:relative;padding-left:30px;margin-bottom:15px}
+        .content-list li::before{content:"→";position:absolute;left:0;color:#EA580C;font-weight:bold;font-size:1.2em}
+        
+        .section-header{background:linear-gradient(135deg,#059669,#EA580C);color:#FEF7ED;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
+        .section-header h1{font-size:3em;margin-bottom:20px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+        .section-header .section-subtitle{font-size:1.4em;opacity:.9}
+        
+        .two-content{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+        .two-content h2{grid-column:1/-1}
+        .content-column{padding:20px;background:rgba(5,150,105,.05);border-radius:10px}
+        .content-column h3{font-size:1.6em;color:#059669;margin-bottom:15px}
+        
+        .comparison{position:relative}
+        .comparison h2{text-align:center}
+        .comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:40px}
+        .comparison-item{text-align:center;padding:30px;border-radius:15px;background:rgba(234,88,12,.1)}
+        .comparison-item h3{font-size:1.8em;color:#EA580C;margin-bottom:20px}
+        .vs-divider{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#EA580C;color:#FEF7ED;padding:10px 20px;border-radius:50px;font-weight:bold;font-size:1.2em}
+        
+        .title-only{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+        .title-only h1{font-size:3em;color:#1E293B;margin-bottom:20px}
+        .title-only .subtitle{font-size:1.4em;color:#059669;font-style:italic}
+        
+        .content-caption{display:grid;grid-template-rows:auto 1fr auto;gap:30px}
+        .main-content-area{background:linear-gradient(45deg,#059669,#EA580C);border:2px dashed #1E293B;border-radius:15px;padding:80px 40px;text-align:center;color:#FEF7ED;font-weight:bold;font-size:1.2em}
+        .caption-area{background:rgba(5,150,105,.1);padding:20px;border-radius:10px;border-left:4px solid #059669}
+        
+        .picture-caption{display:grid;grid-template-columns:2fr 1fr;gap:40px;align-items:start}
+        .picture-caption h2{grid-column:1/-1}
+        .picture-area{background:linear-gradient(45deg,#059669,#EA580C);border:2px dashed #1E293B;border-radius:15px;padding:100px 20px;text-align:center;color:#FEF7ED;font-weight:bold;min-height:300px;display:flex;align-items:center;justify-content:center}
+        .caption-sidebar{background:rgba(234,88,12,.1);padding:30px;border-radius:15px;border-left:4px solid #EA580C}
+        .caption-sidebar h3{color:#EA580C;margin-bottom:15px;font-size:1.4em}
+        
+        .timeline{padding:20px 0}
+        .timeline h2{font-size:2.2em;color:#1E293B;margin-bottom:40px;padding-bottom:10px;border-bottom:3px solid #EA580C;text-align:center}
+        .timeline-container{position:relative;padding:20px 0}
+        .timeline-line{position:absolute;left:50%;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#EA580C,#059669);transform:translateX(-50%)}
+        .timeline-item{position:relative;margin:40px 0;display:flex;align-items:center}
+        .timeline-item:nth-child(odd){flex-direction:row}
+        .timeline-item:nth-child(even){flex-direction:row-reverse}
+        .timeline-content{background:rgba(234,88,12,.05);padding:25px;border-radius:15px;width:45%;border-left:4px solid #EA580C;box-shadow:0 4px 15px rgba(0,0,0,.1)}
+        .timeline-date{position:absolute;left:50%;transform:translateX(-50%);background:#EA580C;color:#FEF7ED;padding:8px 16px;border-radius:20px;font-weight:bold;z-index:2}
+        .timeline-content h4{color:#1E293B;font-size:1.4em;margin-bottom:10px}
+        
+        .stats-slide h2{font-size:2.2em;color:#1E293B;margin-bottom:40px;padding-bottom:10px;border-bottom:3px solid #EA580C;text-align:center}
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;margin:30px 0}
+        .stat-card{background:linear-gradient(135deg,#EA580C,#059669);color:#FEF7ED;padding:40px 30px;border-radius:20px;text-align:center;box-shadow:0 10px 30px rgba(234,88,12,.2);transition:transform .3s}
+        .stat-card:hover{transform:translateY(-10px)}
+        .stat-number{font-size:4em;font-weight:bold;line-height:1;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+        .stat-label{font-size:1.2em;opacity:.9;font-weight:600}
+        .stat-description{font-size:.9em;opacity:.8;margin-top:15px;line-height:1.4}
+        
+        .highlight-box{background:#059669;color:#FEF7ED;padding:20px;border-radius:10px;margin:20px 0;font-weight:bold}
+        .accent-box{background:#EA580C;color:#FEF7ED;padding:20px;border-radius:10px;margin:20px 0;font-style:italic}
+        .emphasis{background:#EA580C;color:#FEF7ED;padding:4px 8px;border-radius:5px;font-weight:bold;display:inline-block}
+        .back-to-top{position:fixed;bottom:30px;right:30px;background:linear-gradient(45deg,#EA580C,#059669);color:#FEF7ED;border:none;border-radius:50%;width:60px;height:60px;font-size:1.5rem;cursor:pointer;opacity:0;transition:all .3s;z-index:1000}
+        .back-to-top.visible{opacity:1}
+        .back-to-top:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(234,88,12,.3)}
+        .float{animation:float 3s ease-in-out infinite}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+        @media (max-width:768px){
+            nav{display:none}
+            .container{padding:10px}
+            .slide{padding:20px;min-height:400px}
+            .title-slide h1{font-size:2.5em}
+            .two-content,.comparison-grid,.picture-caption{grid-template-columns:1fr;gap:20px}
+            .vs-divider{display:none}
+            .timeline-line{display:none}
+            .timeline-content{width:100%;margin:20px 0}
+            .timeline-item{flex-direction:column!important}
+            .timeline-date{position:static;transform:none;margin:10px 0}
+            .stats-grid{grid-template-columns:1fr;gap:20px}
+            .stat-number{font-size:3em}
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <div class="progress-bar" id="progress-bar"></div>
+    
+    <nav id="navbar">
+        <ul>
+            <li><a href="#slide1">Introduction</a></li>
+            <li><a href="#slide2">What is AI Planning?</a></li>
+            <li><a href="#slide3">Core Components</a></li>
+            <li><a href="#slide4">Planning Approaches</a></li>
+            <li><a href="#slide5">Forward Planning</a></li>
+            <li><a href="#slide6">Backward Planning</a></li>
+            <li><a href="#slide7">Forward vs Backward</a></li>
+            <li><a href="#slide8">Advanced Methods</a></li>
+            <li><a href="#slide9">Goal Stack</a></li>
+            <li><a href="#slide10">Plan Space</a></li>
+            <li><a href="#slide11">HTN Planning</a></li>
+            <li><a href="#slide12">Evolution</a></li>
+            <li><a href="#slide13">Key Takeaways</a></li>
+            <li><a href="#slide14">Questions</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- 1. Title Slide -->
+        <div id="slide1" class="slide title-slide">
+            <h1 class="float">AI Planning Paradigms</h1>
+            <p class="subtitle">How AI Systems Make Smart Decisions</p>
+            <p class="author">Professor AI • Interactive Lecture • CS Advanced Topics</p>
+        </div>
+
+        <!-- 2. Section Header -->
+        <div id="slide2" class="slide section-header">
+            <h1>What is AI Planning?</h1>
+            <p class="section-subtitle">Teaching Machines to Think Ahead</p>
+        </div>
+
+        <!-- 3. Title and Content -->
+        <div id="slide3" class="slide title-content">
+            <h2>Understanding AI Planning</h2>
+            <div class="content-area">
+                <p><span class="emphasis">AI Planning</span> is like teaching a computer to be a chess grandmaster - but for real life! It's the process of finding a sequence of actions that transforms the current situation into a desired goal state.</p>
+                
+                <div class="highlight-box">
+                    <strong>Think of it like GPS navigation:</strong> You tell it where you are (initial state), where you want to go (goal state), and it figures out the best route (sequence of actions) to get there!
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>Initial State:</strong> "I'm at home, hungry, and have no food"</li>
+                    <li><strong>Goal State:</strong> "I'm at home, fed, and satisfied"</li>
+                    <li><strong>Actions:</strong> Go to store → Buy ingredients → Return home → Cook meal → Eat</li>
+                    <li><strong>Plan:</strong> The complete sequence that gets you from hungry to satisfied!</li>
+                </ul>
+                
+                <p>AI planning is everywhere: from robot vacuum cleaners navigating your house to manufacturing systems optimizing production schedules!</p>
+            </div>
+        </div>
+
+        <!-- 4. Title and Content -->
+        <div id="slide4" class="slide title-content">
+            <h2>Core Components of Any Planning System</h2>
+            <div class="content-area">
+                <p>Every planning problem, whether it's a robot making coffee or a factory scheduling production, needs these three essential ingredients:</p>
+                
+                <ul class="content-list">
+                    <li><strong>Initial State:</strong> The starting configuration - "Robot is in kitchen, coffee maker is empty, user wants coffee"</li>
+                    <li><strong>Goal State:</strong> The desired outcome - "User has hot coffee, robot is back at charging station"</li>
+                    <li><strong>Actions (Operators):</strong> What the agent can do - "move to location, fill water, add coffee, press start button"</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Each Action Has Two Parts:</strong><br>
+                    🔍 <strong>Preconditions:</strong> What must be true before you can do this action<br>
+                    ⚡ <strong>Effects:</strong> What changes after you do this action
+                </div>
+                
+                <div class="highlight-box">
+                    <strong>Example Action: "Fill Coffee Maker"</strong><br>
+                    Preconditions: Robot at coffee maker, coffee maker empty, water available<br>
+                    Effects: Coffee maker filled with water, water no longer available
+                </div>
+                
+                <p>Think of actions like LEGO instructions - each step tells you exactly what pieces you need (preconditions) and what you'll have built (effects)!</p>
+            </div>
+        </div>
+
+        <!-- 5. Section Header -->
+        <div id="slide5" class="slide section-header">
+            <h1>Planning Approaches</h1>
+            <p class="section-subtitle">Different Ways to Solve the Puzzle</p>
+        </div>
+
+        <!-- 6. Title and Content -->
+        <div id="slide6" class="slide title-content">
+            <h2>Forward Planning (Progression)</h2>
+            <div class="content-area">
+                <p><span class="emphasis">Forward Planning</span> is like following a recipe step-by-step - you start with your ingredients (initial state) and work forward until you have a delicious meal (goal state)!</p>
+                
+                <div class="highlight-box">
+                    <strong>How It Works:</strong><br>
+                    1. Start at the initial state<br>
+                    2. Look at all possible actions you can take right now<br>
+                    3. Pick one action and see what state it leads to<br>
+                    4. Repeat until you reach your goal!
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>✅ Advantages:</strong> Very intuitive - mirrors how humans naturally think</li>
+                    <li><strong>✅ Always valid:</strong> Every state you explore is actually reachable</li>
+                    <li><strong>✅ Easy to implement:</strong> Uses standard search algorithms like A*</li>
+                    <li><strong>❌ Can be inefficient:</strong> Might explore many irrelevant paths</li>
+                    <li><strong>❌ Large search space:</strong> Too many possibilities to explore</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Real-world example:</strong> A delivery robot starting from the warehouse, picking up packages, and delivering them one by one until all deliveries are complete.
+                </div>
+                
+                <p>It's like exploring a maze by always moving forward and marking where you've been!</p>
+            </div>
+        </div>
+
+        <!-- 7. Title and Content -->
+        <div id="slide7" class="slide title-content">
+            <h2>Backward Planning (Regression)</h2>
+            <div class="content-area">
+                <p><span class="emphasis">Backward Planning</span> is like being a detective - you start with the "crime scene" (goal state) and work backward to figure out what must have happened to get there!</p>
+                
+                <div class="highlight-box">
+                    <strong>How It Works:</strong><br>
+                    1. Start with your goal: "I want to be at work on time"<br>
+                    2. Ask: "What action could have achieved this?" → "Take the 8 AM bus"<br>
+                    3. Ask: "What do I need for that?" → "Be at bus stop by 7:55 AM"<br>
+                    4. Keep working backward until you reach something you can do now!
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>✅ Goal-focused:</strong> Every step directly relates to achieving your goal</li>
+                    <li><strong>✅ Efficient for specific goals:</strong> Great when you know exactly what you want</li>
+                    <li><strong>✅ Fewer irrelevant paths:</strong> Less likely to get distracted</li>
+                    <li><strong>❌ Complex reasoning:</strong> Harder to implement correctly</li>
+                    <li><strong>❌ Assumes reversibility:</strong> Not all actions can be "undone" mentally</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Real-world example:</strong> A chef planning a dinner party works backward from "guests enjoying perfectly timed meal" to figure out when to start each dish.
+                </div>
+                
+                <p>It's like solving a jigsaw puzzle by starting with the picture on the box and figuring out which pieces you need!</p>
+            </div>
+        </div>
+
+        <!-- 8. Comparison -->
+        <div id="slide8" class="slide comparison">
+            <h2>Forward vs Backward Planning</h2>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>Forward Planning</h3>
+                    <p><strong>Like following a recipe:</strong> Start with ingredients, follow steps sequentially</p>
+                    <div class="highlight-box">
+                        <strong>Best when:</strong><br>
+                        • You have a clear starting point<br>
+                        • Goal is somewhat flexible<br>
+                        • Actions are straightforward
+                    </div>
+                    <p><strong>Example:</strong> A cleaning robot systematically going room by room</p>
+                </div>
+                <div class="comparison-item">
+                    <h3>Backward Planning</h3>
+                    <p><strong>Like solving a mystery:</strong> Start with the outcome, trace back the clues</p>
+                    <div class="accent-box">
+                        <strong>Best when:</strong><br>
+                        • You have a very specific goal<br>
+                        • Starting point is flexible<br>
+                        • Limited ways to achieve goal
+                    </div>
+                    <p><strong>Example:</strong> Planning a surprise party by working backward from the moment guests arrive</p>
+                </div>
+            </div>
+            <div class="vs-divider">VS</div>
+        </div>
+
+        <!-- 9. Section Header -->
+        <div id="slide9" class="slide section-header">
+            <h1>Advanced Planning Methods</h1>
+            <p class="section-subtitle">When Simple Isn't Enough</p>
+        </div>
+
+        <!-- 10. Title and Content -->
+        <div id="slide10" class="slide title-content">
+            <h2>Goal Stack Planning (STRIPS)</h2>
+            <div class="content-area">
+                <p><span class="emphasis">Goal Stack Planning</span> is like organizing your to-do list as a stack of sticky notes - you always work on the top note first!</p>
+                
+                <div class="highlight-box">
+                    <strong>The Stack Approach:</strong><br>
+                    📚 Push your main goal onto the stack<br>
+                    👆 Look at the top item<br>
+                    ✅ If it's already done, pop it off<br>
+                    📝 If not, find an action that achieves it<br>
+                    📚 Push that action's requirements onto the stack
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>✅ Simple and intuitive:</strong> Easy to understand and implement</li>
+                    <li><strong>✅ Hierarchical approach:</strong> Breaks complex problems into smaller pieces</li>
+                    <li><strong>✅ Goal-driven:</strong> Always focused on achieving something specific</li>
+                    <li><strong>❌ The "Clobbering" Problem:</strong> Can undo previous work by accident!</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>The Sussman Anomaly (Classic Problem):</strong><br>
+                    Imagine stacking blocks: Goal = A on B, B on C<br>
+                    ❌ Put A on B first → But then you can't put B on C!<br>
+                    ✅ Need to think about goal interactions!
+                </div>
+                
+                <p>It's like cleaning your room by making a to-do list, but sometimes cleaning one area messes up another area you already cleaned!</p>
+            </div>
+        </div>
+
+        <!-- 11. Title and Content -->
+        <div id="slide11" class="slide title-content">
+            <h2>Plan Space Planning (Partial-Order)</h2>
+            <div class="content-area">
+                <p><span class="emphasis">Plan Space Planning</span> is like being a flexible project manager - you don't commit to a rigid schedule until you absolutely have to!</p>
+                
+                <div class="highlight-box">
+                    <strong>The "Least Commitment" Principle:</strong><br>
+                    🤝 Only decide order when necessary<br>
+                    🔗 Establish causal links between actions<br>
+                    ⚠️ Resolve conflicts when they arise<br>
+                    🎯 Keep the plan as flexible as possible
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>✅ Handles goal interactions:</strong> Solves the clobbering problem elegantly</li>
+                    <li><strong>✅ Flexible plans:</strong> Multiple valid execution orders</li>
+                    <li><strong>✅ Less backtracking:</strong> Doesn't make premature commitments</li>
+                    <li><strong>❌ Complex implementation:</strong> Requires sophisticated data structures</li>
+                    <li><strong>❌ Large plan space:</strong> Many possible partial plans to consider</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Example:</strong> Planning a dinner party<br>
+                    ✅ "Buy ingredients" must happen before "cook meal"<br>
+                    ❓ But "set table" can happen anytime before guests arrive<br>
+                    💡 Keep maximum flexibility for execution!
+                </div>
+                
+                <p>It's like having a flexible schedule where you know some things must happen before others, but you don't nail down exact times until necessary!</p>
+            </div>
+        </div>
+
+        <!-- 12. Title and Content -->
+        <div id="slide12" class="slide title-content">
+            <h2>Hierarchical Task Network (HTN) Planning</h2>
+            <div class="content-area">
+                <p><span class="emphasis">HTN Planning</span> is like following your grandmother's cooking wisdom - it uses expert knowledge about how to break down complex tasks into manageable steps!</p>
+                
+                <div class="highlight-box">
+                    <strong>How HTN Works:</strong><br>
+                    🎯 Start with a high-level task: "Prepare Thanksgiving dinner"<br>
+                    📋 Break it down: "Plan menu" + "Shop" + "Cook" + "Serve"<br>
+                    🔍 Break down further: "Cook" → "Cook turkey" + "Make sides" + "Bake dessert"<br>
+                    ⚡ Continue until you have simple, doable actions
+                </div>
+                
+                <ul class="content-list">
+                    <li><strong>✅ Uses domain expertise:</strong> Leverages human knowledge and procedures</li>
+                    <li><strong>✅ Handles complex problems:</strong> Scales to real-world scenarios</li>
+                    <li><strong>✅ Human-like plans:</strong> Results make sense to people</li>
+                    <li><strong>❌ Requires expert knowledge:</strong> Someone has to encode the task decompositions</li>
+                    <li><strong>❌ Domain-specific:</strong> Not as general-purpose as other methods</li>
+                </ul>
+                
+                <div class="accent-box">
+                    <strong>Real-world applications:</strong><br>
+                    🏭 Manufacturing: "Assemble car" → detailed step-by-step procedures<br>
+                    🏥 Medical: "Perform surgery" → established protocols and best practices<br>
+                    🤖 Robotics: "Clean house" → room-by-room systematic approach
+                </div>
+                
+                <p>It's like having a master craftsperson teach an apprentice - the expertise is built into the system!</p>
+            </div>
+        </div>
+
+        <!-- 13. Timeline -->
+        <div id="slide13" class="slide timeline">
+            <h2>Evolution of AI Planning</h2>
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">1970s</div>
+                    <div class="timeline-content">
+                        <h4>STRIPS Era</h4>
+                        <p><strong>Goal Stack Planning:</strong> Simple, linear approach to planning. Great for toy problems but struggled with goal interactions. Like learning to walk before you run!</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">1980s</div>
+                    <div class="timeline-content">
+                        <h4>State-Space Search</h4>
+                        <p><strong>Forward & Backward Planning:</strong> More systematic approaches to exploring possible solutions. Think of it as the GPS navigation for AI planning!</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">1990s</div>
+                    <div class="timeline-content">
+                        <h4>Partial-Order Planning</h4>
+                        <p><strong>Plan Space Planning:</strong> Revolutionary "least commitment" approach. Solved the clobbering problem by keeping plans flexible until necessary!</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2000s+</div>
+                    <div class="timeline-content">
+                        <h4>Knowledge-Rich Planning</h4>
+                        <p><strong>HTN & Hybrid Methods:</strong> Incorporating human expertise and domain knowledge. Modern AI planning combines multiple approaches for real-world problems!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 14. Statistics -->
+        <div id="slide14" class="slide stats-slide">
+            <h2>Key Insights About AI Planning</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Main Paradigms</div>
+                    <div class="stat-description">Forward, Backward, Goal Stack, and Plan Space - each solving different aspects of the planning puzzle</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Core Components</div>
+                    <div class="stat-description">Initial State, Goal State, and Actions - the essential building blocks of any planning problem</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Years Evolution</div>
+                    <div class="stat-description">From simple STRIPS to modern HTN planning - continuous improvement in handling complexity</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Applications</div>
+                    <div class="stat-description">From robot navigation to supply chain management - AI planning is everywhere in modern technology</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 15. Title Only -->
+        <div id="slide15" class="slide title-only">
+            <h1>Questions & Discussion</h1>
+            <p class="subtitle">Let's explore AI planning together!</p>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop">↑</button>
+
+    <script>
+        class P{
+            constructor(c){
+                this.c=c;this.x=Math.random()*c.width;this.y=Math.random()*c.height;
+                this.vx=(Math.random()-.5)*.5;this.vy=(Math.random()-.5)*.5;
+                this.s=Math.random()*2+1;this.o=Math.random()*.6+.2;
+            }
+            u(m){
+                this.x+=this.vx;this.y+=this.vy;
+                if(this.x<0||this.x>this.c.width)this.vx*=-1;
+                if(this.y<0||this.y>this.c.height)this.vy*=-1;
+                if(m.x&&m.y){
+                    const d=Math.hypot(this.x-m.x,this.y-m.y);
+                    if(d<60){const f=(60-d)/60,a=Math.atan2(this.y-m.y,this.x-m.x);
+                    this.vx+=Math.cos(a)*f*.3;this.vy+=Math.sin(a)*f*.3;}
+                }
+            }
+            d(ctx){ctx.save();ctx.globalAlpha=this.o;ctx.beginPath();ctx.arc(this.x,this.y,this.s,0,6.28);ctx.fillStyle='rgba(234,88,12,.5)';ctx.fill();ctx.restore();}
+        }
+        class PS{
+            constructor(){this.cv=document.getElementById('particles-canvas');this.ctx=this.cv.getContext('2d');this.ps=[];this.m={x:0,y:0};this.init();}
+            init(){this.r();this.cp();window.addEventListener('resize',()=>{this.r();this.cp();});window.addEventListener('mousemove',e=>{this.m.x=e.clientX;this.m.y=e.clientY;});this.a();}
+            r(){this.cv.width=innerWidth;this.cv.height=innerHeight;this.pc=Math.floor((innerWidth*innerHeight)/12000);}
+            cp(){this.ps=[];for(let i=0;i<this.pc;i++)this.ps.push(new P(this.cv));}
+            a(){this.ctx.clearRect(0,0,this.cv.width,this.cv.height);this.ps.forEach(p=>{p.u(this.m);p.d(this.ctx);});this.dc();requestAnimationFrame(()=>this.a());}
+            dc(){this.ps.forEach((p,i)=>{for(let j=i+1;j<this.ps.length;j++){const o=this.ps[j],d=Math.hypot(p.x-o.x,p.y-o.y);if(d<100){this.ctx.beginPath();this.ctx.strokeStyle=`rgba(30,41,59,${(1-d/100)*.15})`;this.ctx.lineWidth=.5;this.ctx.moveTo(p.x,p.y);this.ctx.lineTo(o.x,o.y);this.ctx.stroke();}}});}
+        }
+        new PS();
+        const o=new IntersectionObserver(e=>e.forEach(e=>e.isIntersecting&&e.target.classList.add('visible')),{threshold:.1});
+        document.querySelectorAll('.slide').forEach(s=>o.observe(s));
+        const u=()=>{const s=scrollY,d=document.documentElement.scrollHeight-innerHeight,p=s/d;document.getElementById('progress-bar').style.transform=`scaleX(${p})`;document.getElementById('navbar').classList.toggle('scrolled',s>100);document.getElementById('backToTop').classList.toggle('visible',s>300);};
+        addEventListener('scroll',u,{passive:!0});
+        document.getElementById('backToTop').onclick=()=>scrollTo({top:0,behavior:'smooth'});
+        document.querySelectorAll('nav a[href^="#"]').forEach(a=>a.onclick=e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));t&&scrollTo({top:t.offsetTop-80,behavior:'smooth'});});
+        u();
+    </script>
+</body>
+</html>
