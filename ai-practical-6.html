@@ -284,83 +284,154 @@
         <div class="code-section">
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
             <div class="code-block">
-<pre># HILL CLIMBING — Real-world demo: Best Mobile Signal on Campus (2D grid)
-# Beginner-friendly. One small helper used multiple times.
+<pre>
+# TSP Hill Climbing - Linear Version (No Functions)
+# Perfect for students to follow step-by-step
 
-import numpy as np
+import random
 import matplotlib.pyplot as plt
 
-np.random.seed(0)
+print(" TSP HILL CLIMBING - STEP BY STEP LEARNING")
+print("==================================================================")
 
-rows, cols = 120, 120
-Y, X = np.mgrid[0:rows, 0:cols]
+# PROBLEM SETUP: Define our 4-city TSP problem
 
-# Towers (centers), strengths, spreads
-tower_centers = np.array([[30,30],[80,40],[40,85],[95,95]], dtype=float)
-tower_strengths = np.array([1.0, 0.8, 1.2, 1.5])
-tower_spreads   = np.array([12.0,18.0,15.0,10.0])
+print("STEP 1: SETTING UP THE PROBLEM")
+print("We have 4 cities with distances between them:")
 
-signal = np.zeros((rows, cols), dtype=float)
-for (cy,cx), s, spread in zip(tower_centers, tower_strengths, tower_spreads):
-    signal += s * np.exp(-(((Y-cy)**2 + (X-cx)**2) / (2*spread**2)))
-signal += 0.01
+# Distance matrix: distance_matrix[i][j] = distance from city i to city j
+distance_matrix = [
+    [0, 400, 500, 300],    # Distances from City 0 to all cities
+    [400, 0, 300, 500],    # Distances from City 1 to all cities  
+    [500, 300, 0, 400],    # Distances from City 2 to all cities
+    [300, 500, 400, 0]     # Distances from City 3 to all cities
+]
 
-plt.figure(figsize=(6,6))
-plt.title("Campus Signal Heatmap (brighter = stronger)")
-plt.imshow(signal, origin='lower'); plt.scatter(tower_centers[:,1], tower_centers[:,0], marker='x', s=80)
-plt.show()
+print("\nDistance Matrix:")
+print("       City 0  City 1  City 2  City 3")
+for i in range(len(distance_matrix)):
+    print(f"City {i}:    {distance_matrix[i]}")
 
-def best_neighbor(y, x, grid):
-    cur = grid[y,x]; best = cur; ny, nx = y, x
-    for dy in (-1,0,1):
-        for dx in (-1,0,1):
-            if dy==0 and dx==0: continue
-            ty, tx = y+dy, x+dx
-            if 0 <= ty < grid.shape[0] and 0 <= tx < grid.shape[1]:
-                v = grid[ty,tx]
-                if v > best: best, ny, nx = v, ty, tx
-    return ny, nx, best, (best > cur)
+print(f"\n GOAL: Find shortest route visiting all cities exactly once and returning to start")
+# STEP 2: CREATE INITIAL RANDOM SOLUTION
+print("STEP 2: CREATING RANDOM STARTING SOLUTION")
 
-# Single climb
-start_y = np.random.randint(0, rows); start_x = np.random.randint(0, cols)
-path_y, path_x = [start_y], [start_x]
-cy, cx = start_y, start_x
-steps, max_steps = 0, 2000
+num_cities = len(distance_matrix)       # 4
+current_tour = list(range(num_cities))  # [0, 1, 2, 3]
+random.shuffle(current_tour)            # Randomize the order
 
-while steps < max_steps:
-    ny, nx, best, improved = best_neighbor(cy, cx, signal)
-    if not improved: break
-    cy, cx = ny, nx; steps += 1; path_y.append(cy); path_x.append(cx)
+print(f"Random starting tour: {current_tour}")
 
-print("Single climb from", (start_y,start_x), "to", (cy,cx), "value =", signal[cy,cx])
+# STEP 3: CALCULATE INITIAL DISTANCE
+print(f"\n STEP 3: CALCULATING DISTANCE OF STARTING TOUR")
 
-plt.figure(figsize=(6,6))
-plt.title("Single Hill Climb Path")
-plt.imshow(signal, origin='lower'); plt.plot(path_x, path_y, linewidth=2)
-plt.scatter(path_x[0], path_y[0], s=80); plt.scatter(path_x[-1], path_y[-1], s=80)
-plt.show()
+current_distance = 0
+print("Distance calculation:")
+for i in range(len(current_tour)):
+    from_city = current_tour[i]
+    to_city = current_tour[(i + 1) % len(current_tour)]  # Next city (wrap to start)
+    step_distance = distance_matrix[from_city][to_city]
+    current_distance += step_distance
+    print(f"  City {from_city} → City {to_city}: {step_distance}")
 
-# Random restarts
-restarts = 15
-best_val = -1; best_coord = None; best_px = None; best_py = None
+print(f"📏 Total starting distance: {current_distance}")
+# STEP 4: HILL CLIMBING MAIN LOOP
+# Keep track of improvements for visualization
+improvement_history = [current_distance]
+iteration = 0
+max_iterations = 100
 
-for _ in range(restarts):
-    sy = np.random.randint(0, rows); sx = np.random.randint(0, cols)
-    cy, cx = sy, sx; px, py = [sx], [sy]; count = 0
-    while count < max_steps:
-        ny, nx, val, improved = best_neighbor(cy, cx, signal)
-        if not improved: break
-        cy, cx = ny, nx; px.append(cx); py.append(cy); count += 1
-    if signal[cy,cx] > best_val:
-        best_val = signal[cy,cx]; best_coord = (cy,cx); best_px, best_py = px, py
+print("STEP 4: STARTING HILL CLIMBING ITERATIONS")
 
-print("Best after restarts:", best_coord, "value =", best_val)
+while iteration < max_iterations:
+    iteration += 1
+    print(f"ITERATION {iteration}")
+    print(f"Current tour: {current_tour}")
+    print(f"Current distance: {current_distance}")
+    
+    # -------------------------------------------------------------------------
+    # SUBSTEP 4A: GENERATE ALL NEIGHBORS (by swapping pairs of cities)
+    # -------------------------------------------------------------------------
+    print(f"\n Generating all possible neighbors by swapping cities:")
+    
+    neighbors = []
+    for i in range(len(current_tour)):
+        for j in range(i + 1, len(current_tour)):
+            # Create neighbor by swapping cities at positions i and j
+            neighbor = current_tour.copy()
+            neighbor[i], neighbor[j] = neighbor[j], neighbor[i]
+            neighbors.append(neighbor)
+            print(f"   Swap positions {i}↔{j}: {current_tour} → {neighbor}")
+    
+    print(f"✅ Generated {len(neighbors)} neighbors")
+    
+    # -------------------------------------------------------------------------
+    # SUBSTEP 4B: FIND BEST NEIGHBOR
+    # -------------------------------------------------------------------------
+    print(f"\n🔍 Finding best neighbor by calculating distances:")
+    
+    best_tour = neighbors[0]
+    best_distance = 0
+    
+    # Calculate distance for first neighbor
+    for i in range(len(best_tour)):
+        from_city = best_tour[i]
+        to_city = best_tour[(i + 1) % len(best_tour)]
+        best_distance += distance_matrix[from_city][to_city]
+    
+    print(f"   Neighbor 1: {best_tour} → distance = {best_distance}")
+    
+    # Check remaining neighbors
+    for neighbor_num, neighbor in enumerate(neighbors[1:], 2):
+        neighbor_distance = 0
+        for i in range(len(neighbor)):
+            from_city = neighbor[i]
+            to_city = neighbor[(i + 1) % len(neighbor)]
+            neighbor_distance += distance_matrix[from_city][to_city]
+        
+        print(f"   Neighbor {neighbor_num}: {neighbor} → distance = {neighbor_distance}")
+        
+        if neighbor_distance < best_distance:
+            best_distance = neighbor_distance
+            best_tour = neighbor
+            print(f"      New best found!")
+    
+    print(f"\n🏆 Best neighbor: {best_tour} with distance = {best_distance}")
+    
+    # -------------------------------------------------------------------------
+    # SUBSTEP 4C: DECIDE WHETHER TO MOVE OR STOP
+    # -------------------------------------------------------------------------
+    print(f"\n Decision time:")
+    print(f"   Current distance: {current_distance}")
+    print(f"   Best neighbor distance: {best_distance}")
+    
+    if best_distance < current_distance:
+        improvement = current_distance - best_distance
+        print(f"   IMPROVEMENT FOUND! Moving to better solution.")
+        print(f"   Improvement: {improvement}")
+        
+        # Move to better solution
+        current_tour = best_tour
+        current_distance = best_distance
+        improvement_history.append(current_distance)
+        
+        print(f"   NEW CURRENT SOLUTION: {current_tour} with distance {current_distance}")
+        
+    else:
+        print(f"   NO IMPROVEMENT POSSIBLE - REACHED LOCAL OPTIMUM!")
+        print(f"   All neighbors are worse than current solution.")
+        break
 
-plt.figure(figsize=(6,6))
-plt.title(f"Best Path After {restarts} Restarts")
-plt.imshow(signal, origin='lower'); plt.plot(best_px, best_py, linewidth=2)
-plt.scatter(best_px[0], best_py[0], s=80); plt.scatter(best_px[-1], best_py[-1], s=80)
-plt.show()</pre>
+
+# STEP 5: FINAL RESULTS
+print(f"\n{'='*60}")
+print(f"🏁 FINAL RESULTS:")
+print(f"   Best tour found: {current_tour}")
+print(f"   Final distance: {current_distance}")
+print(f"   Iterations taken: {iteration}")
+print(f"   Total improvement: {improvement_history[0] - current_distance}")
+
+</pre>
             </div>
         </div>
     </div>
