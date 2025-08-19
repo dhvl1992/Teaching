@@ -99,14 +99,21 @@
   
   .main-grid {
     display: grid;
-    grid-template-columns: 380px 1fr;
-    gap: var(--space-xl);
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
     margin-bottom: var(--space-xl);
+  }
+  
+  .controls-row {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: var(--space-xl);
     align-items: start;
+    margin-bottom: var(--space-xl);
   }
   
   @media (max-width: 1200px) {
-    .main-grid { 
+    .controls-row { 
       grid-template-columns: 1fr; 
       gap: var(--space-lg);
     }
@@ -305,16 +312,34 @@
     transform: scale(1.05);
   }
   
-  /* Architecture Comparison */
-  .architecture-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-xl);
-    align-items: start;
+  /* Architecture Comparison - Row Layout */
+  .architecture-section {
+    margin: var(--space-xl) 0;
   }
   
-  @media (max-width: 900px) {
-    .architecture-grid { grid-template-columns: 1fr; }
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+  }
+  
+  .section-header h2 {
+    font-size: var(--font-size-3xl);
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+    font-weight: 700;
+  }
+  
+  .section-header p {
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+  
+  .network-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
   }
   
   .network-panel {
@@ -325,8 +350,7 @@
     overflow: hidden;
     border-left: 5px solid;
     background: var(--bg-primary);
-    height: auto;
-    min-height: 600px;
+    width: 100%;
   }
   
   .ann-panel {
@@ -360,10 +384,18 @@
   
   .architecture-flow {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     gap: var(--space-md);
     margin: var(--space-lg) 0;
+    overflow-x: auto;
+    padding: var(--space-sm) 0;
+  }
+  
+  @media (max-width: 900px) {
+    .architecture-flow {
+      flex-direction: column;
+    }
   }
   
   .layer-box {
@@ -372,14 +404,15 @@
     border-radius: var(--radius-lg);
     padding: var(--space-md);
     text-align: center;
-    width: 100%;
-    max-width: 280px;
-    min-height: 120px;
+    min-width: 200px;
+    max-width: 250px;
+    min-height: 140px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     transition: all 0.3s ease;
     box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    flex-shrink: 0;
   }
   
   .layer-box:hover {
@@ -425,11 +458,25 @@
   }
   
   .flow-arrow {
-    font-size: var(--font-size-3xl);
+    font-size: var(--font-size-2xl);
     color: var(--accent-orange);
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
     font-weight: 700;
-    margin: var(--space-xs) 0;
+    margin: 0 var(--space-xs);
+    flex-shrink: 0;
+  }
+  
+  @media (max-width: 900px) {
+    .flow-arrow {
+      font-size: var(--font-size-3xl);
+      margin: var(--space-xs) 0;
+      transform: rotate(90deg);
+    }
+    
+    .layer-box {
+      max-width: 100%;
+      min-width: 200px;
+    }
   }
   
   /* Mathematical Analysis */
@@ -890,7 +937,8 @@
   </header>
 
   <div class="container">
-    <div class="main-grid">
+    <!-- Controls and Quick Summary Row -->
+    <div class="controls-row">
       <!-- Interactive Controls -->
       <div class="panel controls-panel">
         <h2 class="controls-title">🎨 Interactive Input</h2>
@@ -955,10 +1003,15 @@
             <button class="digit-btn" data-digit="9">9</button>
           </div>
         </div>
+      </div>
+
+      <!-- Performance Metrics Summary -->
+      <div class="panel">
+        <h2 class="controls-title">📊 Performance Comparison</h2>
         
         <!-- Metrics Section -->
         <div class="section-card metrics-section">
-          <div class="section-title">Performance Metrics</div>
+          <div class="section-title">Key Metrics</div>
           <div class="metrics-grid">
             <div class="metric-card">
               <div class="metric-label">ANN Parameters</div>
@@ -994,13 +1047,28 @@
             </div>
           </div>
         </div>
+
+        <div class="highlight-box">
+          <h3 style="color: var(--bg-primary); margin-bottom: var(--space-sm); font-size: var(--font-size-lg);">🎯 Key Takeaway</h3>
+          <div style="line-height: 1.6; font-size: var(--font-size-base);">
+            CNNs achieve <strong>82% parameter reduction</strong> while being more robust to image translations. 
+            Perfect for vision tasks!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Architecture Analysis Section -->
+    <div class="architecture-section">
+      <div class="section-header">
+        <h2>🧠 Neural Network Architecture Analysis</h2>
+        <p>See how each network processes your digit drawings</p>
       </div>
 
-      <!-- Architecture Comparison -->
-      <div class="architecture-grid">
-        <!-- ANN Panel -->
+      <!-- ANN Section -->
+      <div class="network-row">
         <div class="network-panel ann-panel">
-          <h2 class="network-title ann-title">🧠 Artificial Neural Network</h2>
+          <h2 class="network-title ann-title">🧠 Artificial Neural Network (ANN)</h2>
           
           <div class="architecture-flow">
             <div class="layer-box ann-layer">
@@ -1013,7 +1081,7 @@
               </div>
             </div>
             
-            <div class="flow-arrow">↓</div>
+            <div class="flow-arrow">→</div>
             
             <div class="layer-box ann-layer">
               <div>
@@ -1025,7 +1093,7 @@
               </div>
             </div>
             
-            <div class="flow-arrow">↓</div>
+            <div class="flow-arrow">→</div>
             
             <div class="layer-box ann-layer">
               <div>
@@ -1047,10 +1115,12 @@
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- CNN Panel -->
+      <!-- CNN Section -->
+      <div class="network-row">
         <div class="network-panel cnn-panel">
-          <h2 class="network-title cnn-title">🔍 Convolutional Neural Network</h2>
+          <h2 class="network-title cnn-title">🔍 Convolutional Neural Network (CNN)</h2>
           
           <div class="architecture-flow">
             <div class="layer-box cnn-layer">
@@ -1063,7 +1133,7 @@
               </div>
             </div>
             
-            <div class="flow-arrow">↓</div>
+            <div class="flow-arrow">→</div>
             
             <div class="layer-box cnn-layer">
               <div>
@@ -1075,7 +1145,7 @@
               </div>
             </div>
             
-            <div class="flow-arrow">↓</div>
+            <div class="flow-arrow">→</div>
             
             <div class="layer-box cnn-layer">
               <div>
@@ -1087,7 +1157,7 @@
               </div>
             </div>
             
-            <div class="flow-arrow">↓</div>
+            <div class="flow-arrow">→</div>
             
             <div class="layer-box cnn-layer">
               <div>
@@ -1099,7 +1169,7 @@
               </div>
             </div>
             
-            <div class="flow-arrow">↓</div>
+            <div class="flow-arrow">→</div>
             
             <div class="layer-box cnn-layer">
               <div>
