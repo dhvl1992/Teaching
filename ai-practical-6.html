@@ -49,25 +49,55 @@
             background:#FEF7ED; border:2px solid #EA580C; border-radius:15px; padding:25px;
             margin:25px 0; box-shadow:0 8px 25px rgba(0,0,0,0.1);
         }
-        .heatmap-wrap { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; align-items:flex-start; }
+        .heatmap-wrap { 
+            display:flex; gap:20px; flex-wrap:wrap; justify-content:flex-start; align-items:flex-start; 
+        }
+        .heatmap-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+        }
         .heatmap {
-            display:grid; gap:2px; background:#1E293B; padding:2px; border-radius:10px;
-            width: 360px; /* auto-fit for 24x24 cell at 25 grid */
+            display:grid; gap:1px; background:#1E293B; padding:2px; border-radius:10px;
+            width: 400px; height: 400px;
+            grid-template-columns: repeat(25, 1fr);
+            grid-template-rows: repeat(25, 1fr);
         }
         .cell {
-            width: 24px; height:24px; border:none; border-radius:4px;
-            cursor:pointer; transition:transform .1s ease; position:relative;
+            border:none; border-radius:2px;
+            cursor:pointer; transition:all .2s ease; position:relative;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 12px;
         }
-        .cell:hover { transform: scale(1.08); }
+        .cell:hover { 
+            transform: scale(1.1); 
+            border: 2px solid #fff;
+            z-index: 10;
+        }
+        .cell.start {
+            border: 3px solid #059669 !important;
+        }
         .cell.start::after {
-            content:"S"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-            font-weight:bold; color:#1E293B;
+            content:"S"; 
+            color: #fff;
+            text-shadow: 1px 1px 2px #000;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .cell.end {
+            border: 3px solid #DC2626 !important;
         }
         .cell.end::after {
-            content:"★"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-            font-weight:bold; color:#1E293B;
+            content:"★"; 
+            color: #FFD700;
+            text-shadow: 1px 1px 2px #000;
+            font-size: 14px;
         }
-        .cell.path { outline:2px solid #059669; }
+        .cell.path { 
+            border: 2px solid #059669 !important;
+            box-shadow: inset 0 0 5px rgba(5,150,105,0.5);
+        }
 
         .controls { display:flex; gap:15px; justify-content:center; margin:20px 0; flex-wrap:wrap; }
         .btn {
@@ -82,19 +112,58 @@
             text-align:center; margin:12px 0 18px; font-size:1.1em; font-weight:bold; padding:12px;
             border-radius:10px; background:rgba(234,88,12,.1); border:2px solid #EA580C;
         }
-        .stats { display:grid; grid-template-columns:1fr 1fr; gap:15px; margin:20px 0; }
+        
+        .stats-container {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .stats { 
+            display:grid; 
+            grid-template-columns:1fr 1fr; 
+            gap:15px; 
+            margin:20px 0; 
+        }
         .stat-box {
             background:rgba(234,88,12,.05); border:2px solid #EA580C; border-radius:10px; padding:15px;
             text-align:center; border-left:5px solid #EA580C;
         }
         .stat-box h4 { color:#EA580C; margin-bottom:10px; font-size:1.05em; }
         .stat-value { font-size:1.4em; font-weight:bold; color:#1E293B; }
+        
+        .restart-input-container {
+            margin: 15px 0;
+        }
+        .restart-input-container label {
+            display:block; 
+            margin-bottom:6px; 
+            font-weight:bold;
+            color: #1E293B;
+        }
+        .restart-input-container input {
+            padding:8px 12px; 
+            border-radius:8px; 
+            border:2px solid #EA580C; 
+            width:120px;
+            font-size: 14px;
+        }
+        
         .algorithm-steps {
             background: rgba(5,150,105,0.1); padding:20px; border-radius:10px; margin:20px 0;
             max-height:300px; overflow-y:auto; font-family:'Courier New', monospace; font-size:13px;
             border:2px solid #059669; border-left:5px solid #059669; display:none;
         }
         .algorithm-steps.show { display:block; }
+
+        .grid-tip {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+            max-width: 400px;
+        }
 
         .code-section {
             background:#0F172A; padding:30px; border-radius:15px; margin-bottom:30px; position:relative;
@@ -117,6 +186,8 @@
             .panel { padding:20px; }
             .header h1 { font-size:2em; }
             .section { padding:20px; }
+            .heatmap-wrap { flex-direction: column; align-items: center; }
+            .heatmap { width: 350px; height: 350px; }
         }
     </style>
 </head>
@@ -127,7 +198,7 @@
     <div class="panel left-panel">
         <div class="header">
             <h1>⛰️ Hill Climbing</h1>
-            <p>Campus “Best Mobile Signal” Finder — Greedy Search + Random Restarts</p>
+            <p>Campus "Best Mobile Signal" Finder — Greedy Search + Random Restarts</p>
         </div>
 
         <div class="section">
@@ -152,7 +223,7 @@
         <div class="section">
             <h2>🧪 Interactive Experiment</h2>
             <div class="game-container">
-                <div class="game-status" id="gameStatus">Click “Generate Terrain”, then click any cell to set START.</div>
+                <div class="game-status" id="gameStatus">Click "Generate Terrain", then click any cell to set START.</div>
 
                 <div class="controls">
                     <button class="btn" id="btnGen">🌄 Generate Terrain</button>
@@ -164,13 +235,14 @@
                 </div>
 
                 <div class="heatmap-wrap">
-                    <div>
+                    <div class="heatmap-container">
                         <div id="heatmap" class="heatmap"></div>
-                        <p style="margin-top:10px; text-align:center; font-size:.95em;">
-                            <strong>Tip:</strong> Tap a bright cell to start near a tower, or a dark cell to show local maxima.
-                        </p>
+                        <div class="grid-tip">
+                            <strong>Tip:</strong> Click a bright cell to start near a tower, or a dark cell to show local maxima problems.
+                        </div>
                     </div>
-                    <div style="flex:1; min-width:260px;">
+                    
+                    <div class="stats-container">
                         <div class="stats">
                             <div class="stat-box">
                                 <h4>Current Value</h4>
@@ -189,9 +261,12 @@
                                 <div class="stat-value" id="statRestarts">0</div>
                             </div>
                         </div>
-                        <label style="display:block; margin-top:6px; font-weight:bold;">Random Restarts:</label>
-                        <input id="inputRestarts" type="number" value="10" min="1" max="200"
-                               style="padding:8px 12px; border-radius:8px; border:2px solid #EA580C; width:120px;"/>
+                        
+                        <div class="restart-input-container">
+                            <label>Random Restarts:</label>
+                            <input id="inputRestarts" type="number" value="10" min="1" max="200"/>
+                        </div>
+                        
                         <div class="algorithm-steps" id="algorithmSteps"></div>
                     </div>
                 </div>
@@ -293,7 +368,7 @@ plt.show()</pre>
 
 <script>
 /* =========================
-   Beginner-friendly JS demo
+   Fixed Hill Climbing Demo
    ========================= */
 let GRID = 25;                       // 25 x 25 grid
 let values = [];                     // signal values
@@ -335,7 +410,7 @@ function resetAll(hard=false) {
     running = false; clearInterval(timer); timer = null;
     statVal.textContent = '-'; statSteps.textContent = '0';
     stepBox.classList.remove('show'); showSteps = false; stepBox.innerHTML = '';
-    statusEl.textContent = 'Click “Generate Terrain”, then click any cell to set START.';
+    statusEl.textContent = 'Click "Generate Terrain", then click any cell to set START.';
     if (hard) { bestOverall = -Infinity; restartsDone = 0; statBest.textContent = '-'; statRestarts.textContent='0'; }
     Array.from(heatmap.children).forEach(cell => {
         cell.classList.remove('start','end','path');
@@ -348,12 +423,32 @@ function gaussian(y, x, cy, cx, strength, spread) {
     return strength * Math.exp( - ( (dy*dy + dx*dx) / (2 * spread * spread) ) );
 }
 
+function getColor(value, minVal, maxVal) {
+    // Normalize value to 0-1
+    const normalized = (value - minVal) / (maxVal - minVal + 1e-9);
+    
+    // Create a blue to red gradient through green
+    let r, g, b;
+    if (normalized < 0.5) {
+        // Blue to green (0 to 0.5)
+        const t = normalized * 2;
+        r = Math.floor(0 * (1-t) + 100 * t);
+        g = Math.floor(100 * (1-t) + 255 * t);
+        b = Math.floor(255 * (1-t) + 0 * t);
+    } else {
+        // Green to red (0.5 to 1)
+        const t = (normalized - 0.5) * 2;
+        r = Math.floor(100 * (1-t) + 255 * t);
+        g = Math.floor(255 * (1-t) + 100 * t);
+        b = Math.floor(0 * (1-t) + 0 * t);
+    }
+    
+    return `rgb(${r}, ${g}, ${b})`;
+}
+
 function generateTerrain() {
     resetAll(true);
     values = [];
-    const sizePx = 24 * GRID + 2*(GRID-1) + 4; // approximate
-    heatmap.style.gridTemplateColumns = `repeat(${GRID}, 1fr)`;
-    heatmap.style.width = Math.min(420, sizePx) + 'px';
 
     // Define a few towers (centers)
     const towers = [
@@ -385,26 +480,26 @@ function generateTerrain() {
         for (let c=0; c<GRID; c++) {
             const cell = document.createElement('button');
             cell.className = 'cell';
-            const norm = (values[r][c] - minV) / (maxV - minV + 1e-9);
-            // Color scale: dark (low) → light (high)
-            const light = Math.floor(15 + norm * 85); // 15..100
-            cell.style.background = `hsl(40 90% ${light}%)`;
-            cell.dataset.r = r; cell.dataset.c = c;
+            cell.style.background = getColor(values[r][c], minV, maxV);
+            cell.dataset.r = r; 
+            cell.dataset.c = c;
+            cell.title = `(${r},${c}) = ${values[r][c].toFixed(3)}`;
 
             cell.addEventListener('click', () => {
                 if (!started) {
                     start = {r, c}; current = {r, c}; started = true; steps = 0;
+                    clearDynamicMarks();
                     cell.classList.add('start');
                     statVal.textContent = values[r][c].toFixed(4);
                     statSteps.textContent = '0';
-                    statusEl.textContent = 'Start set. Use “Step” or “Run to Peak”.';
+                    statusEl.textContent = 'Start set. Use "Step" or "Run to Peak".';
                     enableControls(true);
                 }
             });
             heatmap.appendChild(cell);
         }
     }
-    statusEl.textContent = 'Terrain generated. Click a cell to set START.';
+    statusEl.textContent = 'Terrain generated! Click any cell to set your starting position.';
 }
 
 function inBounds(r, c) { return r>=0 && r<GRID && c>=0 && c<GRID; }
@@ -428,23 +523,26 @@ function bestNeighbor(r, c) {
     return {best, improved: (best.r!==r || best.c!==c), bestVal};
 }
 
+function getCellElement(r, c) {
+    const idx = r * GRID + c;
+    return heatmap.children[idx];
+}
+
 function paintPathCell(r, c) {
-    const idx = r*GRID + c;
-    const cell = heatmap.children[idx];
+    const cell = getCellElement(r, c);
     if (cell) cell.classList.add('path');
 }
 
 function markEnd(r, c) {
-    const idx = r*GRID + c;
-    const cell = heatmap.children[idx];
+    const cell = getCellElement(r, c);
     if (cell) cell.classList.add('end');
 }
 
 function clearDynamicMarks() {
     Array.from(heatmap.children).forEach(el => el.classList.remove('path','end','start'));
     if (start) {
-        const idx = start.r*GRID + start.c;
-        heatmap.children[idx]?.classList.add('start');
+        const startCell = getCellElement(start.r, start.c);
+        if (startCell) startCell.classList.add('start');
     }
 }
 
@@ -453,11 +551,11 @@ function stepOnce() {
     const {best, improved, bestVal} = bestNeighbor(current.r, current.c);
     if (showSteps) {
         stepBox.classList.add('show');
-        stepBox.innerHTML += `At (${current.r},${current.c})= ${values[current.r][current.c].toFixed(4)} → best neighbor (${best.r},${best.c})= ${bestVal.toFixed(4)} ${improved? 'UP':'STOP'}<br>`;
+        stepBox.innerHTML += `Step ${steps + 1}: At (${current.r},${current.c})=${values[current.r][current.c].toFixed(4)} → best neighbor (${best.r},${best.c})=${bestVal.toFixed(4)} ${improved? 'MOVE UP':'STOP'}<br>`;
         stepBox.scrollTop = stepBox.scrollHeight;
     }
     if (!improved) {
-        statusEl.textContent = 'Reached a local maximum.';
+        statusEl.textContent = 'Reached a local maximum!';
         markEnd(current.r, current.c);
         const v = values[current.r][current.c];
         if (v > bestOverall) { bestOverall = v; statBest.textContent = v.toFixed(4); }
@@ -473,14 +571,14 @@ function stepOnce() {
 function runToPeak() {
     if (!started || running) return;
     running = true;
-    statusEl.textContent = 'Climbing...';
+    statusEl.textContent = 'Climbing to peak...';
     timer = setInterval(() => {
         const moved = stepOnce();
         if (moved === false) {
             clearInterval(timer); timer = null; running = false;
-            statusEl.textContent = 'Stopped at local maximum.';
+            statusEl.textContent = 'Stopped at local maximum!';
         }
-    }, 60);
+    }, 100);
 }
 
 function doRandomRestarts() {
@@ -511,12 +609,12 @@ function doRandomRestarts() {
     // Show best found end point (and select as current state)
     clearDynamicMarks();
     start = bestCell; current = {...bestCell}; started = true; steps = 0;
-    const idx = start.r*GRID + start.c;
-    heatmap.children[idx]?.classList.add('start');
+    const startCell = getCellElement(start.r, start.c);
+    if (startCell) startCell.classList.add('start');
     markEnd(bestCell.r, bestCell.c);
     statVal.textContent = values[current.r][current.c].toFixed(4);
     statSteps.textContent = '0';
-    statusEl.textContent = `Best local maximum from restarts at (${bestCell.r},${bestCell.c}). Now you can Step/Run again from here.`;
+    statusEl.textContent = `Best peak found at (${bestCell.r},${bestCell.c}) with value ${bestLocal.toFixed(4)}. Try stepping from here!`;
 }
 
 btnGen.addEventListener('click', generateTerrain);
