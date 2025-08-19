@@ -6,21 +6,45 @@
 <title>CNN vs ANN: Interactive Architecture Analysis</title>
 <style>
   :root {
-    /* Colors from your presentation template */
+    /* Colors from presentation template */
     --bg-primary: #FEF7ED;
     --text-primary: #1E293B;
+    --text-secondary: #64748B;
     --accent-orange: #EA580C;
     --accent-teal: #059669;
     --gradient-primary: linear-gradient(135deg, #EA580C, #059669);
     --gradient-reverse: linear-gradient(135deg, #059669, #EA580C);
     
-    /* Semantic color assignments */
+    /* Semantic colors */
     --ann-primary: #EA580C;
-    --ann-secondary: rgba(234, 88, 12, 0.1);
+    --ann-light: rgba(234, 88, 12, 0.1);
+    --ann-medium: rgba(234, 88, 12, 0.2);
     --cnn-primary: #059669;
-    --cnn-secondary: rgba(5, 150, 105, 0.1);
-    --interactive: var(--gradient-primary);
-    --highlight: var(--accent-orange);
+    --cnn-light: rgba(5, 150, 105, 0.1);
+    --cnn-medium: rgba(5, 150, 105, 0.2);
+    
+    /* Spacing system */
+    --space-xs: 8px;
+    --space-sm: 12px;
+    --space-md: 20px;
+    --space-lg: 32px;
+    --space-xl: 48px;
+    
+    /* Border radius system */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    
+    /* Typography */
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 2rem;
+    --font-size-4xl: 2.5rem;
   }
   
   * { 
@@ -44,23 +68,23 @@
   /* Header */
   header {
     background: var(--gradient-primary);
-    padding: 40px 20px;
+    padding: var(--space-xl) var(--space-md);
     text-align: center;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    border-bottom: 5px solid var(--accent-orange);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    border-bottom: 4px solid var(--accent-orange);
   }
   
   header h1 {
-    font-size: 3.5em;
-    font-weight: bold;
+    font-size: var(--font-size-4xl);
+    font-weight: 700;
     color: var(--bg-primary);
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    margin-bottom: 20px;
+    margin-bottom: var(--space-md);
     letter-spacing: -0.02em;
   }
   
   header .subtitle {
-    font-size: 1.6em;
+    font-size: var(--font-size-xl);
     color: rgba(254, 247, 237, 0.9);
     font-style: italic;
     font-weight: 400;
@@ -70,62 +94,75 @@
   .container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: var(--space-xl) var(--space-md);
   }
   
   .main-grid {
     display: grid;
-    grid-template-columns: 400px 1fr;
-    gap: 40px;
-    margin-bottom: 40px;
+    grid-template-columns: 380px 1fr;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+    align-items: start;
   }
   
   @media (max-width: 1200px) {
-    .main-grid { grid-template-columns: 1fr; }
-    header h1 { font-size: 2.8em; }
-    header .subtitle { font-size: 1.3em; }
+    .main-grid { 
+      grid-template-columns: 1fr; 
+      gap: var(--space-lg);
+    }
+    header h1 { font-size: var(--font-size-3xl); }
+    header .subtitle { font-size: var(--font-size-lg); }
   }
   
   /* Panel Base Styles */
   .panel {
     background: var(--bg-primary);
     border: 2px solid var(--accent-orange);
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
     border-left: 5px solid var(--accent-orange);
   }
   
   /* Interactive Controls Panel */
   .controls-panel {
     position: sticky;
-    top: 20px;
+    top: var(--space-md);
     height: fit-content;
   }
   
   .controls-title {
-    font-size: 2.2em;
-    font-weight: bold;
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: 30px;
+    margin-bottom: var(--space-lg);
     text-align: center;
-    padding-bottom: 10px;
+    padding-bottom: var(--space-sm);
     border-bottom: 3px solid var(--accent-orange);
   }
   
-  .drawing-area {
-    background: rgba(5, 150, 105, 0.05);
+  .section-card {
+    background: var(--cnn-light);
     border: 2px solid var(--accent-teal);
-    border-radius: 15px;
-    padding: 25px;
-    margin-bottom: 30px;
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
   }
   
+  .section-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+    text-align: center;
+  }
+  
+  /* Drawing Area */
   .canvas-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 20px;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
   }
   
   @media (max-width: 800px) {
@@ -137,106 +174,143 @@
   }
   
   .canvas-label {
-    font-size: 1.1em;
+    font-size: var(--font-size-base);
     color: var(--text-primary);
-    margin-bottom: 15px;
+    margin-bottom: var(--space-sm);
     font-weight: 600;
   }
   
   #draw {
     border: 3px solid var(--accent-orange);
-    border-radius: 15px;
+    border-radius: var(--radius-lg);
     background: #000;
     cursor: crosshair;
     transition: all 0.3s ease;
+    width: 160px;
+    height: 160px;
   }
   
   #draw:hover {
-    box-shadow: 0 10px 30px rgba(234, 88, 12, 0.3);
+    box-shadow: 0 8px 24px rgba(234, 88, 12, 0.3);
     transform: translateY(-2px);
   }
   
   #mini {
     border: 3px solid var(--accent-teal);
-    border-radius: 15px;
+    border-radius: var(--radius-lg);
     background: #111;
     image-rendering: pixelated;
     transition: all 0.3s ease;
+    width: 160px;
+    height: 160px;
   }
   
   #mini:hover {
-    box-shadow: 0 10px 30px rgba(5, 150, 105, 0.3);
+    box-shadow: 0 8px 24px rgba(5, 150, 105, 0.3);
     transform: translateY(-2px);
   }
   
-  /* Buttons */
-  .btn-group {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: 20px 0;
-  }
-  
+  /* Consistent Button System */
   .btn {
-    background: var(--gradient-primary);
-    color: var(--bg-primary);
-    border: none;
-    padding: 12px 24px;
-    border-radius: 25px;
     font-family: Georgia, serif;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: var(--font-size-sm);
+    border: none;
+    border-radius: 25px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(234, 88, 12, 0.2);
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    padding: var(--space-sm) var(--space-md);
   }
   
-  .btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(234, 88, 12, 0.3);
+  .btn-primary {
+    background: var(--gradient-primary);
+    color: var(--bg-primary);
+    box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2);
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(234, 88, 12, 0.3);
+  }
+  
+  .btn-secondary {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 2px solid var(--text-secondary);
+  }
+  
+  .btn-secondary:hover {
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    transform: translateY(-2px);
+  }
+  
+  .btn-danger {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    color: var(--bg-primary);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+  }
+  
+  .btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
   }
   
   .btn:active {
-    transform: translateY(-1px);
+    transform: translateY(0);
   }
   
-  .btn.secondary {
-    background: rgba(30, 41, 59, 0.1);
-    color: var(--text-primary);
-    border: 2px solid var(--text-primary);
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
   }
   
-  .btn.secondary:hover {
-    background: var(--text-primary);
-    color: var(--bg-primary);
+  .btn-group {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: var(--space-md) 0;
   }
   
-  .btn.danger {
-    background: linear-gradient(135deg, #dc2626, #ef4444);
+  .digit-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--space-xs);
+    margin: var(--space-md) 0;
   }
   
   .digit-btn {
+    aspect-ratio: 1;
     background: var(--bg-primary);
     color: var(--text-primary);
     border: 2px solid var(--accent-orange);
-    min-width: 45px;
-    padding: 10px;
-    font-size: 1.1rem;
-    font-weight: bold;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-lg);
+    font-weight: 700;
     font-family: Georgia, serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
   }
   
   .digit-btn:hover {
     background: var(--accent-orange);
     color: var(--bg-primary);
+    transform: scale(1.05);
   }
   
   /* Architecture Comparison */
   .architecture-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    gap: var(--space-xl);
+    align-items: start;
   }
   
   @media (max-width: 900px) {
@@ -244,36 +318,36 @@
   }
   
   .network-panel {
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
     position: relative;
     overflow: hidden;
     border-left: 5px solid;
+    background: var(--bg-primary);
+    height: auto;
+    min-height: 600px;
   }
   
   .ann-panel {
-    background: var(--bg-primary);
     border: 2px solid var(--ann-primary);
     border-left-color: var(--ann-primary);
   }
   
   .cnn-panel {
-    background: var(--bg-primary);
     border: 2px solid var(--cnn-primary);
     border-left-color: var(--cnn-primary);
   }
   
   .network-title {
-    font-size: 2.2em;
-    font-weight: bold;
-    margin-bottom: 20px;
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin-bottom: var(--space-lg);
     text-align: center;
-    padding: 20px;
-    border-radius: 15px;
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
     color: var(--bg-primary);
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    margin-bottom: 30px;
   }
   
   .ann-title {
@@ -288,132 +362,274 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 25px;
-    margin: 30px 0;
+    gap: var(--space-md);
+    margin: var(--space-lg) 0;
   }
   
   .layer-box {
     background: var(--bg-primary);
     border: 2px solid;
-    border-radius: 15px;
-    padding: 25px;
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
     text-align: center;
-    min-width: 250px;
     width: 100%;
+    max-width: 280px;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
   }
   
   .layer-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
   }
   
   .ann-layer {
     border-color: var(--ann-primary);
-    background: linear-gradient(135deg, var(--bg-primary), var(--ann-secondary));
+    background: linear-gradient(135deg, var(--bg-primary), var(--ann-light));
   }
   
   .cnn-layer {
     border-color: var(--cnn-primary);
-    background: linear-gradient(135deg, var(--bg-primary), var(--cnn-secondary));
+    background: linear-gradient(135deg, var(--bg-primary), var(--cnn-light));
   }
   
   .layer-title {
-    font-size: 1.4em;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    margin-bottom: var(--space-xs);
     color: var(--text-primary);
   }
   
   .layer-details {
-    font-size: 1rem;
-    color: rgba(30, 41, 59, 0.7);
-    margin-bottom: 15px;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-sm);
     font-style: italic;
   }
   
   .layer-visual {
-    height: 80px;
+    height: 50px;
     background: rgba(30, 41, 59, 0.05);
     border: 1px solid rgba(30, 41, 59, 0.2);
-    border-radius: 10px;
-    margin: 15px 0;
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
   }
   
   .flow-arrow {
-    font-size: 2.5rem;
+    font-size: var(--font-size-3xl);
     color: var(--accent-orange);
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    font-weight: 700;
+    margin: var(--space-xs) 0;
   }
   
   /* Mathematical Analysis */
   .math-section {
-    background: linear-gradient(135deg, rgba(234, 88, 12, 0.05), rgba(5, 150, 105, 0.05));
+    background: linear-gradient(135deg, var(--ann-light), var(--cnn-light));
     border: 2px solid var(--accent-orange);
-    border-radius: 15px;
-    padding: 25px;
-    margin: 25px 0;
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    margin: var(--space-md) 0;
     border-left: 5px solid var(--accent-orange);
   }
   
   .math-title {
     color: var(--accent-orange);
-    font-size: 1.6em;
-    font-weight: bold;
-    margin-bottom: 15px;
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    margin-bottom: var(--space-sm);
     text-align: center;
   }
   
   .formula {
     background: var(--text-primary);
     color: var(--bg-primary);
-    padding: 20px;
-    border-radius: 10px;
+    padding: var(--space-md);
+    border-radius: var(--radius-sm);
     font-family: 'Courier New', monospace;
-    font-size: 1.1rem;
-    margin: 15px 0;
+    font-size: var(--font-size-sm);
+    margin: var(--space-sm) 0;
     overflow-x: auto;
     line-height: 1.8;
-    box-shadow: 0 4px 15px rgba(30, 41, 59, 0.2);
+    box-shadow: 0 4px 12px rgba(30, 41, 59, 0.2);
+  }
+  
+  /* Metrics Cards */
+  .metrics-section {
+    margin: var(--space-lg) 0;
+  }
+  
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+  }
+  
+  .metric-card {
+    background: var(--gradient-primary);
+    color: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 24px rgba(234, 88, 12, 0.2);
+  }
+  
+  .metric-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(234, 88, 12, 0.3);
+  }
+  
+  .metric-label {
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-xs);
+    font-weight: 600;
+    opacity: 0.9;
+  }
+  
+  .metric-value {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    line-height: 1;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  /* Progress Bars */
+  .progress-container {
+    margin: var(--space-md) 0;
+  }
+  
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space-xs);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+  }
+  
+  .progress-bar {
+    height: 10px;
+    background: rgba(30, 41, 59, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid rgba(30, 41, 59, 0.2);
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    transition: width 0.5s ease;
+    border-radius: 4px;
+  }
+  
+  .progress-ann .progress-fill {
+    background: linear-gradient(90deg, var(--ann-primary), #f97316);
+  }
+  
+  .progress-cnn .progress-fill {
+    background: linear-gradient(90deg, var(--cnn-primary), #10b981);
+  }
+  
+  /* Tabs */
+  .tab-container {
+    margin: var(--space-xl) 0;
+  }
+  
+  .tabs {
+    display: flex;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .tab {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 2px solid var(--accent-orange);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: Georgia, serif;
+    transition: all 0.3s ease;
+    font-size: var(--font-size-sm);
+  }
+  
+  .tab.active {
+    background: var(--gradient-primary);
+    color: var(--bg-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(234, 88, 12, 0.3);
+  }
+  
+  .tab:hover:not(.active) {
+    background: var(--ann-light);
+    transform: translateY(-1px);
+  }
+  
+  .tab-content {
+    display: none;
+    background: var(--bg-primary);
+    border: 2px solid var(--accent-teal);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+    border-left: 5px solid var(--accent-teal);
+  }
+  
+  .tab-content.active {
+    display: block;
   }
   
   /* Interactive Convolution Demo */
   .conv-demo {
     background: var(--bg-primary);
     border: 2px solid var(--accent-teal);
-    border-radius: 20px;
-    padding: 30px;
-    margin: 30px 0;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    margin: var(--space-lg) 0;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
     border-left: 5px solid var(--accent-teal);
+  }
+  
+  .conv-title {
+    text-align: center;
+    color: var(--accent-orange);
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-lg);
+    font-weight: 700;
   }
   
   .matrix-demo {
     display: grid;
     grid-template-columns: 1fr auto 1fr auto 1fr;
-    gap: 25px;
+    gap: var(--space-lg);
     align-items: center;
-    margin: 30px 0;
+    margin: var(--space-xl) 0;
   }
   
   @media (max-width: 900px) {
     .matrix-demo { 
       grid-template-columns: 1fr; 
-      gap: 20px; 
+      gap: var(--space-md); 
       text-align: center;
     }
   }
   
   .matrix {
     display: grid;
-    gap: 4px;
+    gap: 3px;
     justify-content: center;
   }
   
@@ -427,9 +643,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
-    font-size: 1rem;
-    border-radius: 8px;
+    font-weight: 700;
+    font-size: var(--font-size-sm);
+    border-radius: var(--radius-sm);
     transition: all 0.3s ease;
     font-family: Georgia, serif;
   }
@@ -453,182 +669,102 @@
   }
   
   .highlighted {
-    transform: scale(1.15);
-    box-shadow: 0 0 25px rgba(234, 88, 12, 0.6);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(234, 88, 12, 0.6);
     z-index: 10;
     position: relative;
   }
   
   .conv-arrow {
-    font-size: 3rem;
+    font-size: var(--font-size-4xl);
     color: var(--accent-orange);
-    font-weight: bold;
+    font-weight: 700;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
   }
   
-  /* Metrics Display */
-  .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin: 30px 0;
-  }
-  
-  .metric-card {
-    background: var(--gradient-primary);
-    color: var(--bg-primary);
-    border-radius: 20px;
-    padding: 30px 25px;
-    text-align: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 30px rgba(234, 88, 12, 0.2);
-  }
-  
-  .metric-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(234, 88, 12, 0.3);
-  }
-  
-  .metric-label {
-    font-size: 1rem;
-    margin-bottom: 10px;
-    font-weight: 600;
-    opacity: 0.9;
-  }
-  
-  .metric-value {
-    font-size: 2.5em;
-    font-weight: bold;
-    line-height: 1;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  }
-  
-  /* Progress Bars */
-  .progress-container {
-    margin: 20px 0;
-  }
-  
-  .progress-label {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-  }
-  
-  .progress-bar {
-    height: 12px;
-    background: rgba(30, 41, 59, 0.1);
-    border-radius: 6px;
-    overflow: hidden;
-    border: 1px solid rgba(30, 41, 59, 0.2);
-  }
-  
-  .progress-fill {
-    height: 100%;
-    background: var(--gradient-primary);
-    transition: width 0.5s ease;
-    border-radius: 5px;
-  }
-  
-  .progress-ann .progress-fill {
-    background: linear-gradient(90deg, var(--ann-primary), #f97316);
-  }
-  
-  .progress-cnn .progress-fill {
-    background: linear-gradient(90deg, var(--cnn-primary), #10b981);
-  }
-  
-  /* Tabs */
-  .tab-container {
-    margin: 40px 0;
-  }
-  
-  .tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 25px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .tab {
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    border: 2px solid var(--accent-orange);
-    padding: 15px 25px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: 600;
-    font-family: Georgia, serif;
-    transition: all 0.3s ease;
-    font-size: 1rem;
-  }
-  
-  .tab.active {
-    background: var(--gradient-primary);
-    color: var(--bg-primary);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(234, 88, 12, 0.3);
-  }
-  
-  .tab:hover:not(.active) {
-    background: rgba(234, 88, 12, 0.1);
-    transform: translateY(-2px);
-  }
-  
-  .tab-content {
-    display: none;
-    background: var(--bg-primary);
-    border: 2px solid var(--accent-teal);
-    border-radius: 20px;
-    padding: 40px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    border-left: 5px solid var(--accent-teal);
-  }
-  
-  .tab-content.active {
-    display: block;
-  }
-  
-  /* Step Controls */
   .step-controls {
     display: flex;
-    gap: 15px;
+    gap: var(--space-md);
     justify-content: center;
     align-items: center;
-    margin: 25px 0;
+    margin: var(--space-lg) 0;
+  }
+  
+  .step-info {
+    color: var(--accent-orange);
+    font-weight: 700;
+    font-size: var(--font-size-lg);
+    min-width: 120px;
   }
   
   .step-display {
     background: var(--text-primary);
     color: var(--bg-primary);
     border: 2px solid var(--accent-orange);
-    border-radius: 15px;
-    padding: 20px;
-    margin: 20px 0;
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    margin: var(--space-md) 0;
     font-family: 'Courier New', monospace;
-    font-size: 1rem;
+    font-size: var(--font-size-sm);
     line-height: 1.6;
-    box-shadow: 0 4px 15px rgba(30, 41, 59, 0.2);
+    box-shadow: 0 4px 16px rgba(30, 41, 59, 0.2);
+  }
+  
+  /* Feature Maps */
+  .feature-maps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-md);
+    margin: var(--space-lg) 0;
+  }
+  
+  .feature-card {
+    background: var(--bg-primary);
+    border: 2px solid var(--accent-teal);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md);
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+  
+  .feature-card:hover {
+    border-color: var(--accent-orange);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(234, 88, 12, 0.15);
+  }
+  
+  .feature-title {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+  }
+  
+  .feature-canvas {
+    border: 1px solid rgba(30, 41, 59, 0.2);
+    border-radius: var(--radius-sm);
+    width: 100%;
+    height: auto;
+    image-rendering: pixelated;
   }
   
   /* Input Controls */
   .input-controls {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin: 25px 0;
+    gap: var(--space-md);
+    margin: var(--space-md) 0;
   }
   
   .control-group {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--space-sm);
   }
   
   .control-label {
-    font-size: 1rem;
+    font-size: var(--font-size-sm);
     color: var(--text-primary);
     font-weight: 600;
     min-width: 60px;
@@ -636,17 +772,17 @@
   
   input[type="range"] {
     flex: 1;
-    height: 8px;
+    height: 6px;
     background: rgba(30, 41, 59, 0.1);
-    border-radius: 4px;
+    border-radius: 3px;
     outline: none;
     border: 1px solid rgba(30, 41, 59, 0.2);
   }
   
   input[type="range"]::-webkit-slider-thumb {
     appearance: none;
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     background: var(--gradient-primary);
     border-radius: 50%;
     cursor: pointer;
@@ -654,92 +790,79 @@
   }
   
   input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     accent-color: var(--accent-orange);
-  }
-  
-  /* Feature Maps Visualization */
-  .feature-maps {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 20px;
-    margin: 30px 0;
-  }
-  
-  .feature-card {
-    background: var(--bg-primary);
-    border: 2px solid var(--accent-teal);
-    border-radius: 15px;
-    padding: 20px;
-    text-align: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  }
-  
-  .feature-card:hover {
-    border-color: var(--accent-orange);
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(234, 88, 12, 0.2);
-  }
-  
-  .feature-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 15px;
-  }
-  
-  .feature-canvas {
-    border: 1px solid rgba(30, 41, 59, 0.2);
-    border-radius: 10px;
-    width: 100%;
-    height: auto;
-    image-rendering: pixelated;
   }
   
   /* Highlight Boxes */
   .highlight-box {
     background: var(--accent-teal);
     color: var(--bg-primary);
-    padding: 20px;
-    border-radius: 15px;
-    margin: 20px 0;
-    font-weight: bold;
-    box-shadow: 0 4px 15px rgba(5, 150, 105, 0.2);
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+    margin: var(--space-md) 0;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(5, 150, 105, 0.2);
   }
   
   .accent-box {
     background: var(--accent-orange);
     color: var(--bg-primary);
-    padding: 20px;
-    border-radius: 15px;
-    margin: 20px 0;
+    padding: var(--space-md);
+    border-radius: var(--radius-lg);
+    margin: var(--space-md) 0;
     font-style: italic;
     font-weight: 600;
-    box-shadow: 0 4px 15px rgba(234, 88, 12, 0.2);
+    box-shadow: 0 4px 16px rgba(234, 88, 12, 0.2);
   }
   
   .emphasis {
     background: var(--accent-orange);
     color: var(--bg-primary);
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    font-weight: 700;
     display: inline-block;
     box-shadow: 0 2px 6px rgba(234, 88, 12, 0.2);
   }
   
   /* Responsive Design */
   @media (max-width: 768px) {
-    .container { padding: 20px 10px; }
-    .main-grid { grid-template-columns: 1fr; gap: 25px; }
-    .canvas-row { grid-template-columns: 1fr; }
-    .matrix-demo { grid-template-columns: 1fr; gap: 15px; }
-    .architecture-grid { grid-template-columns: 1fr; }
-    .input-controls { grid-template-columns: 1fr; }
-    .tabs { justify-content: flex-start; }
-    .tab { padding: 12px 20px; font-size: 0.9rem; }
+    .container { 
+      padding: var(--space-md) var(--space-sm); 
+    }
+    .main-grid { 
+      grid-template-columns: 1fr; 
+      gap: var(--space-md); 
+    }
+    .canvas-row { 
+      grid-template-columns: 1fr; 
+    }
+    .matrix-demo { 
+      grid-template-columns: 1fr; 
+      gap: var(--space-sm); 
+    }
+    .architecture-grid { 
+      grid-template-columns: 1fr; 
+    }
+    .input-controls { 
+      grid-template-columns: 1fr; 
+    }
+    .tabs { 
+      justify-content: flex-start; 
+    }
+    .tab { 
+      padding: var(--space-sm) var(--space-md); 
+      font-size: var(--font-size-xs); 
+    }
+    .metrics-grid {
+      grid-template-columns: 1fr;
+    }
+    #draw, #mini {
+      width: 140px;
+      height: 140px;
+    }
   }
   
   /* Utility Classes */
@@ -747,9 +870,7 @@
   .text-ann { color: var(--ann-primary); }
   .text-cnn { color: var(--cnn-primary); }
   .text-highlight { color: var(--accent-orange); }
-  .font-bold { font-weight: bold; }
-  .mb-20 { margin-bottom: 20px; }
-  .mt-20 { margin-top: 20px; }
+  .font-bold { font-weight: 700; }
   
   /* Animation */
   .float {
@@ -758,7 +879,7 @@
   
   @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-8px); }
   }
 </style>
 </head>
@@ -774,26 +895,31 @@
       <div class="panel controls-panel">
         <h2 class="controls-title">🎨 Interactive Input</h2>
         
-        <div class="drawing-area">
+        <!-- Drawing Section -->
+        <div class="section-card">
+          <div class="section-title">Draw & Process</div>
           <div class="canvas-row">
             <div class="canvas-container">
-              <div class="canvas-label">Draw Here (224×224)</div>
-              <canvas id="draw" width="224" height="224" style="width:180px;height:180px;"></canvas>
-              <div class="text-highlight" style="font-size:0.9rem; margin-top:8px; font-weight:600;">
+              <div class="canvas-label">Draw Here</div>
+              <canvas id="draw" width="224" height="224"></canvas>
+              <div class="text-highlight" style="font-size: var(--font-size-xs); margin-top: var(--space-xs); font-weight: 600;">
                 Brush: <span id="brushSizeLabel">18</span>px
               </div>
             </div>
             <div class="canvas-container">
-              <div class="canvas-label">Processed (28×28)</div>
-              <canvas id="mini" width="28" height="28" style="width:180px;height:180px;"></canvas>
+              <div class="canvas-label">Processed</div>
+              <canvas id="mini" width="28" height="28"></canvas>
+              <div style="font-size: var(--font-size-xs); margin-top: var(--space-xs); color: var(--text-secondary);">
+                28×28 pixels
+              </div>
             </div>
           </div>
           
           <div class="btn-group">
-            <button class="btn danger" id="clearBtn">Clear</button>
-            <button class="btn secondary" id="undoBtn">Undo</button>
-            <button class="btn secondary" id="invertBtn">Invert</button>
-            <button class="btn" id="processBtn">Process</button>
+            <button class="btn btn-danger" id="clearBtn">Clear</button>
+            <button class="btn btn-secondary" id="undoBtn">Undo</button>
+            <button class="btn btn-secondary" id="invertBtn">Invert</button>
+            <button class="btn btn-primary" id="processBtn">Process</button>
           </div>
           
           <div class="input-controls">
@@ -808,58 +934,63 @@
           </div>
           
           <div class="btn-group">
-            <button class="btn secondary" id="shiftRight">Shift →</button>
-            <button class="btn secondary" id="shiftDown">Shift ↓</button>
+            <button class="btn btn-secondary" id="shiftRight">Shift →</button>
+            <button class="btn btn-secondary" id="shiftDown">Shift ↓</button>
+          </div>
+        </div>
+
+        <!-- Quick Digits -->
+        <div class="section-card">
+          <div class="section-title">Quick Digits</div>
+          <div class="digit-grid">
+            <button class="digit-btn" data-digit="0">0</button>
+            <button class="digit-btn" data-digit="1">1</button>
+            <button class="digit-btn" data-digit="2">2</button>
+            <button class="digit-btn" data-digit="3">3</button>
+            <button class="digit-btn" data-digit="4">4</button>
+            <button class="digit-btn" data-digit="5">5</button>
+            <button class="digit-btn" data-digit="6">6</button>
+            <button class="digit-btn" data-digit="7">7</button>
+            <button class="digit-btn" data-digit="8">8</button>
+            <button class="digit-btn" data-digit="9">9</button>
+          </div>
+        </div>
+        
+        <!-- Metrics Section -->
+        <div class="section-card metrics-section">
+          <div class="section-title">Performance Metrics</div>
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-label">ANN Parameters</div>
+              <div class="metric-value" id="annParams">–</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">CNN Parameters</div>
+              <div class="metric-value" id="cnnParams">–</div>
+            </div>
           </div>
           
-          <div style="text-align:center; margin:20px 0;">
-            <div class="control-label mb-20">Quick Digits:</div>
-            <div class="btn-group">
-              <button class="digit-btn" data-digit="0">0</button>
-              <button class="digit-btn" data-digit="1">1</button>
-              <button class="digit-btn" data-digit="2">2</button>
-              <button class="digit-btn" data-digit="3">3</button>
-              <button class="digit-btn" data-digit="4">4</button>
-              <button class="digit-btn" data-digit="5">5</button>
-              <button class="digit-btn" data-digit="6">6</button>
-              <button class="digit-btn" data-digit="7">7</button>
-              <button class="digit-btn" data-digit="8">8</button>
-              <button class="digit-btn" data-digit="9">9</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="metrics-grid">
-          <div class="metric-card">
-            <div class="metric-label">ANN Parameters</div>
-            <div class="metric-value" id="annParams">–</div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-label">CNN Parameters</div>
-            <div class="metric-value" id="cnnParams">–</div>
-          </div>
-        </div>
-        
-        <div class="progress-container">
-          <div class="progress-label">
-            <span class="font-bold">Translation Stability Comparison</span>
-          </div>
-          <div class="progress-container progress-ann">
+          <div class="progress-container">
             <div class="progress-label">
-              <span class="text-ann font-bold">ANN</span>
-              <span id="annStabVal">–</span>
+              <span class="font-bold">Translation Stability Test</span>
             </div>
-            <div class="progress-bar">
-              <div class="progress-fill" id="annStab"></div>
+            <div class="progress-container progress-ann">
+              <div class="progress-label">
+                <span class="text-ann font-bold">ANN</span>
+                <span id="annStabVal">–</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="annStab"></div>
+              </div>
             </div>
-          </div>
-          <div class="progress-container progress-cnn">
-            <div class="progress-label">
-              <span class="text-cnn font-bold">CNN</span>
-              <span id="cnnStabVal">–</span>
-            </div>
-            <div class="progress-bar">
-              <div class="progress-fill" id="cnnStab"></div>
+            <div class="progress-container progress-cnn">
+              <div class="progress-label">
+                <span class="text-cnn font-bold">CNN</span>
+                <span id="cnnStabVal">–</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="cnnStab"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -873,8 +1004,10 @@
           
           <div class="architecture-flow">
             <div class="layer-box ann-layer">
-              <div class="layer-title text-ann">Input Layer (Flatten)</div>
-              <div class="layer-details">28×28 = 784 neurons</div>
+              <div>
+                <div class="layer-title text-ann">Input Layer</div>
+                <div class="layer-details">28×28 = 784 neurons (flattened)</div>
+              </div>
               <div class="layer-visual">
                 <canvas id="annInput" width="80" height="40" style="width:100%;height:100%;"></canvas>
               </div>
@@ -883,8 +1016,10 @@
             <div class="flow-arrow">↓</div>
             
             <div class="layer-box ann-layer">
-              <div class="layer-title text-ann">Hidden Layer</div>
-              <div class="layer-details">64 fully connected neurons</div>
+              <div>
+                <div class="layer-title text-ann">Hidden Layer</div>
+                <div class="layer-details">64 fully connected neurons</div>
+              </div>
               <div class="layer-visual">
                 <canvas id="annHidden" width="160" height="40" style="width:100%;height:100%;"></canvas>
               </div>
@@ -893,8 +1028,10 @@
             <div class="flow-arrow">↓</div>
             
             <div class="layer-box ann-layer">
-              <div class="layer-title text-ann">Output Layer</div>
-              <div class="layer-details">10 neurons (digits 0-9)</div>
+              <div>
+                <div class="layer-title text-ann">Output Layer</div>
+                <div class="layer-details">10 neurons (digits 0-9)</div>
+              </div>
               <div class="layer-visual">
                 <canvas id="annLogits" width="160" height="40" style="width:100%;height:100%;"></canvas>
               </div>
@@ -917,8 +1054,10 @@
           
           <div class="architecture-flow">
             <div class="layer-box cnn-layer">
-              <div class="layer-title text-cnn">Conv1 (3×3, 8 filters)</div>
-              <div class="layer-details">28×28×8 feature maps</div>
+              <div>
+                <div class="layer-title text-cnn">Conv1 Layer</div>
+                <div class="layer-details">3×3 filters, 8 feature maps</div>
+              </div>
               <div class="layer-visual">
                 <canvas id="conv1Grid" width="160" height="40" style="width:100%;height:100%;"></canvas>
               </div>
@@ -927,8 +1066,10 @@
             <div class="flow-arrow">↓</div>
             
             <div class="layer-box cnn-layer">
-              <div class="layer-title text-cnn">MaxPool (2×2)</div>
-              <div class="layer-details">14×14×8 feature maps</div>
+              <div>
+                <div class="layer-title text-cnn">MaxPool1 Layer</div>
+                <div class="layer-details">2×2 pooling, 14×14 output</div>
+              </div>
               <div class="layer-visual">
                 <canvas id="pool1Grid" width="160" height="40" style="width:100%;height:100%;"></canvas>
               </div>
@@ -937,8 +1078,10 @@
             <div class="flow-arrow">↓</div>
             
             <div class="layer-box cnn-layer">
-              <div class="layer-title text-cnn">Conv2 (3×3, 16 filters)</div>
-              <div class="layer-details">14×14×16 feature maps</div>
+              <div>
+                <div class="layer-title text-cnn">Conv2 Layer</div>
+                <div class="layer-details">3×3 filters, 16 feature maps</div>
+              </div>
               <div class="layer-visual">
                 <canvas id="conv2Grid" width="160" height="40" style="width:100%;height:100%;"></canvas>
               </div>
@@ -947,8 +1090,10 @@
             <div class="flow-arrow">↓</div>
             
             <div class="layer-box cnn-layer">
-              <div class="layer-title text-cnn">MaxPool (2×2)</div>
-              <div class="layer-details">7×7×16 feature maps</div>
+              <div>
+                <div class="layer-title text-cnn">MaxPool2 Layer</div>
+                <div class="layer-details">2×2 pooling, 7×7 output</div>
+              </div>
               <div class="layer-visual">
                 <canvas id="pool2Grid" width="160" height="40" style="width:100%;height:100%;"></canvas>
               </div>
@@ -957,8 +1102,10 @@
             <div class="flow-arrow">↓</div>
             
             <div class="layer-box cnn-layer">
-              <div class="layer-title text-cnn">Dense Output</div>
-              <div class="layer-details">10 neurons (digits 0-9)</div>
+              <div>
+                <div class="layer-title text-cnn">Dense Output</div>
+                <div class="layer-details">10 neurons (digits 0-9)</div>
+              </div>
               <div class="layer-visual">
                 <canvas id="cnnLogits" width="160" height="40" style="width:100%;height:100%;"></canvas>
               </div>
@@ -988,39 +1135,39 @@
       <!-- Convolution Tab -->
       <div class="tab-content active" id="convolution">
         <div class="conv-demo">
-          <h3 class="text-center text-highlight mb-20" style="font-size: 2.2em; margin-bottom: 30px; font-weight: bold;">Step-by-Step Convolution Operation</h3>
+          <h3 class="conv-title">Step-by-Step Convolution Operation</h3>
           
           <div class="matrix-demo">
             <div class="text-center">
-              <h4 class="text-cnn" style="font-size: 1.4em; margin-bottom: 15px;">Input (5×5)</h4>
+              <h4 class="text-cnn" style="font-size: var(--font-size-lg); margin-bottom: var(--space-sm);">Input (5×5)</h4>
               <div class="matrix matrix-5x5" id="input-matrix"></div>
             </div>
             
             <div class="conv-arrow">⊛</div>
             
             <div class="text-center">
-              <h4 class="text-ann" style="font-size: 1.4em; margin-bottom: 15px;">Kernel (3×3)</h4>
+              <h4 class="text-ann" style="font-size: var(--font-size-lg); margin-bottom: var(--space-sm);">Kernel (3×3)</h4>
               <div class="matrix matrix-3x3" id="kernel-matrix"></div>
-              <div class="btn-group mt-20">
-                <button class="btn" onclick="changeKernel('edge')">Edge</button>
-                <button class="btn" onclick="changeKernel('blur')">Blur</button>
-                <button class="btn" onclick="changeKernel('sharpen')">Sharpen</button>
+              <div class="btn-group" style="margin-top: var(--space-md);">
+                <button class="btn btn-primary" onclick="changeKernel('edge')">Edge</button>
+                <button class="btn btn-primary" onclick="changeKernel('blur')">Blur</button>
+                <button class="btn btn-primary" onclick="changeKernel('sharpen')">Sharpen</button>
               </div>
             </div>
             
             <div class="conv-arrow">=</div>
             
             <div class="text-center">
-              <h4 class="text-highlight" style="font-size: 1.4em; margin-bottom: 15px;">Output (3×3)</h4>
+              <h4 class="text-highlight" style="font-size: var(--font-size-lg); margin-bottom: var(--space-sm);">Output (3×3)</h4>
               <div class="matrix matrix-3x3" id="output-matrix"></div>
             </div>
           </div>
           
           <div class="step-controls">
-            <button class="btn" onclick="prevConvStep()" id="prev-btn">← Previous</button>
-            <span id="step-info" class="text-highlight font-bold" style="font-size: 1.2em;">Step 1 of 9</span>
-            <button class="btn" onclick="nextConvStep()" id="next-btn">Next →</button>
-            <button class="btn secondary" onclick="autoPlayConv()" id="auto-btn">Auto Play</button>
+            <button class="btn btn-secondary" onclick="prevConvStep()" id="prev-btn">← Previous</button>
+            <span id="step-info" class="step-info">Step 1 of 9</span>
+            <button class="btn btn-secondary" onclick="nextConvStep()" id="next-btn">Next →</button>
+            <button class="btn btn-primary" onclick="autoPlayConv()" id="auto-btn">Auto Play</button>
           </div>
           
           <div class="progress-container">
@@ -1041,7 +1188,7 @@
           <div class="feature-card">
             <div class="feature-title">ANN Input (Flattened)</div>
             <canvas class="feature-canvas" id="annInputLarge" width="112" height="112"></canvas>
-            <div style="font-size:0.9rem; color: rgba(30, 41, 59, 0.7); margin-top:10px; font-style: italic;">
+            <div style="font-size: var(--font-size-xs); color: var(--text-secondary); margin-top: var(--space-sm); font-style: italic;">
               784 pixel values
             </div>
           </div>
@@ -1049,7 +1196,7 @@
           <div class="feature-card">
             <div class="feature-title">CNN Conv1 Features</div>
             <canvas class="feature-canvas" id="conv1Features" width="224" height="140"></canvas>
-            <div style="font-size:0.9rem; color: rgba(30, 41, 59, 0.7); margin-top:10px; font-style: italic;">
+            <div style="font-size: var(--font-size-xs); color: var(--text-secondary); margin-top: var(--space-sm); font-style: italic;">
               8 feature maps (28×28)
             </div>
           </div>
@@ -1057,7 +1204,7 @@
           <div class="feature-card">
             <div class="feature-title">CNN Conv2 Features</div>
             <canvas class="feature-canvas" id="conv2Features" width="224" height="140"></canvas>
-            <div style="font-size:0.9rem; color: rgba(30, 41, 59, 0.7); margin-top:10px; font-style: italic;">
+            <div style="font-size: var(--font-size-xs); color: var(--text-secondary); margin-top: var(--space-sm); font-style: italic;">
               16 feature maps (14×14)
             </div>
           </div>
@@ -1065,7 +1212,7 @@
           <div class="feature-card">
             <div class="feature-title">Final Features</div>
             <canvas class="feature-canvas" id="finalFeatures" width="224" height="140"></canvas>
-            <div style="font-size:0.9rem; color: rgba(30, 41, 59, 0.7); margin-top:10px; font-style: italic;">
+            <div style="font-size: var(--font-size-xs); color: var(--text-secondary); margin-top: var(--space-sm); font-style: italic;">
               16 feature maps (7×7)
             </div>
           </div>
@@ -1085,7 +1232,7 @@
 
       <!-- Comparison Tab -->
       <div class="tab-content" id="comparison">
-        <div class="metrics-grid">
+        <div class="metrics-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: var(--space-xl);">
           <div class="metric-card">
             <div class="metric-label">ANN Parameters</div>
             <div class="metric-value" id="annParamsComp">50,890</div>
@@ -1106,8 +1253,8 @@
         
         <div class="architecture-grid">
           <div class="highlight-box">
-            <h3 style="color: var(--bg-primary); margin-bottom: 15px;">Why ANNs Struggle with Images</h3>
-            <div style="line-height: 1.8; font-size: 1.1em;">
+            <h3 style="color: var(--bg-primary); margin-bottom: var(--space-sm); font-size: var(--font-size-xl);">Why ANNs Struggle with Images</h3>
+            <div style="line-height: 1.8; font-size: var(--font-size-base);">
               ❌ <strong>No Spatial Structure:</strong> Treats images as flat vectors<br>
               ❌ <strong>Too Many Parameters:</strong> 784×64 = 50,240 weights in first layer<br>
               ❌ <strong>Position Dependent:</strong> Moving digit changes all connections<br>
@@ -1117,8 +1264,8 @@
           </div>
           
           <div class="accent-box">
-            <h3 style="color: var(--bg-primary); margin-bottom: 15px;">Why CNNs Excel at Images</h3>
-            <div style="line-height: 1.8; font-size: 1.1em;">
+            <h3 style="color: var(--bg-primary); margin-bottom: var(--space-sm); font-size: var(--font-size-xl);">Why CNNs Excel at Images</h3>
+            <div style="line-height: 1.8; font-size: var(--font-size-base);">
               ✅ <strong>Parameter Sharing:</strong> Same 3×3 filter used everywhere<br>
               ✅ <strong>Spatial Awareness:</strong> Preserves 2D structure<br>
               ✅ <strong>Translation Invariant:</strong> Detects edges/shapes anywhere<br>
@@ -1224,6 +1371,7 @@ function getPos(e) {
   return { x, y };
 }
 
+// Mouse events
 draw.addEventListener('mousedown', e => {
   pushUndo();
   drawing = true;
@@ -1237,6 +1385,8 @@ draw.addEventListener('mousemove', e => {
   last = p;
 });
 window.addEventListener('mouseup', () => drawing = false);
+
+// Touch events
 draw.addEventListener('touchstart', e => {
   e.preventDefault();
   pushUndo();
@@ -1253,17 +1403,24 @@ draw.addEventListener('touchmove', e => {
 }, { passive: false });
 draw.addEventListener('touchend', () => drawing = false);
 
+// Button controls
 document.getElementById('clearBtn').onclick = () => {
   dctx.clearRect(0, 0, 224, 224);
   dctx.fillStyle = "#000";
   dctx.fillRect(0, 0, 224, 224);
   renderMini();
+  runModels();
 };
+
 document.getElementById('undoBtn').onclick = () => {
   const prev = undoStack.pop();
-  if (prev) dctx.putImageData(prev, 0, 0);
-  renderMini();
+  if (prev) {
+    dctx.putImageData(prev, 0, 0);
+    renderMini();
+    runModels();
+  }
 };
+
 document.getElementById('invertBtn').onclick = () => {
   const img = dctx.getImageData(0, 0, 224, 224);
   for (let i = 0; i < img.data.length; i += 4) {
@@ -1273,8 +1430,10 @@ document.getElementById('invertBtn').onclick = () => {
   }
   dctx.putImageData(img, 0, 0);
   renderMini();
+  runModels();
 };
 
+// Controls
 const brushRange = document.getElementById('brushRange');
 const brushSizeLabel = document.getElementById('brushSizeLabel');
 brushRange.oninput = (e) => {
@@ -1307,6 +1466,7 @@ document.getElementById('processBtn').onclick = () => {
   runModels();
 };
 
+// Digit buttons
 document.querySelectorAll('button[data-digit]').forEach(btn => {
   btn.onclick = () => {
     const n = btn.getAttribute('data-digit');
@@ -1315,8 +1475,8 @@ document.querySelectorAll('button[data-digit]').forEach(btn => {
     dctx.fillStyle = "#fff";
     dctx.textAlign = "center";
     dctx.textBaseline = "middle";
-    dctx.font = "bold 200px Georgia, serif";
-    dctx.fillText(n, 112, 120);
+    dctx.font = "bold 180px Georgia, serif";
+    dctx.fillText(n, 112, 112);
     renderMini();
     runModels();
   };
@@ -1490,31 +1650,62 @@ function cnnForward(x28) {
 
 /* ========= Visualization Functions ========= */
 function drawAnnVisuals(x, h, yprob) {
-  // Input visualization
+  // Input visualization - show actual pixel intensities
   const c1 = document.getElementById('annInput');
   if (c1) {
     const a1 = c1.getContext('2d');
     a1.clearRect(0, 0, c1.width, c1.height);
-    const gradient = a1.createLinearGradient(0, 0, c1.width, 0);
-    gradient.addColorStop(0, '#EA580C');
-    gradient.addColorStop(1, '#f97316');
-    a1.fillStyle = gradient;
-    a1.fillRect(0, 0, c1.width * Math.random() * 0.8 + 0.2, c1.height);
+    
+    // Create mini representation of input
+    const imgData = a1.createImageData(c1.width, c1.height);
+    const scale = Math.min(c1.width, c1.height);
+    const step = scale / 28;
+    
+    for (let y = 0; y < 28; y++) {
+      for (let x = 0; x < 28; x++) {
+        const intensity = x[y * 28 + x];
+        const startX = Math.floor(x * step);
+        const startY = Math.floor(y * step);
+        const endX = Math.min(Math.floor((x + 1) * step), c1.width);
+        const endY = Math.min(Math.floor((y + 1) * step), c1.height);
+        
+        for (let py = startY; py < endY; py++) {
+          for (let px = startX; px < endX; px++) {
+            const idx = (py * c1.width + px) * 4;
+            const val = Math.round(intensity * 255);
+            imgData.data[idx] = val;     // R
+            imgData.data[idx + 1] = val; // G  
+            imgData.data[idx + 2] = val; // B
+            imgData.data[idx + 3] = 255; // A
+          }
+        }
+      }
+    }
+    a1.putImageData(imgData, 0, 0);
   }
 
-  // Hidden layer visualization
+  // Hidden layer visualization - show activations as colored bars
   const c2 = document.getElementById('annHidden');
   if (c2) {
     const a2 = c2.getContext('2d');
     a2.clearRect(0, 0, c2.width, c2.height);
-    const cols = 8, rows = 4, cellW = c2.width / cols, cellH = c2.height / rows;
-    for (let i = 0; i < 32; i++) {
-      const r = Math.floor(i / cols), c = i % cols;
-      const x0 = c * cellW, y0 = r * cellH;
-      const v = h[i] || 0;
-      const intensity = Math.max(0, Math.min(1, v / 2));
-      a2.fillStyle = `rgba(234, 88, 12, ${intensity})`;
+    const cols = 8, rows = 8, cellW = c2.width / cols, cellH = c2.height / rows;
+    
+    for (let i = 0; i < Math.min(64, h.length); i++) {
+      const r = Math.floor(i / cols);
+      const c = i % cols;
+      const x0 = c * cellW;
+      const y0 = r * cellH;
+      const v = Math.max(0, h[i]);
+      const intensity = Math.min(1, v / 3); // Normalize for display
+      
+      // Background
+      a2.fillStyle = "rgba(30, 41, 59, 0.1)";
       a2.fillRect(x0, y0, cellW - 1, cellH - 1);
+      
+      // Activation bar
+      a2.fillStyle = `rgba(234, 88, 12, ${intensity})`;
+      a2.fillRect(x0 + 2, y0 + cellH - 4, (cellW - 4) * intensity, 4);
     }
   }
 
@@ -1530,21 +1721,31 @@ function drawGridOfMaps(canvasId, maps, H, Wd) {
   
   const n = Math.min(maps.length, 4);
   const cellW = cvs.width / n;
+  
   for (let i = 0; i < n; i++) {
     const x0 = i * cellW;
     let min = 1e9, max = -1e9;
     const m = maps[i];
+    
+    // Find min/max for normalization
     for (let k = 0; k < m.length; k++) {
       if (m[k] < min) min = m[k];
       if (m[k] > max) max = m[k];
     }
     const rng = (max - min) || 1;
     
+    // Draw feature map
     for (let y = 0; y < H; y++) {
       for (let x = 0; x < Wd; x++) {
-        const v = Math.round(255 * (m[y * Wd + x] - min) / rng);
-        ctx.fillStyle = `rgba(5, 150, 105, ${v / 255 * 0.8 + 0.2})`;
-        ctx.fillRect(x0 + x * (cellW / Wd), y * (cvs.height / H), cellW / Wd, cvs.height / H);
+        const val = (m[y * Wd + x] - min) / rng;
+        const intensity = Math.max(0.1, val);
+        ctx.fillStyle = `rgba(5, 150, 105, ${intensity})`;
+        ctx.fillRect(
+          x0 + x * (cellW / Wd), 
+          y * (cvs.height / H), 
+          cellW / Wd, 
+          cvs.height / H
+        );
       }
     }
   }
@@ -1555,14 +1756,30 @@ function drawBars(canvasId, probs) {
   if (!cvs) return;
   const ctx = cvs.getContext('2d');
   ctx.clearRect(0, 0, cvs.width, cvs.height);
+  
   const bw = cvs.width / 10;
+  const maxHeight = cvs.height - 20;
+  
   for (let i = 0; i < 10; i++) {
-    const h = probs[i] * cvs.height;
+    const h = probs[i] * maxHeight;
+    const x = i * bw;
+    
+    // Background
+    ctx.fillStyle = "rgba(30, 41, 59, 0.1)";
+    ctx.fillRect(x, cvs.height - maxHeight, bw - 2, maxHeight);
+    
+    // Bar
     const gradient = ctx.createLinearGradient(0, cvs.height - h, 0, cvs.height);
     gradient.addColorStop(0, '#059669');
     gradient.addColorStop(1, '#10b981');
     ctx.fillStyle = gradient;
-    ctx.fillRect(i * bw, cvs.height - h, bw - 2, h);
+    ctx.fillRect(x, cvs.height - h, bw - 2, h);
+    
+    // Label
+    ctx.fillStyle = "#1E293B";
+    ctx.font = "12px Georgia, serif";
+    ctx.textAlign = "center";
+    ctx.fillText(i.toString(), x + bw/2, cvs.height - 5);
   }
 }
 
@@ -1676,6 +1893,7 @@ function prevConvStep() {
 }
 
 function updateConvStep() {
+  // Clear previous highlights
   document.querySelectorAll('.matrix-cell').forEach(cell => {
     cell.classList.remove('highlighted');
   });
@@ -1683,6 +1901,7 @@ function updateConvStep() {
   const row = Math.floor(currentConvStep / 3);
   const col = currentConvStep % 3;
 
+  // Highlight input region
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       const inputCell = document.getElementById(`input-${row + i}-${col + j}`);
@@ -1690,16 +1909,20 @@ function updateConvStep() {
     }
   }
 
+  // Highlight output cell
   const outputCell = document.getElementById(`output-${row}-${col}`);
   if (outputCell) outputCell.classList.add('highlighted');
 
+  // Update step info
   const stepInfo = document.getElementById('step-info');
   if (stepInfo) stepInfo.textContent = `Step ${currentConvStep + 1} of ${totalConvSteps}`;
   
+  // Update progress
   const progress = ((currentConvStep + 1) / totalConvSteps) * 100;
   const progressEl = document.getElementById('conv-progress');
   if (progressEl) progressEl.style.width = `${progress}%`;
 
+  // Update button states
   const prevBtn = document.getElementById('prev-btn');
   const nextBtn = document.getElementById('next-btn');
   if (prevBtn) prevBtn.disabled = currentConvStep === 0;
@@ -1814,12 +2037,12 @@ function runModels(orig28 = null, shifted28 = null) {
   drawGridOfMaps('pool2Grid', cnn.p2.maps, cnn.p2.H, cnn.p2.W);
   drawBars('cnnLogits', cnn.y);
 
-  // Detailed feature maps
+  // Feature maps for detailed view
   drawGridOfMaps('conv1Features', cnn.conv1, 28, 28);
   drawGridOfMaps('conv2Features', cnn.conv2, 14, 14);
   drawGridOfMaps('finalFeatures', cnn.p2.maps, cnn.p2.H, cnn.p2.W);
 
-  // Metrics
+  // Update metrics
   const Pann = calcAnnParams(), Pcnn = calcCnnParams();
   setText('annParams', fmt(Pann));
   setText('cnnParams', fmt(Pcnn));
@@ -1843,9 +2066,17 @@ function runModels(orig28 = null, shifted28 = null) {
 
 /* ========= Initialization ========= */
 document.addEventListener('DOMContentLoaded', function() {
-  initializeConvDemo();
-  updateConvStep();
-  runModels();
+  console.log('🚀 Initializing CNN vs ANN Interactive Demo...');
+  
+  // Test basic functionality
+  try {
+    initializeConvDemo();
+    updateConvStep();
+    runModels();
+    console.log('✅ All systems initialized successfully');
+  } catch (error) {
+    console.error('❌ Initialization error:', error);
+  }
 });
 
 // Live mini preview update
@@ -1853,9 +2084,26 @@ let miniTimer = null;
 ['mouseup', 'mousemove', 'touchend', 'touchmove'].forEach(ev => {
   draw.addEventListener(ev, () => {
     clearTimeout(miniTimer);
-    miniTimer = setTimeout(() => { renderMini(); }, 60);
+    miniTimer = setTimeout(() => { 
+      renderMini(); 
+      // Only run models on mouse/touch up for performance
+      if (ev.includes('up') || ev.includes('end')) {
+        runModels();
+      }
+    }, 60);
   }, { passive: true });
 });
+
+// Performance monitoring
+let lastProcessTime = 0;
+const originalRunModels = runModels;
+runModels = function(...args) {
+  const start = performance.now();
+  originalRunModels.apply(this, args);
+  const duration = performance.now() - start;
+  lastProcessTime = duration;
+  console.log(`⚡ Models processed in ${duration.toFixed(1)}ms`);
+};
 </script>
 </body>
 </html>
