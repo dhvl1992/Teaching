@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Hill Climbing — Campus Signal Finder</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh; color:#1E293B; line-height:1.6;
+        }
+        .container {
+            display:grid; grid-template-columns:1fr 1fr; min-height:100vh; gap:2px;
+        }
+        .panel { padding:30px; overflow-y:auto; }
+        .left-panel { background:#FEF7ED; }
+        .right-panel { background:#1E293B; color:#FEF7ED; }
+        .header {
+            text-align:center; padding:30px; background:#1E293B; color:#FEF7ED;
+            border-radius:15px; margin-bottom:30px; border-left:5px solid #EA580C;
+            box-shadow:0 8px 25px rgba(0,0,0,0.1); transition:transform .3s ease;
+        }
+        .header:hover { transform: translateY(-5px); }
+        .header h1 { font-size:2.5em; margin-bottom:15px; text-shadow:2px 2px 4px rgba(0,0,0,.3); }
+        .header p { font-size:1.2em; opacity:.9; font-style:italic; }
+        .section {
+            background:#FEF7ED; padding:30px; border-radius:15px; margin-bottom:30px;
+            border-left:5px solid #EA580C; box-shadow:0 8px 25px rgba(0,0,0,0.1);
+            transition:transform .3s ease;
+        }
+        .section:hover { transform: translateY(-5px); }
+        .theory-section {
+            background: rgba(5,150,105,.05);
+            border-left:5px solid #059669;
+        }
+        .section h2 {
+            font-size:2.2em; color:#1E293B; margin-bottom:25px; padding-bottom:10px;
+            border-bottom:3px solid #EA580C;
+        }
+        .theory-section h2 { border-bottom:3px solid #059669; }
+        .section h3 { font-size:1.4em; color:#1E293B; margin:20px 0 10px 0; }
+        .content-list { list-style:none; padding-left:0; }
+        .content-list li { position:relative; padding-left:30px; margin-bottom:12px; }
+        .content-list li::before { content:"→"; position:absolute; left:0; color:#EA580C; font-weight:bold; font-size:1.2em; }
+
+        .game-container {
+            background:#FEF7ED; border:2px solid #EA580C; border-radius:15px; padding:25px;
+            margin:25px 0; box-shadow:0 8px 25px rgba(0,0,0,0.1);
+        }
+        .heatmap-wrap { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; align-items:flex-start; }
+        .heatmap {
+            display:grid; gap:2px; background:#1E293B; padding:2px; border-radius:10px;
+            width: 360px; /* auto-fit for 24x24 cell at 25 grid */
+        }
+        .cell {
+            width: 24px; height:24px; border:none; border-radius:4px;
+            cursor:pointer; transition:transform .1s ease; position:relative;
+        }
+        .cell:hover { transform: scale(1.08); }
+        .cell.start::after {
+            content:"S"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+            font-weight:bold; color:#1E293B;
+        }
+        .cell.end::after {
+            content:"★"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+            font-weight:bold; color:#1E293B;
+        }
+        .cell.path { outline:2px solid #059669; }
+
+        .controls { display:flex; gap:15px; justify-content:center; margin:20px 0; flex-wrap:wrap; }
+        .btn {
+            background:#EA580C; color:#FEF7ED; border:none; padding:12px 18px; border-radius:10px;
+            cursor:pointer; font-size:1em; font-family:Georgia, serif; font-weight:bold;
+            transition:all .3s ease; box-shadow:0 4px 15px rgba(234,88,12,0.3);
+        }
+        .btn:hover { background:#DC2626; transform: translateY(-2px); box-shadow:0 6px 20px rgba(234,88,12,.4); }
+        .btn:disabled { background:#9CA3AF; cursor:not-allowed; transform:none; box-shadow:none; }
+
+        .game-status {
+            text-align:center; margin:12px 0 18px; font-size:1.1em; font-weight:bold; padding:12px;
+            border-radius:10px; background:rgba(234,88,12,.1); border:2px solid #EA580C;
+        }
+        .stats { display:grid; grid-template-columns:1fr 1fr; gap:15px; margin:20px 0; }
+        .stat-box {
+            background:rgba(234,88,12,.05); border:2px solid #EA580C; border-radius:10px; padding:15px;
+            text-align:center; border-left:5px solid #EA580C;
+        }
+        .stat-box h4 { color:#EA580C; margin-bottom:10px; font-size:1.05em; }
+        .stat-value { font-size:1.4em; font-weight:bold; color:#1E293B; }
+        .algorithm-steps {
+            background: rgba(5,150,105,0.1); padding:20px; border-radius:10px; margin:20px 0;
+            max-height:300px; overflow-y:auto; font-family:'Courier New', monospace; font-size:13px;
+            border:2px solid #059669; border-left:5px solid #059669; display:none;
+        }
+        .algorithm-steps.show { display:block; }
+
+        .code-section {
+            background:#0F172A; padding:30px; border-radius:15px; margin-bottom:30px; position:relative;
+            border-left:5px solid #059669; box-shadow:0 8px 25px rgba(0,0,0,.1);
+        }
+        .code-block {
+            background:#000; padding:20px; border-radius:10px; font-family:'Courier New', monospace;
+            font-size:14px; overflow-x:auto; color:#FEF7ED;
+        }
+        .copy-btn {
+            position:absolute; top:15px; right:15px; background:#EA580C; color:#FEF7ED; border:none;
+            padding:8px 15px; border-radius:8px; cursor:pointer; font-size:12px; font-family:Georgia, serif;
+            transition:all .3s ease;
+        }
+        .copy-btn:hover { background:#DC2626; }
+
+        @media (max-width: 768px) {
+            .container { grid-template-columns:1fr; }
+            .stats { grid-template-columns:1fr; }
+            .panel { padding:20px; }
+            .header h1 { font-size:2em; }
+            .section { padding:20px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- Left Panel -->
+    <div class="panel left-panel">
+        <div class="header">
+            <h1>⛰️ Hill Climbing</h1>
+            <p>Campus “Best Mobile Signal” Finder — Greedy Search + Random Restarts</p>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Aim</h2>
+            <p><strong>To implement and understand the Hill Climbing algorithm using a real-world analogy:
+                finding the strongest mobile signal on a campus map (2D grid) by moving uphill until no better neighbor exists.</strong></p>
+
+            <div class="theory-section" style="margin-top:18px; border-radius:12px; padding:18px;">
+                <h3>Real-world Mapping</h3>
+                <ul class="content-list">
+                    <li><strong>State:</strong> a campus location (grid cell)</li>
+                    <li><strong>Value (Objective):</strong> signal strength at that cell</li>
+                    <li><strong>Neighbors:</strong> 8 surrounding cells (N, NE, E, SE, S, SW, W, NW)</li>
+                    <li><strong>Move:</strong> go to the neighbor with the highest value (steepest-ascent)</li>
+                    <li><strong>Stop:</strong> when no neighbor is better → local maximum</li>
+                </ul>
+                <p style="margin-top:10px"><em>Problem:</em> Greedy hill climbing can get stuck on local maxima.  
+                <em>Fix:</em> Try multiple random starting points (<strong>random restarts</strong>) to increase the chance of reaching the global maximum.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧪 Interactive Experiment</h2>
+            <div class="game-container">
+                <div class="game-status" id="gameStatus">Click “Generate Terrain”, then click any cell to set START.</div>
+
+                <div class="controls">
+                    <button class="btn" id="btnGen">🌄 Generate Terrain</button>
+                    <button class="btn" id="btnStep" disabled>➡️ Step</button>
+                    <button class="btn" id="btnRun" disabled>⏩ Run to Peak</button>
+                    <button class="btn" id="btnRestart" disabled>🎲 Random Restarts</button>
+                    <button class="btn" id="btnShow" disabled>🔍 Show Steps</button>
+                    <button class="btn" id="btnReset">🧹 Reset</button>
+                </div>
+
+                <div class="heatmap-wrap">
+                    <div>
+                        <div id="heatmap" class="heatmap"></div>
+                        <p style="margin-top:10px; text-align:center; font-size:.95em;">
+                            <strong>Tip:</strong> Tap a bright cell to start near a tower, or a dark cell to show local maxima.
+                        </p>
+                    </div>
+                    <div style="flex:1; min-width:260px;">
+                        <div class="stats">
+                            <div class="stat-box">
+                                <h4>Current Value</h4>
+                                <div class="stat-value" id="statVal">-</div>
+                            </div>
+                            <div class="stat-box">
+                                <h4>Steps</h4>
+                                <div class="stat-value" id="statSteps">0</div>
+                            </div>
+                            <div class="stat-box">
+                                <h4>Best Overall</h4>
+                                <div class="stat-value" id="statBest">-</div>
+                            </div>
+                            <div class="stat-box">
+                                <h4>Restart Count</h4>
+                                <div class="stat-value" id="statRestarts">0</div>
+                            </div>
+                        </div>
+                        <label style="display:block; margin-top:6px; font-weight:bold;">Random Restarts:</label>
+                        <input id="inputRestarts" type="number" value="10" min="1" max="200"
+                               style="padding:8px 12px; border-radius:8px; border:2px solid #EA580C; width:120px;"/>
+                        <div class="algorithm-steps" id="algorithmSteps"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="panel right-panel">
+        <div class="header">
+            <h2>💻 Hill Climbing (Colab-ready Python)</h2>
+            <p>Beginner-friendly: one tiny helper reused multiple times</p>
+        </div>
+
+        <div class="code-section">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <div class="code-block">
+<pre># HILL CLIMBING — Real-world demo: Best Mobile Signal on Campus (2D grid)
+# Beginner-friendly. One small helper used multiple times.
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(0)
+
+rows, cols = 120, 120
+Y, X = np.mgrid[0:rows, 0:cols]
+
+# Towers (centers), strengths, spreads
+tower_centers = np.array([[30,30],[80,40],[40,85],[95,95]], dtype=float)
+tower_strengths = np.array([1.0, 0.8, 1.2, 1.5])
+tower_spreads   = np.array([12.0,18.0,15.0,10.0])
+
+signal = np.zeros((rows, cols), dtype=float)
+for (cy,cx), s, spread in zip(tower_centers, tower_strengths, tower_spreads):
+    signal += s * np.exp(-(((Y-cy)**2 + (X-cx)**2) / (2*spread**2)))
+signal += 0.01
+
+plt.figure(figsize=(6,6))
+plt.title("Campus Signal Heatmap (brighter = stronger)")
+plt.imshow(signal, origin='lower'); plt.scatter(tower_centers[:,1], tower_centers[:,0], marker='x', s=80)
+plt.show()
+
+def best_neighbor(y, x, grid):
+    cur = grid[y,x]; best = cur; ny, nx = y, x
+    for dy in (-1,0,1):
+        for dx in (-1,0,1):
+            if dy==0 and dx==0: continue
+            ty, tx = y+dy, x+dx
+            if 0 <= ty < grid.shape[0] and 0 <= tx < grid.shape[1]:
+                v = grid[ty,tx]
+                if v > best: best, ny, nx = v, ty, tx
+    return ny, nx, best, (best > cur)
+
+# Single climb
+start_y = np.random.randint(0, rows); start_x = np.random.randint(0, cols)
+path_y, path_x = [start_y], [start_x]
+cy, cx = start_y, start_x
+steps, max_steps = 0, 2000
+
+while steps < max_steps:
+    ny, nx, best, improved = best_neighbor(cy, cx, signal)
+    if not improved: break
+    cy, cx = ny, nx; steps += 1; path_y.append(cy); path_x.append(cx)
+
+print("Single climb from", (start_y,start_x), "to", (cy,cx), "value =", signal[cy,cx])
+
+plt.figure(figsize=(6,6))
+plt.title("Single Hill Climb Path")
+plt.imshow(signal, origin='lower'); plt.plot(path_x, path_y, linewidth=2)
+plt.scatter(path_x[0], path_y[0], s=80); plt.scatter(path_x[-1], path_y[-1], s=80)
+plt.show()
+
+# Random restarts
+restarts = 15
+best_val = -1; best_coord = None; best_px = None; best_py = None
+
+for _ in range(restarts):
+    sy = np.random.randint(0, rows); sx = np.random.randint(0, cols)
+    cy, cx = sy, sx; px, py = [sx], [sy]; count = 0
+    while count < max_steps:
+        ny, nx, val, improved = best_neighbor(cy, cx, signal)
+        if not improved: break
+        cy, cx = ny, nx; px.append(cx); py.append(cy); count += 1
+    if signal[cy,cx] > best_val:
+        best_val = signal[cy,cx]; best_coord = (cy,cx); best_px, best_py = px, py
+
+print("Best after restarts:", best_coord, "value =", best_val)
+
+plt.figure(figsize=(6,6))
+plt.title(f"Best Path After {restarts} Restarts")
+plt.imshow(signal, origin='lower'); plt.plot(best_px, best_py, linewidth=2)
+plt.scatter(best_px[0], best_py[0], s=80); plt.scatter(best_px[-1], best_py[-1], s=80)
+plt.show()</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+/* =========================
+   Beginner-friendly JS demo
+   ========================= */
+let GRID = 25;                       // 25 x 25 grid
+let values = [];                     // signal values
+let started = false;                 // has user selected a start?
+let start = null;                    // {r,c}
+let current = null;                  // {r,c}
+let steps = 0;
+let bestOverall = -Infinity;
+let restartsDone = 0;
+let running = false;
+let showSteps = false;
+let timer = null;
+
+const heatmap = document.getElementById('heatmap');
+const statusEl = document.getElementById('gameStatus');
+const statVal = document.getElementById('statVal');
+const statSteps = document.getElementById('statSteps');
+const statBest = document.getElementById('statBest');
+const statRestarts = document.getElementById('statRestarts');
+const stepBox = document.getElementById('algorithmSteps');
+
+const btnGen = document.getElementById('btnGen');
+const btnStep = document.getElementById('btnStep');
+const btnRun = document.getElementById('btnRun');
+const btnRestart = document.getElementById('btnRestart');
+const btnShow = document.getElementById('btnShow');
+const btnReset = document.getElementById('btnReset');
+const inputRestarts = document.getElementById('inputRestarts');
+
+function enableControls(afterGen) {
+    btnStep.disabled = !afterGen;
+    btnRun.disabled = !afterGen;
+    btnRestart.disabled = !afterGen;
+    btnShow.disabled = !afterGen;
+}
+
+function resetAll(hard=false) {
+    started = false; start = null; current = null; steps = 0;
+    running = false; clearInterval(timer); timer = null;
+    statVal.textContent = '-'; statSteps.textContent = '0';
+    stepBox.classList.remove('show'); showSteps = false; stepBox.innerHTML = '';
+    statusEl.textContent = 'Click “Generate Terrain”, then click any cell to set START.';
+    if (hard) { bestOverall = -Infinity; restartsDone = 0; statBest.textContent = '-'; statRestarts.textContent='0'; }
+    Array.from(heatmap.children).forEach(cell => {
+        cell.classList.remove('start','end','path');
+    });
+    enableControls(false);
+}
+
+function gaussian(y, x, cy, cx, strength, spread) {
+    const dy = y - cy, dx = x - cx;
+    return strength * Math.exp( - ( (dy*dy + dx*dx) / (2 * spread * spread) ) );
+}
+
+function generateTerrain() {
+    resetAll(true);
+    values = [];
+    const sizePx = 24 * GRID + 2*(GRID-1) + 4; // approximate
+    heatmap.style.gridTemplateColumns = `repeat(${GRID}, 1fr)`;
+    heatmap.style.width = Math.min(420, sizePx) + 'px';
+
+    // Define a few towers (centers)
+    const towers = [
+        {cy: 6,  cx: 6,  s: 1.0, spread: 3.5},
+        {cy: 18, cx: 8,  s: 0.9, spread: 4.8},
+        {cy: 8,  cx: 20, s: 1.15,spread: 4.3},
+        {cy: 21, cx: 21, s: 1.5, spread: 3.2}, // often global best
+    ];
+
+    // Build values
+    let minV = Infinity, maxV = -Infinity;
+    for (let r=0; r<GRID; r++) {
+        const row = [];
+        for (let c=0; c<GRID; c++) {
+            let v = 0.01;
+            for (let t=0; t<towers.length; t++) {
+                v += gaussian(r, c, towers[t].cy, towers[t].cx, towers[t].s, towers[t].spread);
+            }
+            row.push(v);
+            if (v < minV) minV = v;
+            if (v > maxV) maxV = v;
+        }
+        values.push(row);
+    }
+
+    // Render as buttons colored by value
+    heatmap.innerHTML = '';
+    for (let r=0; r<GRID; r++) {
+        for (let c=0; c<GRID; c++) {
+            const cell = document.createElement('button');
+            cell.className = 'cell';
+            const norm = (values[r][c] - minV) / (maxV - minV + 1e-9);
+            // Color scale: dark (low) → light (high)
+            const light = Math.floor(15 + norm * 85); // 15..100
+            cell.style.background = `hsl(40 90% ${light}%)`;
+            cell.dataset.r = r; cell.dataset.c = c;
+
+            cell.addEventListener('click', () => {
+                if (!started) {
+                    start = {r, c}; current = {r, c}; started = true; steps = 0;
+                    cell.classList.add('start');
+                    statVal.textContent = values[r][c].toFixed(4);
+                    statSteps.textContent = '0';
+                    statusEl.textContent = 'Start set. Use “Step” or “Run to Peak”.';
+                    enableControls(true);
+                }
+            });
+            heatmap.appendChild(cell);
+        }
+    }
+    statusEl.textContent = 'Terrain generated. Click a cell to set START.';
+}
+
+function inBounds(r, c) { return r>=0 && r<GRID && c>=0 && c<GRID; }
+
+function bestNeighbor(r, c) {
+    // Check 8 neighbors for strictly higher value
+    const dirs = [-1,0,1];
+    let bestVal = values[r][c];
+    let best = {r, c};
+    for (let dy of dirs) {
+        for (let dc of dirs) {
+            if (dy===0 && dc===0) continue;
+            const nr = r + dy, nc = c + dc;
+            if (!inBounds(nr, nc)) continue;
+            const v = values[nr][nc];
+            if (v > bestVal) {
+                bestVal = v; best = {r:nr, c:nc};
+            }
+        }
+    }
+    return {best, improved: (best.r!==r || best.c!==c), bestVal};
+}
+
+function paintPathCell(r, c) {
+    const idx = r*GRID + c;
+    const cell = heatmap.children[idx];
+    if (cell) cell.classList.add('path');
+}
+
+function markEnd(r, c) {
+    const idx = r*GRID + c;
+    const cell = heatmap.children[idx];
+    if (cell) cell.classList.add('end');
+}
+
+function clearDynamicMarks() {
+    Array.from(heatmap.children).forEach(el => el.classList.remove('path','end','start'));
+    if (start) {
+        const idx = start.r*GRID + start.c;
+        heatmap.children[idx]?.classList.add('start');
+    }
+}
+
+function stepOnce() {
+    if (!started || !current) return;
+    const {best, improved, bestVal} = bestNeighbor(current.r, current.c);
+    if (showSteps) {
+        stepBox.classList.add('show');
+        stepBox.innerHTML += `At (${current.r},${current.c})= ${values[current.r][current.c].toFixed(4)} → best neighbor (${best.r},${best.c})= ${bestVal.toFixed(4)} ${improved? 'UP':'STOP'}<br>`;
+        stepBox.scrollTop = stepBox.scrollHeight;
+    }
+    if (!improved) {
+        statusEl.textContent = 'Reached a local maximum.';
+        markEnd(current.r, current.c);
+        const v = values[current.r][current.c];
+        if (v > bestOverall) { bestOverall = v; statBest.textContent = v.toFixed(4); }
+        return false;
+    }
+    current = best; steps += 1;
+    paintPathCell(current.r, current.c);
+    statVal.textContent = values[current.r][current.c].toFixed(4);
+    statSteps.textContent = String(steps);
+    return true;
+}
+
+function runToPeak() {
+    if (!started || running) return;
+    running = true;
+    statusEl.textContent = 'Climbing...';
+    timer = setInterval(() => {
+        const moved = stepOnce();
+        if (moved === false) {
+            clearInterval(timer); timer = null; running = false;
+            statusEl.textContent = 'Stopped at local maximum.';
+        }
+    }, 60);
+}
+
+function doRandomRestarts() {
+    if (!values.length) return;
+    const N = Math.max(1, Math.min(200, parseInt(inputRestarts.value) || 10));
+    restartsDone += N; statRestarts.textContent = String(restartsDone);
+    let bestLocal = -Infinity, bestCell = null;
+    statusEl.textContent = `Trying ${N} random starts...`;
+
+    // Simple sync loop (fast on 25x25)
+    for (let i=0; i<N; i++) {
+        const r = Math.floor(Math.random()*GRID);
+        const c = Math.floor(Math.random()*GRID);
+        let cr = r, cc = c; let safe = 0;
+        while (safe < 2000) {
+            const res = bestNeighbor(cr, cc);
+            if (!res.improved) break;
+            cr = res.best.r; cc = res.best.c; safe++;
+        }
+        const v = values[cr][cc];
+        if (v > bestLocal) { bestLocal = v; bestCell = {r:cr, c:cc}; }
+    }
+
+    if (bestLocal > bestOverall) {
+        bestOverall = bestLocal; statBest.textContent = bestOverall.toFixed(4);
+    }
+
+    // Show best found end point (and select as current state)
+    clearDynamicMarks();
+    start = bestCell; current = {...bestCell}; started = true; steps = 0;
+    const idx = start.r*GRID + start.c;
+    heatmap.children[idx]?.classList.add('start');
+    markEnd(bestCell.r, bestCell.c);
+    statVal.textContent = values[current.r][current.c].toFixed(4);
+    statSteps.textContent = '0';
+    statusEl.textContent = `Best local maximum from restarts at (${bestCell.r},${bestCell.c}). Now you can Step/Run again from here.`;
+}
+
+btnGen.addEventListener('click', generateTerrain);
+btnStep.addEventListener('click', () => { stepOnce(); });
+btnRun.addEventListener('click', runToPeak);
+btnRestart.addEventListener('click', doRandomRestarts);
+btnShow.addEventListener('click', () => {
+    showSteps = !showSteps;
+    if (!showSteps) stepBox.classList.remove('show');
+    if (showSteps) { stepBox.classList.add('show'); stepBox.innerHTML = ''; }
+});
+btnReset.addEventListener('click', () => resetAll(true));
+
+resetAll(true); // initial state
+
+// Copy code (right panel)
+function copyCode(btn) {
+    const code = btn.nextElementSibling.textContent;
+    navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+}
+</script>
+</body>
+</html>
