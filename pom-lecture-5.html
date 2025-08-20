@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complete Management Principles Guide</title>
+    <title>Management History for Engineers - Comprehensive Lecture</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:Georgia,serif;background:#FEF7ED;color:#1E293B;line-height:1.6;overflow-x:hidden}
         #particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1}
-        nav{position:fixed;top:0;width:100%;background:rgba(254,247,237,.95);backdrop-filter:blur(10px);z-index:1000;padding:0.8rem 1.2rem;transition:all .3s;border-bottom:2px solid #EA580C}
+        nav{position:fixed;top:0;width:100%;background:rgba(254,247,237,.95);backdrop-filter:blur(10px);z-index:1000;padding:1rem 2rem;transition:all .3s;border-bottom:2px solid #EA580C}
         nav.scrolled{background:rgba(254,247,237,.98);box-shadow:0 2px 20px rgba(234,88,12,.1)}
-        nav ul{list-style:none;display:flex;justify-content:center;flex-wrap:wrap;gap:0.6rem}
-        nav a{color:#1E293B;text-decoration:none;font-weight:600;transition:all .3s;padding:.3rem .5rem;border-radius:12px;font-size:0.7em}
+        nav ul{list-style:none;display:flex;justify-content:center;flex-wrap:wrap;gap:1rem}
+        nav a{color:#1E293B;text-decoration:none;font-weight:600;transition:all .3s;padding:.3rem .8rem;border-radius:20px;font-size:0.9em}
         nav a:hover{background:rgba(234,88,12,.1);color:#EA580C;transform:translateY(-2px)}
-        .progress-bar{position:fixed;top:70px;left:0;height:4px;background:linear-gradient(90deg,#EA580C,#059669);z-index:999;transform-origin:left;transform:scaleX(0);transition:transform .1s}
+        .progress-bar{position:fixed;top:80px;left:0;height:4px;background:linear-gradient(90deg,#EA580C,#059669);z-index:999;transform-origin:left;transform:scaleX(0);transition:transform .1s}
         .container{max-width:1200px;margin:0 auto;padding:20px}
-        .slide{background:#FEF7ED;margin-bottom:30px;padding:35px;border-radius:15px;border-left:5px solid #EA580C;box-shadow:0 8px 25px rgba(0,0,0,.1);transition:all .8s;min-height:500px;transform:translateY(50px);opacity:0}
+        .slide{background:#FEF7ED;margin-bottom:30px;padding:40px;border-radius:15px;border-left:5px solid #EA580C;box-shadow:0 8px 25px rgba(0,0,0,.1);transition:all .8s;min-height:500px;transform:translateY(50px);opacity:0}
         .slide.visible{transform:translateY(0);opacity:1}
         .slide:hover{transform:translateY(-5px)}
         
@@ -35,59 +35,52 @@
         .section-header h1{font-size:3em;margin-bottom:20px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
         .section-header .section-subtitle{font-size:1.4em;opacity:.9}
         
-        .two-content{display:grid;grid-template-columns:1fr 1fr;gap:35px;align-items:start}
+        .two-content{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
         .two-content h2{grid-column:1/-1}
         .content-column{padding:20px;background:rgba(5,150,105,.05);border-radius:10px}
-        .content-column h3{font-size:1.5em;color:#059669;margin-bottom:15px}
+        .content-column h3{font-size:1.6em;color:#059669;margin-bottom:15px}
         
         .comparison{position:relative}
         .comparison h2{text-align:center}
-        .comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:35px;margin-top:35px}
-        .comparison-item{text-align:center;padding:25px;border-radius:15px;background:rgba(234,88,12,.1)}
-        .comparison-item h3{font-size:1.7em;color:#EA580C;margin-bottom:20px}
+        .comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:40px}
+        .comparison-item{text-align:center;padding:30px;border-radius:15px;background:rgba(234,88,12,.1)}
+        .comparison-item h3{font-size:1.8em;color:#EA580C;margin-bottom:20px}
         .vs-divider{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#EA580C;color:#FEF7ED;padding:10px 20px;border-radius:50px;font-weight:bold;font-size:1.2em}
         
         .title-only{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
         .title-only h1{font-size:3em;color:#1E293B;margin-bottom:20px}
         .title-only .subtitle{font-size:1.4em;color:#059669;font-style:italic}
         
-        .content-caption{display:grid;grid-template-rows:auto 1fr auto;gap:25px}
-        .main-content-area{background:linear-gradient(45deg,#059669,#EA580C);border:2px dashed #1E293B;border-radius:15px;padding:45px 25px;text-align:center;color:#FEF7ED;font-weight:bold;font-size:1.05em;display:flex;align-items:center;justify-content:center;flex-direction:column}
+        .content-caption{display:grid;grid-template-rows:auto 1fr auto;gap:30px}
+        .main-content-area{background:linear-gradient(45deg,#059669,#EA580C);border:2px dashed #1E293B;border-radius:15px;padding:80px 40px;text-align:center;color:#FEF7ED;font-weight:bold;font-size:1.2em}
         .caption-area{background:rgba(5,150,105,.1);padding:20px;border-radius:10px;border-left:4px solid #059669}
         
-        .picture-caption{display:grid;grid-template-columns:1.8fr 1.2fr;gap:35px;align-items:start}
+        .picture-caption{display:grid;grid-template-columns:2fr 1fr;gap:40px;align-items:start}
         .picture-caption h2{grid-column:1/-1}
-        .picture-area{background:rgba(30,41,59,.05);border:2px solid #1E293B;border-radius:15px;padding:25px 20px;text-align:left;color:#1E293B;min-height:220px}
-        .caption-sidebar{background:rgba(234,88,12,.1);padding:22px;border-radius:15px;border-left:4px solid #EA580C}
-        .caption-sidebar h3{color:#EA580C;margin-bottom:15px;font-size:1.3em}
+        .picture-area{background:linear-gradient(45deg,#059669,#EA580C);border:2px dashed #1E293B;border-radius:15px;padding:100px 20px;text-align:center;color:#FEF7ED;font-weight:bold;min-height:300px;display:flex;align-items:center;justify-content:center}
+        .caption-sidebar{background:rgba(234,88,12,.1);padding:30px;border-radius:15px;border-left:4px solid #EA580C}
+        .caption-sidebar h3{color:#EA580C;margin-bottom:15px;font-size:1.4em}
         
         /* Timeline */
         .timeline{padding:20px 0}
         .timeline h2{font-size:2.2em;color:#1E293B;margin-bottom:40px;padding-bottom:10px;border-bottom:3px solid #EA580C;text-align:center}
         .timeline-container{position:relative;padding:20px 0}
         .timeline-line{position:absolute;left:50%;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#EA580C,#059669);transform:translateX(-50%)}
-        .timeline-item{position:relative;margin:30px 0;display:flex;align-items:center}
+        .timeline-item{position:relative;margin:40px 0;display:flex;align-items:center}
         .timeline-item:nth-child(odd){flex-direction:row}
         .timeline-item:nth-child(even){flex-direction:row-reverse}
-        .timeline-content{background:rgba(234,88,12,.05);padding:20px;border-radius:15px;width:45%;border-left:4px solid #EA580C;box-shadow:0 4px 15px rgba(0,0,0,.1)}
-        .timeline-date{position:absolute;left:50%;transform:translateX(-50%);background:#EA580C;color:#FEF7ED;padding:6px 12px;border-radius:15px;font-weight:bold;z-index:2;font-size:0.9em}
-        .timeline-content h4{color:#1E293B;font-size:1.2em;margin-bottom:8px}
+        .timeline-content{background:rgba(234,88,12,.05);padding:25px;border-radius:15px;width:45%;border-left:4px solid #EA580C;box-shadow:0 4px 15px rgba(0,0,0,.1)}
+        .timeline-date{position:absolute;left:50%;transform:translateX(-50%);background:#EA580C;color:#FEF7ED;padding:8px 16px;border-radius:20px;font-weight:bold;z-index:2}
+        .timeline-content h4{color:#1E293B;font-size:1.4em;margin-bottom:10px}
         
         /* Statistics */
         .stats-slide h2{font-size:2.2em;color:#1E293B;margin-bottom:40px;padding-bottom:10px;border-bottom:3px solid #EA580C;text-align:center}
-        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:25px;margin:30px 0}
-        .stat-card{background:linear-gradient(135deg,#EA580C,#059669);color:#FEF7ED;padding:30px 20px;border-radius:20px;text-align:center;box-shadow:0 10px 30px rgba(234,88,12,.2);transition:transform .3s}
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;margin:30px 0}
+        .stat-card{background:linear-gradient(135deg,#EA580C,#059669);color:#FEF7ED;padding:40px 30px;border-radius:20px;text-align:center;box-shadow:0 10px 30px rgba(234,88,12,.2);transition:transform .3s}
         .stat-card:hover{transform:translateY(-10px)}
-        .stat-number{font-size:2.8em;font-weight:bold;line-height:1;margin-bottom:8px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
-        .stat-label{font-size:1.1em;opacity:.9;font-weight:600}
-        .stat-description{font-size:.8em;opacity:.8;margin-top:10px;line-height:1.4}
-        
-        /* Content-specific classes */
-        .concept-box{background:rgba(5,150,105,.08);padding:18px;border-radius:10px;border-left:4px solid #059669;margin:15px 0}
-        .example-box{background:rgba(234,88,12,.08);padding:18px;border-radius:10px;border-left:4px solid #EA580C;margin:15px 0}
-        .story-box{background:rgba(168,85,247,.08);padding:18px;border-radius:10px;border-left:4px solid #A855F7;margin:15px 0}
-        .key-insight{background:#1E293B;color:#FEF7ED;padding:18px;border-radius:10px;margin:18px 0;font-weight:600}
-        .takeaway-box{background:rgba(34,197,94,.15);padding:20px;border-radius:12px;border:2px solid #22C55E;margin:20px 0;font-weight:600}
+        .stat-number{font-size:4em;font-weight:bold;line-height:1;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+        .stat-label{font-size:1.2em;opacity:.9;font-weight:600}
+        .stat-description{font-size:.9em;opacity:.8;margin-top:15px;line-height:1.4}
         
         /* Utility Classes */
         .highlight-box{background:#059669;color:#FEF7ED;padding:20px;border-radius:10px;margin:20px 0;font-weight:bold}
@@ -98,16 +91,6 @@
         .back-to-top:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(234,88,12,.3)}
         .float{animation:float 3s ease-in-out infinite}
         @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-        .principle-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin:25px 0}
-        .principle-card{background:rgba(5,150,105,.05);padding:20px;border-radius:12px;border-left:4px solid #EA580C;transition:transform .3s}
-        .principle-card:hover{transform:translateY(-5px)}
-        .principle-card h4{color:#EA580C;font-size:1.2em;margin-bottom:10px}
-        .simple-table{width:100%;border-collapse:collapse;margin:20px 0;background:#FFF;box-shadow:0 2px 10px rgba(0,0,0,.1)}
-        .simple-table th,.simple-table td{padding:12px;text-align:left;border:1px solid #ddd;font-size:0.95em}
-        .simple-table th{background:#EA580C;color:#FEF7ED;font-weight:bold}
-        .simple-table tr:nth-child(even){background:#f9f9f9}
-        .quiz-box{background:#1E293B;color:#FEF7ED;padding:25px;border-radius:15px;margin:25px 0}
-        .quiz-question{background:rgba(254,247,237,.1);padding:15px;border-radius:10px;margin:15px 0}
         @media (max-width:768px){
             nav{display:none}
             .container{padding:10px}
@@ -120,10 +103,7 @@
             .timeline-item{flex-direction:column!important}
             .timeline-date{position:static;transform:none;margin:10px 0}
             .stats-grid{grid-template-columns:1fr;gap:20px}
-            .stat-number{font-size:2.5em}
-            .principle-grid{grid-template-columns:1fr}
-            .simple-table{font-size:0.8em}
-            .picture-caption{grid-template-columns:1fr}
+            .stat-number{font-size:3em}
         }
     </style>
 </head>
@@ -133,1063 +113,606 @@
     
     <nav id="navbar">
         <ul>
-            <li><a href="#slide1">Start</a></li>
-            <li><a href="#slide2">Why Study?</a></li>
-            <li><a href="#slide3">Taylor</a></li>
-            <li><a href="#slide4">6 Elements</a></li>
-            <li><a href="#slide5">Time Motion</a></li>
-            <li><a href="#slide6">Payment Training</a></li>
-            <li><a href="#slide7">Followers</a></li>
-            <li><a href="#slide8">Case Study</a></li>
-            <li><a href="#slide9">Problems</a></li>
-            <li><a href="#slide10">Fayol</a></li>
-            <li><a href="#slide11">Activities</a></li>
-            <li><a href="#slide12">Functions</a></li>
-            <li><a href="#slide13">14 Principles</a></li>
-            <li><a href="#slide14">Systems</a></li>
-            <li><a href="#slide15">Open Systems</a></li>
-            <li><a href="#slide16">Compare</a></li>
-            <li><a href="#slide17">Modern</a></li>
-            <li><a href="#slide18">Quiz</a></li>
+            <li><a href="#slide1">Title</a></li>
+            <li><a href="#slide2">Why Study</a></li>
+            <li><a href="#slide3">Overview</a></li>
+            <li><a href="#slide4">Schools</a></li>
+            <li><a href="#slide5">Classical</a></li>
+            <li><a href="#slide6">Neo-Classical</a></li>
+            <li><a href="#slide7">Modern</a></li>
+            <li><a href="#slide8">Compare</a></li>
+            <li><a href="#slide9">Scientific</a></li>
+            <li><a href="#slide10">Taylor Intro</a></li>
+            <li><a href="#slide11">4 Principles</a></li>
+            <li><a href="#slide12">Elements</a></li>
+            <li><a href="#slide13">Time Study</a></li>
+            <li><a href="#slide14">Objectives</a></li>
+            <li><a href="#slide15">Problems</a></li>
+            <li><a href="#slide16">Fayol</a></li>
+            <li><a href="#slide17">Activities</a></li>
+            <li><a href="#slide18">5 Functions</a></li>
+            <li><a href="#slide19">Functions Detail</a></li>
+            <li><a href="#slide20">14 Principles</a></li>
+            <li><a href="#slide21">Structural</a></li>
+            <li><a href="#slide22">Human</a></li>
+            <li><a href="#slide23">Systems</a></li>
+            <li><a href="#slide24">Components</a></li>
+            <li><a href="#slide25">Benefits</a></li>
+            <li><a href="#slide26">Timeline</a></li>
+            <li><a href="#slide27">Modern</a></li>
+            <li><a href="#slide28">Summary</a></li>
         </ul>
     </nav>
 
     <div class="container">
         <!-- 1. Title Slide -->
         <div id="slide1" class="slide title-slide">
-            <h1 class="float">Management Principles</h1>
-            <p class="subtitle">Complete Learning Guide with Indian Examples</p>
-            <p class="author">Understand • Apply • Excel in Exams</p>
+            <h1 class="float">Management History</h1>
+            <p class="subtitle">Essential Concepts for Engineering Professionals</p>
+            <p class="author">Dr. Dhaval Patel • 2025</p>
         </div>
 
-        <!-- 2. Why Study Management? -->
+        <!-- 2. Why Study Management History -->
         <div id="slide2" class="slide title-content">
-            <h2>Why Should You Care About Management?</h2>
+            <h2>Why Study Management History?</h2>
             <div class="content-area">
-                <div class="story-box">
-                    <h4>🚀 The Smartphone Revolution Story</h4>
-                    <p>Think about your smartphone. It has millions of components made by thousands of companies across dozens of countries, all working together perfectly. How does this happen? <strong>Management principles!</strong></p>
-                </div>
-                
-                <p>Whether you become an engineer, start your own company, or lead a team, you'll need to <span class="emphasis">organize work and coordinate people</span>. That's what management is all about.</p>
-                
-                <div class="concept-box">
-                    <h4>What You'll Learn:</h4>
-                    <ul class="content-list">
-                        <li><strong>Scientific Management:</strong> How to make work more efficient (like optimizing your study routine)</li>
-                        <li><strong>Administrative Principles:</strong> How to organize and lead people effectively</li>
-                        <li><strong>Systems Thinking:</strong> How to see the big picture and connections</li>
-                    </ul>
-                </div>
-                
-                <div class="example-box">
-                    <h4>Real Impact:</h4>
-                    <p><strong>Mumbai Dabbawalas</strong> use these principles to deliver 200,000 lunch boxes daily with 99.999% accuracy. <strong>ISRO</strong> used them to reach Mars for less money than a Hollywood movie costs.</p>
-                </div>
-                
-                <div class="key-insight">
-                    <strong>Key Insight:</strong> These aren't just "old theories" - they're practical tools that help real people solve real problems every day.
-                </div>
-            </div>
-        </div>
-
-        <!-- 3. Taylor's Story -->
-        <div id="slide3" class="slide section-header">
-            <h1>Scientific Management</h1>
-            <p class="section-subtitle">Frederick Winslow Taylor (1856-1915)</p>
-        </div>
-
-        <!-- 4. Taylor's 6 Elements -->
-        <div id="slide4" class="slide title-content">
-            <h2>1. Elements of Scientific Management</h2>
-            <div class="content-area">
-                <div class="concept-box">
-                    <h4>🤔 What is Scientific Management?</h4>
-                    <p><strong>Simple Definition:</strong> Scientific Management is like using a GPS for work - it finds the most efficient route to complete any task by studying it scientifically, rather than relying on guesswork.</p>
-                </div>
-
-                <div class="story-box">
-                    <h4>Taylor's Problem & Solution:</h4>
-                    <p>In the 1880s, workers basically guessed how to do their jobs. Taylor believed there was a scientifically best way to do every job - the <strong>"One Best Way"</strong>.</p>
-                </div>
-
+                <p>Engineering projects have always required coordination and management - from ancient Egyptian pyramids to modern space missions.</p>
+                <ul class="content-list">
+                    <li><span class="emphasis">Learn from Past Successes:</span> Understanding what worked helps engineers replicate effective practices</li>
+                    <li><span class="emphasis">Avoid Historical Mistakes:</span> Knowledge of past failures prevents repeated errors in project management</li>
+                    <li><span class="emphasis">Build Leadership Skills:</span> Management principles form foundation for technical leadership roles</li>
+                    <li><span class="emphasis">Understand Modern Context:</span> Current practices evolved from historical foundations</li>
+                </ul>
                 <div class="highlight-box">
-                    <strong>Memory Trick: "SSTMDM" = Smart Students Think More, Do More</strong>
-                </div>
-
-                <div class="principle-grid">
-                    <div class="principle-card">
-                        <h4>1. 🔬 Scientific Determination of Task (S)</h4>
-                        <p><strong>Concept:</strong> Break big jobs into small pieces, study each piece scientifically.</p>
-                        <div class="example-box">
-                            <strong>ISRO Example:</strong> Mars mission broken into thousands of specific tasks - fuel calculations, navigation, communication. Each studied scientifically. Cost: only ₹450 crores!
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>2. 👥 Scientific Selection (S)</h4>
-                        <p><strong>Concept:</strong> Choose people based on their abilities, not politics or favoritism.</p>
-                        <div class="example-box">
-                            <strong>Indian Railways:</strong> Train drivers selected through fitness tests, psychological assessments, technical exams.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>3. 🎓 Scientific Training (T)</h4>
-                        <p><strong>Concept:</strong> Teach people systematically using proven methods.</p>
-                        <div class="example-box">
-                            <strong>Infosys:</strong> 3-month systematic training at Mysore campus for all new engineers.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>4. ⏱️ Time & Motion Study (M)</h4>
-                        <p><strong>Concept:</strong> Study movements and timing, eliminate waste.</p>
-                        <div class="example-box">
-                            <strong>Dabbawalas:</strong> Every movement timed and optimized for 99.999% accuracy.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>5. 💰 Differential Payment (D)</h4>
-                        <p><strong>Concept:</strong> Pay based on performance - more output, more money.</p>
-                        <div class="example-box">
-                            <strong>Flipkart:</strong> Warehouse bonuses during sales based on targets met.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>6. 🤝 Mental Revolution (M)</h4>
-                        <p><strong>Concept:</strong> Change from "us vs them" to cooperation.</p>
-                        <div class="example-box">
-                            <strong>Tata Group:</strong> Management and employees worked together during 26/11 attacks.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="takeaway-box">
-                    <h4>🎯 Key Takeaways - Elements of Scientific Management:</h4>
-                    <ul class="content-list">
-                        <li>Scientific method replaces guesswork in work design</li>
-                        <li>Each element focuses on finding the "one best way"</li>
-                        <li>Success requires both management commitment and worker cooperation</li>
-                        <li>Modern applications: Manufacturing, IT, services, project management</li>
-                    </ul>
+                    Management practice started thousands of years ago with projects like the Egyptian pyramids - coordinating architects, engineers, and tens of thousands of laborers for fifteen years!
                 </div>
             </div>
         </div>
 
-        <!-- 5. Time and Motion Study -->
-        <div id="slide5" class="slide content-caption">
-            <h2>2. Time and Motion Study</h2>
-            <div class="main-content-area">
-                <strong>TWO SIMPLE QUESTIONS:</strong><br><br>
-                ⏰ How long should this take?<br>
-                🎯 What movements are necessary?<br><br>
-                <em>Eliminate waste, optimize flow</em>
-            </div>
-            <div class="caption-area">
-                <div class="concept-box">
-                    <h4>Simple Definition:</h4>
-                    <p><strong>Time Study:</strong> Finding the standard time needed for a task (like timing how long different math problems take).</p>
-                    <p><strong>Motion Study:</strong> Eliminating unnecessary movements (like organizing your desk so everything is within reach).</p>
-                </div>
-                
-                <div class="example-box">
-                    <h4>🍕 Domino's 30-Minute Example:</h4>
-                    <ul class="content-list">
-                        <li><strong>Kitchen layout:</strong> Designed for minimum walking</li>
-                        <li><strong>Ingredients:</strong> Placed within arm's reach</li>
-                        <li><strong>Assembly line:</strong> Each person does specific task</li>
-                        <li><strong>Delivery routes:</strong> GPS-optimized paths</li>
-                    </ul>
-                </div>
-                
-                <div class="story-box">
-                    <h4>🏭 Maruti Suzuki Application:</h4>
-                    <p>Assembly line workers' every movement studied and optimized. Result: Can assemble a car in specific time with consistent quality.</p>
-                </div>
-
-                <div class="takeaway-box">
-                    <h4>🎯 Key Takeaways - Time and Motion Study:</h4>
-                    <ul class="content-list">
-                        <li>Time study measures "how long," motion study improves "how"</li>
-                        <li>Focus on eliminating waste, not making people work harder</li>
-                        <li>Modern applications: App design, surgery, manufacturing</li>
-                        <li>Requires worker cooperation for success</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- 6. Differential Payment and Scientific Training -->
-        <div id="slide6" class="slide two-content">
-            <h2>3. Differential Payment System and Scientific Training</h2>
-            <div class="content-column">
-                <h3>💰 Differential Payment System</h3>
-                <div class="concept-box">
-                    <h4>Simple Definition:</h4>
-                    <p><strong>Differential Payment</strong> is like cricket scoring - you get rewarded based on your performance. Hit more runs (produce more), get higher rewards.</p>
-                </div>
-
-                <div class="story-box">
-                    <h4>How It Works:</h4>
-                    <ul class="content-list">
-                        <li><strong>Standard Output:</strong> Minimum expected (like par in golf)</li>
-                        <li><strong>Below Standard:</strong> Lower pay rate</li>
-                        <li><strong>Above Standard:</strong> Higher pay rate</li>
-                        <li><strong>No middle ground:</strong> Either low rate or high rate</li>
-                    </ul>
-                </div>
-
-                <div class="example-box">
-                    <h4>Modern Indian Example - Zomato Delivery:</h4>
-                    <ul class="content-list">
-                        <li><strong>Base rate:</strong> ₹30 per delivery</li>
-                        <li><strong>Peak hours:</strong> ₹50 per delivery</li>
-                        <li><strong>Distance bonus:</strong> ₹10 extra for >5km</li>
-                        <li><strong>Rating bonus:</strong> 4.5+ stars = 20% extra</li>
-                    </ul>
-                </div>
-
-                <div class="key-insight">
-                    <strong>Benefits:</strong> Motivates performance, rewards efficiency. <strong>Challenges:</strong> May create unhealthy competition, stress.
-                </div>
-            </div>
-            
-            <div class="content-column">
-                <h3>🎓 Scientific Training</h3>
-                <div class="concept-box">
-                    <h4>Simple Definition:</h4>
-                    <p><strong>Scientific Training</strong> means teaching the exact skills needed using proven methods, not hoping people figure it out themselves.</p>
-                </div>
-
-                <div class="story-box">
-                    <h4>4-Step Method:</h4>
-                    <ol style="padding-left:20px;">
-                        <li><strong>Show</strong> them the right way</li>
-                        <li><strong>Explain</strong> why it's done this way</li>
-                        <li><strong>Let them try</strong> while you watch</li>
-                        <li><strong>Check</strong> their performance regularly</li>
-                    </ol>
-                    <p><strong>Memory:</strong> SELC = Smart Engineering Leads to Competence</p>
-                </div>
-
-                <div class="example-box">
-                    <h4>TCS Training Example:</h4>
-                    <ul class="content-list">
-                        <li><strong>3-month program:</strong> Theory + hands-on practice</li>
-                        <li><strong>Standardized curriculum:</strong> Same training everywhere</li>
-                        <li><strong>Regular assessments:</strong> Pass/fail based on performance</li>
-                        <li><strong>Continuous improvement:</strong> Training updated with new techniques</li>
-                    </ul>
-                    <p><strong>Result:</strong> Consistent quality across 400,000+ employees globally.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 7. Followers of Taylor -->
-        <div id="slide7" class="slide title-content">
-            <h2>4. Followers of Taylor</h2>
+        <!-- 3. Course Learning Objectives -->
+        <div id="slide3" class="slide title-content">
+            <h2>Learning Objectives for Engineers</h2>
             <div class="content-area">
-                <div class="concept-box">
-                    <h4>Simple Definition:</h4>
-                    <p><strong>Followers of Taylor</strong> were management thinkers who built upon Taylor's ideas, adding their own innovations and improvements to scientific management.</p>
-                </div>
-
-                <div class="principle-grid">
-                    <div class="principle-card">
-                        <h4>Henry L. Gantt (1861-1919)</h4>
-                        <div class="concept-box">
-                            <strong>Main Innovation: Gantt Charts</strong>
-                            <p>Visual timeline showing what tasks need to be done, when they start/end, and which tasks depend on others.</p>
-                        </div>
-                        <div class="example-box">
-                            <strong>Delhi Metro Example:</strong> Used Gantt charts to manage complex construction - land acquisition, design, foundation, pillars, tracks, testing. Each phase planned and tracked visually.
-                        </div>
-                        <div class="story-box">
-                            <strong>Modern Use:</strong> Project management software, construction, IT projects, event planning.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>Frank & Lillian Gilbreth</h4>
-                        <div class="concept-box">
-                            <strong>Innovation: Therbligs (Motion Elements)</strong>
-                            <p>Identified 18 basic hand movements that make up any job - reach, grasp, move, position, use, release.</p>
-                        </div>
-                        <div class="example-box">
-                            <strong>Apollo Hospitals:</strong> Surgery procedures optimized using motion study - instruments arranged in standard order, minimal hand movements during operations.
-                        </div>
-                        <div class="story-box">
-                            <strong>Bricklaying Innovation:</strong> Reduced motions from 18 to 5, tripled productivity.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>Carl Barth (1860-1939)</h4>
-                        <div class="concept-box">
-                            <strong>Innovation: Mathematical Formulas</strong>
-                            <p>Developed mathematical methods for machine speeds, tool angles, and work standards.</p>
-                        </div>
-                        <div class="example-box">
-                            <strong>BHEL Application:</strong> Uses mathematical precision for power plant equipment - optimal machine settings, tool life calculations, quality standards.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>Harrington Emerson (1853-1931)</h4>
-                        <div class="concept-box">
-                            <strong>Innovation: 12 Principles of Efficiency</strong>
-                            <p>Focused on organization-wide efficiency, not just individual workers.</p>
-                        </div>
-                        <div class="example-box">
-                            <strong>Modern Consulting:</strong> McKinsey, BCG use Emerson's efficiency principles to help Indian companies improve performance.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="takeaway-box">
-                    <h4>🎯 Key Takeaways - Followers of Taylor:</h4>
-                    <ul class="content-list">
-                        <li>Each follower specialized in different aspects of management</li>
-                        <li>Gantt: Planning and scheduling, Gilbreths: Motion study, Barth: Mathematical precision</li>
-                        <li>Their principles still used in modern project management and operations</li>
-                        <li>Indian companies successfully adapted these techniques to local conditions</li>
-                    </ul>
+                <p>By the end of this lecture, you will understand how management theory directly applies to engineering practice:</p>
+                <ul class="content-list">
+                    <li><span class="emphasis">Schools of Management:</span> Foundation theories for organizing technical teams and projects</li>
+                    <li><span class="emphasis">Scientific Management:</span> Systematic approaches to process optimization and efficiency improvement</li>
+                    <li><span class="emphasis">Administrative Theory:</span> Essential principles for leading technical teams and managing projects</li>
+                    <li><span class="emphasis">Systems Approach:</span> Holistic thinking for complex engineering projects and integration challenges</li>
+                </ul>
+                <div class="accent-box">
+                    These aren't just theoretical concepts - they're practical tools you'll use throughout your engineering career!
                 </div>
             </div>
         </div>
 
-        <!-- 8. Case Study -->
-        <div id="slide8" class="slide picture-caption">
-            <h2>Case Study: Mumbai Dabbawalas - Scientific Management in Action</h2>
-            <div class="picture-area">
-                <div class="concept-box">
-                    <h4>🌟 Amazing Facts:</h4>
-                    <ul class="content-list">
-                        <li><strong>200,000</strong> tiffins delivered daily</li>
-                        <li><strong>99.999%</strong> accuracy rate</li>
-                        <li><strong>5,000</strong> dabbawalas</li>
-                        <li><strong>6</strong> sigma quality level</li>
-                        <li><strong>Zero</strong> technology used</li>
-                    </ul>
+        <!-- 4. Schools of Management Section -->
+        <div id="slide4" class="slide section-header">
+            <h1>Schools of Management</h1>
+            <p class="section-subtitle">Evolution of Management Thinking</p>
+        </div>
+
+        <!-- 5. Classical School of Management -->
+        <div id="slide5" class="slide title-content">
+            <h2>Classical School of Management</h2>
+            <div class="content-area">
+                <p>Emphasizes finding the most efficient ways to manage work and organizations through systematic study.</p>
+                <ul class="content-list">
+                    <li><span class="emphasis">Structure & Efficiency:</span> Focus on organizational hierarchy and optimal workflows</li>
+                    <li><span class="emphasis">Scientific Method:</span> Systematic study of work processes to find best practices</li>
+                    <li><span class="emphasis">Standardization:</span> Creating consistent procedures and quality standards</li>
+                    <li><span class="emphasis">Task Optimization:</span> Breaking down complex work into manageable components</li>
+                </ul>
+                <div class="highlight-box">
+                    Perfect for engineering project management: systematic approaches to process improvement, quality control, and resource optimization
                 </div>
-                
-                <div class="story-box">
-                    <h4>🔄 The Process:</h4>
-                    <p>🏠 Home Pickup → 🚉 Local Sorting → 🚊 Train Transport → 🔄 Central Hub → 🚴 Final Delivery → 🔄 Return Journey</p>
+                <p><strong>Key Contributors:</strong> Frederick Taylor (Scientific Management), Henri Fayol (Administrative Theory), Max Weber (Bureaucratic Theory)</p>
+            </div>
+        </div>
+
+        <!-- 6. Neo-Classical School -->
+        <div id="slide6" class="slide title-content">
+            <h2>Neo-Classical School of Management</h2>
+            <div class="content-area">
+                <p>Focuses on human relations and psychological factors affecting worker productivity and team effectiveness.</p>
+                <ul class="content-list">
+                    <li><span class="emphasis">Human Behavior:</span> Understanding motivation, satisfaction, and individual needs in workplace</li>
+                    <li><span class="emphasis">Team Dynamics:</span> How groups form, perform, and achieve collective goals</li>
+                    <li><span class="emphasis">Leadership Styles:</span> Different approaches to motivating and guiding technical teams</li>
+                    <li><span class="emphasis">Communication:</span> Effective information flow and collaboration across disciplines</li>
+                </ul>
+                <div class="highlight-box">
+                    Essential for engineers leading technical teams: understanding team motivation, cross-functional collaboration, and managing diverse skill sets
+                </div>
+                <p><strong>Key Contributors:</strong> Elton Mayo (Hawthorne Studies), Abraham Maslow (Hierarchy of Needs), Douglas McGregor (Theory X & Y)</p>
+            </div>
+        </div>
+
+        <!-- 7. Modern Approaches -->
+        <div id="slide7" class="slide title-content">
+            <h2>Modern Approaches to Management</h2>
+            <div class="content-area">
+                <p>Introduces quantitative methods, systems thinking, and contingency approaches for complex organizational challenges.</p>
+                <ul class="content-list">
+                    <li><span class="emphasis">Quantitative School:</span> Mathematical models and statistical analysis for decision-making</li>
+                    <li><span class="emphasis">Systems Theory:</span> Organizations as interconnected systems with feedback loops</li>
+                    <li><span class="emphasis">Contingency Approach:</span> Adapting management style to specific situations and contexts</li>
+                    <li><span class="emphasis">Process Management:</span> Focus on continuous improvement and optimization</li>
+                </ul>
+                <div class="highlight-box">
+                    Provides analytical tools for complex project management: data-driven decisions, systems integration, and adaptive leadership approaches
+                </div>
+                <p><strong>Modern Relevance:</strong> Agile methodologies, Lean manufacturing, Six Sigma, and systems engineering all build on these foundations</p>
+            </div>
+        </div>
+
+        <!-- 8. Comparison of Schools -->
+        <div id="slide8" class="slide comparison">
+            <h2>Classical vs Neo-Classical vs Modern</h2>
+            <div class="comparison-grid" style="grid-template-columns:1fr 1fr 1fr;">
+                <div class="comparison-item">
+                    <h3>Classical</h3>
+                    <p><strong>Focus:</strong> Efficiency & Structure</p>
+                    <ul class="content-list">
+                        <li>Systematic processes</li>
+                        <li>Standardization</li>
+                        <li>Task optimization</li>
+                        <li>Clear hierarchy</li>
+                    </ul>
+                    <div class="accent-box">Best for: Process engineering, quality control</div>
+                </div>
+                <div class="comparison-item">
+                    <h3>Neo-Classical</h3>
+                    <p><strong>Focus:</strong> Human Relations</p>
+                    <ul class="content-list">
+                        <li>Team motivation</li>
+                        <li>Communication</li>
+                        <li>Leadership styles</li>
+                        <li>Group dynamics</li>
+                    </ul>
+                    <div class="accent-box">Best for: Team leadership, collaboration</div>
+                </div>
+                <div class="comparison-item">
+                    <h3>Modern</h3>
+                    <p><strong>Focus:</strong> Analytical & Adaptive</p>
+                    <ul class="content-list">
+                        <li>Data-driven decisions</li>
+                        <li>Systems thinking</li>
+                        <li>Contingency planning</li>
+                        <li>Continuous improvement</li>
+                    </ul>
+                    <div class="accent-box">Best for: Complex projects, innovation</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. Scientific Management Section -->
+        <div id="slide9" class="slide section-header">
+            <h1>Scientific Management</h1>
+            <p class="section-subtitle">Frederick W. Taylor's Systematic Approach</p>
+        </div>
+
+        <!-- 10. Frederick Taylor Introduction -->
+        <div id="slide10" class="slide picture-caption">
+            <h2>Frederick Winslow Taylor (1856-1915)</h2>
+            <div class="picture-area">
+                <div style="font-size:1.8em; line-height:1.5;">
+                    <strong>"Father of Scientific Management"</strong><br>
+                    <em>"The One Best Way"</em><br>
+                    <small>Midvale Steel Company</small>
                 </div>
             </div>
             <div class="caption-sidebar">
-                <h3>Taylor's Elements Applied</h3>
-                
-                <div class="concept-box">
-                    <h4>🔬 Scientific Task Study:</h4>
-                    <p>Complex delivery broken into 5 simple, measurable steps with specific timing for each.</p>
-                </div>
-                
-                <div class="example-box">
-                    <h4>👥 Scientific Selection:</h4>
-                    <p>Dabbawalas chosen for physical fitness, local knowledge, reliability.</p>
-                </div>
-                
-                <div class="story-box">
-                    <h4>🎓 Training:</h4>
-                    <p>6-month apprenticeship learning codes, routes, timing.</p>
-                </div>
-
-                <div class="example-box">
-                    <h4>⏱️ Time & Motion:</h4>
-                    <p>Every step timed to match train schedules. Color-coded system for efficiency.</p>
-                </div>
-
-                <div class="concept-box">
-                    <h4>💰 Payment:</h4>
-                    <p>Team-based profit sharing with accuracy bonuses.</p>
-                </div>
-                
-                <div class="key-insight">
-                    <strong>Lesson:</strong> Good management principles beat expensive technology!
-                </div>
+                <h3>Engineering Background</h3>
+                <p><strong>Education:</strong> Mechanical Engineer</p>
+                <p><strong>Experience:</strong> Shop floor to management</p>
+                <p><strong>Innovation:</strong> Applied engineering principles to management</p>
+                <p><strong>Key Insight:</strong> Workers deliberately worked at less than full capacity ("soldiering")</p>
+                <div class="accent-box">Taylor identified that workers could be trained to perform tasks in "the one best way" rather than relying on their own rules of thumb</div>
             </div>
         </div>
 
-        <!-- 9. Problems with Scientific Management -->
-        <div id="slide9" class="slide title-content">
-            <h2>5. Problems with Scientific Management</h2>
+        <!-- 11. Taylor's 4 Principles -->
+        <div id="slide11" class="slide content-caption">
+            <h2>Taylor's Four Principles of Scientific Management</h2>
+            <div class="main-content-area">
+                <div style="text-align:left; font-size:1.1em; line-height:1.8;">
+                    <strong>1. Scientific Study:</strong> Replace rule of thumb with scientific method<br>
+                    <strong>2. Scientific Selection:</strong> Select and train workers scientifically<br>
+                    <strong>3. Cooperation:</strong> Ensure workers use proper methods<br>
+                    <strong>4. Division of Responsibility:</strong> Management plans, workers execute
+                </div>
+            </div>
+            <div class="caption-area">
+                <strong>Engineering Application:</strong> These principles directly apply to modern engineering practices - systematic analysis of processes, proper training programs, quality assurance procedures, and clear division between design and implementation phases in technical projects.
+            </div>
+        </div>
+
+        <!-- 12. Basic Elements of Scientific Management -->
+        <div id="slide12" class="slide picture-caption">
+            <h2>Basic Elements Flow Chart</h2>
+            <div class="picture-area">
+                <div style="font-size:1.2em; line-height:2; text-align:center;">
+                    <strong>1. Determine "One Best Way"</strong><br>
+                    ↓<br>
+                    <strong>2. Select "Best Persons"</strong><br>
+                    ↓<br>
+                    <strong>3. Train in Efficient Methods</strong><br>
+                    ↓<br>
+                    <strong>4. Provide Monetary Incentives</strong>
+                </div>
+            </div>
+            <div class="caption-sidebar">
+                <h3>Engineering Implementation</h3>
+                <p><strong>Step 1:</strong> Process analysis and optimization</p>
+                <p><strong>Step 2:</strong> Skills-based team selection</p>
+                <p><strong>Step 3:</strong> Technical training programs</p>
+                <p><strong>Step 4:</strong> Performance-based rewards</p>
+                <div class="highlight-box">Modern applications: Lean manufacturing, Six Sigma, standard operating procedures</div>
+            </div>
+        </div>
+
+        <!-- 13. Time and Motion Studies -->
+        <div id="slide13" class="slide title-content">
+            <h2>Time and Motion Studies</h2>
             <div class="content-area">
-                <div class="concept-box">
-                    <h4>Simple Definition:</h4>
-                    <p>While Scientific Management improved efficiency, it faced <strong>criticism from three groups</strong>: employers, employees, and psychologists. Like a medicine that cures one disease but causes side effects.</p>
-                </div>
-
-                <table class="simple-table">
-                    <thead>
-                        <tr>
-                            <th>Who Criticized</th>
-                            <th>Main Problems</th>
-                            <th>Why They Were Unhappy</th>
-                            <th>Indian Example</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>👔 Employers</strong></td>
-                            <td>• High setup costs<br>• Need skilled managers<br>• Resistance to change<br>• May not work everywhere</td>
-                            <td>Expensive to implement, requires investment in training and systems</td>
-                            <td>Maruti Suzuki's ₹500+ crore investment in Japanese methods</td>
-                        </tr>
-                        <tr>
-                            <td><strong>👷 Workers</strong></td>
-                            <td>• Felt like robots<br>• Job security fears<br>• Lost creativity<br>• Exploitation worries</td>
-                            <td>Boring repetitive work, fear of working themselves out of jobs</td>
-                            <td>1920s Mumbai textile mill strikes, Kashmir artisans' resistance</td>
-                        </tr>
-                        <tr>
-                            <td><strong>🧠 Psychologists</strong></td>
-                            <td>• Ignored social needs<br>• Treated all workers same<br>• Neglected emotions<br>• Created stress</td>
-                            <td>Humans are social beings with different motivations, not machines</td>
-                            <td>IT industry burnout, call center stress in Indian BPOs</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="story-box">
-                    <h4>🎭 The Human Side Story:</h4>
-                    <p>A textile worker in 1920s Mumbai said: <em>"I used to make complete shirts and felt proud. Now I only attach buttons all day. I feel like a machine, not a human."</em></p>
-                </div>
-
-                <div class="example-box">
-                    <h4>Modern Solutions:</h4>
-                    <ul class="content-list">
-                        <li><strong>Google's Approach:</strong> 20% time for creative projects alongside systematic work</li>
-                        <li><strong>Tata's Balance:</strong> Efficiency with employee welfare and ethical practices</li>
-                        <li><strong>Infosys Innovation:</strong> Scientific methods + employee suggestion systems</li>
-                    </ul>
-                </div>
-
-                <div class="takeaway-box">
-                    <h4>🎯 Key Takeaways - Problems with Scientific Management:</h4>
-                    <ul class="content-list">
-                        <li>Improved efficiency but ignored human factors</li>
-                        <li>Led to development of Human Relations Movement</li>
-                        <li>Modern management balances efficiency with employee satisfaction</li>
-                        <li>Successful companies integrate scientific methods with human-centered approaches</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- 10. Fayol's Administrative Theory -->
-        <div id="slide10" class="slide section-header">
-            <h1>Administrative Theory</h1>
-            <p class="section-subtitle">Henri Fayol (1841-1925) - Father of Modern Management</p>
-        </div>
-
-        <!-- 11. Fayol's 5 Activities -->
-        <div id="slide11" class="slide title-content">
-            <h2>6. Fayol's Management Activities</h2>
-            <div class="content-area">
-                <div class="concept-box">
-                    <h4>Simple Definition:</h4>
-                    <p><strong>Fayol's Management Activities</strong> are like the different roles a cricket captain plays - sometimes planning strategy, organizing team, leading players, coordinating efforts, and checking if the plan is working.</p>
-                </div>
-
-                <div class="story-box">
-                    <h4>🎭 School Play Director Analogy:</h4>
-                    <p>A play director <strong>plans</strong> the play, <strong>organizes</strong> actors and props, <strong>commands</strong> during rehearsals, <strong>coordinates</strong> everyone's efforts, and <strong>controls</strong> the final performance.</p>
-                </div>
-
-                <div class="highlight-box">
-                    <strong>Memory Trick: "POCCC" = Plan, Organize, Command, Coordinate, Control</strong>
-                </div>
-
-                <div class="principle-grid">
-                    <div class="principle-card">
-                        <h4>📋 1. Planning</h4>
-                        <div class="concept-box">
-                            <strong>What it means:</strong> Decide what you want to achieve and how you'll get there.
-                        </div>
-                        <div class="example-box">
-                            <strong>Reliance Jio:</strong> 3 years planning 4G launch - tower locations, pricing, marketing. Result: 100 million customers in record time!
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>🏗️ 2. Organizing</h4>
-                        <div class="concept-box">
-                            <strong>What it means:</strong> Arrange people and resources so work flows smoothly.
-                        </div>
-                        <div class="example-box">
-                            <strong>ISRO Mars Mission:</strong> Teams organized across cities - spacecraft (Bangalore), launch (Sriharikota), tracking (Pune).
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>👨‍💼 3. Command (Leading)</h4>
-                        <div class="concept-box">
-                            <strong>What it means:</strong> Guide and motivate people to do their best work.
-                        </div>
-                        <div class="example-box">
-                            <strong>Ratan Tata:</strong> During 26/11 crisis, provided clear direction and motivated employees under pressure.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>🔗 4. Coordination</h4>
-                        <div class="concept-box">
-                            <strong>What it means:</strong> Make sure different teams work together, not against each other.
-                        </div>
-                        <div class="example-box">
-                            <strong>Indian Railways:</strong> Coordinates 12,000+ trains daily across operations, maintenance, commercial, security teams.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>✅ 5. Control</h4>
-                        <div class="concept-box">
-                            <strong>What it means:</strong> Monitor progress and fix problems when things go off track.
-                        </div>
-                        <div class="example-box">
-                            <strong>Domino's:</strong> Real-time pizza tracking, automatic alerts if delays, immediate corrective action.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="takeaway-box">
-                    <h4>🎯 Key Takeaways - Fayol's Management Activities:</h4>
-                    <ul class="content-list">
-                        <li>All five activities are interconnected - you can't skip any one</li>
-                        <li>Every manager performs all activities, regardless of level or industry</li>
-                        <li>Planning comes first, control comes last, but all happen continuously</li>
-                        <li>Universal framework applicable across all organizations</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- 12. Functions of Manager -->
-        <div id="slide12" class="slide two-content">
-            <h2>7. Functions of Manager</h2>
-            <div class="content-column">
-                <div class="concept-box">
-                    <h4>Simple Definition:</h4>
-                    <p><strong>Functions of Manager</strong> are the essential roles every manager must perform, like a Swiss Army knife - multiple tools needed to be effective.</p>
-                </div>
-
-                <div class="story-box">
-                    <h4>📱 Ola Cabs Manager Example:</h4>
-                    <p>An Ola city manager performs all these functions daily:</p>
-                </div>
-
-                <div class="principle-card">
-                    <h4>📊 Planning Function</h4>
-                    <ul class="content-list">
-                        <li><strong>Forecasting:</strong> Predict demand patterns</li>
-                        <li><strong>Setting objectives:</strong> Revenue targets</li>
-                        <li><strong>Strategy:</strong> Competitive pricing</li>
-                        <li><strong>Budgeting:</strong> Marketing spend</li>
-                    </ul>
-                </div>
-
-                <div class="principle-card">
-                    <h4>🏗️ Organizing Function</h4>
-                    <ul class="content-list">
-                        <li><strong>Structure:</strong> Team hierarchy</li>
-                        <li><strong>Job design:</strong> Driver onboarding</li>
-                        <li><strong>Resources:</strong> Office, technology</li>
-                        <li><strong>Authority:</strong> Decision-making power</li>
-                    </ul>
-                </div>
-
-                <div class="principle-card">
-                    <h4>👥 Staffing Function</h4>
-                    <ul class="content-list">
-                        <li><strong>Recruitment:</strong> Hire drivers, support staff</li>
-                        <li><strong>Training:</strong> App usage, customer service</li>
-                        <li><strong>Performance:</strong> Rating systems</li>
-                        <li><strong>Compensation:</strong> Fair payment structure</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="content-column">
-                <div class="principle-card">
-                    <h4>🎯 Directing Function</h4>
-                    <ul class="content-list">
-                        <li><strong>Leadership:</strong> Motivate team during challenges</li>
-                        <li><strong>Communication:</strong> Clear instructions</li>
-                        <li><strong>Decision making:</strong> Resolve conflicts</li>
-                        <li><strong>Motivation:</strong> Incentive programs</li>
-                    </ul>
-                </div>
-
-                <div class="principle-card">
-                    <h4>✅ Controlling Function</h4>
-                    <ul class="content-list">
-                        <li><strong>Standards:</strong> Response time targets</li>
-                        <li><strong>Monitoring:</strong> Real-time dashboards</li>
-                        <li><strong>Comparison:</strong> Actual vs targets</li>
-                        <li><strong>Correction:</strong> Action plans for gaps</li>
-                    </ul>
-                </div>
-
-                <div class="example-box">
-                    <h4>🏆 Success Example - Swiggy Growth:</h4>
-                    <p><strong>Planning:</strong> 500 cities by 2020<br>
-                    <strong>Organizing:</strong> City-wise teams<br>
-                    <strong>Staffing:</strong> 200,000+ delivery partners<br>
-                    <strong>Directing:</strong> Customer obsession culture<br>
-                    <strong>Controlling:</strong> 30-minute delivery tracking</p>
-                </div>
-
-                <div class="key-insight">
-                    <strong>Integration:</strong> All functions work together. Weakness in one affects others. Modern technology enhances but doesn't replace these basic functions.
-                </div>
-            </div>
-
-            <div class="takeaway-box" style="grid-column:1/-1;">
-                <h4>🎯 Key Takeaways - Functions of Manager:</h4>
+                <p>Systematic analysis of work methods to eliminate unnecessary movements and optimize efficiency - foundational to industrial engineering.</p>
                 <ul class="content-list">
-                    <li>Every manager performs all five functions, but emphasis varies by level</li>
-                    <li>Functions remain constant, but methods evolve with technology</li>
-                    <li>Success requires competence in all functions, not just one or two</li>
-                    <li>Functions are interconnected and continuous, not sequential</li>
+                    <li><span class="emphasis">Process Analysis:</span> Breaking down tasks into component movements and timing each element</li>
+                    <li><span class="emphasis">Waste Elimination:</span> Identifying and removing non-value-added activities and inefficiencies</li>
+                    <li><span class="emphasis">Method Standardization:</span> Establishing best practices based on empirical data</li>
+                    <li><span class="emphasis">Productivity Measurement:</span> Creating benchmarks and performance standards</li>
+                </ul>
+                <div class="highlight-box">
+                    Critical skill for industrial engineers: improving manufacturing processes, workplace productivity, and operational efficiency
+                </div>
+                <p><strong>Modern Applications:</strong> Ergonomic design, manufacturing optimization, workflow improvement, automation planning</p>
+            </div>
+        </div>
+
+        <!-- 14. Objectives of Scientific Management -->
+        <div id="slide14" class="slide two-content">
+            <h2>Objectives of Scientific Management</h2>
+            <div class="content-column">
+                <h3>Efficiency Objectives</h3>
+                <ul class="content-list">
+                    <li>Eliminate waste and reduce costs</li>
+                    <li>Increase production without more capital</li>
+                    <li>Improve quality of products</li>
+                    <li>Ensure timely delivery</li>
+                    <li>Optimize resource utilization</li>
+                </ul>
+            </div>
+            <div class="content-column">
+                <h3>Human-Centered Objectives</h3>
+                <ul class="content-list">
+                    <li>Provide higher wages for efficient workers</li>
+                    <li>Improve working conditions</li>
+                    <li>Reduce labor problems and conflicts</li>
+                    <li>Increase worker satisfaction</li>
+                    <li>Develop worker skills through training</li>
+                </ul>
+            </div>
+            <div class="accent-box" style="grid-column:1/-1; margin-top:20px;">
+                <strong>Engineering Relevance:</strong> These objectives directly align with modern engineering goals - cost optimization, quality improvement, resource efficiency, and team development in technical projects.
+            </div>
+        </div>
+
+        <!-- 15. Problems with Scientific Management -->
+        <div id="slide15" class="slide title-content">
+            <h2>Criticisms and Limitations</h2>
+            <div class="content-area">
+                <p>Despite advantages, scientific management faced significant criticism that engineers should understand:</p>
+                <ul class="content-list">
+                    <li><span class="emphasis">Dehumanization:</span> Treating workers like machines, ignoring social and psychological needs</li>
+                    <li><span class="emphasis">Over-simplification:</span> Assuming one best way works for all situations and contexts</li>
+                    <li><span class="emphasis">Worker Resistance:</span> Employees may lose job satisfaction and become alienated</li>
+                    <li><span class="emphasis">Skill Loss:</span> Craft skills disappear through extreme specialization</li>
+                    <li><span class="emphasis">Measurement Difficulties:</span> Not all engineering work can be easily quantified</li>
+                </ul>
+                <div class="highlight-box">
+                    Modern Lesson: Engineers must balance efficiency with human factors, adaptability, and innovation - pure efficiency isn't always optimal
+                </div>
+                <p><strong>Modern Solutions:</strong> Agile methodologies, human-centered design, flexible processes, continuous learning</p>
+            </div>
+        </div>
+
+        <!-- 16. Henri Fayol Section -->
+        <div id="slide16" class="slide section-header">
+            <h1>Henri Fayol</h1>
+            <p class="section-subtitle">Father of Modern Management Theory</p>
+        </div>
+
+        <!-- 17. Fayol's Management Activities -->
+        <div id="slide17" class="slide content-caption">
+            <h2>Fayol's Six Management Activities</h2>
+            <div class="main-content-area">
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; font-size:1.1em;">
+                    <div><strong>1. Technical</strong><br>Production & Manufacturing</div>
+                    <div><strong>2. Commercial</strong><br>Purchasing & Selling</div>
+                    <div><strong>3. Financial</strong><br>Capital & Financing</div>
+                    <div><strong>4. Security</strong><br>Protection of Life & Property</div>
+                    <div><strong>5. Accounting</strong><br>Balance Sheet & Statistics</div>
+                    <div><strong>6. Administrative</strong><br>Planning & Coordinating</div>
+                </div>
+            </div>
+            <div class="caption-area">
+                <strong>Engineering Career Path:</strong> Fayol recognized that technical competence alone isn't enough for leadership. Engineers need understanding of business context, financial implications, and administrative skills for career advancement into management roles.
+            </div>
+        </div>
+
+        <!-- 18. Five Functions of Management -->
+        <div id="slide18" class="slide picture-caption">
+            <h2>Fayol's Five Functions of Management</h2>
+            <div class="picture-area">
+                <div style="font-size:1.3em; line-height:2; text-align:center;">
+                    <strong>PLANNING</strong><br>
+                    ↓<br>
+                    <strong>ORGANIZING</strong><br>
+                    ↓<br>
+                    <strong>COMMANDING</strong><br>
+                    ↓<br>
+                    <strong>COORDINATING</strong><br>
+                    ↓<br>
+                    <strong>CONTROLLING</strong>
+                </div>
+            </div>
+            <div class="caption-sidebar">
+                <h3>Universal Functions</h3>
+                <p>These functions apply to all management levels and engineering disciplines</p>
+                <p><strong>Timeless Relevance:</strong> Still used in modern project management frameworks</p>
+                <p><strong>Engineering Application:</strong> From small team projects to large infrastructure developments</p>
+                <div class="accent-box">Essential framework for engineers transitioning into leadership roles</div>
+            </div>
+        </div>
+
+        <!-- 19. Detailed Functions Explanation -->
+        <div id="slide19" class="slide two-content">
+            <h2>Five Functions - Detailed for Engineers</h2>
+            <div class="content-column">
+                <h3>Planning & Organizing</h3>
+                <p><strong>Planning:</strong> Forecasting events, developing operating programs, continuous updating of plans</p>
+                <ul class="content-list">
+                    <li>Project scope and requirements</li>
+                    <li>Resource allocation and scheduling</li>
+                    <li>Risk assessment and mitigation</li>
+                </ul>
+                <p><strong>Organizing:</strong> Structuring tasks, securing resources, coordinating activities</p>
+                <ul class="content-list">
+                    <li>Team structure and roles</li>
+                    <li>Workflow design</li>
+                    <li>Communication channels</li>
+                </ul>
+            </div>
+            <div class="content-column">
+                <h3>Commanding, Coordinating & Controlling</h3>
+                <p><strong>Commanding:</strong> Setting organization in motion, providing leadership and direction</p>
+                <ul class="content-list">
+                    <li>Technical guidance</li>
+                    <li>Decision making</li>
+                    <li>Motivation and inspiration</li>
+                </ul>
+                <p><strong>Coordinating:</strong> Regular meetings, ensuring harmony and unity of purpose</p>
+                <p><strong>Controlling:</strong> Monitoring activities, ensuring consistency with standards and plans</p>
+                <ul class="content-list">
+                    <li>Quality assurance</li>
+                    <li>Progress tracking</li>
+                    <li>Performance evaluation</li>
                 </ul>
             </div>
         </div>
 
-        <!-- 13. Fayol's 14 Principles -->
-        <div id="slide13" class="slide title-content">
-            <h2>8. Henry Fayol's 14 Principles of Management</h2>
+        <!-- 20. 14 Principles Overview -->
+        <div id="slide20" class="slide title-content">
+            <h2>Fayol's 14 Principles of Management</h2>
             <div class="content-area">
-                <div class="concept-box">
-                    <h4>Simple Definition:</h4>
-                    <p><strong>Fayol's 14 Principles</strong> are like traffic rules for management - universal guidelines that help organizations run smoothly, regardless of size, type, or location.</p>
+                <p>Universal principles that apply to business, political, religious, military, and engineering organizations.</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:30px; margin:30px 0;">
+                    <div>
+                        <h4 style="color:#EA580C;">Structural Principles</h4>
+                        <ol style="padding-left:20px;">
+                            <li>Division of Work</li>
+                            <li>Authority and Responsibility</li>
+                            <li>Discipline</li>
+                            <li>Unity of Command</li>
+                            <li>Unity of Direction</li>
+                            <li>Centralization</li>
+                            <li>Scalar Chain</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <h4 style="color:#059669;">Human-Centered Principles</h4>
+                        <ol start="8" style="padding-left:20px;">
+                            <li>Subordination of Individual Interest</li>
+                            <li>Remuneration</li>
+                            <li>Order</li>
+                            <li>Equity</li>
+                            <li>Stability of Personnel Tenure</li>
+                            <li>Initiative</li>
+                            <li>Esprit de Corps</li>
+                        </ol>
+                    </div>
                 </div>
-
                 <div class="highlight-box">
-                    <strong>Memory Trick: "DASU REUS SICS" - Remember as two groups of principles</strong>
-                </div>
-
-                <div class="principle-grid">
-                    <div class="principle-card">
-                        <h4>1. 🔧 Division of Work</h4>
-                        <p><strong>Idea:</strong> Let people specialize in what they're good at.</p>
-                        <div class="example-box">
-                            <strong>Indian Railways:</strong> Station Masters (operations), Commercial Clerks (ticketing), Technical Staff (maintenance), RPF (security).
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>2. ⚖️ Authority & Responsibility</h4>
-                        <p><strong>Idea:</strong> Power must equal accountability.</p>
-                        <div class="example-box">
-                            <strong>ISRO Mission Director:</strong> Authority to spend ₹450 crores, responsible for mission success.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>3. 📏 Discipline</h4>
-                        <p><strong>Idea:</strong> Respect rules and agreements.</p>
-                        <div class="example-box">
-                            <strong>Tata Group:</strong> Code of Conduct applies to everyone from CEO to entry-level.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>4. 👨‍💼 Unity of Command</h4>
-                        <p><strong>Idea:</strong> One boss rule - avoid confusion.</p>
-                        <div class="example-box">
-                            <strong>Indian Army:</strong> Clear chain of command ensures quick decisions, no confusion.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>5. 🎯 Unity of Direction</h4>
-                        <p><strong>Idea:</strong> One plan for same objective.</p>
-                        <div class="example-box">
-                            <strong>Reliance Jio:</strong> All departments focused on single 4G launch strategy.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>6. 🤝 Subordination of Interest</h4>
-                        <p><strong>Idea:</strong> Organization goals come first.</p>
-                        <div class="example-box">
-                            <strong>Tata 26/11:</strong> Employees put guest safety above personal safety.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>7. 💰 Remuneration</h4>
-                        <p><strong>Idea:</strong> Fair pay for work done.</p>
-                        <div class="example-box">
-                            <strong>Zerodha:</strong> Above-market salaries + profit sharing for all employees.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>8. 🏢 Centralization</h4>
-                        <p><strong>Idea:</strong> Right balance of central control.</p>
-                        <div class="example-box">
-                            <strong>SBI:</strong> Central policies, local operational flexibility.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>9. 🪜 Scalar Chain</h4>
-                        <p><strong>Idea:</strong> Clear line of authority top to bottom.</p>
-                        <div class="example-box">
-                            <strong>Railways Hierarchy:</strong> Minister → Secretary → Board → GM → DRM → Station Master.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>10. 📊 Order</h4>
-                        <p><strong>Idea:</strong> Everything has its proper place.</p>
-                        <div class="example-box">
-                            <strong>Dabbawalas:</strong> Color coding, specific routes, systematic organization.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>11. ⚖️ Equity</h4>
-                        <p><strong>Idea:</strong> Fair treatment for everyone.</p>
-                        <div class="example-box">
-                            <strong>Godrej Group:</strong> Inclusive policies for LGBTQ+, women, differently-abled.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>12. 🏠 Stability of Tenure</h4>
-                        <p><strong>Idea:</strong> Job security builds loyalty.</p>
-                        <div class="example-box">
-                            <strong>TCS:</strong> No-layoff policy results in lower attrition than industry average.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>13. 💡 Initiative</h4>
-                        <p><strong>Idea:</strong> Encourage creativity and ideas.</p>
-                        <div class="example-box">
-                            <strong>3M India:</strong> 15% time policy leads to innovations and patents.
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>14. 🤝 Esprit de Corps</h4>
-                        <p><strong>Idea:</strong> Build team spirit and unity.</p>
-                        <div class="example-box">
-                            <strong>Indian Cricket:</strong> MS Dhoni's leadership created unified team, won World Cups.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="takeaway-box">
-                    <h4>🎯 Key Takeaways - Fayol's 14 Principles:</h4>
-                    <ul class="content-list">
-                        <li>Universal principles applicable across all industries and cultures</li>
-                        <li>Provide framework for organizing and managing people effectively</li>
-                        <li>Balance structural efficiency with human factors</li>
-                        <li>Modern organizations adapt these principles to contemporary contexts</li>
-                    </ul>
+                    These principles provide practical guidelines for engineers moving into management roles and leading technical projects
                 </div>
             </div>
         </div>
 
-        <!-- 14. Systems Approach -->
-        <div id="slide14" class="slide section-header">
-            <h1>Systems Approach</h1>
-            <p class="section-subtitle">Modern Holistic Management Perspective</p>
+        <!-- 21. Structural Principles Detailed -->
+        <div id="slide21" class="slide title-content">
+            <h2>Structural Principles for Engineering Teams</h2>
+            <div class="content-area">
+                <ul class="content-list">
+                    <li><span class="emphasis">Division of Work:</span> Specialization increases efficiency - applicable to both managerial and technical functions</li>
+                    <li><span class="emphasis">Authority & Responsibility:</span> Right to command comes with accountability for results</li>
+                    <li><span class="emphasis">Discipline:</span> Clear rules, regulations, and procedures - essential for safety and quality</li>
+                    <li><span class="emphasis">Unity of Command:</span> Worker receives orders from one supervisor only - prevents confusion</li>
+                    <li><span class="emphasis">Unity of Direction:</span> One plan, one person in charge - enables focused effort toward goals</li>
+                    <li><span class="emphasis">Centralization:</span> Balance between centralized authority and decentralized decision-making</li>
+                    <li><span class="emphasis">Scalar Chain:</span> Clear hierarchy and communication path from highest to lowest rank</li>
+                </ul>
+                <div class="accent-box">
+                    <strong>Engineering Application:</strong> These principles help structure technical teams, define roles clearly, and establish effective communication channels in complex projects.
+                </div>
+            </div>
         </div>
 
-        <!-- 15. Open Systems -->
-        <div id="slide15" class="slide content-caption">
-            <h2>9. Systems Approach to Management</h2>
+        <!-- 22. Human-Centered Principles Detailed -->
+        <div id="slide22" class="slide title-content">
+            <h2>Human-Centered Principles for Technical Leadership</h2>
+            <div class="content-area">
+                <ul class="content-list">
+                    <li><span class="emphasis">Subordination of Individual Interest:</span> Team and organizational goals take precedence over personal interests</li>
+                    <li><span class="emphasis">Remuneration:</span> Fair compensation methods - avoid exploitation of employees</li>
+                    <li><span class="emphasis">Order:</span> Right person in right place - proper selection and placement for efficiency</li>
+                    <li><span class="emphasis">Equity:</span> Fair treatment builds employee loyalty and devotion</li>
+                    <li><span class="emphasis">Stability of Personnel Tenure:</span> Reducing turnover increases efficiency and prevents loss of expertise</li>
+                    <li><span class="emphasis">Initiative:</span> Encourage creative thinking and imagination in formulating and executing plans</li>
+                    <li><span class="emphasis">Esprit de Corps:</span> Team spirit and cooperation - unity is strength</li>
+                </ul>
+                <div class="accent-box">
+                    <strong>Modern Relevance:</strong> These principles address talent retention, team building, and creating positive work environments - critical for engineering organizations competing for skilled professionals.
+                </div>
+            </div>
+        </div>
+
+        <!-- 23. Systems Approach Section -->
+        <div id="slide23" class="slide section-header">
+            <h1>Systems Approach</h1>
+            <p class="section-subtitle">Holistic Thinking for Complex Engineering Projects</p>
+        </div>
+
+        <!-- 24. Systems Theory Components -->
+        <div id="slide24" class="slide content-caption">
+            <h2>Systems Theory Framework</h2>
             <div class="main-content-area">
-                <strong>EVERYTHING IS CONNECTED</strong><br><br>
-                🔄 INPUTS → TRANSFORMATION → OUTPUTS<br>
-                ↑_______ FEEDBACK _______↓<br><br>
-                <em>Like the human body - all parts work together</em>
+                <div style="font-size:1.2em; line-height:2;">
+                    <strong>INPUTS</strong> → <strong>TRANSFORMATION PROCESSES</strong> → <strong>OUTPUTS</strong><br>
+                    ↑&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>FEEDBACK LOOP</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+                    <em>Organizations as Open Systems with Environmental Interaction</em>
+                </div>
             </div>
             <div class="caption-area">
-                <div class="concept-box">
-                    <h4>Simple Definition:</h4>
-                    <p><strong>Systems Approach</strong> views organization as a complex system of interconnected parts working together, like the human body where different organs work together to keep the body healthy.</p>
-                </div>
-                
-                <div class="story-box">
-                    <h4>🌐 WhatsApp Message Journey:</h4>
-                    <p>When you send a WhatsApp message, it travels through your phone → cell tower → internet → servers → recipient's network → their phone. All systems working together seamlessly!</p>
-                </div>
-                
-                <div class="example-box">
-                    <h4>🛒 Flipkart System Example:</h4>
-                    <p><strong>Inputs:</strong> Products, technology, delivery partners, customer data<br>
-                    <strong>Transformation:</strong> Order processing, warehousing, logistics<br>
-                    <strong>Outputs:</strong> Delivered products, satisfied customers<br>
-                    <strong>Feedback:</strong> Reviews, ratings, repeat purchases</p>
-                </div>
-
-                <div class="principle-grid">
-                    <div class="principle-card">
-                        <h4>🔍 Systems Theory</h4>
-                        <p><strong>Key Idea:</strong> Organizations are complex systems that interact with their environment.</p>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>🌐 Open System</h4>
-                        <p><strong>Characteristics:</strong> Interacts with environment, adapts to changes, exchanges inputs/outputs.</p>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>🔒 Closed System</h4>
-                        <p><strong>Characteristics:</strong> Self-contained, no environmental interaction (rare in reality).</p>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>⭐ System Properties</h4>
-                        <ul class="content-list">
-                            <li><strong>Holism:</strong> Whole > sum of parts</li>
-                            <li><strong>Synergy:</strong> 1+1 can equal 3</li>
-                            <li><strong>Interdependence:</strong> Everything affects everything</li>
-                            <li><strong>Equifinality:</strong> Multiple paths to same goal</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="example-box">
-                    <h4>🏏 IPL System Example (Synergy):</h4>
-                    <p>Individual teams might struggle financially, but IPL system creates enormous value - ₹11,000+ crores annually, much more than sum of individual team revenues.</p>
-                </div>
-
-                <div class="story-box">
-                    <h4>Components of Organizational System:</h4>
-                    <ul class="content-list">
-                        <li><strong>Inputs:</strong> Human resources, materials, money, information</li>
-                        <li><strong>Transformation:</strong> Processes that convert inputs to outputs</li>
-                        <li><strong>Outputs:</strong> Products, services, satisfied customers</li>
-                        <li><strong>Feedback:</strong> Information about results that influences future inputs</li>
-                        <li><strong>Environment:</strong> External factors affecting the system</li>
-                    </ul>
-                </div>
-
-                <div class="key-insight">
-                    <strong>Advantages of Systems Approach:</strong> Better coordination, focus on objectives, environmental awareness, enhanced innovation, improved problem-solving.
-                </div>
-
-                <div class="takeaway-box">
-                    <h4>🎯 Key Takeaways - Systems Approach:</h4>
-                    <ul class="content-list">
-                        <li>Organizations are open systems constantly interacting with environment</li>
-                        <li>Understanding connections and relationships is crucial for success</li>
-                        <li>Synergy means combined effect exceeds individual effects</li>
-                        <li>Modern digital businesses are perfect examples of systems thinking</li>
-                        <li>Systems approach helps manage complexity in modern organizations</li>
-                    </ul>
-                </div>
+                <strong>Critical for Engineers:</strong> Understanding complex technical systems and their interactions with organizational processes. Organizations viewed as interconnected systems where change in one part affects other subsystems. Essential for large-scale engineering projects requiring systems integration and coordination across multiple disciplines.
             </div>
         </div>
 
-        <!-- 16. Comparison -->
-        <div id="slide16" class="slide title-content">
-            <h2>Comparing All Three Approaches</h2>
+        <!-- 25. Advantages of Systems Approach -->
+        <div id="slide25" class="slide title-content">
+            <h2>Systems Approach Benefits for Engineers</h2>
             <div class="content-area">
-                <div class="story-box">
-                    <h4>🎯 Building a Cricket Team - Three Perspectives:</h4>
-                    <p><strong>Taylor:</strong> Perfect each player's technique<br>
-                    <strong>Fayol:</strong> Focus on team management and coordination<br>
-                    <strong>Systems:</strong> Consider players, management, fans, weather, pitch - everything connected</p>
-                </div>
-
-                <table class="simple-table">
-                    <thead>
-                        <tr>
-                            <th>Aspect</th>
-                            <th>Scientific Management</th>
-                            <th>Administrative Theory</th>
-                            <th>Systems Approach</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Main Focus</strong></td>
-                            <td>Individual work efficiency</td>
-                            <td>Overall management process</td>
-                            <td>Organizational connections</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Key Question</strong></td>
-                            <td>"How to work better?"</td>
-                            <td>"How to manage better?"</td>
-                            <td>"How do things connect?"</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Best Used For</strong></td>
-                            <td>Improving specific processes</td>
-                            <td>Organizing people & structure</td>
-                            <td>Understanding complexity</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Indian Example</strong></td>
-                            <td>Dabbawalas' efficiency</td>
-                            <td>Indian Railways management</td>
-                            <td>Flipkart's ecosystem</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Modern Relevance</strong></td>
-                            <td>Manufacturing, operations</td>
-                            <td>Management education</td>
-                            <td>Digital transformation</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="concept-box">
-                    <h4>🔄 Evolution Pattern:</h4>
-                    <ul class="content-list">
-                        <li><strong>Taylor (1880s-1920s):</strong> Focused on individual efficiency</li>
-                        <li><strong>Fayol (1920s-1950s):</strong> Expanded to management functions</li>
-                        <li><strong>Systems (1950s-present):</strong> Holistic organizational view</li>
-                    </ul>
-                </div>
-
-                <div class="key-insight">
-                    <strong>Modern Reality:</strong> Successful organizations today use ALL THREE approaches - optimize processes (Taylor), maintain structure (Fayol), and think systemically (Systems).
-                </div>
-            </div>
-        </div>
-
-        <!-- 17. Modern Applications -->
-        <div id="slide17" class="slide title-content">
-            <h2>How These Ideas Shape Your Digital World</h2>
-            <div class="content-area">
-                <div class="principle-grid">
-                    <div class="principle-card">
-                        <h4>📱 Your Favorite Apps</h4>
-                        <div class="example-box">
-                            <p><strong>Taylor's influence:</strong> Every tap optimized for speed<br>
-                            <strong>Fayol's influence:</strong> Development teams organized systematically<br>
-                            <strong>Systems influence:</strong> Apps connect payments, social networks, cloud storage</p>
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>🚗 Ola/Uber Success</h4>
-                        <div class="story-box">
-                            <p><strong>Scientific Management:</strong> Route optimization, driver efficiency<br>
-                            <strong>Administrative:</strong> Driver management, quality control<br>
-                            <strong>Systems:</strong> GPS, payments, ratings all integrated</p>
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>🛒 E-commerce Giants</h4>
-                        <div class="concept-box">
-                            <p><strong>Amazon/Flipkart use:</strong></p>
-                            <ul class="content-list">
-                                <li>Warehouse efficiency (Taylor)</li>
-                                <li>Organizational structure (Fayol)</li>
-                                <li>Ecosystem integration (Systems)</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="principle-card">
-                        <h4>🎮 Gaming Industry</h4>
-                        <div class="example-box">
-                            <p>Game development uses optimized code (Taylor), project management (Fayol), and understanding player ecosystems (Systems).</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="story-box">
-                    <h4>🚀 Your Future Career Applications:</h4>
-                    <p><strong>Software Engineer:</strong> Code optimization (Taylor), team collaboration (Fayol), system architecture (Systems)<br>
-                    <strong>Product Manager:</strong> Process improvement (Taylor), team management (Fayol), ecosystem thinking (Systems)<br>
-                    <strong>Entrepreneur:</strong> Efficiency (Taylor), organization (Fayol), market connections (Systems)</p>
-                </div>
-
+                <p>Systems thinking provides valuable concepts for managing complex engineering projects and organizational challenges:</p>
+                <ul class="content-list">
+                    <li><span class="emphasis">Multi-Level Analysis:</span> Analyze systems at different levels - component, subsystem, system, and environment</li>
+                    <li><span class="emphasis">Integration Framework:</span> Assess how various parts interact to achieve common purpose</li>
+                    <li><span class="emphasis">Change Management:</span> Understand that changes in one part affect other subsystems</li>
+                    <li><span class="emphasis">Environmental Interaction:</span> Consider how organization interacts with external environment</li>
+                    <li><span class="emphasis">Feedback & Synergy:</span> Utilize continuous feedback and achieve synergy where whole > sum of parts</li>
+                </ul>
                 <div class="highlight-box">
-                    <strong>Career Tip:</strong> Master all three approaches - they're not alternatives, they're complementary tools for different situations!
+                    Essential for engineers working on large-scale technical projects requiring systems integration, quality management, and cross-functional coordination
+                </div>
+                <p><strong>Modern Applications:</strong> Systems engineering, integrated project management, quality systems, sustainability initiatives</p>
+            </div>
+        </div>
+
+        <!-- 26. Historical Timeline -->
+        <div id="slide26" class="slide timeline">
+            <h2>Evolution of Management Theory Timeline</h2>
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">1900-1920</div>
+                    <div class="timeline-content">
+                        <h4>Classical School Foundation</h4>
+                        <p><strong>Taylor's Scientific Management:</strong> Time and motion studies, systematic task analysis, efficiency optimization. <strong>Engineering Impact:</strong> Foundation for industrial engineering, process optimization, quality control systems.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">1916</div>
+                    <div class="timeline-content">
+                        <h4>Administrative Theory</h4>
+                        <p><strong>Fayol's Management Functions:</strong> Planning, organizing, commanding, coordinating, controlling. <strong>Engineering Impact:</strong> Framework for project management, team leadership, organizational structure in technical environments.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">1930-1940</div>
+                    <div class="timeline-content">
+                        <h4>Human Relations Movement</h4>
+                        <p><strong>Hawthorne Studies:</strong> Focus on team dynamics, motivation, informal groups. <strong>Engineering Impact:</strong> Understanding team collaboration, cross-functional communication, leadership styles for technical professionals.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">1950-1960</div>
+                    <div class="timeline-content">
+                        <h4>Systems & Quantitative Approaches</h4>
+                        <p><strong>Systems Theory:</strong> Organizations as interconnected systems with feedback loops. <strong>Engineering Impact:</strong> Systems engineering, integrated project management, complex problem-solving methodologies.</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 18. Quiz -->
-        <div id="slide18" class="slide title-content">
-            <h2>🎓 Self-Assessment Quiz</h2>
-            <div class="content-area">
-                <div class="quiz-box">
-                    <h4>Test Your Understanding - Choose the Best Answer:</h4>
-                    
-                    <div class="quiz-question">
-                        <p><strong>1. What does "SSTMDM" help you remember?</strong></p>
-                        <p>a) Fayol's management activities<br>
-                        b) Taylor's 6 elements of scientific management<br>
-                        c) Types of organizational systems<br>
-                        d) Principles of coordination</p>
-                    </div>
+        <!-- 27. Modern Relevance -->
+        <div id="slide27" class="slide two-content">
+            <h2>Modern Applications in Engineering</h2>
+            <div class="content-column">
+                <h3>Classical Principles Today</h3>
+                <ul class="content-list">
+                    <li><strong>Lean Manufacturing:</strong> Waste elimination, continuous improvement</li>
+                    <li><strong>Six Sigma:</strong> Data-driven quality improvement</li>
+                    <li><strong>Standard Operating Procedures:</strong> Consistent processes and quality</li>
+                    <li><strong>Process Engineering:</strong> Systematic optimization methods</li>
+                </ul>
+            </div>
+            <div class="content-column">
+                <h3>Human Relations Evolution</h3>
+                <ul class="content-list">
+                    <li><strong>Agile Methodologies:</strong> Team collaboration and adaptability</li>
+                    <li><strong>Cross-functional Teams:</strong> Integrated project approaches</li>
+                    <li><strong>Leadership Development:</strong> Technical leadership skills</li>
+                    <li><strong>Innovation Management:</strong> Creativity and initiative</li>
+                </ul>
+            </div>
+            <div class="highlight-box" style="grid-column:1/-1; margin-top:20px;">
+                <strong>Key Insight:</strong> Modern engineering practice combines all schools - systematic processes (Classical), team collaboration (Neo-Classical), and analytical thinking (Modern) for optimal project outcomes.
+            </div>
+        </div>
 
-                    <div class="quiz-question">
-                        <p><strong>2. Mumbai Dabbawalas achieve 99.999% accuracy primarily through:</strong></p>
-                        <p>a) Advanced technology systems<br>
-                        b) Time and motion study with systematic organization<br>
-                        c) High salaries for workers<br>
-                        d) Government supervision</p>
-                    </div>
-
-                    <div class="quiz-question">
-                        <p><strong>3. Fayol's "Unity of Command" means:</strong></p>
-                        <p>a) All employees work toward same goal<br>
-                        b) Each employee gets orders from only one boss<br>
-                        c) Management should be centralized<br>
-                        d) Teams should have unified structure</p>
-                    </div>
-
-                    <div class="quiz-question">
-                        <p><strong>4. Which Indian example best shows "Synergy" in systems approach?</strong></p>
-                        <p>a) Individual cricket players practicing alone<br>
-                        b) IPL creating value greater than sum of teams<br>
-                        c) Factory workers doing identical tasks<br>
-                        d) Students studying in separate rooms</p>
-                    </div>
-
-                    <div class="quiz-question">
-                        <p><strong>5. The main criticism of Scientific Management by workers was:</strong></p>
-                        <p>a) Too much technology required<br>
-                        b) Feeling dehumanized and treated like machines<br>
-                        c) Complex mathematical formulas<br>
-                        d) Expensive training programs</p>
-                    </div>
-
-                    <div class="quiz-question">
-                        <p><strong>6. POCCC represents:</strong></p>
-                        <p>a) Taylor's scientific elements<br>
-                        b) Fayol's management activities<br>
-                        c) Systems theory components<br>
-                        d) Types of organizational problems</p>
-                    </div>
-
-                    <div class="quiz-question">
-                        <p><strong>7. An "Open System" organization:</strong></p>
-                        <p>a) Has transparent management policies<br>
-                        b) Allows employees to work from anywhere<br>
-                        c) Actively interacts with its environment<br>
-                        d) Uses open-source technology only</p>
-                    </div>
+        <!-- 28. Summary and Key Takeaways -->
+        <div id="slide28" class="slide stats-slide">
+            <h2>Key Takeaways for Engineering Professionals</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Management Schools</div>
+                    <div class="stat-description">Classical, Neo-Classical, and Modern approaches each contribute essential tools</div>
                 </div>
-
-                <div class="takeaway-box">
-                    <h4>🎯 Quiz Answers:</h4>
-                    <p><strong>1.</strong> b) Taylor's 6 elements | <strong>2.</strong> b) Time and motion study | <strong>3.</strong> b) One boss rule | <strong>4.</strong> b) IPL synergy | <strong>5.</strong> b) Dehumanization | <strong>6.</strong> b) Fayol's activities | <strong>7.</strong> c) Environmental interaction</p>
+                
+                <div class="stat-card">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Scientific Principles</div>
+                    <div class="stat-description">Taylor's systematic approach to process optimization and efficiency</div>
                 </div>
-
-                <div class="key-insight">
-                    <strong>Final Message:</strong> You now understand the fundamental principles that shape how organizations work! Whether you join TCS, start your own company, or lead a project team, these concepts will help you succeed. Remember - good management is about balancing efficiency with human values. Go make a positive impact! 🌟
+                
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Management Functions</div>
+                    <div class="stat-description">Fayol's timeless framework for effective technical leadership</div>
                 </div>
+                
+                <div class="stat-card">
+                    <div class="stat-number">14</div>
+                    <div class="stat-label">Universal Principles</div>
+                    <div class="stat-description">Fayol's guidelines for organizational effectiveness and team management</div>
+                </div>
+            </div>
+            <div class="highlight-box" style="margin-top:40px; text-align:center; font-size:1.2em;">
+                <strong>Final Message:</strong> These management principles aren't historical artifacts - they're practical tools that form the foundation for modern engineering leadership, project management, and organizational effectiveness. Master these concepts to become a more effective technical professional!
             </div>
         </div>
     </div>
