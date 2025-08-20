@@ -198,24 +198,24 @@
         <div id="slide1" class="slide title-slide">
             <h1 class="float">Constraint Satisfaction & AI Planning</h1>
             <p class="subtitle">Fundamental Approaches to Problem Solving in Artificial Intelligence</p>
-            <p class="author">Advanced AI Course • 2025 • Comprehensive Study</p>
+            <p class="author">Dr. Dhaval Patel • 2025</p>
         </div>
 
         <!-- 2. Course Agenda -->
         <div id="slide2" class="slide title-content">
-            <h2>Course Agenda</h2>
+            <h2>index</h2>
             <div class="content-area">
-                <p>This comprehensive lecture covers two fundamental AI problem-solving paradigms that form the backbone of intelligent systems.</p>
+                <p>Today we'll explore two powerful ways that computers solve complex problems and make smart decisions.</p>
                 <ul class="content-list">
-                    <li><span class="emphasis">Constraint Satisfaction Problems (CSP)</span> - Systematic approaches to solving combinatorial problems</li>
-                    <li><span class="emphasis">Node Coloring Problem</span> - Graph-based constraint satisfaction with practical applications</li>
-                    <li><span class="emphasis">Cryptarithmetic Puzzles</span> - Complex constraint propagation and intelligent backtracking</li>
-                    <li><span class="emphasis">AI Planning Algorithms</span> - Strategic action sequence generation for goal achievement</li>
-                    <li><span class="emphasis">Planning Paradigms</span> - Forward, backward, hierarchical, and plan-space approaches</li>
-                    <li><span class="emphasis">Real-World Applications</span> - Robotics, logistics, healthcare, and gaming implementations</li>
+                    <li><span class="emphasis">Constraint Satisfaction Problems (CSP)</span> - How to solve puzzles with rules and restrictions</li>
+                    <li><span class="emphasis">Graph Coloring</span> - Coloring maps and graphs without breaking the rules</li>
+                    <li><span class="emphasis">Math Puzzles</span> - Solving letter-to-number puzzles step by step</li>
+                    <li><span class="emphasis">AI Planning</span> - How computers make step-by-step plans to reach goals</li>
+                    <li><span class="emphasis">Different Planning Methods</span> - Various ways computers can think ahead and plan</li>
+                    <li><span class="emphasis">Real-World Uses</span> - How these ideas help robots, delivery services, hospitals, and games</li>
                 </ul>
                 <div class="highlight-box">
-                    Learning Objectives: Master constraint modeling, backtracking algorithms, planning strategies, and their integration in autonomous systems.
+                    Goal: Learn how computers solve complex problems and make smart decisions automatically.
                 </div>
             </div>
         </div>
@@ -228,58 +228,58 @@
 
         <!-- 4. What is Constraint Satisfaction? -->
         <div id="slide4" class="slide title-content">
-            <h2>Understanding Constraint Satisfaction Problems</h2>
+            <h2>What Are Constraint Satisfaction Problems?</h2>
             <div class="content-area">
-                <p>Constraint Satisfaction Problems (CSP) represent a powerful paradigm for modeling and solving complex combinatorial problems where solutions must satisfy multiple constraints simultaneously.</p>
+                <p>Think of constraint satisfaction problems like solving puzzles with rules. You have to find solutions that follow all the rules at the same time.</p>
                 
                 <div class="highlight-box">
-                    <strong>Core Definition:</strong> A search procedure that operates in a space of constraint sets, systematically discovering problem states that satisfy all given constraints.
+                    <strong>Simple Definition:</strong> A way to solve problems by finding answers that satisfy all the given rules and restrictions.
                 </div>
                 
                 <ul class="content-list">
-                    <li><strong>Declarative Approach:</strong> Define what constitutes a valid solution rather than how to find it</li>
-                    <li><strong>Constraint Propagation:</strong> Systematically reduce domain values based on constraint implications</li>
-                    <li><strong>Intelligent Backtracking:</strong> Efficiently explore solution space with conflict-driven search</li>
-                    <li><strong>Real-World Modeling:</strong> Natural representation for scheduling, allocation, and configuration problems</li>
+                    <li><strong>Tell the Computer What You Want:</strong> Describe the rules instead of how to solve it</li>
+                    <li><strong>Rule Checking:</strong> The computer automatically checks if rules are broken</li>
+                    <li><strong>Smart Searching:</strong> When something doesn't work, go back and try something else</li>
+                    <li><strong>Real Problems:</strong> Perfect for scheduling, organizing, and arranging things</li>
                 </ul>
                 
-                <p>Unlike traditional search problems that focus on path-finding, CSP emphasizes <span class="emphasis">state satisfaction</span> where the goal is to find any assignment of values to variables that meets all constraints.</p>
+                <p>Unlike finding the shortest path, constraint problems focus on <span class="emphasis">finding any solution that works</span> rather than finding the best route to get somewhere.</p>
             </div>
         </div>
 
         <!-- 5. CSP Components Deep Dive -->
         <div id="slide5" class="slide two-content">
-            <h2>Essential Components of Constraint Satisfaction</h2>
+            <h2>The Building Blocks of Constraint Problems</h2>
             <div class="content-column">
-                <h3>Variables & Domains</h3>
-                <p><strong>Variables (V):</strong> {v₁, v₂, v₃, ..., vₙ}</p>
+                <h3>Things & Their Options</h3>
+                <p><strong>Variables:</strong> The things you need to assign values to</p>
                 <ul class="content-list">
-                    <li>Represent unknown entities to be assigned values</li>
-                    <li>Must be clearly defined and finite</li>
-                    <li>Can represent physical objects, time slots, resources</li>
+                    <li>Like empty boxes that need to be filled</li>
+                    <li>Each box has a clear label and purpose</li>
+                    <li>Could be time slots, colors, or numbers</li>
                 </ul>
                 
-                <p><strong>Domains (D):</strong> {D₁, D₂, D₃, ..., Dₙ}</p>
+                <p><strong>Domains:</strong> The possible choices for each thing</p>
                 <ul class="content-list">
-                    <li>Set of possible values each variable can take</li>
-                    <li>Domain reduction drives constraint propagation</li>
-                    <li>Can be discrete (colors, numbers) or continuous</li>
+                    <li>All the options available for each box</li>
+                    <li>Options get smaller as we make choices</li>
+                    <li>Could be colors (red, blue) or numbers (1-9)</li>
                 </ul>
             </div>
             <div class="content-column">
-                <h3>Constraints & Relationships</h3>
-                <p><strong>Constraints (C):</strong> Rules limiting variable assignments</p>
+                <h3>Rules & Relationships</h3>
+                <p><strong>Constraints:</strong> The rules that limit our choices</p>
                 <ul class="content-list">
-                    <li><strong>Unary:</strong> Constraints on single variables</li>
-                    <li><strong>Binary:</strong> Relationships between two variables</li>
-                    <li><strong>Global:</strong> Complex constraints involving multiple variables</li>
+                    <li><strong>Simple Rules:</strong> Rules about just one thing</li>
+                    <li><strong>Pair Rules:</strong> Rules about how two things relate</li>
+                    <li><strong>Group Rules:</strong> Complex rules involving many things</li>
                 </ul>
                 
                 <div class="accent-box">
-                    <strong>Key Insight:</strong> The interplay between domain reduction and constraint checking drives the efficiency of CSP algorithms.
+                    <strong>Key Idea:</strong> As we make choices, the remaining options automatically get smaller, making the problem easier to solve.
                 </div>
                 
-                <p>Constraint satisfaction becomes a systematic process of eliminating impossible value combinations while preserving all valid solutions.</p>
+                <p>Solving these problems means finding choices that make all the rules happy at the same time.</p>
             </div>
         </div>
 
@@ -307,26 +307,26 @@
 
         <!-- 7. Intelligent Backtracking Fundamentals -->
         <div id="slide7" class="slide title-content">
-            <h2>Mastering Intelligent Backtracking</h2>
+            <h2>Smart Trial and Error: Backtracking</h2>
             <div class="content-area">
-                <p>Intelligent backtracking represents the core algorithmic approach in CSP, distinguishing it from naive exhaustive search through conflict-driven analysis and systematic constraint propagation.</p>
+                <p>Backtracking is like smart trial and error. Instead of trying everything randomly, we learn from our mistakes and avoid making the same errors again.</p>
                 
                 <div class="highlight-box">
-                    <strong>Key Principle:</strong> Only backtrack when conflicts occur - avoid redundant exploration of guaranteed-to-fail branches.
+                    <strong>Key Idea:</strong> Only change your mind when you hit a dead end - don't waste time exploring paths that can't work.
                 </div>
                 
                 <ul class="content-list">
-                    <li><strong>Conflict Detection:</strong> Immediately identify when current assignments violate constraints</li>
-                    <li><strong>Constraint Propagation:</strong> Systematically reduce domains based on current assignments</li>
-                    <li><strong>Chronological Backtracking:</strong> Return to most recent decision point when conflicts arise</li>
-                    <li><strong>Conflict-Directed Backjumping:</strong> Jump directly to source of conflict, skipping irrelevant decisions</li>
-                    <li><strong>Learning from Failures:</strong> Record constraint violations to avoid repeating failed combinations</li>
+                    <li><strong>Spot Problems Early:</strong> Notice right away when rules are broken</li>
+                    <li><strong>Update Automatically:</strong> When you make a choice, automatically update what's still possible</li>
+                    <li><strong>Go Back When Stuck:</strong> Return to your last decision when you hit a dead end</li>
+                    <li><strong>Skip Useless Paths:</strong> Jump directly to the source of the problem</li>
+                    <li><strong>Remember Mistakes:</strong> Keep track of what doesn't work to avoid repeating errors</li>
                 </ul>
                 
-                <p>Understanding when and why backtracking is necessary, and how it maintains consistency in solution spaces, is crucial for implementing efficient CSP solvers and developing intuition for constraint-based problem solving.</p>
+                <p>Understanding when to go back and try something different is crucial for solving complex puzzles efficiently.</p>
                 
                 <div class="accent-box">
-                    <strong>Essential Skill:</strong> Learn to identify implicit constraints and ensure complete problem formulation before applying backtracking algorithms.
+                    <strong>Important Skill:</strong> Learn to spot all the hidden rules in a problem before you start solving it.
                 </div>
             </div>
         </div>
@@ -361,27 +361,27 @@
 
         <!-- 9. Problem Formulation Mastery -->
         <div id="slide9" class="slide title-content">
-            <h2>Essential Skills: Problem Formulation</h2>
+            <h2>How to Set Up Problems the Right Way</h2>
             <div class="content-area">
-                <p>The ability to properly define variables, domains, and constraints for any given problem is fundamental to CSP success. Poor formulation leads to inefficient or impossible solutions.</p>
+                <p>Setting up a problem correctly is half the battle. If you describe the problem wrong, even the best solution methods won't work well.</p>
                 
                 <div class="highlight-box">
-                    <strong>Formulation Framework:</strong>
-                    <br>1. Identify decision variables (what needs to be assigned?)
-                    <br>2. Define domains (what values are possible?)
-                    <br>3. Enumerate constraints (what restrictions apply?)
-                    <br>4. Validate completeness (are all requirements captured?)
+                    <strong>Problem Setup Steps:</strong>
+                    <br>1. Identify what decisions need to be made
+                    <br>2. List what choices are available for each decision
+                    <br>3. Write down all the rules and restrictions
+                    <br>4. Double-check that everything important is included
                 </div>
                 
                 <ul class="content-list">
-                    <li><strong>Variable Selection:</strong> Choose variables that directly represent decisions, not derived values</li>
-                    <li><strong>Domain Design:</strong> Balance granularity with computational complexity</li>
-                    <li><strong>Constraint Discovery:</strong> Identify both explicit and implicit constraints</li>
-                    <li><strong>Consistency Checking:</strong> Ensure constraints don't create impossible scenarios</li>
-                    <li><strong>Completeness Verification:</strong> Confirm all requirements are mathematically captured</li>
+                    <li><strong>Pick the Right Things:</strong> Choose things that represent actual decisions, not calculated results</li>
+                    <li><strong>Balance Choices:</strong> Not too few options (might miss solutions) or too many (gets complicated)</li>
+                    <li><strong>Find All Rules:</strong> Look for both obvious and hidden rules that limit choices</li>
+                    <li><strong>Check for Conflicts:</strong> Make sure the rules don't make the problem impossible to solve</li>
+                    <li><strong>Verify Completeness:</strong> Confirm all real-world requirements are captured in the rules</li>
                 </ul>
                 
-                <p>Master this systematic approach before diving into specific problem instances. A well-formulated CSP is half-solved.</p>
+                <p>Master this systematic approach before jumping into specific problems. A well-described problem is much easier to solve.</p>
             </div>
         </div>
 
@@ -630,26 +630,26 @@
 
         <!-- 18. Cryptarithmetic Fundamentals -->
         <div id="slide18" class="slide title-content">
-            <h2>Understanding Cryptarithmetic Puzzles</h2>
+            <h2>Letter-to-Number Puzzles</h2>
             <div class="content-area">
-                <p>Cryptarithmetic problems represent sophisticated constraint satisfaction challenges where letters substitute for digits in arithmetic expressions, requiring systematic constraint propagation and backtracking strategies.</p>
+                <p>Cryptarithmetic puzzles are like secret codes where letters hide numbers. You need to figure out which number each letter represents to make the math work correctly.</p>
                 
                 <div class="highlight-box">
-                    <strong>Core Challenge:</strong> Translate arithmetic constraints into logical constraint satisfaction frameworks while managing complex interdependencies.
+                    <strong>The Challenge:</strong> Replace each letter with a number (0-9) so the math equation is correct, following all the rules.
                 </div>
                 
                 <ul class="content-list">
-                    <li><strong>Variable Mapping:</strong> Each letter represents exactly one digit (0-9)</li>
-                    <li><strong>Uniqueness Constraint:</strong> No two letters can represent the same digit</li>
-                    <li><strong>Arithmetic Validity:</strong> The resulting equation must be mathematically correct</li>
-                    <li><strong>Leading Digit Constraint:</strong> Leading letters typically cannot represent zero</li>
-                    <li><strong>Carry Propagation:</strong> Addition/subtraction carry effects create complex interdependencies</li>
+                    <li><strong>One Letter, One Number:</strong> Each letter can only represent one specific number</li>
+                    <li><strong>No Sharing:</strong> No two letters can represent the same number</li>
+                    <li><strong>Math Must Work:</strong> The equation must be mathematically correct when solved</li>
+                    <li><strong>No Leading Zeros:</strong> The first letter in a word usually can't be zero</li>
+                    <li><strong>Carrying Numbers:</strong> Addition might involve carrying over, just like regular math</li>
                 </ul>
                 
-                <p>These problems demonstrate advanced constraint satisfaction techniques including <span class="emphasis">intelligent assumption making</span>, <span class="emphasis">systematic backtracking</span>, and <span class="emphasis">constraint propagation strategies</span>.</p>
+                <p>These puzzles teach us advanced problem-solving skills like <span class="emphasis">making smart guesses</span>, <span class="emphasis">systematic backtracking</span>, and <span class="emphasis">rule checking</span>.</p>
                 
                 <div class="accent-box">
-                    <strong>Essential Skill:</strong> Practice systematic variable assignment and constraint propagation strategies to develop intuition for complex CSP solving.
+                    <strong>Learning Goal:</strong> Practice making systematic choices and checking rules to develop problem-solving intuition.
                 </div>
             </div>
         </div>
