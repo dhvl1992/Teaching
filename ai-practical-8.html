@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NLTK Text Processing Pipeline</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, serif;
+            background: #FEF7ED;
+            color: #1E293B;
+            min-height: 100vh;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 350px 1fr 300px;
+            gap: 20px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .panel {
+            background: rgba(254, 247, 237, 0.95);
+            border: 2px solid #EA580C;
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(234, 88, 12, 0.15);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #EA580C 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #059669;
+            font-size: 1.1em;
+            font-style: italic;
+        }
+
+        .controls h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #EA580C 0%, #059669 100%);
+            border: none;
+            border-radius: 10px;
+            color: #FEF7ED;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-family: Georgia, serif;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(234, 88, 12, 0.3);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .pipeline-progress {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            height: 8px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.5s ease;
+            border-radius: 20px;
+        }
+
+        .step-indicators {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .step-indicator {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .step-indicator.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: #667eea;
+            transform: scale(1.1);
+        }
+
+        .step-indicator.completed {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border-color: #28a745;
+        }
+
+        .visualization {
+            min-height: 500px;
+            overflow-y: auto;
+        }
+
+        .step-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            font-size: 1.8em;
+            color: #EA580C;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 15px 0;
+            border-bottom: 3px solid #EA580C;
+        }
+
+        .data-display {
+            background: rgba(255, 255, 255, 0.6);
+            border: 2px solid rgba(234, 88, 12, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 5px solid #EA580C;
+        }
+
+        .data-label {
+            color: #EA580C;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .data-content {
+            color: #1E293B;
+            font-family: Georgia, serif;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .token-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .token {
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .token:hover {
+            background: rgba(102, 126, 234, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .token.removed {
+            background: rgba(220, 53, 69, 0.2);
+            border-color: rgba(220, 53, 69, 0.4);
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .token.changed {
+            background: rgba(255, 193, 7, 0.2);
+            border-color: rgba(255, 193, 7, 0.4);
+        }
+
+        .explanation h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .explanation p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .explanation ul {
+            color: rgba(255, 255, 255, 0.7);
+            margin-left: 20px;
+        }
+
+        .explanation li {
+            margin-bottom: 8px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(102, 126, 234, 0.2);
+            border: 1px solid rgba(102, 126, 234, 0.4);
+            border-radius: 6px;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .pos-tag {
+            font-size: 11px;
+            background: rgba(118, 75, 162, 0.3);
+            border-radius: 3px;
+            padding: 2px 6px;
+            margin-left: 5px;
+        }
+
+        .sentiment-gauge {
+            width: 200px;
+            height: 100px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .gauge-arc {
+            stroke: #667eea;
+            fill: none;
+            stroke-width: 8;
+        }
+
+        .gauge-needle {
+            stroke: #ff6b6b;
+            stroke-width: 3;
+            transform-origin: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>NLTK Text Processing Pipeline</h1>
+        <p>Interactive visualization of text processing steps</p>
+    </div>
+
+    <div class="container">
+        <!-- Left Panel: Controls -->
+        <div class="panel controls">
+            <h3>Input Controls</h3>
+            
+            <div class="input-group">
+                <label for="textInput">Enter your text:</label>
+                <textarea 
+                    id="textInput" 
+                    placeholder="India is known for its rich heritage and diverse culture. It has a variety of languages spoken across different regions.">India is known for its rich heritage and diverse culture. It has a variety of languages spoken across different regions.</textarea>
+            </div>
+
+            <div class="button-group">
+                <button onclick="processPipelineData()">Process Text</button>
+                <button onclick="resetPipeline()">Reset</button>
+            </div>
+
+            <div class="pipeline-progress">
+                <h4>Progress</h4>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div class="step-indicators" id="stepIndicators">
+                    <!-- Steps will be generated here -->
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="nav-btn" onclick="previousStep()" id="prevBtn">← Previous</button>
+                <button class="nav-btn" onclick="nextStep()" id="nextBtn">Next →</button>
+            </div>
+        </div>
+
+        <!-- Center Panel: Visualization -->
+        <div class="panel visualization" id="visualization">
+            <div class="step-content active" id="step0">
+                <div class="step-title">Welcome to NLTK Pipeline</div>
+                <div class="data-display">
+                    <div class="data-label">Ready to Process</div>
+                    <div class="data-content">Click "Process Text" to prepare pipeline data, then use navigation controls to step through each stage individually.</div>
+                </div>
+            </div>
+            <!-- Step contents will be generated here -->
+        </div>
+
+        <!-- Right Panel: Explanations -->
+        <div class="panel explanation" id="explanationPanel">
+            <h3>Step Information</h3>
+            <div id="stepExplanation">
+                <h4>Getting Started</h4>
+                <p>This interactive pipeline demonstrates how NLTK processes text through multiple stages:</p>
+                <ul>
+                    <li><strong>Input Text:</strong> Raw unprocessed text</li>
+                    <li><strong>Sentence Segmentation:</strong> Split text into sentences</li>
+                    <li><strong>Word Tokenization:</strong> Break sentences into words</li>
+                    <li><strong>Stop Words Removal:</strong> Filter out common words</li>
+                    <li><strong>Stemming:</strong> Reduce words to root forms using rules</li>
+                    <li><strong>Lemmatization:</strong> Convert to dictionary forms using context</li>
+                    <li><strong>Text Embeddings:</strong> Convert to numerical vectors (TF-IDF)</li>
+                    <li><strong>POS Tagging:</strong> Identify parts of speech</li>
+                    <li><strong>Named Entities:</strong> Find people, places, organizations</li>
+                    <li><strong>Sentiment Analysis:</strong> Determine emotional tone</li>
+                </ul>
+                <p>Enter your text and click "Process Text" to prepare the data, then navigate through each step to see the transformations!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        let pipelineData = {};
+        let isRunning = false;
+
+        const steps = [
+            { name: 'Input', key: 'input' },
+            { name: 'Sentences', key: 'sentences' },
+            { name: 'Tokens', key: 'tokens' },
+            { name: 'Filtered', key: 'filtered' },
+            { name: 'Stemmed', key: 'stemmed' },
+            { name: 'Lemmatized', key: 'lemmatized' },
+            { name: 'Embeddings', key: 'embeddings' },
+            { name: 'POS Tags', key: 'pos' },
+            { name: 'Entities', key: 'entities' },
+            { name: 'Sentiment', key: 'sentiment' }
+        ];
+
+        const explanations = {
+            0: {
+                title: "1. Input Text",
+                content: `<strong>Raw Text Input</strong><br><br>
+                This is the unprocessed, natural language text as entered by the user. Raw text contains all the complexities of human language: punctuation, capitalization, spacing irregularities, and mixed formatting. At this stage, the text exists as a simple string of characters that computers cannot directly understand for semantic analysis.<br><br>
+                <strong>Challenges at this stage:</strong><br>
+                • Inconsistent formatting and spacing<br>
+                • Mixed case letters (upper/lowercase)<br>
+                • Punctuation marks attached to words<br>
+                • No structural understanding of language<br><br>
+                This raw input serves as the foundation for all subsequent processing steps that will transform it into machine-readable formats.`
+            },
+            1: {
+                title: "2. Sentence Segmentation", 
+                content: `<strong>Breaking Text into Sentences</strong><br><br>
+                Sentence segmentation (or sentence boundary detection) identifies where sentences begin and end within the text. This process uses linguistic rules to detect sentence boundaries based on punctuation marks (periods, exclamation marks, question marks) and contextual clues.<br><br>
+                <strong>Technical Process:</strong><br>
+                • Scans for sentence-ending punctuation (.!?)<br>
+                • Handles abbreviations (Dr., Mr., etc.) that shouldn't end sentences<br>
+                • Considers capitalization patterns after punctuation<br>
+                • Manages edge cases like ellipses (...) and decimal numbers<br><br>
+                <strong>Why This Matters:</strong><br>
+                Many NLP algorithms work better on sentence-level chunks rather than entire documents. Sentences represent complete thoughts and grammatical units, making them ideal for syntactic and semantic analysis. This segmentation enables parallel processing of sentences and helps maintain context boundaries for downstream tasks.`
+            },
+            2: {
+                title: "3. Word Tokenization",
+                content: `<strong>Splitting Text into Individual Tokens</strong><br><br>
+                Tokenization breaks sentences into individual words, punctuation marks, and meaningful symbols. This process transforms continuous text into a structured list of discrete units (tokens) that can be individually analyzed and processed.<br><br>
+                <strong>Technical Challenges:</strong><br>
+                • Handling contractions (don't → don + 't or don't as single token)<br>
+                • Managing hyphenated words (state-of-the-art)<br>
+                • Processing punctuation (separate from words or attach?)<br>
+                • Dealing with special characters, numbers, and URLs<br><br>
+                <strong>NLTK's Approach:</strong><br>
+                Uses sophisticated rules that understand English language patterns, properly separating punctuation while preserving meaningful units. Each token becomes a discrete element that can be individually processed, tagged, and analyzed in subsequent pipeline stages.<br><br>
+                <strong>Output Format:</strong> List of strings, where each string represents one token.`
+            },
+            3: {
+                title: "4. Stop Words Removal",
+                content: `<strong>Filtering Out Low-Information Words</strong><br><br>
+                Stop words are extremely common words that appear frequently in text but carry minimal semantic meaning for most NLP tasks. These include articles (a, an, the), prepositions (in, on, at), conjunctions (and, but, or), and common verbs (is, are, was, were).<br><br>
+                <strong>Why Remove Stop Words?</strong><br>
+                • <strong>Noise Reduction:</strong> Focus processing on content-bearing words<br>
+                • <strong>Computational Efficiency:</strong> Reduce dataset size by 40-50%<br>
+                • <strong>Feature Quality:</strong> Prevent common words from dominating statistical models<br>
+                • <strong>Storage Optimization:</strong> Significantly reduce memory requirements<br><br>
+                <strong>NLTK's Stop Words List:</strong><br>
+                Contains 179 English stop words including: the, is, at, which, on, a, an, and, or, but, in, with, to, for, of, as, by, that, this, it, from, be, are, was, were, been, have, has, had, do, does, did, will, would, could, should.<br><br>
+                <strong>Trade-offs:</strong> While removing stop words improves many tasks, it can hurt others like sentiment analysis where words like "not" are crucial for meaning.`
+            },
+            4: {
+                title: "5. Stemming",
+                content: `<strong>Reducing Words to Root Forms Using Rules</strong><br><br>
+                Stemming reduces words to their root form using simple algorithmic rules, without considering word meaning or context. The Porter Stemmer (most common) applies a series of suffix-removal rules to strip common endings.<br><br>
+                <strong>Porter Stemmer Rules (Examples):</strong><br>
+                • Remove "-ing": running → runn, walking → walk<br>
+                • Remove "-ed": played → play, wanted → want<br>
+                • Remove "-ly": quickly → quick, really → real<br>
+                • Remove "-ies": stories → stori, flies → fli<br>
+                • Remove "-s": cats → cat, dogs → dog<br><br>
+                <strong>Advantages:</strong><br>
+                • Very fast processing speed<br>
+                • Language-independent approach<br>
+                • Reduces vocabulary size significantly<br>
+                • Simple to implement and understand<br><br>
+                <strong>Limitations:</strong><br>
+                • Can create non-words: "better" → "better" (no change), but "studies" → "studi"<br>
+                • Over-stemming: "organization" → "organ"<br>
+                • Under-stemming: "ran" and "running" don't reduce to same stem<br>
+                • No semantic understanding: "universe" and "university" might stem similarly`
+            },
+            5: {
+                title: "6. Lemmatization",
+                content: `<strong>Converting Words to Dictionary Base Forms</strong><br><br>
+                Lemmatization reduces words to their canonical dictionary form (lemma) by considering word context, part of speech, and meaning. Unlike stemming, lemmatization produces real dictionary words and considers morphological analysis.<br><br>
+                <strong>How It Works:</strong><br>
+                • Uses linguistic knowledge and dictionaries (like WordNet)<br>
+                • Considers part-of-speech context<br>
+                • Applies morphological rules based on language structure<br>
+                • Always produces valid dictionary words<br><br>
+                <strong>Examples of Superior Performance:</strong><br>
+                • "better" → "good" (stemming would leave "better")<br>
+                • "running" → "run" (both produce same result)<br>
+                • "feet" → "foot" (stemming might produce "feet")<br>
+                • "mice" → "mouse" (stemming would fail)<br>
+                • "was" → "be" (stemming produces "wa")<br><br>
+                <strong>Advantages:</strong><br>
+                • Always produces real words<br>
+                • Semantically meaningful results<br>
+                • Better for tasks requiring word meaning<br>
+                • More accurate grouping of related words<br><br>
+                <strong>Trade-offs:</strong><br>
+                • Slower than stemming (requires dictionary lookups)<br>
+                • More complex implementation<br>
+                • Language-dependent (needs specific dictionaries)`
+            },
+            6: {
+                title: "7. Text Embeddings & Vectorization",
+                content: `<strong>Converting Text to Numerical Representations</strong><br><br>
+                Embedding involves converting text into numerical vectors that machine learning models can process. This transformation captures semantic relationships and word importance through mathematical representations.<br><br>
+                <strong>TF-IDF (Term Frequency-Inverse Document Frequency):</strong><br>
+                TF-IDF evaluates word importance by combining two factors:<br>
+                • <strong>Term Frequency (TF):</strong> How often a word appears in a document<br>
+                • <strong>Inverse Document Frequency (IDF):</strong> How rare the word is across all documents<br><br>
+                <strong>Example Calculation:</strong><br>
+                If "sun" appears 5 times in Document A (out of 100 words) and appears in only 1 out of 10 total documents:<br>
+                • TF = 5/100 = 0.05<br>
+                • IDF = log(10/1) = 1.0<br>
+                • TF-IDF = 0.05 × 1.0 = 0.05 (high score = important word)<br><br>
+                <strong>Vector Representations:</strong><br>
+                • Each document becomes a vector of TF-IDF scores<br>
+                • Similar documents have similar vectors<br>
+                • Enables mathematical operations on text<br>
+                • Foundation for machine learning algorithms<br><br>
+                <strong>Modern Approaches:</strong> Word2Vec, GloVe, and transformer embeddings (BERT, GPT) create dense vectors that capture deeper semantic relationships between words.`
+            },
+            7: {
+                title: "8. Part-of-Speech Tagging",
+                content: `<strong>Identifying Grammatical Roles of Words</strong><br><br>
+                Part-of-Speech (POS) tagging assigns grammatical labels to each word based on its role in the sentence and relationships with neighboring words. This provides crucial syntactic information for understanding sentence structure.<br><br>
+                <strong>Common POS Tags (Penn Treebank):</strong><br>
+                • <strong>NNP:</strong> Proper Noun (India, Microsoft, John)<br>
+                • <strong>NN:</strong> Noun, singular (cat, house, idea)<br>
+                • <strong>VBN:</strong> Verb, past participle (spoken, written, known)<br>
+                • <strong>JJ:</strong> Adjective (rich, diverse, beautiful)<br>
+                • <strong>VB:</strong> Verb, base form (run, think, create)<br>
+                • <strong>IN:</strong> Preposition (in, on, at, for, with)<br>
+                • <strong>DT:</strong> Determiner (the, a, an, this, that)<br><br>
+                <strong>Technical Approach:</strong><br>
+                NLTK uses statistical models trained on large annotated corpora. The tagger considers:<br>
+                • Word context (surrounding words)<br>
+                • Word endings and morphology<br>
+                • Capitalization patterns<br>
+                • Statistical likelihood based on training data<br><br>
+                <strong>Applications:</strong><br>
+                • Information extraction (finding all nouns)<br>
+                • Grammar checking and correction<br>
+                • Machine translation quality<br>
+                • Question answering systems<br>
+                • Syntactic parsing and analysis`
+            },
+            8: {
+                title: "9. Named Entity Recognition",
+                content: `<strong>Identifying and Classifying Named Entities</strong><br><br>
+                Named Entity Recognition (NER) automatically identifies and classifies named entities in text into predefined categories. This process goes beyond POS tagging to understand what real-world entities words refer to.<br><br>
+                <strong>Common Entity Types:</strong><br>
+                • <strong>PERSON:</strong> People's names (John Smith, Marie Curie)<br>
+                • <strong>GPE:</strong> Geopolitical entities - countries, cities, states (India, New York, California)<br>
+                • <strong>ORGANIZATION:</strong> Companies, institutions (Google, Harvard University)<br>
+                • <strong>DATE:</strong> Absolute or relative dates and times<br>
+                • <strong>MONEY:</strong> Monetary values including currency<br>
+                • <strong>LOCATION:</strong> Geographic locations, landmarks<br><br>
+                <strong>Technical Process:</strong><br>
+                • Combines POS tags with contextual analysis<br>
+                • Uses pattern matching and statistical models<br>
+                • Considers capitalization and word position<br>
+                • Applies linguistic rules and gazetteer lookups<br><br>
+                <strong>Challenges:</strong><br>
+                • Ambiguity: "Apple" could be fruit or company<br>
+                • Context dependency: "Paris" (city) vs "Paris" (person's name)<br>
+                • New entities not seen in training data<br>
+                • Multi-word entities: "New York City"<br><br>
+                <strong>Applications:</strong> Information extraction, knowledge graph construction, document indexing, and automated content analysis.`
+            },
+            9: {
+                title: "10. Sentiment Analysis",
+                content: `<strong>Determining Emotional Tone and Polarity</strong><br><br>
+                Sentiment Analysis identifies the emotional tone of text, classifying it as positive, negative, or neutral using natural language processing techniques. This computational approach to understanding human emotions in text has become essential for business intelligence and social media monitoring.<br><br>
+                <strong>TextBlob's Approach:</strong><br>
+                • <strong>Polarity:</strong> Ranges from -1 (extremely negative) to +1 (extremely positive)<br>
+                • <strong>Subjectivity:</strong> Ranges from 0 (objective) to 1 (subjective/opinionated)<br><br>
+                <strong>Analysis Techniques:</strong><br>
+                • <strong>Lexicon-based:</strong> Uses pre-built dictionaries of positive/negative words<br>
+                • <strong>Machine Learning:</strong> Trained models on labeled sentiment data<br>
+                • <strong>Rule-based:</strong> Grammar rules and linguistic patterns<br>
+                • <strong>Hybrid:</strong> Combines multiple approaches for better accuracy<br><br>
+                <strong>Complexity Factors:</strong><br>
+                • <strong>Negation:</strong> "not good" vs "good" - context matters<br>
+                • <strong>Sarcasm:</strong> "Great job!" could be positive or negative<br>
+                • <strong>Domain-specific:</strong> "This movie is sick" vs "The patient is sick"<br>
+                • <strong>Intensity:</strong> "okay" vs "amazing" - both positive, different strength<br><br>
+                <strong>Real-world Applications:</strong><br>
+                • Customer feedback analysis and brand monitoring<br>
+                • Social media sentiment tracking<br>
+                • Product review summarization<br>
+                • Financial market sentiment analysis<br>
+                • Political opinion mining and election prediction`
+            }
+        };
+
+        // Initialize the interface
+        function init() {
+            generateStepIndicators();
+            updateExplanation();
+            updateNavigationButtons();
+        }
+
+        function generateStepIndicators() {
+            const container = document.getElementById('stepIndicators');
+            container.innerHTML = '';
+            
+            steps.forEach((step, index) => {
+                const indicator = document.createElement('div');
+                indicator.className = 'step-indicator';
+                indicator.textContent = index + 1;
+                indicator.title = step.name;
+                indicator.onclick = () => goToStep(index);
+                container.appendChild(indicator);
+            });
+        }
+
+        function processPipelineData() {
+            const text = document.getElementById('textInput').value.trim();
+            if (!text) {
+                alert('Please enter some text first!');
+                return;
+            }
+
+            // Process the text through our simulated NLTK pipeline
+            processPipeline(text);
+            
+            // Go to first step (input) to show the processed data is ready
+            goToStep(0);
+        }
+
+        function processPipeline(text) {
+            // Simulate NLTK pipeline processing
+            pipelineData = {
+                input: text,
+                sentences: splitIntoSentences(text),
+                tokens: tokenize(text),
+                filtered: removeStopWords(tokenize(text)),
+                stemmed: stem(removeStopWords(tokenize(text))),
+                lemmatized: lemmatize(removeStopWords(tokenize(text))),
+                embeddings: generateEmbeddings(lemmatize(removeStopWords(tokenize(text))), text),
+                pos: posTag(removeStopWords(tokenize(text))),
+                entities: extractEntities(removeStopWords(tokenize(text))),
+                sentiment: analyzeSentiment(text)
+            };
+        }
+
+        // Simulated NLP functions (simplified versions)
+        function splitIntoSentences(text) {
+            return text.split(/[.!?]+/).filter(s => s.trim().length > 0).map(s => s.trim());
+        }
+
+        function tokenize(text) {
+            return text.toLowerCase()
+                      .replace(/[^\w\s]/g, ' ')
+                      .split(/\s+/)
+                      .filter(token => token.length > 0);
+        }
+
+        function removeStopWords(tokens) {
+            const stopWords = ['the', 'is', 'at', 'which', 'on', 'a', 'an', 'and', 'or', 'but', 'in', 'with', 'to', 'for', 'of', 'as', 'by', 'that', 'this', 'it', 'from', 'be', 'are', 'was', 'were', 'been', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could', 'should'];
+            return tokens.filter(token => !stopWords.includes(token.toLowerCase()));
+        }
+
+        function stem(tokens) {
+            // Simplified stemming simulation
+            const stemRules = {
+                'running': 'run', 'languages': 'languag', 'different': 'differ',
+                'regions': 'region', 'heritage': 'heritag', 'culture': 'cultur',
+                'diverse': 'divers', 'variety': 'varieti', 'spoken': 'spoken'
+            };
+            return tokens.map(token => stemRules[token] || token);
+        }
+
+        function lemmatize(tokens) {
+            // Simplified lemmatization simulation  
+            const lemmaRules = {
+                'languages': 'language', 'regions': 'region', 'cultures': 'culture'
+            };
+            return tokens.map(token => lemmaRules[token] || token);
+        }
+
+        function posTag(tokens) {
+            // Simplified POS tagging simulation
+            const posRules = {
+                'india': 'NNP', 'known': 'VBN', 'rich': 'JJ', 'heritage': 'NN',
+                'diverse': 'JJ', 'culture': 'NN', 'variety': 'NN', 'language': 'NN',
+                'spoken': 'VBN', 'across': 'IN', 'different': 'JJ', 'region': 'NN'
+            };
+            return tokens.map(token => ({
+                word: token,
+                pos: posRules[token.toLowerCase()] || 'NN'
+            }));
+        }
+
+        function extractEntities(tokens) {
+            // Simplified NER simulation
+            const entities = [];
+            tokens.forEach(token => {
+                if (token.toLowerCase() === 'india') {
+                    entities.push({ word: token, label: 'GPE' });
+                }
+            });
+            return entities;
+        }
+
+        function generateEmbeddings(tokens, originalText) {
+            // Simulate TF-IDF and embedding generation
+            const vocabulary = [...new Set(tokens)];
+            const documentCount = 5; // Simulated corpus size
+            
+            // Simulate TF-IDF calculation
+            const tfIdf = {};
+            vocabulary.forEach(word => {
+                const tf = tokens.filter(token => token === word).length / tokens.length;
+                const df = Math.max(1, Math.floor(Math.random() * documentCount)); // Simulated document frequency
+                const idf = Math.log(documentCount / df);
+                tfIdf[word] = {
+                    tf: tf.toFixed(3),
+                    idf: idf.toFixed(3),
+                    tfIdf: (tf * idf).toFixed(3)
+                };
+            });
+
+            // Simulate simple word vectors (normally would be 100-300 dimensions)
+            const vectors = {};
+            vocabulary.forEach(word => {
+                vectors[word] = Array.from({length: 5}, () => (Math.random() - 0.5).toFixed(3));
+            });
+
+            return {
+                tfidf: tfIdf,
+                vectors: vectors,
+                vocabulary: vocabulary,
+                totalTokens: tokens.length,
+                uniqueTokens: vocabulary.length
+            };
+        }
+
+        function analyzeSentiment(text) {
+            // Simplified sentiment analysis
+            const positiveWords = ['rich', 'diverse', 'good', 'great', 'excellent', 'beautiful'];
+            const negativeWords = ['bad', 'poor', 'terrible', 'awful', 'horrible'];
+            
+            const words = text.toLowerCase().split(/\s+/);
+            let score = 0;
+            
+            words.forEach(word => {
+                if (positiveWords.includes(word)) score += 0.1;
+                if (negativeWords.includes(word)) score -= 0.1;
+            });
+            
+            return {
+                polarity: Math.max(-1, Math.min(1, score)),
+                subjectivity: 0.5 // Simplified
+            };
+        }
+
+        function goToStep(stepIndex) {
+            if (stepIndex < 0 || stepIndex >= steps.length) return;
+            
+            currentStep = stepIndex;
+            updateVisualization();
+            updateProgress();
+            updateStepIndicators();
+            updateExplanation();
+            updateNavigationButtons();
+        }
+
+        function updateVisualization() {
+            const visualization = document.getElementById('visualization');
+            const step = steps[currentStep];
+            const data = pipelineData[step.key];
+
+            let content = `
+                <div class="step-content active">
+                    <div class="step-title">${currentStep + 1}. ${explanations[currentStep].title}</div>
+                    <div class="data-display">
+                        <div class="data-label">Output:</div>
+                        <div class="data-content">${formatData(data, step.key)}</div>
+                    </div>
+                </div>
+            `;
+
+            visualization.innerHTML = content;
+        }
+
+        function formatData(data, type) {
+            if (!data) return 'No data processed yet. Click "Run Pipeline" first.';
+
+            switch(type) {
+                case 'input':
+                    return `"${data}"`;
+                
+                case 'sentences':
+                    return data.map((sent, i) => `${i + 1}. "${sent}"`).join('\n');
+                
+                case 'tokens':
+                case 'filtered':
+                case 'stemmed': 
+                case 'lemmatized':
+                    return `[${data.map(token => `'${token}'`).join(', ')}]`;
+                
+                case 'embeddings':
+                    const embData = data;
+                    let embOutput = `TF-IDF Scores:\n`;
+                    Object.entries(embData.tfidf).slice(0, 5).forEach(([word, scores]) => {
+                        embOutput += `"${word}": TF=${scores.tf}, IDF=${scores.idf}, TF-IDF=${scores.tfIdf}\n`;
+                    });
+                    embOutput += `\nSample Word Vectors (5-dimensional):\n`;
+                    Object.entries(embData.vectors).slice(0, 3).forEach(([word, vector]) => {
+                        embOutput += `"${word}": [${vector.join(', ')}]\n`;
+                    });
+                    embOutput += `\nVocabulary Statistics:\n`;
+                    embOutput += `Total Tokens: ${embData.totalTokens}\n`;
+                    embOutput += `Unique Tokens: ${embData.uniqueTokens}\n`;
+                    embOutput += `Vocabulary: [${embData.vocabulary.slice(0, 8).join(', ')}...]`;
+                    return embOutput;
+                    return data.map(item => `('${item.word}', '${item.pos}')`).join('\n');
+                
+                case 'entities':
+                    return data.length > 0 ? 
+                        data.map(ent => `${ent.word}: ${ent.label}`).join('\n') :
+                        'No named entities found';
+                
+                case 'sentiment':
+                    return `Polarity: ${data.polarity.toFixed(3)} (${data.polarity > 0 ? 'Positive' : data.polarity < 0 ? 'Negative' : 'Neutral'})
+Subjectivity: ${data.subjectivity.toFixed(3)}`;
+                
+                default:
+                    return JSON.stringify(data, null, 2);
+            }
+        }
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const percentage = ((currentStep + 1) / steps.length) * 100;
+            progressFill.style.width = percentage + '%';
+        }
+
+        function updateStepIndicators() {
+            const indicators = document.querySelectorAll('.step-indicator');
+            indicators.forEach((indicator, index) => {
+                indicator.classList.remove('active', 'completed');
+                if (index === currentStep) {
+                    indicator.classList.add('active');
+                } else if (index < currentStep) {
+                    indicator.classList.add('completed');
+                }
+            });
+        }
+
+        function updateExplanation() {
+            const explanationDiv = document.getElementById('stepExplanation');
+            const explanation = explanations[currentStep];
+            
+            explanationDiv.innerHTML = `
+                <h4>${explanation.title}</h4>
+                <p>${explanation.content}</p>
+            `;
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentStep <= 0;
+            nextBtn.disabled = currentStep >= steps.length - 1;
+        }
+
+        function previousStep() {
+            if (currentStep > 0) {
+                goToStep(currentStep - 1);
+            }
+        }
+
+        function nextStep() {
+            if (currentStep < steps.length - 1) {
+                goToStep(currentStep + 1);
+            }
+        }
+
+        function resetPipeline() {
+            currentStep = 0;
+            pipelineData = {};
+            isRunning = false;
+            
+            const visualization = document.getElementById('visualization');
+            visualization.innerHTML = `
+                <div class="step-content active">
+                    <div class="step-title">Welcome to NLTK Pipeline</div>
+                    <div class="data-display">
+                        <div class="data-label">Ready to Process</div>
+                        <div class="data-content">Click "Run Pipeline" to start text processing, or step through each stage individually.</div>
+                    </div>
+                </div>
+            `;
+            
+            updateProgress();
+            updateStepIndicators();
+            updateExplanation();
+            updateNavigationButtons();
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
