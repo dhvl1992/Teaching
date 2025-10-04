@@ -1,669 +1,492 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How AI Understands Language: The Magic Behind Embeddings</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Text Embeddings & Similarity Search</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh; color:#1E293B; line-height:1.6;
         }
-
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            display:grid; grid-template-columns:1fr 1fr; min-height:100vh; gap:2px;
         }
-
-        .hero {
-            text-align: center;
-            color: white;
-            padding: 40px 0;
-            margin-bottom: 40px;
+        .panel { padding:30px; overflow-y:auto; }
+        .left-panel { background:#FEF7ED; }
+        .right-panel { background:#1E293B; color:#FEF7ED; }
+        
+        .header {
+            text-align:center; padding:30px; background:#1E293B; color:#FEF7ED;
+            border-radius:15px; margin-bottom:30px; border-left:5px solid #EA580C;
+            box-shadow:0 8px 25px rgba(0,0,0,0.1); transition:transform .3s ease;
         }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: fadeInUp 1s ease-out;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            animation: fadeInUp 1s ease-out 0.3s both;
-        }
-
+        .header:hover { transform: translateY(-5px); }
+        .header h1 { font-size:2.5em; margin-bottom:15px; text-shadow:2px 2px 4px rgba(0,0,0,.3); }
+        .header p { font-size:1.2em; opacity:.9; font-style:italic; }
+        
         .section {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            animation: slideInUp 0.8s ease-out;
+            background:#FEF7ED; padding:30px; border-radius:15px; margin-bottom:30px;
+            border-left:5px solid #EA580C; box-shadow:0 8px 25px rgba(0,0,0,0.1);
+            transition:transform .3s ease;
         }
-
+        .section:hover { transform: translateY(-5px); }
+        .theory-section {
+            background: rgba(5,150,105,.05);
+            border-left:5px solid #059669;
+        }
         .section h2 {
-            color: #4a5568;
-            font-size: 2rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            font-size:2.2em; color:#1E293B; margin-bottom:25px; padding-bottom:10px;
+            border-bottom:3px solid #EA580C;
         }
-
-        .icon {
-            font-size: 2.5rem;
-            animation: bounce 2s infinite;
+        .theory-section h2 { border-bottom:3px solid #059669; }
+        .section h3 { font-size:1.4em; color:#1E293B; margin:20px 0 10px 0; }
+        
+        .content-list { list-style:none; padding-left:0; }
+        .content-list li { position:relative; padding-left:30px; margin-bottom:12px; }
+        .content-list li::before { 
+            content:"→"; position:absolute; left:0; color:#EA580C; 
+            font-weight:bold; font-size:1.2em; 
         }
-
+        
         .training-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+            gap:20px; margin:20px 0;
         }
-
         .training-card {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            transition: transform 0.3s ease;
+            background:linear-gradient(135deg, #EA580C 0%, #059669 100%);
+            color:#FEF7ED; padding:20px; border-radius:10px; text-align:center;
+            transition:transform .3s ease; box-shadow:0 4px 15px rgba(234,88,12,0.3);
         }
-
-        .training-card:hover {
-            transform: translateY(-5px) scale(1.02);
+        .training-card:hover { transform: translateY(-5px) scale(1.02); }
+        .training-card h3 { margin-bottom:10px; font-size:1.3em; }
+        
+        .demo-container {
+            background:#FEF7ED; border:2px solid #EA580C; border-radius:15px; padding:25px;
+            margin:25px 0; box-shadow:0 8px 25px rgba(0,0,0,0.1);
         }
-
-        .process-step {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 15px 0;
-            position: relative;
-            overflow: hidden;
+        
+        .document-grid {
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+            gap:20px; margin:20px 0;
         }
-
-        .process-step::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+        .document-card {
+            background:linear-gradient(135deg, rgba(234,88,12,.1) 0%, rgba(5,150,105,.1) 100%);
+            border:2px solid #EA580C; border-radius:10px; padding:20px;
+            cursor:pointer; transition:all .3s ease;
         }
-
-        .process-step:hover::before {
-            left: 100%;
+        .document-card:hover {
+            transform: translateY(-5px); border-color:#059669;
+            box-shadow:0 8px 20px rgba(234,88,12,0.3);
         }
-
-        .step-number {
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            float: left;
-            margin-right: 15px;
+        .document-card.selected {
+            border:3px solid #059669; background:rgba(5,150,105,.2);
         }
-
-        .embedding-demo {
-            background: #f7fafc;
-            border: 2px dashed #cbd5e0;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
+        .doc-title { font-weight:bold; color:#1E293B; margin-bottom:10px; font-size:1.1em; }
+        .doc-text { color:#334155; font-size:0.95em; margin:10px 0; }
+        .doc-vector {
+            font-family:'Courier New', monospace; background:rgba(0,0,0,.05);
+            padding:8px; border-radius:5px; font-size:0.85em; margin-top:10px;
         }
-
-        .vector-visualization {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin: 20px 0;
+        
+        .query-section {
+            background:rgba(5,150,105,.1); padding:20px; border-radius:10px;
+            border:2px solid #059669; margin:20px 0;
         }
-
-        .vector-box {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            min-width: 200px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
+        .query-text {
+            font-size:1.1em; font-weight:bold; color:#1E293B; margin-bottom:10px;
         }
-
-        .vector-box:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .numbers {
-            font-family: 'Courier New', monospace;
-            background: rgba(255,255,255,0.2);
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-            font-size: 0.9rem;
-        }
-
+        
         .similarity-meter {
-            background: #e2e8f0;
-            height: 20px;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 10px 0;
-            position: relative;
+            background:#E2E8F0; height:25px; border-radius:12px; overflow:hidden;
+            margin:10px 0; position:relative;
         }
-
         .similarity-fill {
-            background: linear-gradient(90deg, #ff6b6b, #ffa500, #32cd32);
-            height: 100%;
-            border-radius: 10px;
-            transition: width 2s ease-in-out;
-            position: relative;
+            height:100%; border-radius:12px; transition:width 1s ease;
+            background:linear-gradient(90deg, #DC2626, #EA580C, #059669);
+            position:relative;
         }
-
         .similarity-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shimmer 2s infinite;
+            content:''; position:absolute; top:0; left:0; right:0; bottom:0;
+            background:linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation:shimmer 2s infinite;
         }
-
-        .interactive-question {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        .question-input {
-            background: white;
-            color: #333;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 400px;
-            margin: 10px 0;
-            font-size: 1rem;
-        }
-
-        .magic-button {
-            background: linear-gradient(135deg, #ff6b6b, #ffa500);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 10px;
-        }
-
-        .magic-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-
-        .result-box {
-            background: #f0fff4;
-            border: 2px solid #68d391;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            display: none;
-        }
-
-        .highlight {
-            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
-        }
-
         @keyframes shimmer {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
+            0% { transform:translateX(-100%); }
+            100% { transform:translateX(100%); }
         }
-
-        .timeline {
-            position: relative;
-            margin: 20px 0;
+        
+        .result-box {
+            background:rgba(5,150,105,.1); border:2px solid #059669;
+            border-radius:10px; padding:20px; margin:20px 0; display:none;
         }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        .result-box.show { display:block; }
+        .result-text { font-size:1.05em; color:#1E293B; margin:10px 0; }
+        
+        .btn {
+            background:#EA580C; color:#FEF7ED; border:none; padding:12px 24px; 
+            border-radius:10px; cursor:pointer; font-size:1em; font-family:Georgia, serif; 
+            font-weight:bold; transition:all .3s ease; box-shadow:0 4px 15px rgba(234,88,12,0.3);
+            margin:5px;
         }
-
-        .timeline-item {
-            position: relative;
-            margin: 30px 0;
-            width: 45%;
+        .btn:hover { 
+            background:#DC2626; transform:translateY(-2px); 
+            box-shadow:0 6px 20px rgba(234,88,12,.4); 
         }
-
-        .timeline-item:nth-child(even) {
-            margin-left: 55%;
+        
+        .highlight {
+            background:linear-gradient(120deg, rgba(234,88,12,.2) 0%, rgba(5,150,105,.2) 100%);
+            padding:3px 8px; border-radius:5px; font-weight:bold;
         }
-
-        .timeline-content {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            position: relative;
+        
+        .code-section {
+            background:#0F172A; padding:30px; border-radius:15px; margin-bottom:30px;
+            border-left:5px solid #059669; box-shadow:0 8px 25px rgba(0,0,0,.1);
+            position:relative;
         }
-
-        .timeline-content::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            width: 0;
-            height: 0;
-            border: 10px solid;
+        .code-block {
+            background:#000; padding:20px; border-radius:10px; 
+            font-family:'Courier New', monospace; font-size:14px; 
+            overflow-x:auto; color:#FEF7ED; line-height:1.5;
         }
-
-        .timeline-item:nth-child(odd) .timeline-content::before {
-            right: -20px;
-            border-color: transparent transparent transparent white;
+        .copy-btn {
+            position:absolute; top:15px; right:15px; background:#EA580C; 
+            color:#FEF7ED; border:none; padding:8px 15px; border-radius:8px; 
+            cursor:pointer; font-size:12px; font-family:Georgia, serif;
+            transition:all .3s ease;
         }
-
-        .timeline-item:nth-child(even) .timeline-content::before {
-            left: -20px;
-            border-color: transparent white transparent transparent;
-        }
-
+        .copy-btn:hover { background:#DC2626; }
+        
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .vector-visualization {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .timeline::before {
-                left: 20px;
-            }
-            
-            .timeline-item {
-                width: calc(100% - 40px);
-                margin-left: 40px !important;
-            }
-            
-            .timeline-item:nth-child(even) .timeline-content::before {
-                left: -20px;
-                border-color: transparent white transparent transparent;
-            }
+            .container { grid-template-columns:1fr; }
+            .panel { padding:20px; }
+            .header h1 { font-size:2em; }
+            .section { padding:20px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Hero Section -->
-        <div class="hero">
-            <h1>🤖 How AI Understands Language</h1>
-            <p>The Magic Behind Embeddings and Similarity Search</p>
+<div class="container">
+    <!-- Left Panel -->
+    <div class="panel left-panel">
+        <div class="header">
+            <h1>🤖 Text Embeddings</h1>
+            <p>How AI Transforms Words into Numbers for Similarity Search</p>
         </div>
 
-        <!-- Training Section -->
         <div class="section">
-            <h2><span class="icon">🏋️</span>The Training Secret: Learning from BILLIONS of Examples</h2>
-            <p>Before an AI can understand your questions, it needs to go to "AI School" and learn from reading almost everything humans have ever written!</p>
-            
+            <h2>🎯 Aim</h2>
+            <p><strong>To understand how AI converts text into numerical vectors (embeddings) and uses vector similarity to find relevant documents — enabling semantic search that understands meaning, not just keywords.</strong></p>
+
+            <div class="theory-section" style="margin-top:18px; border-radius:12px; padding:18px;">
+                <h3>Core Concepts</h3>
+                <ul class="content-list">
+                    <li><strong>Embeddings:</strong> Converting text to numerical vectors (e.g., [0.8, 0.2, 0.9, ...])</li>
+                    <li><strong>Vector Space:</strong> Similar meanings → similar vectors (close in space)</li>
+                    <li><strong>Cosine Similarity:</strong> Measure angle between vectors (0 to 1 score)</li>
+                    <li><strong>Semantic Search:</strong> Find documents by meaning, not exact word matches</li>
+                    <li><strong>Training:</strong> AI learns from billions of examples to encode meaning</li>
+                </ul>
+                <p style="margin-top:10px"><em>Key Insight:</em> The AI learned that "height", "tall", and "meters" are related by reading millions of examples. When you ask about tower height, it finds documents with those concepts even if they use different words!</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧠 How AI Learns Meaning</h2>
             <div class="training-grid">
                 <div class="training-card">
-                    <h3>📚 Books & Articles</h3>
-                    <p>Millions of books, Wikipedia, news articles, research papers</p>
+                    <h3>📚 Training Data</h3>
+                    <p>Billions of text examples: books, articles, websites, Q&A</p>
                 </div>
                 <div class="training-card">
-                    <h3>🌐 Web Content</h3>
-                    <p>Websites, forums, blogs, Q&A sites like Stack Overflow</p>
+                    <h3>🔤 Pattern Learning</h3>
+                    <p>Learns "tall" ≈ "height" ≈ "meters" from context</p>
                 </div>
                 <div class="training-card">
-                    <h3>🔤 Language Patterns</h3>
-                    <p>Learns that "tall" = "height" = "meters" from context</p>
+                    <h3>🔢 Vector Encoding</h3>
+                    <p>Similar concepts get similar number patterns</p>
                 </div>
-            </div>
-
-            <div class="embedding-demo">
-                <h3>🧠 How the AI Learns Relationships</h3>
-                <p>During training, the AI saw patterns like this <strong>millions of times</strong>:</p>
-                <div style="margin: 20px 0;">
-                    <div style="background: #e2f0ff; padding: 15px; border-radius: 8px; margin: 10px 0;">
-                        <strong>Pattern:</strong> "The [BUILDING] is [NUMBER] [UNIT] tall"<br>
-                        <em>Examples:</em> "The tower is 330 meters tall", "The building is 100 feet tall"
-                    </div>
-                    <div style="background: #fff0e2; padding: 15px; border-radius: 8px; margin: 10px 0;">
-                        <strong>Pattern:</strong> "How [HEIGHT_WORD] is the [OBJECT]?"<br>
-                        <em>Examples:</em> "How tall is the tower?", "How high is the mountain?"
-                    </div>
-                </div>
-                <p><span class="highlight">The AI learned that questions about height expect measurement answers!</span></p>
-            </div>
-        </div>
-
-        <!-- What Happens When You Ask Section -->
-        <div class="section">
-            <h2><span class="icon">🗼</span>What Happens When You Ask About the Eiffel Tower?</h2>
-            
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="step-number">1</div>
-                        <h3>Your Question</h3>
-                        <p><em>"What is the height of the Eiffel Tower?"</em></p>
-                        <p>You type your question in plain English</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="step-number">2</div>
-                        <h3>Convert to Numbers</h3>
-                        <p>The AI converts your question into a special number code (embedding)</p>
-                        <div class="numbers">[0.052, 0.090, -0.011, 0.029, -0.070, ...]</div>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="step-number">3</div>
-                        <h3>Search for Similar Numbers</h3>
-                        <p>The system looks through ALL stored documents to find similar number patterns</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="step-number">4</div>
-                        <h3>Find the Best Match</h3>
-                        <p><strong>Winner:</strong> "The Eiffel Tower is 330 meters tall. It was built in 1889."</p>
-                        <div class="similarity-meter">
-                            <div class="similarity-fill" style="width: 85%"></div>
-                        </div>
-                        <p>Similarity Score: 0.847 (Very High!)</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="step-number">5</div>
-                        <h3>Generate Answer</h3>
-                        <p>Gemini AI reads the matched document and extracts: <strong>"330 meters"</strong></p>
-                    </div>
+                <div class="training-card">
+                    <h3>⚡ Fast Search</h3>
+                    <p>Math operations on vectors = millisecond searches</p>
                 </div>
             </div>
         </div>
 
-        <!-- Vector Similarity Demo -->
         <div class="section">
-            <h2><span class="icon">🔢</span>How Number Similarity Works</h2>
-            <p>Each sentence becomes a list of 384 numbers. Similar meanings = similar numbers!</p>
-            
-            <div class="vector-visualization">
-                <div class="vector-box" onclick="showSimilarity(this, 0.847)">
-                    <h4>📄 Document 1</h4>
-                    <p>"The Eiffel Tower is 330 meters tall"</p>
-                    <div class="numbers">[0.8, 0.2, 0.9, 0.1, 0.7, ...]</div>
+            <h2>🎮 Interactive Demo</h2>
+            <div class="demo-container">
+                <div class="query-section">
+                    <div class="query-text">❓ Your Query:</div>
+                    <div style="font-size:1.1em; padding:10px; background:rgba(255,255,255,0.6); border-radius:8px;">
+                        "What is the height of the Eiffel Tower?"
+                    </div>
+                    <div class="doc-vector">Vector: [0.72, 0.31, 0.85, 0.19, 0.64, ...]</div>
+                    <p style="margin-top:15px; font-style:italic; color:#334155;">
+                        Click on documents below to see their similarity scores!
+                    </p>
                 </div>
-                
-                <div class="vector-box" onclick="showSimilarity(this, 0.234)">
-                    <h4>📄 Document 2</h4>
-                    <p>"The capital of France is Paris"</p>
-                    <div class="numbers">[0.2, 0.8, 0.1, 0.9, 0.3, ...]</div>
-                </div>
-                
-                <div class="vector-box" onclick="showSimilarity(this, 0.156)">
-                    <h4>📄 Document 3</h4>
-                    <p>"French cuisine includes croissants"</p>
-                    <div class="numbers">[0.1, 0.6, 0.2, 0.7, 0.4, ...]</div>
-                </div>
-            </div>
 
-            <div class="interactive-question">
-                <h3>❓ Your Question</h3>
-                <p>"What is the height of the Eiffel Tower?"</p>
-                <div class="numbers">[0.7, 0.3, 0.8, 0.2, 0.6, ...]</div>
-                <p><em>Click on the documents above to see their similarity scores!</em></p>
-            </div>
+                <div class="document-grid">
+                    <div class="document-card" onclick="showSimilarity(this, 0.847, 0)">
+                        <div class="doc-title">📄 Document 1</div>
+                        <div class="doc-text">"The Eiffel Tower is 330 meters tall. It was built in 1889 in Paris, France."</div>
+                        <div class="doc-vector">[0.78, 0.28, 0.89, 0.15, 0.69, ...]</div>
+                    </div>
 
-            <div class="result-box" id="similarity-result">
-                <h3>🎯 Similarity Result</h3>
-                <p id="similarity-text">Click on a document to see how similar it is to your question!</p>
-                <div class="similarity-meter">
-                    <div class="similarity-fill" id="similarity-bar" style="width: 0%"></div>
+                    <div class="document-card" onclick="showSimilarity(this, 0.334, 1)">
+                        <div class="doc-title">📄 Document 2</div>
+                        <div class="doc-text">"The capital of France is Paris. Paris has a population of 2.1 million people."</div>
+                        <div class="doc-vector">[0.25, 0.81, 0.12, 0.88, 0.31, ...]</div>
+                    </div>
+
+                    <div class="document-card" onclick="showSimilarity(this, 0.156, 2)">
+                        <div class="doc-title">📄 Document 3</div>
+                        <div class="doc-text">"French cuisine includes croissants, baguettes, and escargot as traditional dishes."</div>
+                        <div class="doc-vector">[0.14, 0.67, 0.23, 0.72, 0.38, ...]</div>
+                    </div>
+                </div>
+
+                <div class="result-box" id="resultBox">
+                    <h3 style="color:#059669; margin-bottom:15px;">🎯 Similarity Analysis</h3>
+                    <div class="result-text" id="resultText"></div>
+                    <div class="similarity-meter">
+                        <div class="similarity-fill" id="similarityBar" style="width:0%"></div>
+                    </div>
+                    <div style="text-align:center; margin-top:10px;">
+                        <strong id="scoreText"></strong>
+                    </div>
+                </div>
+
+                <div style="margin-top:25px; padding:20px; background:rgba(5,150,105,.1); border-radius:10px;">
+                    <h3 style="color:#059669;">💡 Why Document 1 Wins:</h3>
+                    <ul class="content-list">
+                        <li>Contains exact answer: <span class="highlight">"330 meters tall"</span></li>
+                        <li>Shares key concepts: height, tower, measurement</li>
+                        <li>Vector similarity = 0.847 (very high match!)</li>
+                        <li>AI extracts: <strong>"The Eiffel Tower is 330 meters tall"</strong></li>
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <!-- Interactive Demo -->
-        <div class="section">
-            <h2><span class="icon">🎮</span>Try It Yourself!</h2>
-            <p>See how different questions find different answers:</p>
-            
-            <div class="interactive-question">
-                <input type="text" class="question-input" placeholder="Ask a question about the Eiffel Tower..." id="user-question">
-                <br>
-                <button class="magic-button" onclick="processQuestion()">🔮 Find Similar Documents</button>
-            </div>
-
-            <div class="result-box" id="demo-result">
-                <h3>📊 Results</h3>
-                <div id="demo-content"></div>
-            </div>
-        </div>
-
-        <!-- Key Insights -->
-        <div class="section">
-            <h2><span class="icon">💡</span>Why This Is Revolutionary</h2>
-            
-            <div class="training-grid">
-                <div class="training-card">
-                    <h3>🎯 Perfect Matching</h3>
-                    <p>Finds relevant info even when you use different words than the original document</p>
-                </div>
-                <div class="training-card">
-                    <h3>🚀 Lightning Fast</h3>
-                    <p>Searches through millions of documents in milliseconds using math</p>
-                </div>
-                <div class="training-card">
-                    <h3>🌍 Universal</h3>
-                    <p>Works across languages and understands context, not just keywords</p>
-                </div>
-                <div class="training-card">
-                    <h3>✅ Accurate</h3>
-                    <p>Only gives answers based on YOUR documents - no hallucination!</p>
-                </div>
-            </div>
-
-            <div style="background: #f0f8ff; padding: 20px; border-radius: 10px; margin-top: 20px; text-align: center;">
-                <h3>🌟 The Bottom Line</h3>
-                <p style="font-size: 1.1rem;"><span class="highlight">AI learned to understand meaning by reading billions of examples and encoding relationships in numbers!</span></p>
-                <p>When you ask about the Eiffel Tower, it doesn't just match words - it understands <strong>concepts</strong> and finds semantically similar information.</p>
-            </div>
+        <div class="section theory-section">
+            <h2>🔬 The Math Behind It</h2>
+            <h3>Cosine Similarity Formula:</h3>
+            <p style="background:rgba(255,255,255,0.7); padding:15px; border-radius:8px; font-family:'Courier New', monospace; margin:15px 0;">
+                similarity = (A · B) / (||A|| × ||B||)
+            </p>
+            <ul class="content-list">
+                <li><strong>A · B:</strong> Dot product (multiply matching positions, sum them)</li>
+                <li><strong>||A||, ||B||:</strong> Vector magnitudes (lengths)</li>
+                <li><strong>Result:</strong> Score from 0 (completely different) to 1 (identical)</li>
+            </ul>
+            <p style="margin-top:15px;"><em>Example:</em> Query vector [0.7, 0.3, 0.8] vs Doc [0.8, 0.2, 0.9] → High similarity because numbers are close!</p>
         </div>
     </div>
 
-    <script>
-        function showSimilarity(element, score) {
-            const resultBox = document.getElementById('similarity-result');
-            const similarityText = document.getElementById('similarity-text');
-            const similarityBar = document.getElementById('similarity-bar');
-            
-            resultBox.style.display = 'block';
-            
-            let message;
-            if (score > 0.8) {
-                message = `🎯 Excellent match! Score: ${score} - This document is highly relevant to your question about Eiffel Tower height.`;
-            } else if (score > 0.4) {
-                message = `🔍 Partial match. Score: ${score} - This document has some relevance but isn't the best answer.`;
-            } else {
-                message = `❌ Poor match. Score: ${score} - This document is not very relevant to your height question.`;
-            }
-            
-            similarityText.textContent = message;
-            similarityBar.style.width = (score * 100) + '%';
-            
-            // Highlight the clicked element
-            document.querySelectorAll('.vector-box').forEach(box => box.style.border = 'none');
-            element.style.border = '3px solid #ffd700';
-        }
+    <!-- Right Panel -->
+    <div class="panel right-panel">
+        <div class="header">
+            <h2>💻 Python Implementation</h2>
+            <p>Complete embeddings & similarity search code</p>
+        </div>
 
-        function processQuestion() {
-            const question = document.getElementById('user-question').value;
-            const resultBox = document.getElementById('demo-result');
-            const demoContent = document.getElementById('demo-content');
-            
-            if (!question.trim()) {
-                alert('Please enter a question!');
-                return;
-            }
-            
-            resultBox.style.display = 'block';
-            
-            // Simulate document matching based on keywords
-            const documents = [
-                { text: "The Eiffel Tower is 330 meters tall. It was built in 1889.", score: 0.0 },
-                { text: "The Seine River flows through Paris and is 777 kilometers long.", score: 0.0 },
-                { text: "The capital of France is Paris. Paris has a population of 2.1 million.", score: 0.0 }
-            ];
-            
-            // Simple keyword matching simulation
-            const lowerQuestion = question.toLowerCase();
-            
-            if (lowerQuestion.includes('tall') || lowerQuestion.includes('height') || lowerQuestion.includes('high')) {
-                documents[0].score = 0.847;
-                documents[1].score = 0.337;
-                documents[2].score = 0.214;
-            } else if (lowerQuestion.includes('river') || lowerQuestion.includes('water') || lowerQuestion.includes('seine')) {
-                documents[0].score = 0.156;
-                documents[1].score = 0.923;
-                documents[2].score = 0.334;
-            } else if (lowerQuestion.includes('capital') || lowerQuestion.includes('population') || lowerQuestion.includes('people')) {
-                documents[0].score = 0.123;
-                documents[1].score = 0.298;
-                documents[2].score = 0.876;
-            } else {
-                documents[0].score = 0.234;
-                documents[1].score = 0.156;
-                documents[2].score = 0.345;
-            }
-            
-            // Sort by score
-            documents.sort((a, b) => b.score - a.score);
-            
-            let html = `<h4>Your Question: "${question}"</h4><br>`;
-            html += '<h4>📊 Ranked Results:</h4>';
-            
-            documents.forEach((doc, index) => {
-                const percentage = Math.round(doc.score * 100);
-                html += `
-                    <div style="background: #f8f9fa; padding: 15px; margin: 10px 0; border-radius: 8px; border-left: 4px solid ${doc.score > 0.7 ? '#28a745' : doc.score > 0.4 ? '#ffc107' : '#dc3545'};">
-                        <strong>Rank ${index + 1}:</strong> "${doc.text}"<br>
-                        <div style="background: #e9ecef; height: 10px; border-radius: 5px; margin: 8px 0;">
-                            <div style="background: linear-gradient(90deg, #ff6b6b, #ffa500, #32cd32); height: 100%; width: ${percentage}%; border-radius: 5px; transition: width 1s ease;"></div>
-                        </div>
-                        <strong>Similarity Score: ${doc.score}</strong> (${percentage}% match)
-                    </div>
-                `;
-            });
-            
-            html += `<div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-top: 15px;">
-                        <strong>🤖 AI Answer:</strong> Based on the highest scoring document, the answer would be extracted from: 
-                        "<em>${documents[0].text}</em>"
-                     </div>`;
-            
-            demoContent.innerHTML = html;
-        }
+        <div class="code-section">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <div class="code-block">
+<pre>
+# Text Embeddings & Similarity Search
+# Using sentence-transformers for semantic search
 
-        // Add some interactive animations
-        document.addEventListener('DOMContentLoaded', function() {
-            // Animate similarity bars on page load
-            setTimeout(() => {
-                const bars = document.querySelectorAll('.similarity-fill');
-                bars.forEach(bar => {
-                    const width = bar.style.width;
-                    bar.style.width = '0%';
-                    setTimeout(() => {
-                        bar.style.width = width;
-                    }, 500);
-                });
-            }, 1000);
-        });
-    </script>
+# STEP 1: Install required libraries
+# !pip install sentence-transformers scikit-learn
+
+import numpy as np
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+
+print("=" * 60)
+print("TEXT EMBEDDINGS & SIMILARITY SEARCH")
+print("=" * 60)
+
+# STEP 2: Load pre-trained embedding model
+print("\nSTEP 1: Loading pre-trained embedding model...")
+print("Model: all-MiniLM-L6-v2 (384-dimensional vectors)")
+
+model = SentenceTransformer('all-MiniLM-L6-v2')
+print("✓ Model loaded successfully!")
+
+# STEP 3: Define our documents (knowledge base)
+print("\nSTEP 2: Creating document collection...")
+
+documents = [
+    "The Eiffel Tower is 330 meters tall. It was built in 1889.",
+    "The capital of France is Paris. Paris has a population of 2.1 million.",
+    "French cuisine includes croissants, baguettes, and escargot.",
+    "The Seine River flows through Paris and is 777 kilometers long.",
+    "The Louvre Museum in Paris houses the Mona Lisa painting."
+]
+
+print(f"Documents in knowledge base: {len(documents)}")
+for i, doc in enumerate(documents, 1):
+    print(f"  Doc {i}: {doc[:50]}...")
+
+# STEP 4: Convert documents to embeddings
+print("\nSTEP 3: Converting documents to embeddings...")
+print("This transforms text into 384-dimensional vectors")
+
+doc_embeddings = model.encode(documents)
+
+print(f"✓ Created {len(doc_embeddings)} document embeddings")
+print(f"  Each embedding shape: {doc_embeddings[0].shape}")
+print(f"\nSample embedding (first 5 dimensions):")
+print(f"  Doc 1: {doc_embeddings[0][:5]}")
+
+# STEP 5: User query
+print("\n" + "=" * 60)
+print("STEP 4: Processing user query...")
+
+query = "What is the height of the Eiffel Tower?"
+print(f"Query: '{query}'")
+
+# Convert query to embedding
+query_embedding = model.encode([query])
+print(f"✓ Query converted to {query_embedding.shape[1]}-dimensional vector")
+print(f"  First 5 dimensions: {query_embedding[0][:5]}")
+
+# STEP 6: Calculate similarity scores
+print("\nSTEP 5: Calculating similarity scores...")
+print("Using cosine similarity: measures angle between vectors")
+
+similarities = cosine_similarity(query_embedding, doc_embeddings)[0]
+
+print(f"\n{'Document':<10} {'Similarity':<12} {'Match Quality'}")
+print("-" * 50)
+for i, sim in enumerate(similarities, 1):
+    quality = "Excellent" if sim > 0.7 else "Good" if sim > 0.4 else "Poor"
+    print(f"Doc {i:<7} {sim:.4f}       {quality}")
+
+# STEP 7: Find best match
+print("\nSTEP 6: Finding best matching document...")
+
+best_idx = np.argmax(similarities)
+best_score = similarities[best_idx]
+best_doc = documents[best_idx]
+
+print(f"\n🎯 BEST MATCH:")
+print(f"  Document {best_idx + 1}")
+print(f"  Score: {best_score:.4f}")
+print(f"  Text: '{best_doc}'")
+
+# STEP 8: Rank all results
+print("\nSTEP 7: Ranking all documents by relevance...")
+
+# Create list of (document, score) pairs and sort
+ranked = sorted(
+    zip(documents, similarities), 
+    key=lambda x: x[1], 
+    reverse=True
+)
+
+print(f"\n{'Rank':<6} {'Score':<8} {'Document'}")
+print("-" * 70)
+for rank, (doc, score) in enumerate(ranked, 1):
+    print(f"{rank:<6} {score:.4f}   {doc[:50]}...")
+
+# STEP 9: Demonstrate why it works
+print("\n" + "=" * 60)
+print("WHY THIS WORKS:")
+print("=" * 60)
+
+print("""
+The AI model was trained on billions of text examples and learned:
+  • "height", "tall", "meters" are related concepts
+  • Questions about "how tall" expect measurement answers
+  • "Eiffel Tower" is a landmark with measurable height
+
+When you query about Eiffel Tower height:
+  1. Query becomes vector: [0.72, 0.31, 0.85, ...]
+  2. Doc 1 vector is similar: [0.78, 0.28, 0.89, ...]
+  3. Cosine similarity = 0.847 (very high!)
+  4. System returns Doc 1 as best answer
+
+This is SEMANTIC search - understanding meaning, not just keywords!
+""")
+
+# STEP 10: Try different query
+print("\n" + "=" * 60)
+print("BONUS: Try a different query")
+print("=" * 60)
+
+new_query = "Tell me about French food"
+print(f"New Query: '{new_query}'")
+
+new_embedding = model.encode([new_query])
+new_similarities = cosine_similarity(new_embedding, doc_embeddings)[0]
+
+best_new_idx = np.argmax(new_similarities)
+print(f"\n🎯 Best Match: Document {best_new_idx + 1}")
+print(f"Score: {new_similarities[best_new_idx]:.4f}")
+print(f"Text: '{documents[best_new_idx]}'")
+
+print("\n" + "=" * 60)
+print("EXPERIMENT COMPLETE!")
+print("=" * 60)
+</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let selectedDoc = null;
+
+function showSimilarity(element, score, docIndex) {
+    const resultBox = document.getElementById('resultBox');
+    const resultText = document.getElementById('resultText');
+    const similarityBar = document.getElementById('similarityBar');
+    const scoreText = document.getElementById('scoreText');
+    
+    // Remove previous selection
+    document.querySelectorAll('.document-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    // Add selection to clicked card
+    element.classList.add('selected');
+    selectedDoc = docIndex;
+    
+    // Show result box
+    resultBox.classList.add('show');
+    
+    // Determine message based on score
+    let message, quality;
+    if (score > 0.7) {
+        message = `🎯 <strong>Excellent Match!</strong><br><br>This document is highly relevant to your query about Eiffel Tower height. The vector similarity score of ${score.toFixed(3)} indicates strong semantic alignment.<br><br><strong>Why it matches:</strong> Contains direct answer with related concepts (height, tower, measurements).`;
+        quality = "EXCELLENT MATCH";
+    } else if (score > 0.4) {
+        message = `🔍 <strong>Partial Match</strong><br><br>This document has some relevance (score: ${score.toFixed(3)}) but isn't the best answer. It shares some concepts with your query but lacks the specific information requested.<br><br><strong>Why lower score:</strong> Related topic (Paris, France) but missing height information.`;
+        quality = "PARTIAL MATCH";
+    } else {
+        message = `❌ <strong>Poor Match</strong><br><br>This document is not very relevant (score: ${score.toFixed(3)}) to your height question. The vectors are far apart in the embedding space.<br><br><strong>Why it fails:</strong> Different topic entirely - discusses food instead of tower measurements.`;
+        quality = "POOR MATCH";
+    }
+    
+    resultText.innerHTML = message;
+    similarityBar.style.width = (score * 100) + '%';
+    scoreText.textContent = `Similarity Score: ${score.toFixed(3)} — ${quality}`;
+}
+
+function copyCode(btn) {
+    const code = btn.nextElementSibling.textContent;
+    navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+}
+</script>
 </body>
 </html>
