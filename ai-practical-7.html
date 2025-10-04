@@ -1,1 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>NLTK Text Processing Pipeline</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: Georgia, serif;
+            background: linear-gradient(135deg, #FEF7ED 0%, #1E293B 100%);
+            min-height: 100vh; color:#1E293B; line-height:1.6;
+        }
+        .container {
+            display:grid; grid-template-columns:1fr 1fr; min-height:100vh; gap:2px;
+        }
+        .panel { padding:30px; overflow-y:auto; }
+        .left-panel { background:#FEF7ED; }
+        .right-panel { background:#1E293B; color:#FEF7ED; }
+        
+        .header {
+            text-align:center; padding:30px; background:#1E293B; color:#FEF7ED;
+            border-radius:15px; margin-bottom:30px; border-left:5px solid #EA580C;
+            box-shadow:0 8px 25px rgba(0,0,0,0.1); transition:transform .3s ease;
+        }
+        .header:hover { transform: translateY(-5px); }
+        .header h1 { font-size:2.5em; margin-bottom:15px; text-shadow:2px 2px 4px rgba(0,0,0,.3); }
+        .header p { font-size:1.2em; opacity:.9; font-style:italic; }
+        
+        .section {
+            background:#FEF7ED; padding:30px; border-radius:15px; margin-bottom:30px;
+            border-left:5px solid #EA580C; box-shadow:0 8px 25px rgba(0,0,0,0.1);
+            transition:transform .3s ease;
+        }
+        .section:hover { transform: translateY(-5px); }
+        .theory-section {
+            background: rgba(5,150,105,.05);
+            border-left:5px solid #059669;
+        }
+        .section h2 {
+            font-size:2.2em; color:#1E293B; margin-bottom:25px; padding-bottom:10px;
+            border-bottom:3px solid #EA580C;
+        }
+        .theory-section h2 { border-bottom:3px solid #059669; }
+        .section h3 { font-size:1.4em; color:#1E293B; margin:20px 0 10px 0; }
+        
+        .content-list { list-style:none; padding-left:0; }
+        .content-list li { position:relative; padding-left:30px; margin-bottom:12px; }
+        .content-list li::before { 
+            content:"→"; position:absolute; left:0; color:#EA580C; 
+            font-weight:bold; font-size:1.2em; 
+        }
+        
+        .pipeline-container {
+            background:#FEF7ED; border:2px solid #EA580C; border-radius:15px; padding:25px;
+            margin:25px 0; box-shadow:0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .controls { text-align:center; margin:20px 0; }
+        .btn {
+            background:#EA580C; color:#FEF7ED; border:none; padding:12px 24px; 
+            border-radius:10px; cursor:pointer; font-size:1em; font-family:Georgia, serif; 
+            font-weight:bold; transition:all .3s ease; box-shadow:0 4px 15px rgba(234,88,12,0.3);
+            margin:5px;
+        }
+        .btn:hover { 
+            background:#DC2626; transform:translateY(-2px); 
+            box-shadow:0 6px 20px rgba(234,88,12,.4); 
+        }
+        .btn:disabled { background:#9CA3AF; cursor:not-allowed; transform:none; }
+        
+        .progress-bar {
+            background:rgba(0,0,0,.1); height:12px; border-radius:10px; 
+            overflow:hidden; margin:15px 0;
+        }
+        .progress-fill {
+            height:100%; background:linear-gradient(90deg, #EA580C, #059669);
+            transition:width .5s ease; border-radius:10px;
+        }
+        
+        .step-indicators {
+            display:flex; justify-content:space-between; flex-wrap:wrap; 
+            gap:8px; margin:20px 0;
+        }
+        .step-indicator {
+            flex:1; min-width:60px; padding:10px; border-radius:8px;
+            background:rgba(0,0,0,.05); border:2px solid #E2E8F0;
+            text-align:center; font-size:0.85em; cursor:pointer;
+            transition:all .3s ease;
+        }
+        .step-indicator:hover { background:rgba(234,88,12,.1); border-color:#EA580C; }
+        .step-indicator.active {
+            background:#EA580C; color:#FEF7ED; border-color:#EA580C;
+            transform:scale(1.05); font-weight:bold;
+        }
+        .step-indicator.completed {
+            background:rgba(5,150,105,.2); border-color:#059669;
+        }
+        
+        .output-box {
+            background:rgba(255,255,255,0.7); border:2px solid #059669;
+            border-radius:10px; padding:20px; margin:20px 0;
+            border-left:5px solid #059669; min-height:200px;
+        }
+        .output-title {
+            color:#059669; font-weight:bold; font-size:1.3em; margin-bottom:15px;
+        }
+        .output-content {
+            color:#1E293B; font-family:Georgia, serif; line-height:1.8;
+            white-space:pre-wrap; word-break:break-word;
+        }
+        
+        .token-display {
+            display:flex; flex-wrap:wrap; gap:8px; margin:15px 0;
+        }
+        .token {
+            background:rgba(234,88,12,.15); border:2px solid rgba(234,88,12,.3);
+            border-radius:8px; padding:8px 14px; font-size:14px;
+            transition:all .3s ease; cursor:pointer;
+        }
+        .token:hover { 
+            background:rgba(234,88,12,.3); transform:translateY(-2px);
+            box-shadow:0 4px 10px rgba(234,88,12,.2);
+        }
+        .token.removed {
+            background:rgba(220,53,69,.15); border-color:rgba(220,53,69,.3);
+            text-decoration:line-through; opacity:0.6;
+        }
+        .token.pos-tag::after {
+            content:attr(data-pos); font-size:10px; margin-left:6px;
+            background:rgba(5,150,105,.3); padding:2px 6px; border-radius:4px;
+        }
+        
+        textarea {
+            width:100%; padding:15px; background:rgba(255,255,255,0.9);
+            border:2px solid #EA580C; border-radius:10px; color:#1E293B;
+            font-family:Georgia, serif; font-size:14px; resize:vertical;
+            min-height:100px; transition:border-color .3s ease;
+        }
+        textarea:focus { outline:none; border-color:#059669; }
+        
+        .code-section {
+            background:#0F172A; padding:30px; border-radius:15px; margin-bottom:30px;
+            border-left:5px solid #059669; box-shadow:0 8px 25px rgba(0,0,0,.1);
+            position:relative;
+        }
+        .code-block {
+            background:#000; padding:20px; border-radius:10px; 
+            font-family:'Courier New', monospace; font-size:14px; 
+            overflow-x:auto; color:#FEF7ED; line-height:1.5;
+        }
+        .copy-btn {
+            position:absolute; top:15px; right:15px; background:#EA580C; 
+            color:#FEF7ED; border:none; padding:8px 15px; border-radius:8px; 
+            cursor:pointer; font-size:12px; font-family:Georgia, serif;
+            transition:all .3s ease;
+        }
+        .copy-btn:hover { background:#DC2626; }
+        
+        @media (max-width: 768px) {
+            .container { grid-template-columns:1fr; }
+            .panel { padding:20px; }
+            .header h1 { font-size:2em; }
+            .section { padding:20px; }
+            .step-indicators { flex-direction:column; }
+            .step-indicator { min-width:100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Left Panel -->
+    <div class="panel left-panel">
+        <div class="header">
+            <h1>📝 NLTK Pipeline</h1>
+            <p>Text Processing from Raw to Analyzed — Step by Step</p>
+        </div>
 
+        <div class="section">
+            <h2>🎯 Aim</h2>
+            <p><strong>To understand the complete Natural Language Processing pipeline using NLTK: transforming raw text through tokenization, cleaning, normalization, tagging, and analysis stages.</strong></p>
+
+            <div class="theory-section" style="margin-top:18px; border-radius:12px; padding:18px;">
+                <h3>Pipeline Stages</h3>
+                <ul class="content-list">
+                    <li><strong>Sentence Segmentation:</strong> Split text into sentences</li>
+                    <li><strong>Tokenization:</strong> Break sentences into words</li>
+                    <li><strong>Stop Words Removal:</strong> Filter out common words (the, is, and...)</li>
+                    <li><strong>Stemming:</strong> Reduce to root forms (running → run)</li>
+                    <li><strong>Lemmatization:</strong> Convert to dictionary forms (better → good)</li>
+                    <li><strong>POS Tagging:</strong> Identify parts of speech (noun, verb...)</li>
+                    <li><strong>NER:</strong> Find named entities (people, places, organizations)</li>
+                    <li><strong>Sentiment:</strong> Determine emotional tone (positive/negative)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎮 Interactive Pipeline</h2>
+            <div class="pipeline-container">
+                <div style="margin-bottom:20px;">
+                    <label style="font-weight:bold; display:block; margin-bottom:8px;">Enter your text:</label>
+                    <textarea id="textInput" placeholder="India is known for its rich heritage and diverse culture. It has a variety of languages spoken across different regions.">India is known for its rich heritage and diverse culture. It has a variety of languages spoken across different regions.</textarea>
+                </div>
+
+                <div class="controls">
+                    <button class="btn" onclick="processText()">🚀 Process Text</button>
+                    <button class="btn" onclick="nextStep()" id="nextBtn" disabled>➡️ Next Step</button>
+                    <button class="btn" onclick="previousStep()" id="prevBtn" disabled>⬅️ Previous</button>
+                    <button class="btn" onclick="resetPipeline()">🔄 Reset</button>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar" style="width:0%"></div>
+                </div>
+
+                <div class="step-indicators" id="stepIndicators"></div>
+
+                <div class="output-box">
+                    <div class="output-title" id="stepTitle">Click "Process Text" to begin</div>
+                    <div class="output-content" id="stepOutput">
+                        Enter your text above and click "Process Text" to see the NLTK pipeline in action. 
+                        Use the navigation buttons to step through each processing stage.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section theory-section">
+            <h2>💡 Key Insights</h2>
+            <h3>Why Each Step Matters:</h3>
+            <ul class="content-list">
+                <li><strong>Tokenization:</strong> Computers can't understand sentences — they need individual words</li>
+                <li><strong>Stop Words:</strong> Removing "the, is, and" reduces noise by 40-50%</li>
+                <li><strong>Stemming vs Lemmatization:</strong> Stemming is fast (rules), Lemmatization is accurate (dictionary)</li>
+                <li><strong>POS Tagging:</strong> Understanding grammar helps extract meaning</li>
+                <li><strong>NER:</strong> Finding entities enables knowledge extraction</li>
+                <li><strong>Sentiment:</strong> Knowing emotion helps in customer feedback, social media analysis</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="panel right-panel">
+        <div class="header">
+            <h2>💻 Complete NLTK Pipeline</h2>
+            <p>Production-ready Python code</p>
+        </div>
+
+        <div class="code-section">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <div class="code-block">
+<pre>
+# Complete NLTK Text Processing Pipeline
+# All stages: tokenization → cleaning → tagging → analysis
+
+# STEP 1: Install and import libraries
+# !pip install nltk textblob
+
+import nltk
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk import pos_tag, ne_chunk
+from textblob import TextBlob
+import string
+
+# Download required NLTK data
+print("Downloading NLTK data...")
+nltk.download('punkt', quiet=True)
+nltk.download('stopwords', quiet=True)
+nltk.download('wordnet', quiet=True)
+nltk.download('averaged_perceptron_tagger', quiet=True)
+nltk.download('maxent_ne_chunker', quiet=True)
+nltk.download('words', quiet=True)
+
+print("=" * 70)
+print("NLTK TEXT PROCESSING PIPELINE")
+print("=" * 70)
+
+# STEP 2: Input text
+text = """India is known for its rich heritage and diverse culture. 
+It has a variety of languages spoken across different regions."""
+
+print(f"\nSTEP 1: INPUT TEXT")
+print("-" * 70)
+print(f"Original text:\n{text}")
+print(f"Character count: {len(text)}")
+
+# STEP 3: Sentence Segmentation
+print(f"\n{'=' * 70}")
+print("STEP 2: SENTENCE SEGMENTATION")
+print("-" * 70)
+
+sentences = sent_tokenize(text)
+print(f"Number of sentences: {len(sentences)}")
+for i, sent in enumerate(sentences, 1):
+    print(f"  {i}. {sent}")
+
+# STEP 4: Word Tokenization
+print(f"\n{'=' * 70}")
+print("STEP 3: WORD TOKENIZATION")
+print("-" * 70)
+
+tokens = word_tokenize(text.lower())
+print(f"Total tokens: {len(tokens)}")
+print(f"Tokens: {tokens}")
+
+# STEP 5: Remove punctuation and stopwords
+print(f"\n{'=' * 70}")
+print("STEP 4: STOP WORDS REMOVAL")
+print("-" * 70)
+
+stop_words = set(stopwords.words('english'))
+print(f"English stop words count: {len(stop_words)}")
+print(f"Sample stop words: {list(stop_words)[:20]}")
+
+# Filter tokens
+filtered_tokens = [
+    token for token in tokens 
+    if token not in stop_words and token not in string.punctuation
+]
+
+print(f"\nBefore filtering: {len(tokens)} tokens")
+print(f"After filtering: {len(filtered_tokens)} tokens")
+print(f"Removed: {len(tokens) - len(filtered_tokens)} tokens")
+print(f"\nFiltered tokens: {filtered_tokens}")
+
+# STEP 6: Stemming
+print(f"\n{'=' * 70}")
+print("STEP 5: STEMMING (Porter Stemmer)")
+print("-" * 70)
+
+stemmer = PorterStemmer()
+stemmed = [stemmer.stem(token) for token in filtered_tokens]
+
+print(f"{'Original':<20} {'Stemmed':<20}")
+print("-" * 40)
+for original, stem in zip(filtered_tokens, stemmed):
+    if original != stem:  # Only show changed words
+        print(f"{original:<20} {stem:<20}")
+
+print(f"\nStemmed tokens: {stemmed}")
+
+# STEP 7: Lemmatization
+print(f"\n{'=' * 70}")
+print("STEP 6: LEMMATIZATION")
+print("-" * 70)
+
+lemmatizer = WordNetLemmatizer()
+lemmatized = [lemmatizer.lemmatize(token) for token in filtered_tokens]
+
+print(f"{'Original':<20} {'Lemmatized':<20}")
+print("-" * 40)
+for original, lemma in zip(filtered_tokens, lemmatized):
+    if original != lemma:  # Only show changed words
+        print(f"{original:<20} {lemma:<20}")
+
+print(f"\nLemmatized tokens: {lemmatized}")
+
+# STEP 8: Part-of-Speech Tagging
+print(f"\n{'=' * 70}")
+print("STEP 7: POS TAGGING")
+print("-" * 70)
+
+pos_tags = pos_tag(filtered_tokens)
+
+print(f"{'Word':<20} {'POS Tag':<10} {'Meaning'}")
+print("-" * 50)
+
+# POS tag meanings
+pos_meanings = {
+    'NN': 'Noun, singular',
+    'NNS': 'Noun, plural',
+    'NNP': 'Proper noun, singular',
+    'VBN': 'Verb, past participle',
+    'VB': 'Verb, base form',
+    'JJ': 'Adjective',
+    'RB': 'Adverb',
+    'IN': 'Preposition',
+    'DT': 'Determiner'
+}
+
+for word, tag in pos_tags:
+    meaning = pos_meanings.get(tag, 'Other')
+    print(f"{word:<20} {tag:<10} {meaning}")
+
+# STEP 9: Named Entity Recognition
+print(f"\n{'=' * 70}")
+print("STEP 8: NAMED ENTITY RECOGNITION (NER)")
+print("-" * 70)
+
+# Need to POS tag first for NER
+pos_tagged = pos_tag(word_tokenize(text))
+named_entities = ne_chunk(pos_tagged)
+
+print("Named Entities found:")
+entities_found = []
+for chunk in named_entities:
+    if hasattr(chunk, 'label'):
+        entity = ' '.join(c[0] for c in chunk)
+        entity_type = chunk.label()
+        entities_found.append((entity, entity_type))
+        print(f"  {entity}: {entity_type}")
+
+if not entities_found:
+    print("  No named entities detected in this text")
+else:
+    print(f"\nTotal entities: {len(entities_found)}")
+
+# STEP 10: Sentiment Analysis
+print(f"\n{'=' * 70}")
+print("STEP 9: SENTIMENT ANALYSIS")
+print("-" * 70)
+
+blob = TextBlob(text)
+sentiment = blob.sentiment
+
+print(f"Polarity: {sentiment.polarity:.4f}")
+print(f"  Range: -1 (negative) to +1 (positive)")
+print(f"  Interpretation: ", end="")
+
+if sentiment.polarity > 0.1:
+    print("POSITIVE")
+elif sentiment.polarity < -0.1:
+    print("NEGATIVE")
+else:
+    print("NEUTRAL")
+
+print(f"\nSubjectivity: {sentiment.subjectivity:.4f}")
+print(f"  Range: 0 (objective) to 1 (subjective)")
+print(f"  Interpretation: ", end="")
+
+if sentiment.subjectivity > 0.5:
+    print("SUBJECTIVE (opinion-based)")
+else:
+    print("OBJECTIVE (fact-based)")
+
+# STEP 11: Summary
+print(f"\n{'=' * 70}")
+print("PIPELINE SUMMARY")
+print("=" * 70)
+
+print(f"""
+Original text length: {len(text)} characters
+Sentences: {len(sentences)}
+Original tokens: {len(tokens)}
+After stop word removal: {len(filtered_tokens)}
+Unique words: {len(set(filtered_tokens))}
+Named entities: {len(entities_found)}
+Sentiment: {'Positive' if sentiment.polarity > 0 else 'Negative' if sentiment.polarity < 0 else 'Neutral'}
+
+Processing complete! ✓
+""")
+</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const steps = [
+    { name: 'Input', key: 'input' },
+    { name: 'Sentences', key: 'sentences' },
+    { name: 'Tokens', key: 'tokens' },
+    { name: 'Filtered', key: 'filtered' },
+    { name: 'Stemmed', key: 'stemmed' },
+    { name: 'Lemmatized', key: 'lemmatized' },
+    { name: 'POS Tags', key: 'pos' },
+    { name: 'Entities', key: 'entities' },
+    { name: 'Sentiment', key: 'sentiment' }
+];
+
+let currentStep = -1;
+let pipelineData = {};
+
+function initStepIndicators() {
+    const container = document.getElementById('stepIndicators');
+    container.innerHTML = '';
+    
+    steps.forEach((step, index) => {
+        const indicator = document.createElement('div');
+        indicator.className = 'step-indicator';
+        indicator.textContent = `${index + 1}. ${step.name}`;
+        indicator.onclick = () => goToStep(index);
+        container.appendChild(indicator);
+    });
+}
+
+function processText() {
+    const text = document.getElementById('textInput').value.trim();
+    if (!text) {
+        alert('Please enter some text first!');
+        return;
+    }
+    
+    // Process through pipeline
+    pipelineData = {
+        input: text,
+        sentences: splitSentences(text),
+        tokens: tokenize(text),
+        filtered: removeStopWords(tokenize(text)),
+        stemmed: stem(removeStopWords(tokenize(text))),
+        lemmatized: lemmatize(removeStopWords(tokenize(text))),
+        pos: posTag(removeStopWords(tokenize(text))),
+        entities: extractEntities(text),
+        sentiment: analyzeSentiment(text)
+    };
+    
+    goToStep(0);
+    document.getElementById('nextBtn').disabled = false;
+}
+
+function splitSentences(text) {
+    return text.split(/[.!?]+/).filter(s => s.trim().length > 0).map(s => s.trim());
+}
+
+function tokenize(text) {
+    return text.toLowerCase()
+              .replace(/[^\w\s]/g, ' ')
+              .split(/\s+/)
+              .filter(t => t.length > 0);
+}
+
+function removeStopWords(tokens) {
+    const stopWords = ['the', 'is', 'at', 'which', 'on', 'a', 'an', 'and', 'or', 
+                       'but', 'in', 'with', 'to', 'for', 'of', 'as', 'by', 'that', 
+                       'this', 'it', 'from', 'be', 'are', 'was', 'were', 'been', 
+                       'have', 'has', 'had', 'do', 'does', 'did'];
+    return tokens.filter(t => !stopWords.includes(t.toLowerCase()));
+}
+
+function stem(tokens) {
+    const rules = {
+        'known': 'know', 'languages': 'languag', 'different': 'differ',
+        'regions': 'region', 'heritage': 'heritag', 'culture': 'cultur',
+        'diverse': 'divers', 'variety': 'varieti', 'spoken': 'spoken'
+    };
+    return tokens.map(t => rules[t] || t);
+}
+
+function lemmatize(tokens) {
+    const rules = {
+        'languages': 'language', 'regions': 'region', 'known': 'know'
+    };
+    return tokens.map(t => rules[t] || t);
+}
+
+function posTag(tokens) {
+    const tags = {
+        'india': 'NNP', 'known': 'VBN', 'rich': 'JJ', 'heritage': 'NN',
+        'diverse': 'JJ', 'culture': 'NN', 'variety': 'NN', 'language': 'NN',
+        'spoken': 'VBN', 'across': 'IN', 'different': 'JJ', 'region': 'NN'
+    };
+    return tokens.map(t => ({ word: t, pos: tags[t.toLowerCase()] || 'NN' }));
+}
+
+function extractEntities(text) {
+    const entities = [];
+    if (text.toLowerCase().includes('india')) {
+        entities.push({ word: 'India', label: 'GPE (Country)' });
+    }
+    return entities;
+}
+
+function analyzeSentiment(text) {
+    const positive = ['rich', 'diverse', 'good', 'great', 'excellent'];
+    const negative = ['bad', 'poor', 'terrible'];
+    
+    const words = text.toLowerCase().split(/\s+/);
+    let score = 0;
+    
+    words.forEach(w => {
+        if (positive.includes(w)) score += 0.15;
+        if (negative.includes(w)) score -= 0.15;
+    });
+    
+    return {
+        polarity: Math.max(-1, Math.min(1, score)),
+        subjectivity: 0.5
+    };
+}
+
+function goToStep(index) {
+    if (index < 0 || index >= steps.length || !pipelineData.input) return;
+    
+    currentStep = index;
+    updateDisplay();
+    updateProgress();
+    updateStepIndicators();
+    updateButtons();
+}
+
+function updateDisplay() {
+    const step = steps[currentStep];
+    const data = pipelineData[step.key];
+    
+    document.getElementById('stepTitle').textContent = 
+        `Step ${currentStep + 1}: ${step.name}`;
+    document.getElementById('stepOutput').innerHTML = formatOutput(data, step.key);
+}
+
+function formatOutput(data, type) {
+    switch(type) {
+        case 'input':
+            return `<div style="font-style:italic;">"${data}"</div>
+                    <div style="margin-top:15px; color:#059669;">
+                        <strong>Characters:</strong> ${data.length}<br>
+                        <strong>Ready for processing!</strong>
+                    </div>`;
+        
+        case 'sentences':
+            return data.map((s, i) => 
+                `<div style="margin:10px 0; padding:10px; background:rgba(5,150,105,.1); border-radius:5px;">
+                    <strong>${i + 1}.</strong> ${s}
+                </div>`
+            ).join('');
+        
+        case 'tokens':
+        case 'filtered':
+        case 'stemmed':
+        case 'lemmatized':
+            return `<div class="token-display">
+                ${data.map(t => `<span class="token">${t}</span>`).join('')}
+            </div>
+            <div style="margin-top:15px; color:#059669;">
+                <strong>Total tokens:</strong> ${data.length}
+            </div>`;
+        
+        case 'pos':
+            return `<div class="token-display">
+                ${data.map(item => 
+                    `<span class="token pos-tag" data-pos="${item.pos}">${item.word}</span>`
+                ).join('')}
+            </div>
+            <div style="margin-top:15px; color:#059669;">
+                <strong>Legend:</strong> NNP=Proper Noun, VBN=Verb Past, JJ=Adjective, NN=Noun
+            </div>`;
+        
+        case 'entities':
+            if (data.length === 0) {
+                return '<div style="color:#EA580C;">No named entities found</div>';
+            }
+            return data.map(e => 
+                `<div style="margin:10px 0; padding:15px; background:rgba(5,150,105,.1); border-radius:8px; border-left:4px solid #059669;">
+                    <strong style="font-size:1.2em;">${e.word}</strong>
+                    <div style="color:#059669; margin-top:5px;">${e.label}</div>
+                </div>`
+            ).join('');
+        
+        case 'sentiment':
+            const polarity = data.polarity;
+            const sentiment = polarity > 0.1 ? 'POSITIVE ✓' : 
+                            polarity < -0.1 ? 'NEGATIVE ✗' : 'NEUTRAL ○';
+            const color = polarity > 0.1 ? '#059669' : 
+                         polarity < -0.1 ? '#DC2626' : '#EA580C';
+            
+            return `<div style="text-align:center;">
+                <div style="font-size:2em; color:${color}; margin:20px 0; font-weight:bold;">
+                    ${sentiment}
+                </div>
+                <div style="background:rgba(5,150,105,.1); padding:15px; border-radius:8px; margin:10px 0;">
+                    <strong>Polarity:</strong> ${polarity.toFixed(3)}<br>
+                    <small>Range: -1 (negative) to +1 (positive)</small>
+                </div>
+                <div style="background:rgba(234,88,12,.1); padding:15px; border-radius:8px;">
+                    <strong>Subjectivity:</strong> ${data.subjectivity.toFixed(3)}<br>
+                    <small>Range: 0 (objective) to 1 (subjective)</small>
+                </div>
+            </div>`;
+        
+        default:
+            return JSON.stringify(data);
+    }
+}
+
+function updateProgress() {
+    const percent = ((currentStep + 1) / steps.length) * 100;
+    document.getElementById('progressBar').style.width = percent + '%';
+}
+
+function updateStepIndicators() {
+    const indicators = document.querySelectorAll('.step-indicator');
+    indicators.forEach((ind, i) => {
+        ind.classList.remove('active', 'completed');
+        if (i === currentStep) {
+            ind.classList.add('active');
+        } else if (i < currentStep) {
+            ind.classList.add('completed');
+        }
+    });
+}
+
+function updateButtons() {
+    document.getElementById('prevBtn').disabled = currentStep <= 0;
+    document.getElementById('nextBtn').disabled = currentStep >= steps.length - 1;
+}
+
+function nextStep() {
+    if (currentStep < steps.length - 1) {
+        goToStep(currentStep + 1);
+    }
+}
+
+function previousStep() {
+    if (currentStep > 0) {
+        goToStep(currentStep - 1);
+    }
+}
+
+function resetPipeline() {
+    currentStep = -1;
+    pipelineData = {};
+    document.getElementById('stepTitle').textContent = 'Click "Process Text" to begin';
+    document.getElementById('stepOutput').textContent = 
+        'Enter your text above and click "Process Text" to see the NLTK pipeline in action.';
+    document.getElementById('progressBar').style.width = '0%';
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('prevBtn').disabled = true;
+    
+    const indicators = document.querySelectorAll('.step-indicator');
+    indicators.forEach(ind => ind.classList.remove('active', 'completed'));
+}
+
+function copyCode(btn) {
+    const code = btn.nextElementSibling.textContent;
+    navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    initStepIndicators();
+});
+</script>
+</body>
+</html>
