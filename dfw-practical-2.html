@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protective Devices in Electrical Engineering</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:Georgia,serif;background:#FEF7ED;color:#1E293B;line-height:1.6;overflow-x:hidden}
+        #particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1}
+        nav{position:fixed;top:0;width:100%;background:rgba(254,247,237,.95);backdrop-filter:blur(10px);z-index:1000;padding:1rem 2rem;transition:all .3s;border-bottom:2px solid #EA580C}
+        nav.scrolled{background:rgba(254,247,237,.98);box-shadow:0 2px 20px rgba(234,88,12,.1)}
+        nav ul{list-style:none;display:flex;justify-content:center;flex-wrap:wrap;gap:2rem}
+        nav a{color:#1E293B;text-decoration:none;font-weight:600;transition:all .3s;padding:.5rem 1rem;border-radius:25px}
+        nav a:hover{background:rgba(234,88,12,.1);color:#EA580C;transform:translateY(-2px)}
+        .progress-bar{position:fixed;top:80px;left:0;height:4px;background:linear-gradient(90deg,#EA580C,#059669);z-index:999;transform-origin:left;transform:scaleX(0);transition:transform .1s}
+        .container{max-width:1200px;margin:0 auto;padding:20px}
+        .slide{background:#FEF7ED;margin-bottom:30px;padding:40px;border-radius:15px;border-left:5px solid #EA580C;box-shadow:0 8px 25px rgba(0,0,0,.1);transition:all .8s;min-height:500px;transform:translateY(50px);opacity:0}
+        .slide.visible{transform:translateY(0);opacity:1}
+        .slide:hover{transform:translateY(-5px)}
+        .title-slide{background:#1E293B;color:#FEF7ED;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
+        .title-slide h1{font-size:3.5em;margin-bottom:30px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+        .title-slide .subtitle{font-size:1.6em;opacity:.9;font-style:italic;margin-bottom:20px}
+        .title-slide .author{font-size:1.2em;opacity:.8}
+        .title-content h2,.two-content h2,.comparison h2{font-size:2.2em;color:#1E293B;margin-bottom:30px;padding-bottom:10px;border-bottom:3px solid #EA580C}
+        .content-area{font-size:1.1em;line-height:1.8}
+        .content-list{list-style:none}
+        .content-list li{position:relative;padding-left:30px;margin-bottom:15px}
+        .content-list li::before{content:"→";position:absolute;left:0;color:#EA580C;font-weight:bold;font-size:1.2em}
+        .section-header{background:linear-gradient(135deg,#059669,#EA580C);color:#FEF7ED;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center}
+        .section-header h1{font-size:3em;margin-bottom:20px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+        .section-header .section-subtitle{font-size:1.4em;opacity:.9}
+        .two-content{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+        .two-content h2{grid-column:1/-1}
+        .content-column{padding:20px;background:rgba(5,150,105,.05);border-radius:10px}
+        .content-column h3{font-size:1.6em;color:#059669;margin-bottom:15px}
+        .comparison{position:relative}
+        .comparison h2{text-align:center}
+        .comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:40px}
+        .comparison-item{text-align:center;padding:30px;border-radius:15px;background:rgba(234,88,12,.1)}
+        .comparison-item h3{font-size:1.8em;color:#EA580C;margin-bottom:20px}
+        .vs-divider{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#EA580C;color:#FEF7ED;padding:10px 20px;border-radius:50px;font-weight:bold;font-size:1.2em}
+        .highlight-box{background:#059669;color:#FEF7ED;padding:20px;border-radius:10px;margin:20px 0;font-weight:bold}
+        .accent-box{background:#EA580C;color:#FEF7ED;padding:20px;border-radius:10px;margin:20px 0;font-style:italic}
+        .emphasis{background:#EA580C;color:#FEF7ED;padding:4px 8px;border-radius:5px;font-weight:bold;display:inline-block}
+        .back-to-top{position:fixed;bottom:30px;right:30px;background:linear-gradient(45deg,#EA580C,#059669);color:#FEF7ED;border:none;border-radius:50%;width:60px;height:60px;font-size:1.5rem;cursor:pointer;opacity:0;transition:all .3s;z-index:1000}
+        .back-to-top.visible{opacity:1}
+        .back-to-top:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(234,88,12,.3)}
+        .float{animation:float 3s ease-in-out infinite}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+        @media (max-width:768px){
+            nav{display:none}
+            .container{padding:10px}
+            .slide{padding:20px;min-height:400px}
+            .title-slide h1{font-size:2.5em}
+            .two-content,.comparison-grid{grid-template-columns:1fr;gap:20px}
+            .vs-divider{display:none}
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <div class="progress-bar" id="progress-bar"></div>
+    
+    <nav id="navbar">
+        <ul>
+            <li><a href="#slide1">Title</a></li>
+            <li><a href="#slide2">The Problem</a></li>
+            <li><a href="#slide3">Fuses</a></li>
+            <li><a href="#slide4">Breakers</a></li>
+            <li><a href="#slide5">Relays</a></li>
+            <li><a href="#slide6">SPD</a></li>
+            <li><a href="#slide7">GFCI</a></li>
+            <li><a href="#slide8">Summary</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- Title Slide -->
+        <div id="slide1" class="slide title-slide">
+            <h1 class="float">Protective Devices</h1>
+            <p class="subtitle">Electrical & Electronics Engineering</p>
+            <p class="author">Understanding the Guardians of Your Electrical System</p>
+        </div>
+
+        <!-- The Problem -->
+        <div id="slide2" class="slide title-content">
+            <h2>The Real Problem</h2>
+            <div class="content-area">
+                <p>Your expensive equipment just fried during a storm, and your insurance won't cover it because "surge protection wasn't installed."</p>
+                
+                <div class="accent-box">
+                    Three circuits tripped this month. Your laptop charger melted. The bathroom outlet sparked near water. You reset the breakers, replace the charger, avoid that outlet—but something's broken.
+                </div>
+                
+                <p>Every "accident" has a specific device designed to catch it before it happens. Each protective device watches for its one specific failure mode:</p>
+                <ul class="content-list">
+                    <li>Circuit breakers catch sustained overloads</li>
+                    <li>GFCIs catch leakage through you</li>
+                    <li>SPDs catch voltage spikes</li>
+                    <li>Fuses sacrifice themselves to save circuits</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Fuses Section -->
+        <div id="slide3" class="slide section-header">
+            <h1>Fuses</h1>
+            <p class="section-subtitle">The Sacrificial Guardian</p>
+        </div>
+
+        <div class="slide title-content">
+            <h2>How Fuses Work</h2>
+            <div class="content-area">
+                <p>A fuse is a <span class="emphasis">sacrificial device</span> that melts when current exceeds a predetermined value, breaking the circuit and stopping electricity flow.</p>
+                
+                <div class="highlight-box">
+                    Working Principle: Heat = Current² × Resistance<br>
+                    When overcurrent occurs, heat generation exceeds the melting point of the fuse element.
+                </div>
+                
+                <p><strong>Key Characteristics:</strong></p>
+                <ul class="content-list">
+                    <li>Non-reversible process—must be replaced after blowing</li>
+                    <li>Fast response to short circuits</li>
+                    <li>Simple, cost-effective protection</li>
+                    <li>No moving parts</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide two-content">
+            <h2>Types of Fuses</h2>
+            <div class="content-column">
+                <h3>Cartridge Fuse</h3>
+                <p>Enclosed in a cylindrical casing with metal caps at both ends.</p>
+                <ul class="content-list">
+                    <li>Domestic appliances</li>
+                    <li>Industrial machinery</li>
+                    <li>Automotive applications</li>
+                </ul>
+            </div>
+            <div class="content-column">
+                <h3>Rewirable Fuse</h3>
+                <p>Also called Kit-Kat fuse—allows the fuse wire to be replaced.</p>
+                <ul class="content-list">
+                    <li>Domestic wiring systems</li>
+                    <li>Cost-effective solution</li>
+                    <li>User-replaceable element</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Circuit Breakers Section -->
+        <div id="slide4" class="slide section-header">
+            <h1>Circuit Breakers</h1>
+            <p class="section-subtitle">The Resettable Protector</p>
+        </div>
+
+        <div class="slide title-content">
+            <h2>Circuit Breaker Operation</h2>
+            <div class="content-area">
+                <p>Unlike fuses, circuit breakers <span class="emphasis">can be reset and reused</span> after tripping. They automatically interrupt electrical flow when excessive current is detected.</p>
+                
+                <div class="accent-box">
+                    Two Protection Mechanisms:<br>
+                    • Thermal Effect (overload): Bimetallic strip bends from heat<br>
+                    • Magnetic Effect (short circuit): Electromagnet trips instantly
+                </div>
+                
+                <p><strong>Advantages over Fuses:</strong></p>
+                <ul class="content-list">
+                    <li>Reusable—no replacement needed</li>
+                    <li>Easy to identify which circuit tripped</li>
+                    <li>Can isolate circuits for maintenance</li>
+                    <li>More precise current ratings</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide comparison">
+            <h2>MCB vs MCCB</h2>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>MCB</h3>
+                    <p>Miniature Circuit Breaker</p>
+                    <ul class="content-list">
+                        <li>Current: Up to 125A</li>
+                        <li>Voltage: Up to 1000V</li>
+                        <li>Used in: Homes, small offices</li>
+                        <li>Protects: Lighting, sockets, appliances</li>
+                    </ul>
+                    <div class="highlight-box">Fast, automatic protection for residential circuits</div>
+                </div>
+                <div class="comparison-item">
+                    <h3>MCCB</h3>
+                    <p>Molded Case Circuit Breaker</p>
+                    <ul class="content-list">
+                        <li>Current: Up to 2500A</li>
+                        <li>Voltage: Up to 1000V</li>
+                        <li>Used in: Industries, large buildings</li>
+                        <li>Protects: Motors, transformers, machines</li>
+                    </ul>
+                    <div class="accent-box">Adjustable trip settings for industrial applications</div>
+                </div>
+            </div>
+            <div class="vs-divider">VS</div>
+        </div>
+
+        <!-- Relays Section -->
+        <div id="slide5" class="slide section-header">
+            <h1>Relays</h1>
+            <p class="section-subtitle">The Control Switch</p>
+        </div>
+
+        <div class="slide title-content">
+            <h2>Understanding Relays</h2>
+            <div class="content-area">
+                <p>A relay is an <span class="emphasis">electromechanical switch</span> that controls a high-power circuit using a low-power signal. It provides isolation between control and output circuits.</p>
+                
+                <div class="highlight-box">
+                    Key Function: Allows low voltage/current circuit to control much higher voltage/current circuit without direct connection
+                </div>
+                
+                <p><strong>Common Types:</strong></p>
+                <ul class="content-list">
+                    <li>Electromagnetic Relay (EMR): Basic mechanical switching</li>
+                    <li>Solid State Relay (SSR): No moving parts, fast, silent</li>
+                    <li>Thermal Overload Relay: Protects motors from overheating</li>
+                    <li>Time Delay Relay: Delayed operation for automation</li>
+                </ul>
+                
+                <p><strong>Applications:</strong> Motor control, automation systems, power control circuits, signal switching</p>
+            </div>
+        </div>
+
+        <!-- SPD Section -->
+        <div id="slide6" class="slide section-header">
+            <h1>Surge Protective Devices</h1>
+            <p class="section-subtitle">The Voltage Spike Guardian</p>
+        </div>
+
+        <div class="slide title-content">
+            <h2>SPD Protection</h2>
+            <div class="content-area">
+                <p>An SPD protects electrical equipment from <span class="emphasis">transient overvoltage events</span> like lightning strikes, power line disturbances, or switching surges.</p>
+                
+                <div class="accent-box">
+                    Real Scenario: A 240V surge from nearby lightning rode straight into your electronics expecting 120V. Without an SPD at your service entrance, that surge destroyed your equipment.
+                </div>
+                
+                <p><strong>How it Works:</strong></p>
+                <ul class="content-list">
+                    <li>Senses abnormal voltage levels</li>
+                    <li>Diverts excess energy to ground</li>
+                    <li>Responds in nanoseconds</li>
+                    <li>Returns to normal after surge passes</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <strong>Three Types:</strong><br>
+                    Type 1: Service entrance (lightning protection)<br>
+                    Type 2: Distribution panel (whole-building protection)<br>
+                    Type 3: Point-of-use (individual sensitive devices)
+                </div>
+            </div>
+        </div>
+
+        <!-- GFCI Section -->
+        <div id="slide7" class="slide section-header">
+            <h1>GFCI / RCD</h1>
+            <p class="section-subtitle">The Life Saver</p>
+        </div>
+
+        <div class="slide title-content">
+            <h2>Ground Fault Protection</h2>
+            <div class="content-area">
+                <p>A GFCI (Ground Fault Circuit Interrupter) or RCD (Residual Current Device) protects people from <span class="emphasis">electric shock</span> by detecting current leakage.</p>
+                
+                <div class="accent-box">
+                    Critical Fact: When water creates a path to ground through you, even 30 milliamps of leakage will kill you in seconds. A GFCI senses that imbalance in 25 milliseconds and cuts power before your heart stops.
+                </div>
+                
+                <p><strong>Operation Principle:</strong></p>
+                <ul class="content-list">
+                    <li>Monitors current in (hot) vs current out (neutral)</li>
+                    <li>Detects imbalance as small as 5-30mA</li>
+                    <li>Trips in 25-40 milliseconds</li>
+                    <li>Prevents electrocution from ground faults</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <strong>Required Locations:</strong><br>
+                    • Within 6 feet of water sources<br>
+                    • Kitchens, bathrooms, laundry rooms<br>
+                    • Outdoor outlets, garages, basements<br>
+                    • Swimming pools and hot tubs
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Slide -->
+        <div id="slide8" class="slide title-content">
+            <h2>The One Thing You Must Do Today</h2>
+            <div class="content-area">
+                <p>Walk to your electrical panel right now and check if you have a GFCI protecting every outlet within six feet of water.</p>
+                
+                <div class="highlight-box">
+                    If you don't—that's your tomorrow project, not your someday project.
+                </div>
+                
+                <p><strong>Quick Reference: Device Functions</strong></p>
+                <ul class="content-list">
+                    <li><strong>Fuse:</strong> Sacrificial protection, must replace after blowing</li>
+                    <li><strong>Circuit Breaker:</strong> Resettable protection against overload and short circuits</li>
+                    <li><strong>Relay:</strong> Controls high-power circuits with low-power signals</li>
+                    <li><strong>SPD:</strong> Diverts voltage spikes from lightning and surges</li>
+                    <li><strong>GFCI/RCD:</strong> Prevents electrocution by detecting ground faults</li>
+                </ul>
+                
+                <div class="accent-box">
+                    Remember: Each device watches for its specific failure mode. Together, they form a layered defense protecting you, your equipment, and your property.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="back-to-top" id="backToTop">↑</button>
+
+    <script>
+        class P{
+            constructor(c){
+                this.c=c;this.x=Math.random()*c.width;this.y=Math.random()*c.height;
+                this.vx=(Math.random()-.5)*.5;this.vy=(Math.random()-.5)*.5;
+                this.s=Math.random()*2+1;this.o=Math.random()*.6+.2;
+            }
+            u(m){
+                this.x+=this.vx;this.y+=this.vy;
+                if(this.x<0||this.x>this.c.width)this.vx*=-1;
+                if(this.y<0||this.y>this.c.height)this.vy*=-1;
+                if(m.x&&m.y){
+                    const d=Math.hypot(this.x-m.x,this.y-m.y);
+                    if(d<60){const f=(60-d)/60,a=Math.atan2(this.y-m.y,this.x-m.x);
+                    this.vx+=Math.cos(a)*f*.3;this.vy+=Math.sin(a)*f*.3;}
+                }
+            }
+            d(ctx){ctx.save();ctx.globalAlpha=this.o;ctx.beginPath();ctx.arc(this.x,this.y,this.s,0,6.28);ctx.fillStyle='rgba(234,88,12,.5)';ctx.fill();ctx.restore();}
+        }
+        class PS{
+            constructor(){this.cv=document.getElementById('particles-canvas');this.ctx=this.cv.getContext('2d');this.ps=[];this.m={x:0,y:0};this.init();}
+            init(){this.r();this.cp();window.addEventListener('resize',()=>{this.r();this.cp();});window.addEventListener('mousemove',e=>{this.m.x=e.clientX;this.m.y=e.clientY;});this.a();}
+            r(){this.cv.width=innerWidth;this.cv.height=innerHeight;this.pc=Math.floor((innerWidth*innerHeight)/12000);}
+            cp(){this.ps=[];for(let i=0;i<this.pc;i++)this.ps.push(new P(this.cv));}
+            a(){this.ctx.clearRect(0,0,this.cv.width,this.cv.height);this.ps.forEach(p=>{p.u(this.m);p.d(this.ctx);});this.dc();requestAnimationFrame(()=>this.a());}
+            dc(){this.ps.forEach((p,i)=>{for(let j=i+1;j<this.ps.length;j++){const o=this.ps[j],d=Math.hypot(p.x-o.x,p.y-o.y);if(d<100){this.ctx.beginPath();this.ctx.strokeStyle=`rgba(30,41,59,${(1-d/100)*.15})`;this.ctx.lineWidth=.5;this.ctx.moveTo(p.x,p.y);this.ctx.lineTo(o.x,o.y);this.ctx.stroke();}}});}
+        }
+        new PS();
+        const o=new IntersectionObserver(e=>e.forEach(e=>e.isIntersecting&&e.target.classList.add('visible')),{threshold:.1});
+        document.querySelectorAll('.slide').forEach(s=>o.observe(s));
+        const u=()=>{const s=scrollY,d=document.documentElement.scrollHeight-innerHeight,p=s/d;document.getElementById('progress-bar').style.transform=`scaleX(${p})`;document.getElementById('navbar').classList.toggle('scrolled',s>100);document.getElementById('backToTop').classList.toggle('visible',s>300);};
+        addEventListener('scroll',u,{passive:!0});
+        document.getElementById('backToTop').onclick=()=>scrollTo({top:0,behavior:'smooth'});
+        document.querySelectorAll('nav a[href^="#"]').forEach(a=>a.onclick=e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));t&&scrollTo({top:t.offsetTop-80,behavior:'smooth'});});
+        u();
+    </script>
+</body>
+</html>
