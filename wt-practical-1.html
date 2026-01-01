@@ -18,10 +18,15 @@
         /* Right Panel: Interactive Preview & Code */
         .right-panel { background: #1e1e1e; color: #d4d4d4; padding: 40px; overflow-y: auto; }
         .preview-box { background: white; color: black; padding: 20px; border-radius: 8px; margin-bottom: 20px; min-height: 200px; }
-        .code-block { background: #000; padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; color: #9cdcfe; overflow-x: auto; }
+        
+        /* Code Block Styling */
+        .code-block { background: #000; padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; color: #9cdcfe; overflow-x: auto; border: 2px solid transparent; transition: 0.3s; }
+        .code-block:focus { outline: none; border-color: #007bff; background: #0d0d0d; }
+        #code-output { white-space: pre-wrap; }
         
         .action-btn { background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
         .action-btn:hover { background: #218838; }
+        .compile-btn { background: #17a2b8; display: none; } /* Hidden until Edit Mode is active */
     </style>
 </head>
 <body>
@@ -33,22 +38,15 @@
                 <p>Design web pages for your college containing a description of courses, departments, and library using <strong>Links</strong> and <strong>Lists</strong>.</p>
             </div>
 
-            <div class="theory-section">
-                <h2>📚 Key Definitions</h2>
-                <ul>
-                    <li><strong>HTML5:</strong> The latest version of Hypertext Markup Language used for structuring web content.</li>
-                    <li><strong>Tag:</strong> A command used to tell the browser how to display content, written as <code>&lt;tagname&gt;</code>.</li>
-                    <li><strong>Attribute:</strong> Extra information added to a tag, like <code>href</code> for links, to provide settings.</li>
-                    <li><strong>Nesting:</strong> The practice of placing one HTML element inside another.</li>
-                </ul>
-            </div>
-
             <div class="virtual-lab">
                 <h2>🛠️ Interactive Builder</h2>
-                <p>Click the buttons to "build" your page structure:</p>
+                <p>Click the buttons to "build" or manually edit code:</p>
                 <button class="action-btn" onclick="addHeading()">1. Add Heading</button>
                 <button class="action-btn" onclick="addList()">2. Add Departments</button>
                 <button class="action-btn" onclick="addLink()">3. Add College Link</button>
+                <button class="action-btn" style="background:#6f42c1" onclick="enableEditing()">4. Custom Edit</button>
+                <button id="run-btn" class="action-btn compile-btn" onclick="compileCode()">🚀 Run Code</button>
+                
                 <button class="action-btn" style="background:#dc3545" onclick="resetPreview()">Reset</button>
             </div>
         </div>
@@ -60,17 +58,20 @@
             </div>
 
             <h2>Reference Source Code</h2>
-            <div class="code-block">
-<pre id="code-output">
+            <div class="code-block" id="code-container">
+<pre id="code-output" contenteditable="false">
 &lt;!-- Code will update as you build --&gt;
 </pre>
             </div>
+            <p id="edit-status" style="font-size: 0.8rem; margin-top: 5px; color: #888;"></p>
         </div>
     </div>
 
     <script>
         const preview = document.getElementById('preview-box');
         const codeOut = document.getElementById('code-output');
+        const runBtn = document.getElementById('run-btn');
+        const status = document.getElementById('edit-status');
         let currentCode = "";
 
         function updateDisplay(htmlPart) {
@@ -92,10 +93,39 @@
             updateDisplay("<a href='https://www.gtu.ac.in'>Visit Official Site</a>");
         }
 
+        // --- NEW FUNCTIONS ---
+
+        function enableEditing() {
+            codeOut.contentEditable = "true";
+            codeOut.focus();
+            runBtn.style.display = "inline-block";
+            status.innerText = "✨ Edit mode active! Modify the code and click 'Run Code'.";
+            status.style.color = "#9cdcfe";
+        }
+
+        function compileCode() {
+            // Get text from the editable area
+            const editedCode = codeOut.innerText;
+            
+            // Logic to extract content between <body> and </body> if user kept the tags
+            // Otherwise, just render the whole content
+            let bodyContent = editedCode;
+            if (editedCode.includes("<body>") && editedCode.includes("</body>")) {
+                bodyContent = editedCode.split("<body>")[1].split("</body>")[0];
+            }
+
+            preview.innerHTML = bodyContent;
+            status.innerText = "✅ Preview updated successfully!";
+            status.style.color = "#28a745";
+        }
+
         function resetPreview() {
             preview.innerHTML = "<em>Your page preview will appear here...</em>";
             codeOut.innerText = "";
+            codeOut.contentEditable = "false";
             currentCode = "";
+            runBtn.style.display = "none";
+            status.innerText = "";
         }
     </script>
 </body>
