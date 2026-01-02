@@ -3,130 +3,490 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Tech Lab - Experiment 1</title>
+    <title>Web Dev Lab - GEC Bharuch</title>
     <style>
-        /* Modern UI Styling */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; color: #333; line-height: 1.6; }
-        .container { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+        :root {
+            --primary: #0056b3;
+            --secondary: #6c757d;
+            --success: #28a745;
+            --info: #17a2b8;
+            --dark: #1e1e1e;
+            --light: #f8f9fa;
+            --code-bg: #0d0d0d;
+        }
 
-        /* Left Panel: Theory */
-        .left-panel { background: #ffffff; padding: 40px; overflow-y: auto; border-right: 4px solid #007bff; }
-        .theory-section { margin-bottom: 30px; padding: 20px; border-radius: 10px; background: #e9ecef; }
-        h1, h2 { color: #007bff; margin-bottom: 15px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        /* Right Panel: Interactive Preview & Code */
-        .right-panel { background: #1e1e1e; color: #d4d4d4; padding: 40px; overflow-y: auto; }
-        .preview-box { background: white; color: black; padding: 20px; border-radius: 8px; margin-bottom: 20px; min-height: 200px; }
-        
-        /* Code Block Styling */
-        .code-block { background: #000; padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace; color: #9cdcfe; overflow-x: auto; border: 2px solid transparent; transition: 0.3s; }
-        .code-block:focus { outline: none; border-color: #007bff; background: #0d0d0d; }
-        #code-output { white-space: pre-wrap; }
-        
-        .action-btn { background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
-        .action-btn:hover { background: #218838; }
-        .compile-btn { background: #17a2b8; display: none; } /* Hidden until Edit Mode is active */
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background: #f0f2f5; 
+            color: #333; 
+            overflow: hidden; 
+            height: 100vh;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            height: 100vh;
+        }
+
+        /* Left Panel: Theory & Instructions */
+        .sidebar {
+            background: white;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        .sidebar-content {
+            padding: 20px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .theory-card {
+            background: var(--light);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .theory-card h3 { margin-bottom: 8px; color: var(--primary); }
+
+        /* Tools / Interaction */
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-info { background: var(--info); color: white; }
+        .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        /* Right Panel: Code & Preview */
+        .main-stage {
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+            overflow: hidden;
+        }
+
+        .preview-pane {
+            background: white;
+            padding: 20px;
+            border-bottom: 1px solid #ddd;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .preview-header {
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .editor-pane {
+            background: var(--dark);
+            color: #d4d4d4;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .file-tabs {
+            background: #2d2d2d;
+            display: flex;
+            padding-top: 5px;
+        }
+
+        .tab {
+            padding: 8px 20px;
+            background: #2d2d2d;
+            cursor: pointer;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            font-size: 0.85rem;
+            margin-right: 2px;
+            transition: background 0.2s;
+        }
+
+        .tab.active {
+            background: var(--dark);
+            color: white;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .code-area {
+            flex-grow: 1;
+            padding: 20px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            outline: none;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        /* Virtual UI inside Preview */
+        .browser-mock {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .browser-toolbar {
+            background: #eee;
+            padding: 8px 15px;
+            border-bottom: 1px solid #ccc;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dot { height: 10px; width: 10px; border-radius: 50%; display: inline-block; }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .address-bar {
+            background: white;
+            flex-grow: 1;
+            border-radius: 4px;
+            padding: 2px 10px;
+            font-size: 12px;
+            color: #666;
+            border: 1px solid #ddd;
+        }
+
+        .browser-content {
+            padding: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+            background: white;
+        }
+
+        /* Semantic rendering helpers */
+        header { background: #003366; color: white; padding: 15px; margin-bottom: 10px; border-radius: 4px; }
+        nav { background: #e9ecef; padding: 10px; margin-bottom: 10px; border-radius: 4px; }
+        nav ul { list-style: none; display: flex; gap: 15px; }
+        nav a { text-decoration: none; color: var(--primary); font-weight: bold; }
+        footer { border-top: 1px solid #eee; margin-top: 20px; padding: 10px; font-size: 0.8rem; color: #777; }
+        article { border: 1px solid #eee; padding: 10px; margin: 10px 0; border-radius: 4px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="left-panel">
-            <h1>Experiment 1: College Web Page</h1>
-            <div class="theory-section">
-                <h2>🎯 Aim</h2>
-                <p>Design web pages for your college containing a description of courses, departments, and library using <strong>Links</strong> and <strong>Lists</strong>.</p>
-            </div>
 
-            <div class="virtual-lab">
-                <h2>🛠️ Interactive Builder</h2>
-                <p>Click the buttons to "build" or manually edit code:</p>
-                <button class="action-btn" onclick="addHeading()">1. Add Heading</button>
-                <button class="action-btn" onclick="addList()">2. Add Departments</button>
-                <button class="action-btn" onclick="addLink()">3. Add College Link</button>
-                <button class="action-btn" style="background:#6f42c1" onclick="enableEditing()">4. Custom Edit</button>
-                <button id="run-btn" class="action-btn compile-btn" onclick="compileCode()">🚀 Run Code</button>
-                
-                <button class="action-btn" style="background:#dc3545" onclick="resetPreview()">Reset</button>
-            </div>
+<div class="layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Lab Practical 1</h2>
+            <p style="font-size: 0.8rem; opacity: 0.8;">Foundations of Web Development</p>
         </div>
-
-        <div class="right-panel">
-            <h2>Live Component Preview</h2>
-            <div class="preview-box" id="preview-box">
-                <em>Your page preview will appear here...</em>
+        
+        <div class="sidebar-content">
+            <div class="theory-card">
+                <h3>🎯 Aim</h3>
+                <p>Implement a multi-page website using Semantic HTML for GEC Bharuch, including Departments with nested lists.</p>
             </div>
 
-            <h2>Reference Source Code</h2>
-            <div class="code-block" id="code-container">
-<pre id="code-output" contenteditable="false">
-&lt;!-- Code will update as you build --&gt;
-</pre>
+            <div class="theory-card">
+                <h3>📖 Theory</h3>
+                <p><strong>Semantic HTML:</strong> Tags like <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, and <code>&lt;main&gt;</code> describe their content's purpose to browsers and screen readers.</p>
             </div>
-            <p id="edit-status" style="font-size: 0.8rem; margin-top: 5px; color: #888;"></p>
+
+            <div class="theory-card">
+                <h3>🛠️ Builder Tools</h3>
+                <div class="controls">
+                    <button class="btn btn-primary" onclick="loadBaseTemplate()">1. Load Multi-page Boilerplate</button>
+                    <button class="btn btn-info" onclick="addDepartmentList()">2. Add Nested Dept List</button>
+                    <button class="btn btn-success" onclick="linkAllPages()">3. Enable Navigation Links</button>
+                    <button class="btn btn-outline" onclick="runCode()">🚀 Compile & Preview</button>
+                    <button class="btn" style="background: #dc3545; color: white;" onclick="resetLab()">Reset Project</button>
+                </div>
+            </div>
+            
+            <p style="margin-top: 15px; font-size: 0.85rem; color: #666;">
+                <strong>Homework:</strong> Ensure all three files are properly linked and the Departments page uses nested <code>&lt;ul&gt;</code>.
+            </p>
         </div>
     </div>
 
-    <script>
-        const preview = document.getElementById('preview-box');
-        const codeOut = document.getElementById('code-output');
-        const runBtn = document.getElementById('run-btn');
-        const status = document.getElementById('edit-status');
-        let currentCode = "";
+    <!-- Main Workspace -->
+    <div class="main-stage">
+        <!-- Live Preview -->
+        <div class="preview-pane">
+            <div class="preview-header">Live Virtual Lab Environment</div>
+            <div class="browser-mock">
+                <div class="browser-toolbar">
+                    <span class="dot dot-red"></span>
+                    <span class="dot dot-yellow"></span>
+                    <span class="dot dot-green"></span>
+                    <div class="address-bar" id="address-bar">http://gec-bharuch.edu/index.html</div>
+                </div>
+                <div class="browser-content" id="browser-view">
+                    <div style="text-align:center; margin-top: 50px; color: #999;">
+                        <h3>Virtual Lab Standby</h3>
+                        <p>Click "Load Boilerplate" to begin building the GEC Bharuch website.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        function updateDisplay(htmlPart) {
-            if (preview.innerHTML.includes("em")) preview.innerHTML = "";
-            preview.innerHTML += htmlPart;
-            currentCode += htmlPart + "\n";
-            codeOut.innerText = `<!DOCTYPE html>\n<html>\n<body>\n${currentCode}</body>\n</html>`;
-        }
+        <!-- Multi-file Editor -->
+        <div class="editor-pane">
+            <div class="file-tabs" id="tab-bar">
+                <div class="tab active" onclick="switchFile('index.html')">index.html</div>
+                <div class="tab" onclick="switchFile('faculty.html')">faculty.html</div>
+                <div class="tab" onclick="switchFile('departments.html')">departments.html</div>
+            </div>
+            <div class="code-area" id="editor" contenteditable="true" spellcheck="false"></div>
+        </div>
+    </div>
+</div>
 
-        function addHeading() {
-            updateDisplay("<h1>Welcome to GTU College</h1>");
-        }
+<script>
+    // Project State
+    const project = {
+        files: {
+            "index.html": "",
+            "faculty.html": "",
+            "departments.html": ""
+        },
+        activeFile: "index.html"
+    };
 
-        function addList() {
-            updateDisplay("<h3>Our Departments</h3>\n<ul>\n  <li>Electronics & Comm.</li>\n  <li>Computer Engineering</li>\n</ul>");
-        }
+    const editor = document.getElementById('editor');
+    const browserView = document.getElementById('browser-view');
+    const addressBar = document.getElementById('address-bar');
+    const tabBar = document.getElementById('tab-bar');
 
-        function addLink() {
-            updateDisplay("<a href='https://www.gtu.ac.in'>Visit Official Site</a>");
-        }
+    // Templates
+    const homeTemplate = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>GEC Bharuch - Home</title>
+</head>
+<body>
+    <header>
+        <h1>Government Engineering College, Bharuch</h1>
+    </header>
 
-        // --- NEW FUNCTIONS ---
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="departments.html">Departments</a></li>
+            <li><a href="faculty.html">Faculty</a></li>
+        </ul>
+    </nav>
 
-        function enableEditing() {
-            codeOut.contentEditable = "true";
-            codeOut.focus();
-            runBtn.style.display = "inline-block";
-            status.innerText = "✨ Edit mode active! Modify the code and click 'Run Code'.";
-            status.style.color = "#9cdcfe";
-        }
+    <main>
+        <section>
+            <h2>Welcome to GEC Bharuch</h2>
+            <p>Providing quality technical education to build a better future.</p>
+        </section>
+    </main>
 
-        function compileCode() {
-            // Get text from the editable area
-            const editedCode = codeOut.innerText;
-            
-            // Logic to extract content between <body> and </body> if user kept the tags
-            // Otherwise, just render the whole content
-            let bodyContent = editedCode;
-            if (editedCode.includes("<body>") && editedCode.includes("</body>")) {
-                bodyContent = editedCode.split("<body>")[1].split("</body>")[0];
+    <footer>
+        <p>© 2023 GEC Bharuch. All rights reserved.</p>
+    </footer>
+</body>
+</html>`;
+
+    const facultyTemplate = `<!DOCTYPE html>
+<html>
+<body>
+    <header><h1>GEC Bharuch</h1></header>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="departments.html">Departments</a></li>
+            <li><a href="faculty.html">Faculty</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h2>Our Faculty</h2>
+        <article>
+            <h3>Prof. Devendra Patel</h3>
+            <p>Assistant Professor, Computer Engineering.</p>
+        </article>
+    </main>
+</body>
+</html>`;
+
+    const departmentsTemplate = `<!DOCTYPE html>
+<html>
+<body>
+    <header><h1>GEC Bharuch</h1></header>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="departments.html">Departments</a></li>
+            <li><a href="faculty.html">Faculty</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h2>Academic Departments</h2>
+        <!-- Nested List Task will go here -->
+    </main>
+</body>
+</html>`;
+
+    function loadBaseTemplate() {
+        project.files["index.html"] = homeTemplate;
+        project.files["faculty.html"] = facultyTemplate;
+        project.files["departments.html"] = departmentsTemplate;
+        updateEditor();
+        runCode();
+        showNotification("Templates loaded for all three pages.");
+    }
+
+    function switchFile(fileName) {
+        // Save current editor content to state
+        project.files[project.activeFile] = editor.innerText;
+        
+        // Update active file
+        project.activeFile = fileName;
+        
+        // Update Tabs UI
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(t => {
+            t.classList.toggle('active', t.innerText === fileName);
+        });
+
+        updateEditor();
+    }
+
+    function updateEditor() {
+        editor.innerText = project.files[project.activeFile];
+    }
+
+    function addDepartmentList() {
+        const nestedList = `
+        <ul>
+            <li>Civil Engineering
+                <ul>
+                    <li>Surveying Lab</li>
+                    <li>Concrete Lab</li>
+                </ul>
+            </li>
+            <li>Mechanical Engineering
+                <ul>
+                    <li>Thermal Lab</li>
+                    <li>Workshop</li>
+                </ul>
+            </li>
+            <li>Chemical Engineering
+                <ul>
+                    <li>Mass Transfer Lab</li>
+                    <li>Reaction Eng. Lab</li>
+                </ul>
+            </li>
+        </ul>`;
+        
+        if (project.activeFile === "departments.html") {
+            let code = editor.innerText;
+            if (code.includes("<!-- Nested List Task will go here -->")) {
+                code = code.replace("<!-- Nested List Task will go here -->", nestedList);
+                editor.innerText = code;
+                project.files["departments.html"] = code;
+                runCode();
+            } else {
+                showNotification("Switch to departments.html to add the list.");
             }
+        } else {
+            showNotification("Please select 'departments.html' tab first.");
+        }
+    }
 
-            preview.innerHTML = bodyContent;
-            status.innerText = "✅ Preview updated successfully!";
-            status.style.color = "#28a745";
+    function linkAllPages() {
+        showNotification("Checking hyperlinks consistency...");
+        // This is a simulation, in real IDE it would search-replace
+        runCode();
+    }
+
+    function runCode() {
+        // Update state from editor
+        project.files[project.activeFile] = editor.innerText;
+        
+        const html = project.files[project.activeFile];
+        addressBar.innerText = `http://gec-bharuch.edu/${project.activeFile}`;
+
+        // Extract body content for the preview
+        let displayHtml = html;
+        if (html.includes("<body>") && html.includes("</body>")) {
+            displayHtml = html.split("<body>")[1].split("</body>")[0];
         }
 
-        function resetPreview() {
-            preview.innerHTML = "<em>Your page preview will appear here...</em>";
-            codeOut.innerText = "";
-            codeOut.contentEditable = "false";
-            currentCode = "";
-            runBtn.style.display = "none";
-            status.innerText = "";
-        }
-    </script>
+        browserView.innerHTML = displayHtml;
+        
+        // Intercept clicks on preview links to simulate multi-page
+        const links = browserView.querySelectorAll('a');
+        links.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = link.getAttribute('href');
+                if (project.files[target] !== undefined) {
+                    switchFile(target);
+                    runCode();
+                } else {
+                    showNotification(`Page "${target}" not found in current project.`);
+                }
+            });
+        });
+    }
+
+    function showNotification(msg) {
+        const notify = document.createElement('div');
+        notify.style = "position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 10px 20px; border-radius: 5px; z-index: 1000; font-size: 0.8rem; box-shadow: 0 4px 10px rgba(0,0,0,0.3);";
+        notify.innerText = msg;
+        document.body.appendChild(notify);
+        setTimeout(() => notify.remove(), 3000);
+    }
+
+    function resetLab() {
+        project.files = { "index.html": "", "faculty.html": "", "departments.html": "" };
+        editor.innerText = "";
+        browserView.innerHTML = `<div style="text-align:center; margin-top: 50px; color: #999;"><h3>Project Reset</h3><p>Load boilerplate to start again.</p></div>`;
+        addressBar.innerText = "http://localhost/";
+    }
+
+    // Initialize
+    updateEditor();
+</script>
+
 </body>
 </html>
