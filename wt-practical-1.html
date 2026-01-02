@@ -23,14 +23,14 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background: #f0f2f5; 
             color: #333; 
-            overflow: hidden; 
-            height: 100vh;
         }
 
+        /* Desktop Layout */
         .layout {
             display: grid;
             grid-template-columns: 380px 1fr;
             height: 100vh;
+            overflow: hidden;
         }
 
         /* Sidebar Styling */
@@ -47,6 +47,7 @@
             padding: 20px;
             background: var(--primary);
             color: white;
+            flex-shrink: 0;
         }
 
         .sidebar-header h2 { font-size: 1.2rem; margin-bottom: 5px; }
@@ -79,7 +80,7 @@
         }
 
         .btn {
-            padding: 10px 15px;
+            padding: 12px 15px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
@@ -87,6 +88,7 @@
             transition: all 0.2s;
             text-align: left;
             font-size: 0.85rem;
+            width: 100%;
         }
 
         .btn-primary { background: var(--primary); color: white; }
@@ -101,6 +103,7 @@
             display: grid;
             grid-template-rows: 1fr 1fr;
             overflow: hidden;
+            min-height: 0;
         }
 
         /* Preview Area */
@@ -109,6 +112,7 @@
             padding: 15px;
             display: flex;
             flex-direction: column;
+            min-height: 0;
         }
 
         .preview-label {
@@ -133,7 +137,7 @@
 
         .browser-toolbar {
             background: #f1f1f1;
-            padding: 10px;
+            padding: 8px 12px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -152,9 +156,12 @@
             border-radius: 20px;
             padding: 4px 15px;
             flex-grow: 1;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #555;
             font-family: monospace;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .browser-viewport {
@@ -170,24 +177,28 @@
             display: flex;
             flex-direction: column;
             border-top: 1px solid #444;
+            min-height: 0;
         }
 
         .file-tabs {
             background: #252526;
             display: flex;
             padding: 0 5px;
+            flex-shrink: 0;
+            overflow-x: auto;
         }
 
         .tab {
-            padding: 10px 20px;
+            padding: 10px 15px;
             color: #969696;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             cursor: pointer;
             border-right: 1px solid #1e1e1e;
             display: flex;
             align-items: center;
             gap: 8px;
             background: #2d2d2d;
+            white-space: nowrap;
         }
 
         .tab.active {
@@ -198,48 +209,102 @@
 
         .code-editor {
             flex-grow: 1;
-            padding: 20px;
+            padding: 15px;
             color: #d4d4d4;
             font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.6;
+            font-size: 13px;
+            line-height: 1.5;
             outline: none;
-            overflow-y: auto;
+            overflow: auto;
             white-space: pre;
             tab-size: 4;
+            min-height: 200px;
         }
 
-        /* Simple syntax coloring via JS later or basic styles */
-        .code-editor:focus { background: #232323; }
+        /* Responsive Breakpoints */
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+                height: auto;
+                overflow: visible;
+            }
+
+            .sidebar {
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                overflow: visible;
+            }
+
+            .sidebar-content {
+                height: auto;
+                overflow: visible;
+            }
+
+            .workspace {
+                height: auto;
+                display: flex;
+                flex-direction: column;
+                overflow: visible;
+            }
+
+            .preview-area {
+                height: 500px; /* Fixed height for mobile preview */
+            }
+
+            .editor-area {
+                height: 500px; /* Fixed height for mobile editor */
+                border-top: 5px solid var(--secondary);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar-header { padding: 15px; }
+            .card { padding: 12px; }
+            .preview-area, .editor-area { height: 400px; }
+            .tab { padding: 10px; }
+        }
+
+        /* Custom Scrollbar for the Editor */
+        .code-editor::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .code-editor::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+        .code-editor::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
+        }
 
         /* Notification Toast */
         #toast {
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            left: 50%;
+            transform: translate(-50%, 100px);
             background: #333;
             color: white;
             padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            transform: translateY(100px);
-            transition: transform 0.3s ease;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 9999;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            white-space: nowrap;
         }
 
-        #toast.show { transform: translateY(0); }
+        #toast.show { transform: translate(-50%, 0); }
 
-        /* Rendered HTML Styling (to make the preview look like a real site) */
-        /* These styles will be injected into the preview viewport */
-        .preview-content header { background: #003366; color: white; padding: 20px; text-align: center; }
-        .preview-content nav { background: #f8f9fa; border-bottom: 1px solid #ddd; padding: 10px; }
-        .preview-content nav ul { list-style: none; display: flex; justify-content: center; gap: 20px; }
-        .preview-content nav a { text-decoration: none; color: #0056b3; font-weight: bold; font-size: 0.9rem; }
-        .preview-content nav a:hover { text-decoration: underline; }
-        .preview-content main { padding: 20px; max-width: 800px; margin: 0 auto; line-height: 1.6; }
-        .preview-content footer { text-align: center; padding: 20px; border-top: 1px solid #eee; color: #666; font-size: 0.8rem; }
-        .preview-content h1, .preview-content h2 { margin-bottom: 15px; }
+        /* Rendered HTML Styling */
+        .preview-content header { background: #003366; color: white; padding: 15px; text-align: center; }
+        .preview-content nav { background: #f8f9fa; border-bottom: 1px solid #ddd; padding: 8px; }
+        .preview-content nav ul { list-style: none; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .preview-content nav a { text-decoration: none; color: #0056b3; font-weight: bold; font-size: 0.8rem; }
+        .preview-content main { padding: 15px; line-height: 1.5; font-size: 0.9rem; }
+        .preview-content footer { text-align: center; padding: 15px; border-top: 1px solid #eee; color: #666; font-size: 0.75rem; }
     </style>
 </head>
 <body>
@@ -255,30 +320,23 @@
         <div class="sidebar-content">
             <div class="card">
                 <h3>🎯 Aim</h3>
-                <p>To understand the fundamental structure of HTML5 and develop a multi-page website using semantic tags and hyperlinks.</p>
+                <p>Develop a multi-page website using semantic HTML tags and hyperlinks.</p>
             </div>
 
             <div class="card">
-                <h3>📖 Theory</h3>
-                <p><strong>Semantic HTML:</strong> Use tags like <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, and <code>&lt;footer&gt;</code> to define the structure clearly.</p>
-                <p style="margin-top:5px;"><strong>Lists:</strong> Use <code>&lt;ul&gt;</code> for bullets and <code>&lt;ol&gt;</code> for numbered lists.</p>
-            </div>
-
-            <div class="card">
-                <h3>📝 Exercise Task</h3>
-                <p>1. Create <strong>departments.html</strong>.</p>
-                <p>2. Add an <strong>Ordered List</strong> with at least 3 departments (Chemical, Civil, IC).</p>
-                <p>3. Ensure navigation works between all pages.</p>
-            </div>
-
-            <div class="card" style="background: white; border-left-color: var(--success);">
                 <h3>🛠️ Virtual Tools</h3>
                 <div class="controls">
-                    <button class="btn btn-primary" onclick="loadProject()">1. Initialize Project Files</button>
-                    <button class="btn btn-info" onclick="solveExercise()">2. Solve Departments Exercise</button>
-                    <button class="btn btn-success" onclick="runCode()">3. Compile & Preview</button>
-                    <button class="btn btn-danger" onclick="resetProject()" style="margin-top: 10px;">Reset Lab</button>
+                    <button class="btn btn-primary" onclick="loadProject()">1. Init Project Files</button>
+                    <button class="btn btn-info" onclick="solveExercise()">2. Solve Task (Dept List)</button>
+                    <button class="btn btn-success" onclick="runCode()">3. Run / Refresh</button>
+                    <button class="btn btn-danger" onclick="resetProject()">Reset Project</button>
                 </div>
+            </div>
+
+            <div class="card">
+                <h3>📖 Theory Summary</h3>
+                <p><strong>Semantic:</strong> <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;header&gt;</code>.</p>
+                <p><strong>Links:</strong> <code>&lt;a href="..."&gt;</code>.</p>
             </div>
         </div>
     </aside>
@@ -287,7 +345,7 @@
     <main class="workspace">
         <!-- Preview -->
         <section class="preview-area">
-            <div class="preview-label">Live Preview Environment</div>
+            <div class="preview-label">Live Preview</div>
             <div class="browser-mock">
                 <div class="browser-toolbar">
                     <div class="browser-dots">
@@ -298,10 +356,9 @@
                     <div class="address-bar" id="address-text">http://gec-bharuch.edu/index.html</div>
                 </div>
                 <div class="browser-viewport" id="viewport">
-                    <!-- Browser content rendered here -->
                     <div style="padding: 40px; text-align: center; color: #888;">
                         <h3>Standby Mode</h3>
-                        <p>Click "Initialize Project Files" to start the lab.</p>
+                        <p>Initialize project to begin.</p>
                     </div>
                 </div>
             </div>
@@ -322,7 +379,6 @@
 <div id="toast">Message goes here</div>
 
 <script>
-    // --- Application State ---
     const project = {
         files: {
             "index.html": "",
@@ -332,7 +388,6 @@
         activeFile: "index.html"
     };
 
-    // --- Templates ---
     const indexTemplate = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -356,12 +411,12 @@
     <main>
         <section>
             <h2>About Our College</h2>
-            <p>Moving from being 'consumers' of the internet to 'creators.' This is the front-end portal for our prestigious engineering college.</p>
+            <p>Moving from being 'consumers' of the internet to 'creators.'</p>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2023 GEC Bharuch - Digital Workshop</p>
+        <p>&copy; 2023 GEC Bharuch</p>
     </footer>
 
 </body>
@@ -374,33 +429,21 @@
     <title>GEC Bharuch - Faculty</title>
 </head>
 <body>
-
-    <header>
-        <h1>Faculty Members</h1>
-    </header>
-
+    <header><h1>Faculty Members</h1></header>
     <nav>
         <ul>
-            <li><a href="index.html">Back to Home</a></li>
+            <li><a href="index.html">Home</a></li>
             <li><a href="faculty.html">Faculty</a></li>
             <li><a href="departments.html">Departments</a></li>
         </ul>
     </nav>
-
     <main>
-        <section>
-            <h2>Computer / IT Department</h2>
-            <ul>
-                <li>Prof. Devendra Patel</li>
-                <li>Prof. Rahul Patel</li>
-            </ul>
-        </section>
+        <h2>Computer / IT Department</h2>
+        <ul>
+            <li>Prof. Devendra Patel</li>
+            <li>Prof. Rahul Patel</li>
+        </ul>
     </main>
-
-    <footer>
-        <p>GEC Bharuch - Department of Information Technology</p>
-    </footer>
-
 </body>
 </html>`;
 
@@ -411,11 +454,7 @@
     <title>GEC Bharuch - Departments</title>
 </head>
 <body>
-
-    <header>
-        <h1>Academic Departments</h1>
-    </header>
-
+    <header><h1>Academic Departments</h1></header>
     <nav>
         <ul>
             <li><a href="index.html">Home</a></li>
@@ -423,23 +462,12 @@
             <li><a href="departments.html">Departments</a></li>
         </ul>
     </nav>
-
     <main>
-        <section>
-            <h2>Our Specialized Branches</h2>
-            <!-- TODO: Add Ordered List of Departments here -->
-            <p>List of departments will be added here as per the lab task.</p>
-        </section>
+        <h2>Our Specialized Branches</h2>
+        <!-- TODO: Add Ordered List of Departments here -->
     </main>
-
-    <footer>
-        <p>GEC Bharuch - Engineering Excellence</p>
-    </footer>
-
 </body>
 </html>`;
-
-    // --- Core Functions ---
 
     const editorEl = document.getElementById('editor');
     const viewportEl = document.getElementById('viewport');
@@ -456,131 +484,82 @@
         project.files["index.html"] = indexTemplate;
         project.files["faculty.html"] = facultyTemplate;
         project.files["departments.html"] = departmentsTemplate;
-        
         switchFile("index.html");
-        runCode();
-        showToast("Project initialized with boilerplate code.");
+        showToast("Files Loaded.");
     }
 
     function switchFile(fileName) {
-        // Save current editor content to state before switching
         if (project.files[project.activeFile] !== undefined) {
             project.files[project.activeFile] = editorEl.innerText;
         }
-
         project.activeFile = fileName;
         editorEl.innerText = project.files[fileName];
-
-        // Update Tab UI
         const tabs = document.querySelectorAll('.tab');
         tabs.forEach(t => {
-            if (t.innerText === fileName) t.classList.add('active');
-            else t.classList.remove('active');
+            t.classList.toggle('active', t.innerText === fileName);
         });
-
         runCode();
     }
 
     function runCode() {
-        // Update state with latest editor changes
         project.files[project.activeFile] = editorEl.innerText;
-
         const rawHTML = project.files[project.activeFile];
         addressEl.innerText = `http://gec-bharuch.edu/${project.activeFile}`;
-
-        // Create a temporary container to extract the body and apply lab styles
         const parser = new DOMParser();
         const doc = parser.parseFromString(rawHTML, 'text/html');
         const bodyContent = doc.body ? doc.body.innerHTML : rawHTML;
-
-        // Apply visual skin to make it look like a real page within the preview
         viewportEl.innerHTML = `<div class="preview-content">${bodyContent}</div>`;
-
-        // Intercept links to simulate browser navigation
-        const links = viewportEl.querySelectorAll('a');
-        links.forEach(link => {
+        viewportEl.querySelectorAll('a').forEach(link => {
             link.onclick = (e) => {
                 e.preventDefault();
                 const href = link.getAttribute('href');
-                if (project.files[href] !== undefined) {
-                    switchFile(href);
-                    showToast(`Navigating to ${href}`);
-                } else {
-                    showToast(`Error: File "${href}" not found.`);
-                }
+                if (project.files[href] !== undefined) switchFile(href);
+                else showToast(`404: ${href} not found`);
             };
         });
     }
 
     function solveExercise() {
+        if (project.activeFile !== "departments.html") switchFile("departments.html");
         const deptCode = `
-            <h2>Our Specialized Branches</h2>
-            <ol>
-                <li>Chemical Engineering</li>
-                <li>Civil Engineering</li>
-                <li>Instrumentation & Control (IC)</li>
-                <li>Mechanical Engineering</li>
-                <li>Electrical Engineering</li>
-            </ol>
-            <p><a href="index.html">Back to Home Page</a></p>`;
-
-        if (project.activeFile !== "departments.html") {
-            switchFile("departments.html");
-        }
-
+        <ol>
+            <li>Chemical Engineering</li>
+            <li>Civil Engineering</li>
+            <li>Instrumentation & Control (IC)</li>
+        </ol>
+        <p><a href="index.html">Back to Home</a></p>`;
         let currentCode = editorEl.innerText;
-        const taskPlaceholder = "<!-- TODO: Add Ordered List of Departments here -->";
-        const textPlaceholder = "List of departments will be added here as per the lab task.";
-
-        if (currentCode.includes(taskPlaceholder)) {
-            currentCode = currentCode.replace(taskPlaceholder, "");
-            currentCode = currentCode.replace(textPlaceholder, deptCode);
-            editorEl.innerText = currentCode;
+        const placeholder = "<!-- TODO: Add Ordered List of Departments here -->";
+        if (currentCode.includes(placeholder)) {
+            editorEl.innerText = currentCode.replace(placeholder, deptCode);
             runCode();
-            showToast("Exercise solved: Departments list added!");
-        } else if (!currentCode.includes("<li>Chemical Engineering</li>")) {
-            // If placeholder is gone but list isn't there, just inject into main
-            currentCode = currentCode.replace("</main>", `${deptCode}\n    </main>`);
-            editorEl.innerText = currentCode;
-            runCode();
-            showToast("Exercise solved: Departments list added!");
+            showToast("Departments added!");
         } else {
-            showToast("Exercise already solved!");
+            showToast("Placeholder not found or already solved.");
         }
     }
 
     function resetProject() {
-        if (confirm("Reset all files? Your changes will be lost.")) {
+        if (confirm("Reset project?")) {
             project.files = { "index.html": "", "faculty.html": "", "departments.html": "" };
             editorEl.innerText = "";
-            viewportEl.innerHTML = `<div style="padding: 40px; text-align: center; color: #888;"><h3>Project Reset</h3><p>Initialize project to start again.</p></div>`;
-            addressEl.innerText = "http://gec-bharuch.edu/";
-            showToast("Lab has been reset.");
+            viewportEl.innerHTML = `<div style="padding:40px;text-align:center;color:#888;"><h3>Reset</h3></div>`;
+            showToast("Reset complete.");
         }
     }
 
-    // Handle Tab key in editor
     editorEl.addEventListener('keydown', function(e) {
         if (e.key === 'Tab') {
             e.preventDefault();
-            const selection = window.getSelection();
-            const range = selection.getRangeAt(0);
-            const tabNode = document.createTextNode('    ');
-            range.insertNode(tabNode);
-            range.setStartAfter(tabNode);
-            range.setEndAfter(tabNode);
-            selection.removeAllRanges();
-            selection.addRange(range);
+            document.execCommand('insertText', false, '    ');
         }
     });
 
-    // Auto-update preview on typing (with slight debounce)
     let timeout;
     editorEl.addEventListener('input', () => {
         clearTimeout(timeout);
-        timeout = setTimeout(runCode, 500);
+        timeout = setTimeout(runCode, 1000);
     });
-
 </script>
 
 </body>
