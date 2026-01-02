@@ -3,14 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DUP Teaching Learning Content</title>
+    <title>Academic Portal | Dr. Dhaval Patel</title>
+    <!-- Modern Sans-Serif Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --dark-slate: #1E293B;
-            --vibrant-orange: #EA580C;
-            --warm-cream: #FEF7ED;
-            --emerald-green: #059669;
+            --primary-blue: #1a73e8;
+            --text-dark: #202124;
+            --text-medium: #3c4043;
+            --text-light: #5f6368;
+            --bg-light: #ffffff;
+            --bg-offset: #f8f9fa;
+            --border-color: #dadce0;
+            --shadow-sm: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -20,109 +29,138 @@
         }
 
         body {
-            font-family: 'Georgia', serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             line-height: 1.6;
-            color: var(--dark-slate);
-            background: linear-gradient(135deg, var(--warm-cream) 0%, var(--dark-slate) 100%);
-            min-height: 100vh;
+            color: var(--text-medium);
+            background-color: var(--bg-light);
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1080px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 24px;
         }
 
+        /* --- Header Styling --- */
         header {
-            background: var(--dark-slate);
-            color: var(--warm-cream);
-            padding: 60px 40px;
-            border-radius: 15px;
+            padding: 80px 0 40px;
             text-align: center;
-            margin-bottom: 40px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border-left: 5px solid var(--vibrant-orange);
         }
 
-        h1 {
-            font-size: 3.5em;
-            margin-bottom: 15px;
+        header h1 {
+            font-size: 3rem;
             font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        header h1 i {
+            color: var(--primary-blue);
+            font-size: 0.8em;
         }
 
         .subtitle {
-            font-size: 1.6em;
-            color: var(--emerald-green);
+            font-size: 1.25rem;
+            color: var(--text-light);
             font-weight: 400;
-            font-style: italic;
+            max-width: 700px;
+            margin: 0 auto;
         }
 
-        .subjects-section {
-            margin-bottom: 40px;
-        }
-
-        .section-header {
-            font-size: 2.2em;
-            color: var(--dark-slate);
-            margin-bottom: 30px;
+        /* --- Intro Section --- */
+        .academic-intro {
+            background-color: var(--bg-offset);
+            padding: 32px;
+            border-radius: 24px;
+            margin-bottom: 64px;
             text-align: center;
-            border-bottom: 3px solid var(--vibrant-orange);
-            padding-bottom: 10px;
-            font-weight: 700;
+            border: 1px solid var(--border-color);
         }
 
-        .subjects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
+        .academic-intro p {
+            font-size: 1.1rem;
+            color: var(--text-medium);
         }
 
-        .subject-card {
-            background: var(--warm-cream);
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border-left: 5px solid var(--vibrant-orange);
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideIn 0.6s ease forwards;
-        }
-
-        .subject-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
-        }
-
-        @keyframes slideIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .subject-header {
-            background: var(--dark-slate);
-            color: var(--warm-cream);
-            padding: 25px 20px;
-            text-align: center;
-            font-size: 1.6em;
+        .key-highlight {
+            color: var(--primary-blue);
             font-weight: 600;
         }
 
+        /* --- Sections --- */
+        .subjects-section {
+            margin-bottom: 80px;
+        }
+
+        .section-header {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-header::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        /* --- Grid & Cards --- */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .subject-card {
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .subject-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-color: var(--primary-blue);
+            transform: translateY(-4px);
+        }
+
+        .subject-header {
+            padding: 24px;
+            background: var(--bg-offset);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .subject-header i {
-            color: var(--vibrant-orange);
-            margin-right: 10px;
-            font-size: 1.1em;
+            color: var(--primary-blue);
         }
 
         .subject-content {
-            padding: 30px 25px;
+            padding: 24px;
+            flex-grow: 1;
         }
 
         .content-section {
-            margin-bottom: 25px;
+            margin-bottom: 24px;
         }
 
         .content-section:last-child {
@@ -130,487 +168,258 @@
         }
 
         .content-section h4 {
-            font-size: 1.6em;
-            color: var(--emerald-green);
-            margin-bottom: 15px;
-            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .content-section h4 i {
-            color: var(--vibrant-orange);
-            width: 20px;
-        }
-
+        /* --- Link Buttons --- */
         .content-links {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .content-links a {
-            background: var(--vibrant-orange);
-            color: var(--warm-cream);
-            padding: 12px 20px;
             text-decoration: none;
-            border-radius: 10px;
-            font-size: 1em;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition);
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(234, 88, 12, 0.2);
+            gap: 10px;
+            border: 1px solid transparent;
+        }
+
+        /* Standard Link */
+        .content-links a {
+            color: var(--primary-blue);
+            background: rgba(26, 115, 232, 0.04);
         }
 
         .content-links a:hover {
-            background: #DC2626;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(234, 88, 12, 0.3);
+            background: rgba(26, 115, 232, 0.08);
+            border-color: var(--primary-blue);
         }
 
-        .lecture-link {
-            background: var(--emerald-green) !important;
-            box-shadow: 0 4px 15px rgba(5, 150, 105, 0.2) !important;
-        }
-
-        .lecture-link:hover {
-            background: #047857 !important;
-            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3) !important;
-        }
-
+        /* Highlighted/Attendance Link */
         .attendance-link {
-            background: linear-gradient(135deg, var(--vibrant-orange), var(--emerald-green)) !important;
-            font-style: italic !important;
-            box-shadow: 0 4px 15px rgba(234, 88, 12, 0.2) !important;
+            color: #ffffff !important;
+            background: var(--primary-blue) !important;
         }
 
         .attendance-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(234, 88, 12, 0.3) !important;
+            background: #1765cc !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .key-highlight {
-            display: inline-block;
-            background: var(--vibrant-orange);
-            color: var(--warm-cream);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.9em;
-        }
-
-        .info-box {
-            background: var(--emerald-green);
-            color: var(--warm-cream);
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            font-weight: bold;
-            text-align: center;
-        }
-
+        /* --- Footer --- */
         footer {
-            background: var(--warm-cream);
-            color: var(--dark-slate);
+            margin-top: 100px;
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
             text-align: center;
-            padding: 30px;
-            border-radius: 15px;
-            margin-top: 40px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border-left: 5px solid var(--vibrant-orange);
-            font-weight: 600;
+            color: var(--text-light);
+            font-size: 0.9rem;
         }
 
         footer i {
-            color: var(--vibrant-orange);
-            margin-right: 8px;
+            margin-right: 4px;
         }
 
-        .academic-intro {
-            background: var(--warm-cream);
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 40px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border-left: 5px solid var(--vibrant-orange);
-            text-align: center;
-        }
-
-        .academic-intro p {
-            font-size: 1.2em;
-            color: var(--dark-slate);
-            font-style: italic;
-            margin-bottom: 15px;
-        }
-
-        /* Responsive Design */
+        /* --- Responsive Design --- */
         @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            header {
-                padding: 40px 20px;
-            }
-            
-            h1 {
-                font-size: 2.8em;
-            }
-            
-            .subtitle {
-                font-size: 1.3em;
-            }
-            
-            .section-header {
-                font-size: 1.8em;
-            }
-            
-            .subjects-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .subject-header {
-                padding: 20px 15px;
-                font-size: 1.4em;
-            }
-            
-            .subject-content {
-                padding: 25px 20px;
-            }
-            
-            .content-section h4 {
-                font-size: 1.4em;
-            }
-            
-            .content-links {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
+            header { padding: 60px 0 30px; }
+            header h1 { font-size: 2.25rem; }
+            .subtitle { font-size: 1.1rem; }
+            .subjects-grid { grid-template-columns: 1fr; }
         }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 2.2em;
-            }
-            
-            .subtitle {
-                font-size: 1.1em;
-            }
-            
-            .section-header {
-                font-size: 1.6em;
-            }
-            
-            .subject-header {
-                padding: 18px 12px;
-                font-size: 1.2em;
-            }
-            
-            .subject-content {
-                padding: 20px 15px;
-            }
-        }
-
-        /* Staggered animation delays */
-        .subject-card:nth-child(1) { animation-delay: 0.1s; }
-        .subject-card:nth-child(2) { animation-delay: 0.2s; }
-        .subject-card:nth-child(3) { animation-delay: 0.3s; }
-        .subject-card:nth-child(4) { animation-delay: 0.4s; }
-        .subject-card:nth-child(5) { animation-delay: 0.5s; }
-        .subject-card:nth-child(6) { animation-delay: 0.6s; }
-        .subject-card:nth-child(7) { animation-delay: 0.7s; }
-        .subject-card:nth-child(8) { animation-delay: 0.8s; }
-        .subject-card:nth-child(9) { animation-delay: 0.9s; }
-        .subject-card:nth-child(10) { animation-delay: 1.0s; }
     </style>
 </head>
 <body>
+
     <div class="container">
         <header>
-            <h1><i class="fas fa-graduation-cap"></i> Teaching Learning Content</h1>
-            <p class="subtitle">Subject-wise Learning Materials & Resources</p>
+            <h1><i class="fas fa-graduation-cap"></i> Academic Portal</h1>
+            <p class="subtitle">Learning Materials & Resources curated for Digital University Students</p>
         </header>
 
-        <div class="academic-intro">
-            <p>Welcome to our the academic portal featuring <span class="key-highlight">your curricula</span> as per university.</p>
-        </div>
+        <section class="academic-intro">
+            <p>Welcome to the centralized resource hub featuring your <span class="key-highlight">university curricula</span> and practical learning modules.</p>
+        </section>
 
         <main class="subjects-section">
             <h2 class="section-header">Academic Subjects</h2>
             
             <div class="subjects-grid">
                 <!-- AI Subject -->
-                <div class="subject-card">
+                <article class="subject-card">
                     <div class="subject-header">
-                        <i class="fas fa-robot"></i> Artificial Intelligence (AI)
+                        <i class="fas fa-microchip"></i> Artificial Intelligence
                     </div>
                     <div class="subject-content">
                         <div class="content-section">
-                            <h4><i class="fas fa-book-open"></i> Lecture Materials</h4>
+                            <h4>Lectures</h4>
                             <div class="content-links">
-                                <a href="ai-lectures-1.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 1: History of AI
-                                </a>
-                                <a href="ai-lectures-2.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 2: AI Application, Problem and Techniques
-                                </a>
-                                <a href="ai-lectures-3.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 3: Uninformed Search
-                                </a>
-                                <a href="ai-lecture-4.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 4: informed Search
-                                </a>
-                                <a href="ai-lecture-5.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 5: Local Search
-                                </a>
-                                <a href="ai-lecture-6.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 6: Adversarial Search
-                                </a>
-                                <a href="ai-lecture-7.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 7: AI Planning
-                                </a>
-                                <a href="ai-lecture-8.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 8: Constraints Satisfaction Problem
-                                </a>
-                                <a href="ai-lecture-9.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 9: NLP
-                                </a>
+                                <a href="ai-lectures-1.html"><i class="far fa-file-alt"></i> History of AI</a>
+                                <a href="ai-lectures-2.html"><i class="far fa-file-alt"></i> Problem Techniques</a>
+                                <a href="ai-lectures-3.html"><i class="far fa-file-alt"></i> Uninformed Search</a>
+                                <a href="ai-lecture-4.html"><i class="far fa-file-alt"></i> Informed Search</a>
+                                <a href="ai-lecture-5.html"><i class="far fa-file-alt"></i> Local Search</a>
+                                <a href="ai-lecture-6.html"><i class="far fa-file-alt"></i> Adversarial Search</a>
+                                <a href="ai-lecture-7.html"><i class="far fa-file-alt"></i> AI Planning</a>
+                                <a href="ai-lecture-8.html"><i class="far fa-file-alt"></i> Constraint Satisfaction</a>
+                                <a href="ai-lecture-9.html"><i class="far fa-file-alt"></i> NLP</a>
                             </div>
                         </div>
                         <div class="content-section">
-                            <h4><i class="fas fa-code"></i> Practicals</h4>
+                            <h4>Practicals</h4>
                             <div class="content-links">
-                                <a href="https://drive.google.com/file/d/1CNq_GVCLDNZ4NxZVK8siEE-GsUaGxneX/view?usp=drive_link">
-                                    <i class="fas fa-laptop-code"></i> Lab Manual
-                                </a>
-                                <a href="ai-practical-1.html">
-                                    <i class="fas fa-laptop-code"></i> Practical 1
-                                </a>
-                                <a href="ai-practical-2.html">
-                                    <i class="fas fa-laptop-code"></i> Practical 2
-                                </a>
-                                <a href="ai-practical-3.html">
-                                    <i class="fas fa-laptop-code"></i> Practical 3
-                                </a>
-                                <a href="ai-practical-4.html">
-                                    <i class="fas fa-laptop-code"></i> Practical 4
-                                </a>
-                                <a href="ai-practical-5.html">
-                                    <i class="fas fa-laptop-code"></i> Practical 5
-                                </a>
-                                <a href="ai-practical-6.html">
-                                    <i class="fas fa-laptop-code"></i> Practical 6
-                                </a>
-                                <a href="ai-practical-7.html">
-                                    <i class="fas fa-laptop-code"></i> Practical 7
-                                </a>
-                                <a href="ai-practical-8.html">
-                                    <i class="fas fa-laptop-code"></i> Practical 8
-                                </a>
+                                <a href="https://drive.google.com/file/d/1CNq_GVCLDNZ4NxZVK8siEE-GsUaGxneX/view?usp=drive_link"><i class="fas fa-book"></i> Lab Manual</a>
+                                <a href="ai-practical-1.html"><i class="fas fa-code"></i> Practical 1-8</a>
                             </div>
                         </div>
                         <div class="content-section">
-                            <h4><i class="fas fa-chart-bar"></i> Attendance</h4>
+                            <h4>Monitoring</h4>
                             <div class="content-links">
-                                <a href="AI-attendance-odd-2025.html" class="attendance-link">
-                                    <i class="fas fa-users"></i> View Attendance
-                                </a>
+                                <a href="AI-attendance-odd-2025.html" class="attendance-link"><i class="fas fa-check-circle"></i> View Attendance</a>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- ML Subject -->
-                <div class="subject-card">
-                    <div class="subject-header">
-                        <i class="fas fa-robot"></i> Machine Learning (ML)
-                    </div>
-                    <div class="subject-content">
-                        <div class="content-section">
-                            <h4><i class="fas fa-book-open"></i> Lecture Materials</h4>
-                            <div class="content-links">
-                                <a href="ml-lectures-1.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 1: Machine Learning Fundamentals
-                                </a>
-                                <a href="ml-lecture-2.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 2: Machine Learning Elements Part - 1
-                                </a>
-                                <a href="ml-lecture-3.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 3: Machine Learning Elements Part - 2
-                                </a>
-                                <a href="ml-lecture-4.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 4: Neural Network
-                                </a>
-                                <a href="ml-lecture-5.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 5: Gradient Descent
-                                </a>
-                                
-                                <a href="ml-lecture-6.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 6: Backpropagation
-                                </a>
-                                <a href="ml-lectures-7.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 7: Artificial Neural Network
-                                </a>
-                                 <a href="ml-lecture-8.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 8: Convolution Neural Network
-                                </a>
-                                 <a href="https://drive.google.com/file/d/1pPZ9X_oSJJIYevdA54p9XIJCthW1toPT/view?usp=drive_link" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 9:  Ensemble Learning, Bagging and Boosting
-                                </a>
+                </article>
 
+                <!-- ML Subject -->
+                <article class="subject-card">
+                    <div class="subject-header">
+                        <i class="fas fa-brain"></i> Machine Learning
+                    </div>
+                    <div class="subject-content">
+                        <div class="content-section">
+                            <h4>Lectures</h4>
+                            <div class="content-links">
+                                <a href="ml-lectures-1.html"><i class="far fa-file-alt"></i> ML Fundamentals</a>
+                                <a href="ml-lecture-2.html"><i class="far fa-file-alt"></i> Elements Part I</a>
+                                <a href="ml-lecture-3.html"><i class="far fa-file-alt"></i> Elements Part II</a>
+                                <a href="ml-lecture-4.html"><i class="far fa-file-alt"></i> Neural Networks</a>
+                                <a href="ml-lecture-5.html"><i class="far fa-file-alt"></i> Gradient Descent</a>
+                                <a href="ml-lecture-6.html"><i class="far fa-file-alt"></i> Backpropagation</a>
+                                <a href="ml-lectures-7.html"><i class="far fa-file-alt"></i> ANN</a>
+                                <a href="ml-lecture-8.html"><i class="far fa-file-alt"></i> CNN</a>
+                                <a href="https://drive.google.com/file/d/1pPZ9X_oSJJIYevdA54p9XIJCthW1toPT/view?usp=drive_link"><i class="far fa-file-alt"></i> Ensemble Learning</a>
                             </div>
                         </div>
                         <div class="content-section">
-                            <h4><i class="fas fa-code"></i> Practicals</h4>
+                            <h4>Monitoring</h4>
                             <div class="content-links">
-                                <a href="ai-practical1.html">
-                                    <i class="fas fa-laptop-code"></i> No Practical
-                                </a>
-                            </div>
-                        </div>
-                        <div class="content-section">
-                            <h4><i class="fas fa-chart-bar"></i> Attendance</h4>
-                            <div class="content-links">
-                                <a href="ml-attendance-odd-2025.html" class="attendance-link">
-                                    <i class="fas fa-users"></i> View Attendance
-                                </a>
+                                <a href="ml-attendance-odd-2025.html" class="attendance-link"><i class="fas fa-check-circle"></i> View Attendance</a>
                             </div>
                         </div>
                     </div>
-                </div>
+                </article>
+
                 <!-- WT Subject -->
-                <div class="subject-card">
+                <article class="subject-card">
                     <div class="subject-header">
-                        <i class="fas fa-robot"></i> Web Technology (WT)
+                        <i class="fas fa-globe"></i> Web Technology
                     </div>
                     <div class="subject-content">
                         <div class="content-section">
-                            <h4><i class="fas fa-code"></i> Practicals</h4>
+                            <h4>Practicals</h4>
                             <div class="content-links">
-                                <a href="#">
-                                    <i class="fas fa-laptop-code"></i> Lab Manual
-                                </a>
-                                <a href="wt-practical-1.html">
-                                    <i class="fas fa-laptop-code"></i> Practical 1
-                                </a>
+                                <a href="#"><i class="fas fa-book"></i> Lab Manual</a>
+                                <a href="wt-practical-1.html"><i class="fas fa-code"></i> Practical 1</a>
                             </div>
                         </div>
                         <div class="content-section">
-                            <h4><i class="fas fa-chart-bar"></i> Attendance</h4>
+                            <h4>Monitoring</h4>
                             <div class="content-links">
-                                <a href="#" class="attendance-link">
-                                    <i class="fas fa-users"></i> View Attendance
-                                </a>
+                                <a href="#" class="attendance-link"><i class="fas fa-check-circle"></i> View Attendance</a>
                             </div>
                         </div>
                     </div>
-                </div>
+                </article>
+
                 <!-- DFW Subject -->
-                <div class="subject-card">
+                <article class="subject-card">
                     <div class="subject-header">
-                        <i class="fas fa-robot"></i> Digital Fabrication Workshop (DFW)
+                        <i class="fas fa-layer-group"></i> Digital Fabrication
                     </div>
                     <div class="subject-content">
                         <div class="content-section">
-                            <h4><i class="fas fa-code"></i> Practicals</h4>
+                            <h4>Practicals</h4>
                             <div class="content-links">
-                                <a href="https://drive.google.com/file/d/1X4V_bFGfTFW1TmPYg7T_M_eMiJI5HsV-/view?usp=sharing">
-                                    <i class="fas fa-laptop-code"></i> Lab Manual
-                                </a>
-                                <a href="dfw-practical1.html">
-                                    <i class="fas fa-laptop-code"></i> Practical 1
-                                </a>
-                                <a href="dfw-practical-2.html">
-                                    <i class="fas fa-laptop-code"></i> Practical Protective Device
-                                </a>
+                                <a href="https://drive.google.com/file/d/1X4V_bFGfTFW1TmPYg7T_M_eMiJI5HsV-/view?usp=sharing"><i class="fas fa-book"></i> Lab Manual</a>
+                                <a href="dfw-practical1.html"><i class="fas fa-code"></i> Practical 1</a>
+                                <a href="dfw-practical-2.html"><i class="fas fa-code"></i> Protective Devices</a>
                             </div>
                         </div>
                         <div class="content-section">
-                            <h4><i class="fas fa-chart-bar"></i> Attendance</h4>
+                            <h4>Monitoring</h4>
                             <div class="content-links">
-                                <a href="AI-attendance-odd-2025.html" class="attendance-link">
-                                    <i class="fas fa-users"></i> View Attendance
-                                </a>
+                                <a href="AI-attendance-odd-2025.html" class="attendance-link"><i class="fas fa-check-circle"></i> View Attendance</a>
                             </div>
                         </div>
                     </div>
-                </div>
+                </article>
+
                 <!-- POM Subject -->
-                <div class="subject-card">
+                <article class="subject-card">
                     <div class="subject-header">
-                        <i class="fas fa-robot"></i> Principles of Management
+                        <i class="fas fa-chart-line"></i> Management
                     </div>
                     <div class="subject-content">
                         <div class="content-section">
-                            <h4><i class="fas fa-book-open"></i> Lecture Materials</h4>
+                            <h4>Lectures</h4>
                             <div class="content-links">
-                                <a href="pom-lectures-1.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 1: Management 
-                                </a>
-                                <a href="pom-lectures-2.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 2: Management Principle
-                                </a>
-                                <a href="pom-lectures-3.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 3: Management levels
-                                </a>
-                                <a href="pom-lecture-4.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 4: History of Management
-                                </a>
-                                <a href="pom-lecture-5.html" class="lecture-link">
-                                    <i class="fas fa-play-circle"></i> Lectures 5: Scientifical Management Studies
-                                </a>
+                                <a href="pom-lectures-1.html"><i class="far fa-file-alt"></i> Intro to Management</a>
+                                <a href="pom-lectures-2.html"><i class="far fa-file-alt"></i> Principles</a>
+                                <a href="pom-lectures-3.html"><i class="far fa-file-alt"></i> Management Levels</a>
+                                <a href="pom-lecture-4.html"><i class="far fa-file-alt"></i> History</a>
+                                <a href="pom-lecture-5.html"><i class="far fa-file-alt"></i> Scientific Studies</a>
                             </div>
                         </div>
                         <div class="content-section">
-                            <h4><i class="fas fa-briefcase"></i> Case Study</h4>
+                            <h4>Analysis</h4>
                             <div class="content-links">
-                                <a href="pom-casestudy-1.html" class="lecture-link">
-                                    <i class="fas fa-users"></i> Case Study 1
-                                </a>
-                            </div>
-                        </div>
-                        <div class="content-section">
-                            <h4><i class="fas fa-chart-bar"></i> Attendance</h4>
-                            <div class="content-links">
-                                <a href="POM-attendance-odd-2025.html" class="attendance-link">
-                                    <i class="fas fa-users"></i> View Attendance
-                                </a>
+                                <a href="pom-casestudy-1.html"><i class="fas fa-users-viewfinder"></i> Case Study 1</a>
+                                <a href="POM-attendance-odd-2025.html" class="attendance-link"><i class="fas fa-check-circle"></i> View Attendance</a>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- Copy beofre this div -->
+                </article>
             </div>
         </main>
-        <main class="subjects-section">
-            <h2 class="section-header">Tools</h2>
-            
+
+        <section class="subjects-section">
+            <h2 class="section-header">Tools & Support</h2>
             <div class="subjects-grid">
-                <!-- Resources -->
-                <div class="subject-card">
+                <article class="subject-card">
                     <div class="subject-header">
-                        <i class="fas fa-robot"></i> Student Resources
+                        <i class="fas fa-toolbox"></i> Student Resources
                     </div>
                     <div class="subject-content">
                         <div class="content-section">
-                            <h4><i class="fas fa-link"></i> Link</h4>
+                            <h4>Utility</h4>
                             <div class="content-links">
-                                <a href="resources.html">
-                                    <i class="fas fa-laptop-code"></i> Link
-                                </a>
+                                <a href="resources.html"><i class="fas fa-external-link-alt"></i> Central Resource Hub</a>
                             </div>
                         </div>
                     </div>
-                </div>
+                </article>
             </div>
+        </section>
+
         <footer>
-            <p><i class="fas fa-copyright"></i> 2025 Dr. Dhaval Patel - All Subjects</p>
+            <p><i class="far fa-copyright"></i> 2025 Dr. Dhaval Patel &bull; Academic Excellence through Innovation</p>
         </footer>
     </div>
+
 </body>
 </html>
