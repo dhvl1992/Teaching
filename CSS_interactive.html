@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive CSS Mastery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,19 +13,19 @@
         }
 
         :root {
-            --bg-dark: #0a0e27;
-            --bg-card: #1a1f3a;
-            --accent: #00ff88;
-            --accent-2: #ff006e;
-            --text: #e0e6ed;
-            --text-dim: #8892ab;
-            --border: #2a3150;
-            --code-bg: #13162e;
+            --bg-dark: #ffffff;
+            --bg-card: #f9fafb;
+            --accent: #2563eb;
+            --accent-2: #1e40af;
+            --text: #1f2937;
+            --text-dim: #6b7280;
+            --border: #e5e7eb;
+            --code-bg: #f3f4f6;
             --output-bg: #ffffff;
         }
 
         body {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Inter', sans-serif;
             background: var(--bg-dark);
             color: var(--text);
             line-height: 1.6;
@@ -36,7 +36,7 @@
         .hero {
             padding: 60px 20px;
             text-align: center;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a0f2e 100%);
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
             border-bottom: 3px solid var(--accent);
             position: relative;
             overflow: hidden;
@@ -49,7 +49,7 @@
             right: -10%;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
             animation: pulse 4s ease-in-out infinite;
         }
 
@@ -59,9 +59,9 @@
         }
 
         h1 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Inter', sans-serif;
             font-size: 4rem;
-            font-weight: 900;
+            font-weight: 800;
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -104,7 +104,7 @@
         .lesson-number {
             display: inline-block;
             background: var(--accent);
-            color: var(--bg-dark);
+            color: #ffffff;
             padding: 5px 15px;
             border-radius: 20px;
             font-weight: 700;
@@ -113,8 +113,9 @@
         }
 
         .lesson h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Inter', sans-serif;
             font-size: 2rem;
+            font-weight: 700;
             color: var(--accent);
             margin-bottom: 20px;
         }
@@ -123,12 +124,12 @@
             background: var(--code-bg);
             padding: 20px;
             border-radius: 8px;
-            border-left: 4px solid var(--accent-2);
+            border-left: 4px solid var(--accent);
             margin-bottom: 25px;
         }
 
         .theory h3 {
-            color: var(--accent-2);
+            color: var(--accent);
             margin-bottom: 10px;
             font-size: 1.1rem;
         }
@@ -237,7 +238,7 @@
             color: var(--text);
             border: none;
             padding: 15px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Inter', monospace;
             font-size: 0.9rem;
             resize: vertical;
             outline: none;
@@ -252,7 +253,7 @@
 
         .output-header {
             background: var(--accent);
-            color: var(--bg-dark);
+            color: #ffffff;
             padding: 10px 15px;
             font-weight: 700;
             font-size: 0.85rem;
@@ -267,11 +268,11 @@
         /* Buttons */
         .btn {
             background: var(--accent);
-            color: var(--bg-dark);
+            color: #ffffff;
             border: none;
             padding: 12px 30px;
             border-radius: 6px;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Inter', sans-serif;
             font-weight: 700;
             font-size: 0.9rem;
             cursor: pointer;
@@ -282,6 +283,7 @@
         .btn:hover {
             background: var(--accent-2);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
         .btn:active {
@@ -302,11 +304,11 @@
         }
 
         /* Syntax highlighting colors */
-        .keyword { color: #ff79c6; }
-        .property { color: #50fa7b; }
-        .value { color: #f1fa8c; }
-        .selector { color: #8be9fd; }
-        .comment { color: #6272a4; font-style: italic; }
+        .keyword { color: #a855f7; }
+        .property { color: #059669; }
+        .value { color: #dc2626; }
+        .selector { color: #2563eb; }
+        .comment { color: #6b7280; font-style: italic; }
     </style>
 </head>
 <body>
