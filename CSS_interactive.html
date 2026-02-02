@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive CSS Mastery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Added Inter font for the main UI to match the Academic look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         * {
             margin: 0;
@@ -13,179 +17,184 @@
         }
 
         :root {
-            --bg-dark: #ffffff;
-            --bg-card: #f9fafb;
-            --accent: #2563eb;
-            --accent-2: #1e40af;
-            --text: #1f2937;
-            --text-dim: #6b7280;
-            --border: #e5e7eb;
-            --code-bg: #f3f4f6;
-            --output-bg: #ffffff;
+            /* Academic Color Palette based on your image */
+            --bg-body: #f9fafb;       /* Very light gray background */
+            --bg-card: #ffffff;       /* Pure white for cards */
+            
+            --primary: #2563eb;       /* The "Academic Blue" */
+            --primary-light: #eff6ff; /* Light blue for button backgrounds */
+            --primary-dark: #1d4ed8;  /* Darker blue for hover states */
+            
+            --text-main: #111827;     /* Near black for headings */
+            --text-body: #374151;     /* Dark gray for reading */
+            --text-muted: #6b7280;    /* Muted text for subtitles */
+            
+            --border: #e5e7eb;        /* Subtle borders */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            
+            /* Code editor colors - Keeping dark for contrast, but softer */
+            --code-bg: #1e293b;       
+            --code-text: #e2e8f0;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-dark);
-            color: var(--text);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg-body);
+            color: var(--text-body);
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* Hero Section */
+        /* Hero Section - Clean and White like the portal header */
         .hero {
-            padding: 60px 20px;
+            padding: 60px 20px 40px;
             text-align: center;
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            border-bottom: 3px solid var(--accent);
-            position: relative;
-            overflow: hidden;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 40px;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
-            animation: pulse 4s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 0.8; }
+        .hero-icon {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 15px;
         }
 
         h1 {
             font-family: 'Inter', sans-serif;
-            font-size: 4rem;
+            font-size: 2.5rem;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--text-main);
             margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
+            letter-spacing: -0.025em;
         }
 
         .subtitle {
-            font-size: 1.2rem;
-            color: var(--text-dim);
-            font-weight: 400;
-            position: relative;
-            z-index: 1;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         /* Container */
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 0 20px 60px;
         }
 
-        /* Lesson Card */
+        /* Lesson Card - Styled like the "Academic Subjects" cards */
         .lesson {
             background: var(--bg-card);
-            border: 2px solid var(--border);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 30px;
+            padding: 0; /* Removing padding to use header/body structure */
             margin-bottom: 40px;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden; /* For border radius */
+            transition: box-shadow 0.3s ease;
         }
 
         .lesson:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
+            box-shadow: var(--shadow-md);
         }
 
-        .lesson-number {
-            display: inline-block;
-            background: var(--accent);
-            color: #ffffff;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.85rem;
-            margin-bottom: 15px;
+        /* Card Header */
+        .lesson-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border);
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .lesson-icon {
+            color: var(--primary);
+            font-size: 1.2rem;
         }
 
         .lesson h2 {
             font-family: 'Inter', sans-serif;
-            font-size: 2rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 20px;
+            color: var(--text-main);
+            margin: 0;
         }
 
+        .lesson-body {
+            padding: 25px;
+        }
+
+        /* Theory Section */
         .theory {
-            background: var(--code-bg);
+            background: var(--primary-light); /* Light blue bg like the image buttons */
             padding: 20px;
             border-radius: 8px;
-            border-left: 4px solid var(--accent);
+            border: 1px solid #dbeafe; /* Slightly darker blue border */
             margin-bottom: 25px;
         }
 
         .theory h3 {
-            color: var(--accent);
+            color: var(--primary-dark);
             margin-bottom: 10px;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .theory p {
-            color: var(--text-dim);
-            line-height: 1.8;
-            margin-bottom: 10px;
+            color: var(--text-body);
+            font-size: 0.95rem;
+            margin-bottom: 8px;
         }
 
         .theory code {
-            background: var(--bg-card);
+            background: #ffffff;
             padding: 2px 6px;
-            border-radius: 3px;
-            color: var(--accent);
-            font-size: 0.9rem;
+            border-radius: 4px;
+            border: 1px solid #bfdbfe;
+            color: var(--primary-dark);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
         }
 
         /* Example Section */
         .example {
-            background: var(--code-bg);
-            padding: 20px;
-            border-radius: 8px;
             margin-bottom: 25px;
         }
 
         .example h3 {
-            color: var(--accent);
+            color: var(--text-main);
             margin-bottom: 15px;
             font-size: 1.1rem;
+            font-weight: 600;
         }
 
         .example-code {
-            background: var(--bg-dark);
+            background: var(--code-bg);
             padding: 15px;
-            border-radius: 6px;
+            border-radius: 8px;
             overflow-x: auto;
             border: 1px solid var(--border);
             margin-bottom: 15px;
-        }
-
-        .example-code pre {
-            color: var(--text);
-            font-size: 0.9rem;
-            white-space: pre-wrap;
+            color: var(--code-text);
+            font-family: 'JetBrains Mono', monospace;
         }
 
         .example-output {
-            background: var(--output-bg);
+            background: #ffffff;
             padding: 20px;
-            border-radius: 6px;
-            border: 2px solid var(--accent);
+            border-radius: 8px;
+            border: 2px dashed var(--border);
             min-height: 100px;
+            overflow: visible; 
+            color: #000;
         }
 
-        /* Interactive Section */
+        /* Interactive Grid */
         .interactive {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -199,778 +208,553 @@
             }
         }
 
+        /* Editor Styling - Pro Clean Look */
         .editor-container {
-            background: var(--code-bg);
+            border: 1px solid var(--border);
             border-radius: 8px;
             overflow: hidden;
-            border: 2px solid var(--border);
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-sm);
         }
 
         .editor-header {
-            background: var(--bg-card);
-            padding: 10px 15px;
+            background: #f3f4f6;
+            padding: 8px 15px;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: space-between;
         }
-
-        .editor-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .dot-red { background: #ff5f56; }
-        .dot-yellow { background: #ffbd2e; }
-        .dot-green { background: #27c93f; }
 
         .editor-title {
-            margin-left: auto;
-            font-size: 0.85rem;
-            color: var(--text-dim);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
         }
 
         textarea {
             width: 100%;
             min-height: 200px;
-            background: var(--bg-dark);
-            color: var(--text);
+            background: #ffffff; /* Light editor */
+            color: #1e293b;      /* Dark text */
             border: none;
             padding: 15px;
-            font-family: 'Inter', monospace;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.9rem;
             resize: vertical;
             outline: none;
+            flex-grow: 1;
+            line-height: 1.5;
+        }
+        
+        textarea:focus {
+            background: #fafafa;
         }
 
         .output-container {
-            background: var(--output-bg);
+            background: #ffffff;
             border-radius: 8px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
-            border: 2px solid var(--accent);
+            box-shadow: var(--shadow-sm);
         }
 
         .output-header {
-            background: var(--accent);
-            color: #ffffff;
-            padding: 10px 15px;
-            font-weight: 700;
-            font-size: 0.85rem;
+            background: #f3f4f6;
+            color: var(--text-muted);
+            padding: 8px 15px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
         }
 
         .output-display {
             padding: 20px;
             min-height: 200px;
             color: #000;
+            position: relative;
+            background-color: white;
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px; /* Graph paper effect */
         }
 
-        /* Buttons */
+        /* Buttons - Match the "Lecture" buttons in image */
         .btn {
-            background: var(--accent);
-            color: #ffffff;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 6px;
+            display: block;
+            width: 100%;
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid transparent;
+            padding: 14px 20px;
+            border-radius: 8px;
             font-family: 'Inter', sans-serif;
-            font-weight: 700;
-            font-size: 0.9rem;
+            font-weight: 600;
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 15px;
+            transition: all 0.2s ease;
+            margin-top: 20px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn::before {
+            content: '\f04b'; /* FontAwesome Play icon */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 0.8rem;
         }
 
         .btn:hover {
-            background: var(--accent-2);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            background: #dbeafe;
+            color: var(--primary-dark);
+            transform: translateY(-1px);
         }
 
         .btn:active {
             transform: translateY(0);
         }
 
+        /* Syntax Highlighting for Example Code (Dark Theme) */
+        .selector { color: #f472b6; } /* Pink */
+        .property { color: #60a5fa; } /* Blue */
+        .value { color: #a78bfa; }    /* Purple */
+        .comment { color: #94a3b8; font-style: italic; }
+
         /* Footer */
         footer {
             text-align: center;
             padding: 40px 20px;
-            background: var(--bg-card);
-            border-top: 2px solid var(--border);
+            background: #ffffff;
+            border-top: 1px solid var(--border);
             margin-top: 60px;
         }
 
         footer p {
-            color: var(--text-dim);
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
-
-        /* Syntax highlighting colors */
-        .keyword { color: #a855f7; }
-        .property { color: #059669; }
-        .value { color: #dc2626; }
-        .selector { color: #2563eb; }
-        .comment { color: #6b7280; font-style: italic; }
     </style>
 </head>
 <body>
 
     <div class="hero">
-        <h1>CSS Mastery</h1>
-        <p class="subtitle">Interactive guide to styling the web</p>
+        <div class="hero-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+        <h1>intro to CSS</h1>
+        
     </div>
 
     <div class="container">
 
         <!-- Lesson 1: Background Color -->
         <div class="lesson">
-            <span class="lesson-number">LESSON 1</span>
-            <h2>Background Color</h2>
-            
-            <div class="theory">
-                <h3>📚 Theory</h3>
-                <p>The <code>background-color</code> property sets the background color of an element. You can use color names, hex codes, RGB, RGBA, HSL, or HSLA values.</p>
-                <p><strong>Syntax:</strong> <code>background-color: value;</code></p>
-                <p><strong>Values:</strong> Color names (red, blue), Hex (#ff0000), RGB (rgb(255, 0, 0)), RGBA (rgb(255, 0, 0, 0.5))</p>
+            <div class="lesson-header">
+                <i class="fa-solid fa-globe lesson-icon"></i>
+                <h2>Lesson 1: Background Color</h2>
             </div>
+            
+            <div class="lesson-body">
+                <div class="theory">
+                    <h3><i class="fa-solid fa-book-open"></i> Theory</h3>
+                    <p>The <code>background-color</code> property sets the background color of an element.</p>
+                    <p><strong>Syntax:</strong> <code>background-color: value;</code></p>
+                </div>
 
-            <div class="example">
-                <h3>💡 Example</h3>
-                <div class="example-code">
-                    <pre><span class="selector">.box</span> {
-    <span class="property">background-color</span>: <span class="value">#ff6b6b</span>;
+                <div class="example">
+                    <h3>Example Code</h3>
+                    <div class="example-code">
+<pre><span class="selector">.box</span> {
+    <span class="property">background-color</span>: <span class="value">#ef4444</span>;
     <span class="property">padding</span>: <span class="value">20px</span>;
     <span class="property">border-radius</span>: <span class="value">8px</span>;
+    <span class="property">color</span>: <span class="value">white</span>;
 }</pre>
-                </div>
-                <div class="example-output">
-                    <div style="background-color: #ff6b6b; padding: 20px; border-radius: 8px; color: white; text-align: center;">
-                        This box has a coral background!
+                    </div>
+                    <div class="example-output">
+                        <div style="background-color: #ef4444; padding: 20px; border-radius: 8px; color: white; text-align: center; font-family: sans-serif;">
+                            This box has a red background!
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <h3 style="color: var(--accent); margin-bottom: 15px;">🎨 Try It Yourself</h3>
-            <div class="interactive">
-                <div class="editor-container">
-                    <div class="editor-header">
-                        <span class="editor-dot dot-red"></span>
-                        <span class="editor-dot dot-yellow"></span>
-                        <span class="editor-dot dot-green"></span>
-                        <span class="editor-title">style.css</span>
-                    </div>
-                    <textarea id="editor1" spellcheck="false">.mybox {
-    background-color: #4ecdc4;
+                <h3 style="margin-top: 30px; font-size: 1.1rem; color: var(--text-main);">Try It Yourself</h3>
+                <div class="interactive">
+                    <div class="editor-container">
+                        <div class="editor-header">
+                            <span class="editor-title">style.css</span>
+                            <i class="fa-solid fa-code" style="color: #9ca3af; font-size: 0.8rem;"></i>
+                        </div>
+                        <textarea id="editor1" spellcheck="false">.mybox {
+    background-color: #2563eb;
     padding: 30px;
     border-radius: 10px;
     color: white;
     font-weight: bold;
 }</textarea>
+                    </div>
+                    <div class="output-container">
+                        <div class="output-header">Live Preview</div>
+                        <!-- This div will host the Shadow DOM -->
+                        <div class="output-display" id="output1"></div>
+                    </div>
                 </div>
-                <div class="output-container">
-                    <div class="output-header">LIVE OUTPUT</div>
-                    <div class="output-display" id="output1"></div>
-                </div>
+                <!-- Updated Button Text to match academic vibe -->
+                <button class="btn" onclick="runCode(1, '<div class=\'mybox\'>Styled Content</div>')">Run Simulation</button>
             </div>
-            <button class="btn" onclick="updateOutput1()">▶ Run Code</button>
         </div>
 
         <!-- Lesson 2: Text Color -->
         <div class="lesson">
-            <span class="lesson-number">LESSON 2</span>
-            <h2>Text Color</h2>
+            <div class="lesson-header">
+                <i class="fa-solid fa-pen-nib lesson-icon"></i>
+                <h2>Lesson 2: Text Color</h2>
+            </div>
             
-            <div class="theory">
-                <h3>📚 Theory</h3>
-                <p>The <code>color</code> property sets the color of text. It accepts the same value types as background-color.</p>
-                <p><strong>Syntax:</strong> <code>color: value;</code></p>
-                <p><strong>Tip:</strong> Always ensure sufficient contrast between text and background for readability.</p>
-            </div>
-
-            <div class="example">
-                <h3>💡 Example</h3>
-                <div class="example-code">
-                    <pre><span class="selector">.highlight</span> {
-    <span class="property">color</span>: <span class="value">#e74c3c</span>;
-    <span class="property">font-weight</span>: <span class="value">bold</span>;
-}
-
-<span class="selector">.subtle</span> {
-    <span class="property">color</span>: <span class="value">rgba(0, 0, 0, 0.6)</span>;
-}</pre>
+            <div class="lesson-body">
+                <div class="theory">
+                    <h3><i class="fa-solid fa-book-open"></i> Theory</h3>
+                    <p>The <code>color</code> property sets the color of text foreground.</p>
                 </div>
-                <div class="example-output">
-                    <p style="color: #e74c3c; font-weight: bold;">This text is red and bold!</p>
-                    <p style="color: rgba(0, 0, 0, 0.6);">This text is subtle with transparency.</p>
-                </div>
-            </div>
 
-            <h3 style="color: var(--accent); margin-bottom: 15px;">🎨 Try It Yourself</h3>
-            <div class="interactive">
-                <div class="editor-container">
-                    <div class="editor-header">
-                        <span class="editor-dot dot-red"></span>
-                        <span class="editor-dot dot-yellow"></span>
-                        <span class="editor-dot dot-green"></span>
-                        <span class="editor-title">style.css</span>
-                    </div>
-                    <textarea id="editor2" spellcheck="false">.mytext {
-    color: #9b59b6;
+                <div class="interactive">
+                    <div class="editor-container">
+                        <div class="editor-header">
+                            <span class="editor-title">style.css</span>
+                            <i class="fa-solid fa-code" style="color: #9ca3af; font-size: 0.8rem;"></i>
+                        </div>
+                        <textarea id="editor2" spellcheck="false">.mytext {
+    color: #7c3aed;
     font-size: 24px;
-    background-color: #f8f9fa;
+    background-color: #f3f4f6;
     padding: 15px;
+    border-radius: 6px;
 }</textarea>
+                    </div>
+                    <div class="output-container">
+                        <div class="output-header">Live Preview</div>
+                        <div class="output-display" id="output2"></div>
+                    </div>
                 </div>
-                <div class="output-container">
-                    <div class="output-header">LIVE OUTPUT</div>
-                    <div class="output-display" id="output2"></div>
-                </div>
+                <button class="btn" onclick="runCode(2, '<div class=\'mytext\'>Colorful Text</div>')">Run Simulation</button>
             </div>
-            <button class="btn" onclick="updateOutput2()">▶ Run Code</button>
         </div>
 
         <!-- Lesson 3: Box Model -->
         <div class="lesson">
-            <span class="lesson-number">LESSON 3</span>
-            <h2>Box Model: Border, Margin & Padding</h2>
+            <div class="lesson-header">
+                <i class="fa-regular fa-square lesson-icon"></i>
+                <h2>Lesson 3: Box Model</h2>
+            </div>
             
-            <div class="theory">
-                <h3>📚 Theory</h3>
-                <p>Every element is a box with four parts: <code>content</code>, <code>padding</code>, <code>border</code>, and <code>margin</code>.</p>
-                <p><strong>Padding:</strong> Space between content and border (inside)</p>
-                <p><strong>Border:</strong> The edge around padding</p>
-                <p><strong>Margin:</strong> Space outside the border (creates gaps between elements)</p>
-                <p><strong>Syntax:</strong> <code>padding: 20px;</code> <code>border: 2px solid black;</code> <code>margin: 10px;</code></p>
-            </div>
-
-            <div class="example">
-                <h3>💡 Example</h3>
-                <div class="example-code">
-                    <pre><span class="selector">.box-demo</span> {
-    <span class="property">padding</span>: <span class="value">20px</span>;          <span class="comment">/* Inside spacing */</span>
-    <span class="property">border</span>: <span class="value">3px solid #3498db</span>; <span class="comment">/* Border style */</span>
-    <span class="property">margin</span>: <span class="value">15px</span>;           <span class="comment">/* Outside spacing */</span>
-    <span class="property">background-color</span>: <span class="value">#ecf0f1</span>;
-}</pre>
-                </div>
-                <div class="example-output">
-                    <div style="padding: 20px; border: 3px solid #3498db; margin: 15px; background-color: #ecf0f1;">
-                        Content with padding, border, and margin
-                    </div>
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent); margin-bottom: 15px;">🎨 Try It Yourself</h3>
-            <div class="interactive">
-                <div class="editor-container">
-                    <div class="editor-header">
-                        <span class="editor-dot dot-red"></span>
-                        <span class="editor-dot dot-yellow"></span>
-                        <span class="editor-dot dot-green"></span>
-                        <span class="editor-title">style.css</span>
-                    </div>
-                    <textarea id="editor3" spellcheck="false">.mybox {
+            <div class="lesson-body">
+                <div class="interactive">
+                    <div class="editor-container">
+                        <div class="editor-header">
+                            <span class="editor-title">style.css</span>
+                        </div>
+                        <textarea id="editor3" spellcheck="false">.mybox {
     padding: 25px;
-    border: 4px dashed #e74c3c;
+    border: 4px dashed #f59e0b;
     margin: 20px;
-    background-color: #ffe5e5;
+    background-color: #fef3c7;
     border-radius: 12px;
 }</textarea>
+                    </div>
+                    <div class="output-container">
+                        <div class="output-header">Live Preview</div>
+                        <div class="output-display" id="output3"></div>
+                    </div>
                 </div>
-                <div class="output-container">
-                    <div class="output-header">LIVE OUTPUT</div>
-                    <div class="output-display" id="output3"></div>
-                </div>
+                <button class="btn" onclick="runCode(3, '<div class=\'mybox\'>Box Model Demo</div>')">Run Simulation</button>
             </div>
-            <button class="btn" onclick="updateOutput3()">▶ Run Code</button>
         </div>
 
         <!-- Lesson 4: Font Properties -->
         <div class="lesson">
-            <span class="lesson-number">LESSON 4</span>
-            <h2>Font: Weight, Style & Family</h2>
+            <div class="lesson-header">
+                <i class="fa-solid fa-font lesson-icon"></i>
+                <h2>Lesson 4: Typography</h2>
+            </div>
             
-            <div class="theory">
-                <h3>📚 Theory</h3>
-                <p><code>font-weight</code>: Controls thickness (normal, bold, 100-900)</p>
-                <p><code>font-style</code>: Normal, italic, or oblique</p>
-                <p><code>font-family</code>: Typeface to use (serif, sans-serif, monospace, or specific fonts)</p>
-                <p><strong>Tip:</strong> Always provide fallback fonts: <code>font-family: "Arial", sans-serif;</code></p>
-            </div>
-
-            <div class="example">
-                <h3>💡 Example</h3>
-                <div class="example-code">
-                    <pre><span class="selector">.heading</span> {
-    <span class="property">font-family</span>: <span class="value">'Georgia', serif</span>;
-    <span class="property">font-weight</span>: <span class="value">700</span>;
-    <span class="property">font-style</span>: <span class="value">normal</span>;
-}
-
-<span class="selector">.quote</span> {
-    <span class="property">font-family</span>: <span class="value">'Courier New', monospace</span>;
-    <span class="property">font-style</span>: <span class="value">italic</span>;
-    <span class="property">font-weight</span>: <span class="value">400</span>;
-}</pre>
-                </div>
-                <div class="example-output">
-                    <p style="font-family: Georgia, serif; font-weight: 700; font-size: 20px;">Bold Serif Heading</p>
-                    <p style="font-family: 'Courier New', monospace; font-style: italic; font-weight: 400;">Italic monospace quote</p>
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent); margin-bottom: 15px;">🎨 Try It Yourself</h3>
-            <div class="interactive">
-                <div class="editor-container">
-                    <div class="editor-header">
-                        <span class="editor-dot dot-red"></span>
-                        <span class="editor-dot dot-yellow"></span>
-                        <span class="editor-dot dot-green"></span>
-                        <span class="editor-title">style.css</span>
-                    </div>
-                    <textarea id="editor4" spellcheck="false">.mytext {
-    font-family: 'Georgia', serif;
+            <div class="lesson-body">
+                <div class="interactive">
+                    <div class="editor-container">
+                        <div class="editor-header">
+                            <span class="editor-title">style.css</span>
+                        </div>
+                        <textarea id="editor4" spellcheck="false">.mytext {
+    font-family: 'Times New Roman', serif;
     font-weight: 600;
     font-style: italic;
-    font-size: 22px;
-    color: #2c3e50;
+    font-size: 24px;
+    color: #111827;
 }</textarea>
+                    </div>
+                    <div class="output-container">
+                        <div class="output-header">Live Preview</div>
+                        <div class="output-display" id="output4"></div>
+                    </div>
                 </div>
-                <div class="output-container">
-                    <div class="output-header">LIVE OUTPUT</div>
-                    <div class="output-display" id="output4"></div>
-                </div>
+                <button class="btn" onclick="runCode(4, '<div class=\'mytext\'>Typography Matters</div>')">Run Simulation</button>
             </div>
-            <button class="btn" onclick="updateOutput4()">▶ Run Code</button>
         </div>
 
-        <!-- Lesson 5: Text Decoration & Alignment -->
+        <!-- Lesson 5: Text Decoration -->
         <div class="lesson">
-            <span class="lesson-number">LESSON 5</span>
-            <h2>Text Decoration & Alignment</h2>
+            <div class="lesson-header">
+                <i class="fa-solid fa-align-center lesson-icon"></i>
+                <h2>Lesson 5: Alignment & Decoration</h2>
+            </div>
             
-            <div class="theory">
-                <h3>📚 Theory</h3>
-                <p><code>text-decoration</code>: Adds lines to text (none, underline, overline, line-through)</p>
-                <p><code>text-align</code>: Horizontal alignment (left, right, center, justify)</p>
-                <p><strong>Note:</strong> text-align works on block-level elements, not inline elements.</p>
-            </div>
-
-            <div class="example">
-                <h3>💡 Example</h3>
-                <div class="example-code">
-                    <pre><span class="selector">.underline</span> {
-    <span class="property">text-decoration</span>: <span class="value">underline</span>;
-    <span class="property">text-decoration-color</span>: <span class="value">#e74c3c</span>;
-    <span class="property">text-decoration-thickness</span>: <span class="value">3px</span>;
-}
-
-<span class="selector">.centered</span> {
-    <span class="property">text-align</span>: <span class="value">center</span>;
-}</pre>
-                </div>
-                <div class="example-output">
-                    <p style="text-decoration: underline; text-decoration-color: #e74c3c; text-decoration-thickness: 3px;">Underlined text</p>
-                    <p style="text-align: center; background: #ecf0f1; padding: 10px;">Centered text</p>
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent); margin-bottom: 15px;">🎨 Try It Yourself</h3>
-            <div class="interactive">
-                <div class="editor-container">
-                    <div class="editor-header">
-                        <span class="editor-dot dot-red"></span>
-                        <span class="editor-dot dot-yellow"></span>
-                        <span class="editor-dot dot-green"></span>
-                        <span class="editor-title">style.css</span>
-                    </div>
-                    <textarea id="editor5" spellcheck="false">.mytext {
-    text-decoration: underline wavy #ff6b6b;
+            <div class="lesson-body">
+                <div class="interactive">
+                    <div class="editor-container">
+                        <div class="editor-header">
+                            <span class="editor-title">style.css</span>
+                        </div>
+                        <textarea id="editor5" spellcheck="false">.mytext {
+    /* We set width to 100% so you can see the alignment change */
+    width: 100%; 
+    text-decoration: underline wavy #ef4444;
     text-align: center;
     padding: 20px;
-    background: #f8f9fa;
+    background: #f3f4f6;
     font-size: 20px;
 }</textarea>
+                    </div>
+                    <div class="output-container">
+                        <div class="output-header">Live Preview</div>
+                        <div class="output-display" id="output5"></div>
+                    </div>
                 </div>
-                <div class="output-container">
-                    <div class="output-header">LIVE OUTPUT</div>
-                    <div class="output-display" id="output5"></div>
-                </div>
+                <button class="btn" onclick="runCode(5, '<div class=\'mytext\'>Decorated Text</div>')">Run Simulation</button>
             </div>
-            <button class="btn" onclick="updateOutput5()">▶ Run Code</button>
         </div>
 
         <!-- Lesson 6: Pseudo Classes -->
         <div class="lesson">
-            <span class="lesson-number">LESSON 6</span>
-            <h2>Pseudo Classes: Hover, Active & Focus</h2>
+            <div class="lesson-header">
+                <i class="fa-solid fa-mouse-pointer lesson-icon"></i>
+                <h2>Lesson 6: Pseudo Classes</h2>
+            </div>
             
-            <div class="theory">
-                <h3>📚 Theory</h3>
-                <p>Pseudo-classes style elements based on their state:</p>
-                <p><code>:hover</code> - When mouse is over the element</p>
-                <p><code>:active</code> - When element is being clicked</p>
-                <p><code>:focus</code> - When element has keyboard focus</p>
-                <p><code>li:nth-child(odd)</code> - Selects odd list items</p>
-            </div>
-
-            <div class="example">
-                <h3>💡 Example</h3>
-                <div class="example-code">
-                    <pre><span class="selector">.btn</span> {
-    <span class="property">background</span>: <span class="value">#3498db</span>;
-    <span class="property">color</span>: <span class="value">white</span>;
-    <span class="property">padding</span>: <span class="value">10px 20px</span>;
-}
-
-<span class="selector">.btn:hover</span> {
-    <span class="property">background</span>: <span class="value">#2980b9</span>;
-    <span class="property">transform</span>: <span class="value">scale(1.05)</span>;
-}
-
-<span class="selector">.btn:active</span> {
-    <span class="property">transform</span>: <span class="value">scale(0.95)</span>;
-}</pre>
-                </div>
-                <div class="example-output">
-                    <style>
-                        .demo-btn {
-                            background: #3498db;
-                            color: white;
-                            padding: 10px 20px;
-                            border: none;
-                            border-radius: 5px;
-                            cursor: pointer;
-                            transition: all 0.3s;
-                        }
-                        .demo-btn:hover {
-                            background: #2980b9;
-                            transform: scale(1.05);
-                        }
-                        .demo-btn:active {
-                            transform: scale(0.95);
-                        }
-                    </style>
-                    <button class="demo-btn">Hover & Click Me!</button>
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent); margin-bottom: 15px;">🎨 Try It Yourself</h3>
-            <div class="interactive">
-                <div class="editor-container">
-                    <div class="editor-header">
-                        <span class="editor-dot dot-red"></span>
-                        <span class="editor-dot dot-yellow"></span>
-                        <span class="editor-dot dot-green"></span>
-                        <span class="editor-title">style.css</span>
-                    </div>
-                    <textarea id="editor6" spellcheck="false">.mybutton {
-    background: #e74c3c;
+            <div class="lesson-body">
+                <div class="interactive">
+                    <div class="editor-container">
+                        <div class="editor-header">
+                            <span class="editor-title">style.css</span>
+                        </div>
+                        <textarea id="editor6" spellcheck="false">.mybutton {
+    background: #2563eb;
     color: white;
-    padding: 15px 30px;
+    padding: 12px 24px;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s;
+    font-size: 1rem;
+    font-family: sans-serif;
 }
 
 .mybutton:hover {
-    background: #c0392b;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    background: #1d4ed8;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
 }
 
 .mybutton:active {
     transform: translateY(2px);
 }</textarea>
+                    </div>
+                    <div class="output-container">
+                        <div class="output-header">Live Preview</div>
+                        <div class="output-display" id="output6"></div>
+                    </div>
                 </div>
-                <div class="output-container">
-                    <div class="output-header">LIVE OUTPUT</div>
-                    <div class="output-display" id="output6"></div>
-                </div>
+                <button class="btn" onclick="runCode(6, '<button class=\'mybutton\'>Interactive Button</button>')">Run Simulation</button>
             </div>
-            <button class="btn" onclick="updateOutput6()">▶ Run Code</button>
         </div>
 
-        <!-- Lesson 7: Tooltips with ::before and ::after -->
+        <!-- Lesson 7: Tooltips -->
         <div class="lesson">
-            <span class="lesson-number">LESSON 7</span>
-            <h2>Tooltips: ::before & ::after</h2>
+            <div class="lesson-header">
+                <i class="fa-solid fa-comment-dots lesson-icon"></i>
+                <h2>Lesson 7: Tooltips</h2>
+            </div>
             
-            <div class="theory">
-                <h3>📚 Theory</h3>
-                <p><code>::before</code> and <code>::after</code> are pseudo-elements that insert content before or after an element's content.</p>
-                <p>They require a <code>content</code> property to work.</p>
-                <p>Perfect for tooltips, decorative elements, and icons without extra HTML.</p>
-                <p><strong>Use with:</strong> <code>position: absolute</code> for precise positioning</p>
-            </div>
-
-            <div class="example">
-                <h3>💡 Example</h3>
-                <div class="example-code">
-                    <pre><span class="selector">.tooltip</span> {
-    <span class="property">position</span>: <span class="value">relative</span>;
-    <span class="property">cursor</span>: <span class="value">help</span>;
-}
-
-<span class="selector">.tooltip::after</span> {
-    <span class="property">content</span>: <span class="value">attr(data-tip)</span>;
-    <span class="property">position</span>: <span class="value">absolute</span>;
-    <span class="property">bottom</span>: <span class="value">100%</span>;
-    <span class="property">background</span>: <span class="value">#333</span>;
-    <span class="property">color</span>: <span class="value">white</span>;
-    <span class="property">padding</span>: <span class="value">5px 10px</span>;
-    <span class="property">opacity</span>: <span class="value">0</span>;
-    <span class="property">transition</span>: <span class="value">opacity 0.3s</span>;
-}
-
-<span class="selector">.tooltip:hover::after</span> {
-    <span class="property">opacity</span>: <span class="value">1</span>;
-}</pre>
-                </div>
-                <div class="example-output">
-                    <style>
-                        .demo-tooltip {
-                            position: relative;
-                            display: inline-block;
-                            padding: 10px 20px;
-                            background: #3498db;
-                            color: white;
-                            border-radius: 5px;
-                            cursor: help;
-                        }
-                        .demo-tooltip::after {
-                            content: attr(data-tip);
-                            position: absolute;
-                            bottom: 120%;
-                            left: 50%;
-                            transform: translateX(-50%);
-                            background: #2c3e50;
-                            color: white;
-                            padding: 8px 12px;
-                            border-radius: 5px;
-                            white-space: nowrap;
-                            opacity: 0;
-                            transition: opacity 0.3s;
-                            pointer-events: none;
-                            font-size: 14px;
-                        }
-                        .demo-tooltip:hover::after {
-                            opacity: 1;
-                        }
-                    </style>
-                    <span class="demo-tooltip" data-tip="I'm a tooltip! 👋">Hover over me</span>
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent); margin-bottom: 15px;">🎨 Try It Yourself</h3>
-            <div class="interactive">
-                <div class="editor-container">
-                    <div class="editor-header">
-                        <span class="editor-dot dot-red"></span>
-                        <span class="editor-dot dot-yellow"></span>
-                        <span class="editor-dot dot-green"></span>
-                        <span class="editor-title">style.css</span>
-                    </div>
-                    <textarea id="editor7" spellcheck="false">.mytooltip {
+            <div class="lesson-body">
+                <div class="interactive">
+                    <div class="editor-container">
+                        <div class="editor-header">
+                            <span class="editor-title">style.css</span>
+                        </div>
+                        <textarea id="editor7" spellcheck="false">.mytooltip {
     position: relative;
     display: inline-block;
-    padding: 12px 24px;
-    background: #9b59b6;
+    padding: 10px 20px;
+    background: #8b5cf6;
     color: white;
     border-radius: 6px;
     cursor: help;
+    font-family: sans-serif;
 }
 
 .mytooltip::after {
-    content: 'This is a custom tooltip!';
+    content: 'Extra Info!';
     position: absolute;
-    bottom: 125%;
+    bottom: 130%;
     left: 50%;
     transform: translateX(-50%);
-    background: #34495e;
+    background: #1f2937;
     color: white;
-    padding: 10px 15px;
-    border-radius: 8px;
+    padding: 8px 12px;
+    border-radius: 4px;
     opacity: 0;
-    transition: opacity 0.4s;
+    transition: opacity 0.3s;
     white-space: nowrap;
+    font-size: 0.85rem;
 }
 
 .mytooltip:hover::after {
     opacity: 1;
 }</textarea>
+                    </div>
+                    <div class="output-container">
+                        <div class="output-header">Live Preview</div>
+                        <div class="output-display" id="output7"></div>
+                    </div>
                 </div>
-                <div class="output-container">
-                    <div class="output-header">LIVE OUTPUT</div>
-                    <div class="output-display" id="output7"></div>
-                </div>
+                <button class="btn" onclick="runCode(7, '<span class=\'mytooltip\'>Hover Me</span>')">Run Simulation</button>
             </div>
-            <button class="btn" onclick="updateOutput7()">▶ Run Code</button>
         </div>
 
         <!-- Lesson 8: Animations -->
         <div class="lesson">
-            <span class="lesson-number">LESSON 8</span>
-            <h2>CSS Animations</h2>
+            <div class="lesson-header">
+                <i class="fa-solid fa-film lesson-icon"></i>
+                <h2>Lesson 8: CSS Animations</h2>
+            </div>
             
-            <div class="theory">
-                <h3>📚 Theory</h3>
-                <p>CSS animations let you animate elements without JavaScript. Two steps:</p>
-                <p>1. Define keyframes with <code>@keyframes</code></p>
-                <p>2. Apply animation using <code>animation</code> property</p>
-                <p><strong>Properties:</strong> animation-name, animation-duration, animation-timing-function, animation-delay, animation-iteration-count</p>
-            </div>
-
-            <div class="example">
-                <h3>💡 Example</h3>
-                <div class="example-code">
-                    <pre><span class="keyword">@keyframes</span> <span class="selector">slideIn</span> {
-    <span class="value">0%</span> {
-        <span class="property">transform</span>: <span class="value">translateX(-100%)</span>;
-        <span class="property">opacity</span>: <span class="value">0</span>;
-    }
-    <span class="value">100%</span> {
-        <span class="property">transform</span>: <span class="value">translateX(0)</span>;
-        <span class="property">opacity</span>: <span class="value">1</span>;
-    }
-}
-
-<span class="selector">.animated-box</span> {
-    <span class="property">animation</span>: <span class="value">slideIn 1s ease-out</span>;
-}</pre>
-                </div>
-                <div class="example-output">
-                    <style>
-                        @keyframes demoSlide {
-                            0% {
-                                transform: translateX(-100%);
-                                opacity: 0;
-                            }
-                            100% {
-                                transform: translateX(0);
-                                opacity: 1;
-                            }
-                        }
-                        .demo-animated {
-                            background: #e74c3c;
-                            color: white;
-                            padding: 20px;
-                            border-radius: 8px;
-                            animation: demoSlide 1.5s ease-out infinite;
-                        }
-                    </style>
-                    <div class="demo-animated">Watch me slide in!</div>
-                </div>
-            </div>
-
-            <h3 style="color: var(--accent); margin-bottom: 15px;">🎨 Try It Yourself</h3>
-            <div class="interactive">
-                <div class="editor-container">
-                    <div class="editor-header">
-                        <span class="editor-dot dot-red"></span>
-                        <span class="editor-dot dot-yellow"></span>
-                        <span class="editor-dot dot-green"></span>
-                        <span class="editor-title">style.css</span>
-                    </div>
-                    <textarea id="editor8" spellcheck="false">@keyframes bounce {
+            <div class="lesson-body">
+                <div class="interactive">
+                    <div class="editor-container">
+                        <div class="editor-header">
+                            <span class="editor-title">style.css</span>
+                        </div>
+                        <textarea id="editor8" spellcheck="false">@keyframes bounce {
     0%, 100% {
         transform: translateY(0);
     }
     50% {
-        transform: translateY(-30px);
+        transform: translateY(-20px);
     }
 }
 
 .myanimation {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: white;
-    padding: 25px 40px;
-    border-radius: 12px;
+    padding: 20px 30px;
+    border-radius: 8px;
     display: inline-block;
     animation: bounce 1.5s ease-in-out infinite;
     font-weight: bold;
     font-size: 18px;
+    font-family: sans-serif;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
 }</textarea>
+                    </div>
+                    <div class="output-container">
+                        <div class="output-header">Live Preview</div>
+                        <div class="output-display" id="output8"></div>
+                    </div>
                 </div>
-                <div class="output-container">
-                    <div class="output-header">LIVE OUTPUT</div>
-                    <div class="output-display" id="output8"></div>
-                </div>
+                <button class="btn" onclick="runCode(8, '<div class=\'myanimation\'>Animated!</div>')">Run Simulation</button>
             </div>
-            <button class="btn" onclick="updateOutput8()">▶ Run Code</button>
         </div>
 
     </div>
 
     <footer>
-        <p>💻 Master CSS one property at a time | Built with passion for learning</p>
+        <p>© 2026 Academic Portal | Digital Learning Initiative</p>
     </footer>
 
     <script>
-        // Lesson 1: Background Color
-        function updateOutput1() {
-            var css = document.getElementById('editor1').value;
-            var output = document.getElementById('output1');
-            output.innerHTML = '<div class="mybox">Styled Content</div><style>' + css + '</style>';
+        /**
+         * CSS MASTERY ENGINE
+         * Uses Shadow DOM to encapsulate student code and prevent
+         * global style leaks.
+         */
+
+        function runCode(id, htmlContent) {
+            // 1. Get the User's CSS
+            const userCSS = document.getElementById('editor' + id).value;
+            
+            // 2. Get the Output Container
+            const outputHost = document.getElementById('output' + id);
+            
+            // 3. Create or Clear Shadow DOM
+            let shadow = outputHost.shadowRoot;
+            if (!shadow) {
+                shadow = outputHost.attachShadow({mode: 'open'});
+            }
+            
+            // 4. Construct the Sandboxed Content
+            shadow.innerHTML = `
+                <style>
+                    /* Reset for the sandbox */
+                    :host {
+                        display: block;
+                        font-family: 'Inter', system-ui, sans-serif;
+                        all: initial; 
+                        width: 100%;
+                        height: 100%;
+                    }
+                    /* Default container to help center items for presentation */
+                    .sandbox-wrapper {
+                        padding: 20px;
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        box-sizing: border-box;
+                        font-family: 'Inter', system-ui, sans-serif; 
+                    }
+                    /* Inject Student CSS here */
+                    ${userCSS}
+                </style>
+                <div class="sandbox-wrapper">
+                    ${htmlContent}
+                </div>
+            `;
         }
 
-        // Lesson 2: Text Color
-        function updateOutput2() {
-            var css = document.getElementById('editor2').value;
-            var output = document.getElementById('output2');
-            output.innerHTML = '<div class="mytext">Colorful Text</div><style>' + css + '</style>';
-        }
-
-        // Lesson 3: Box Model
-        function updateOutput3() {
-            var css = document.getElementById('editor3').value;
-            var output = document.getElementById('output3');
-            output.innerHTML = '<div class="mybox">Box Model Demo</div><style>' + css + '</style>';
-        }
-
-        // Lesson 4: Font Properties
-        function updateOutput4() {
-            var css = document.getElementById('editor4').value;
-            var output = document.getElementById('output4');
-            output.innerHTML = '<div class="mytext">Typography Matters</div><style>' + css + '</style>';
-        }
-
-        // Lesson 5: Text Decoration & Alignment
-        function updateOutput5() {
-            var css = document.getElementById('editor5').value;
-            var output = document.getElementById('output5');
-            output.innerHTML = '<div class="mytext">Decorated Text</div><style>' + css + '</style>';
-        }
-
-        // Lesson 6: Pseudo Classes
-        function updateOutput6() {
-            var css = document.getElementById('editor6').value;
-            var output = document.getElementById('output6');
-            output.innerHTML = '<button class="mybutton">Interactive Button</button><style>' + css + '</style>';
-        }
-
-        // Lesson 7: Tooltips
-        function updateOutput7() {
-            var css = document.getElementById('editor7').value;
-            var output = document.getElementById('output7');
-            output.innerHTML = '<span class="mytooltip">Hover Me</span><style>' + css + '</style>';
-        }
-
-        // Lesson 8: Animations
-        function updateOutput8() {
-            var css = document.getElementById('editor8').value;
-            var output = document.getElementById('output8');
-            output.innerHTML = '<div class="myanimation">Animated!</div><style>' + css + '</style>';
-        }
-
-        // Initialize all outputs
+        // Initialize all outputs on load
         window.onload = function() {
-            updateOutput1();
-            updateOutput2();
-            updateOutput3();
-            updateOutput4();
-            updateOutput5();
-            updateOutput6();
-            updateOutput7();
-            updateOutput8();
+            // We simulate a click on every "Run Code" button to init the page
+            const totalLessons = 8;
+            
+            // Initial data for auto-load (matches the onclick handlers above)
+            const initialHTML = {
+                1: '<div class="mybox">Styled Content</div>',
+                2: '<div class="mytext">Colorful Text</div>',
+                3: '<div class="mybox">Box Model Demo</div>',
+                4: '<div class="mytext">Typography Matters</div>',
+                5: '<div class="mytext">Decorated Text</div>',
+                6: '<button class="mybutton">Interactive Button</button>',
+                7: '<span class="mytooltip">Hover Me</span>',
+                8: '<div class="myanimation">Animated!</div>'
+            };
+
+            for(let i=1; i<=totalLessons; i++) {
+                runCode(i, initialHTML[i]);
+            }
         };
     </script>
 
