@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Tree — The Visual Lesson</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #181c27;
+    --border: #2a2f3f;
+    --pass: #22c55e;
+    --fail: #ef4444;
+    --gold: #f59e0b;
+    --blue: #60a5fa;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  header {
+    text-align: center;
+    padding: 32px 16px 16px;
+  }
+
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.6rem, 6vw, 3.5rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #f59e0b, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+
+  header p {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .tabs {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all .2s;
+    letter-spacing: .3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .tab.active, .tab:hover {
+    background: var(--gold);
+    color: #0f1117;
+    border-color: var(--gold);
+  }
+
+  .section { display: none; padding: 16px; max-width: 900px; margin: 0 auto; }
+  .section.active { display: block; animation: fadeUp .35s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: clamp(16px, 4vw, 28px);
+    margin-bottom: 16px;
+  }
+
+  .card h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+    color: var(--gold);
+  }
+
+  .card p, .card li {
+    line-height: 1.7;
+    color: #c8cad4;
+    font-size: 0.97rem;
+  }
+
+  .card ul { padding-left: 20px; margin-top: 8px; }
+  .card li { margin-bottom: 6px; }
+
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 12px;
+    border-radius: 8px;
+  }
+
+  table {
+    width: 100%;
+    min-width: 380px;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  th {
+    background: #1e2334;
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: .8px;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: #c8cad4;
+  }
+
+  tr:hover td { background: #1e2334; }
+
+  .pass-badge { color: var(--pass); font-weight: 700; }
+  .fail-badge { color: var(--fail); font-weight: 700; }
+
+  .entropy-row {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .entropy-box {
+    flex: 1;
+    min-width: 200px;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 2px solid;
+  }
+
+  .entropy-box.pure {
+    border-color: var(--pass);
+    background: rgba(34,197,94,.07);
+  }
+
+  .entropy-box.impure {
+    border-color: var(--fail);
+    background: rgba(239,68,68,.07);
+  }
+
+  .entropy-box h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+
+  .dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 12px 0;
+  }
+
+  .dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+  }
+
+  .dot.g { background: var(--pass); }
+  .dot.r { background: var(--fail); }
+
+  .entropy-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-top: 10px;
+  }
+
+  .formula {
+    background: #1e2334;
+    border-left: 4px solid var(--blue);
+    padding: 14px 16px;
+    border-radius: 0 12px 12px 0;
+    margin: 16px 0;
+    font-family: 'Courier New', monospace;
+    font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+    color: #93c5fd;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+
+  .ig-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  @media (max-width: 540px) {
+    .ig-grid { grid-template-columns: 1fr; }
+  }
+
+  .ig-card {
+    border-radius: 12px;
+    padding: 16px;
+    border: 1.5px solid var(--border);
+    text-align: center;
+    transition: transform .2s;
+    background: #181c27;
+  }
+
+  .ig-card:hover { transform: translateY(-4px); }
+
+  .ig-card.winner {
+    border-color: var(--gold);
+    background: rgba(245,158,11,.07);
+  }
+
+  .ig-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--muted);
+  }
+
+  .ig-card .score {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
+
+  .score.high { color: var(--gold); }
+  .score.med  { color: var(--blue); }
+
+  .tree-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 10px 0 20px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tree-node {
+    background: #1e2334;
+    border: 2px solid var(--blue);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(0.72rem, 2.5vw, 0.9rem);
+    color: var(--blue);
+    text-align: center;
+    min-width: 120px;
+    max-width: 180px;
+  }
+
+  .tree-node.root { border-color: var(--gold); color: var(--gold); }
+  .tree-node.leaf-pass { border-color: var(--pass); color: var(--pass); background: rgba(34,197,94,.1); }
+  .tree-node.leaf-fail { border-color: var(--fail); color: var(--fail); background: rgba(239,68,68,.1); }
+
+  .tree-branches {
+    display: flex;
+    gap: clamp(16px, 5vw, 60px);
+    align-items: flex-start;
+  }
+
+  .branch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .branch-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    color: var(--muted);
+    margin: 4px 0;
+  }
+
+  .branch-label.yes { color: var(--pass); }
+  .branch-label.no  { color: var(--fail); }
+
+  .connector {
+    width: 2px;
+    height: 30px;
+    background: var(--border);
+  }
+
+  .step-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #1e2334;
+    border-radius: 999px;
+    padding: 4px 14px 4px 4px;
+    margin-bottom: 14px;
+  }
+
+  .step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: #0f1117;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    display: grid;
+    place-items: center;
+  }
+
+  .step-text {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .predictor {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  @media(max-width: 480px) {
+    .predictor { grid-template-columns: 1fr; }
+    .predict-btn { grid-column: 1; }
+    .result-box { grid-column: 1; }
+    .steps-box { grid-column: 1; }
+  }
+
+  .input-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    margin-bottom: 6px;
+  }
+
+  .input-group input[type=range] {
+    width: 100%;
+    accent-color: var(--gold);
+  }
+
+  .input-group .val {
+    text-align: right;
+    font-size: 0.85rem;
+    color: var(--blue);
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  .predict-btn {
+    grid-column: 1 / -1;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: var(--gold);
+    color: #0f1117;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+
+  .predict-btn:hover { opacity: .85; }
+
+  .result-box {
+    grid-column: 1 / -1;
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    display: none;
+  }
+
+  .result-box.show { display: block; animation: fadeUp .3s ease; }
+  .result-box.pass { background: rgba(34,197,94,.15); border: 2px solid var(--pass); color: var(--pass); }
+  .result-box.fail { background: rgba(239,68,68,.15); border: 2px solid var(--fail); color: var(--fail); }
+
+  .steps-box {
+    grid-column: 1 / -1;
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.8;
+    display: none;
+    background: #1e2334;
+    border-radius: 8px;
+    padding: 14px;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+  }
+
+  .steps-box.show { display: block; }
+
+  b.hl { color: var(--gold); }
+  b.blu { color: var(--blue); }
+  b.grn { color: var(--pass); }
+  b.red { color: var(--fail); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Decision Tree</h1>
+  <p>A complete visual lesson — from raw data to prediction</p>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="show('intro')">1 · The Idea</div>
+  <div class="tab" onclick="show('entropy')">2 · Impurity</div>
+  <div class="tab" onclick="show('infogain')">3 · Info Gain</div>
+  <div class="tab" onclick="show('tree')">4 · Build the Tree</div>
+  <div class="tab" onclick="show('predict')">5 · Try It!</div>
+</div>
+
+<!-- SECTION 1 -->
+<div class="section active" id="intro">
+  <div class="card">
+    <h2>🎓 The Big Idea</h2>
+    <p>A Decision Tree is just a series of <b class="hl">yes/no questions</b>. Like a professor guessing if a student will pass — no complex math, just logic.</p>
+    <br>
+    <p>The machine learns <b class="hl">which question to ask first</b> and in what order — automatically, from data.</p>
+  </div>
+
+  <div class="card">
+    <h2>📊 Our Training Data</h2>
+    <p>5 students, 3 features, 1 outcome. The tree will learn from this.</p>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Study Hrs/day</th>
+          <th>Attendance %</th>
+          <th>Prev. Marks</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>A</td><td>2</td><td>60</td><td>45</td><td class="fail-badge">Fail</td></tr>
+        <tr><td>B</td><td>5</td><td>75</td><td>60</td><td class="pass-badge">Pass</td></tr>
+        <tr><td>C</td><td>8</td><td>90</td><td>80</td><td class="pass-badge">Pass</td></tr>
+        <tr><td>D</td><td>1</td><td>50</td><td>35</td><td class="fail-badge">Fail</td></tr>
+        <tr><td>E</td><td>6</td><td>80</td><td>70</td><td class="pass-badge">Pass</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>❓ The Core Question</h2>
+    <p>We have 3 features. <b class="hl">Which one should we ask about first?</b></p>
+    <br>
+    <p>Not randomly — we pick the feature that <b class="hl">best separates</b> Pass from Fail students. That's the Root Node.</p>
+    <br>
+    <p>To measure "best separation" we use a concept called <b class="hl">Entropy</b> (Impurity) →</p>
+  </div>
+</div>
+
+<!-- SECTION 2 -->
+<div class="section" id="entropy">
+  <div class="card">
+    <h2>🔀 What is Impurity (Entropy)?</h2>
+    <p>Entropy tells us <b class="hl">how mixed a group is</b>.</p>
+    <ul>
+      <li>All Pass → <b class="grn">Entropy = 0</b> (Pure ✅)</li>
+      <li>All Fail → <b class="grn">Entropy = 0</b> (Pure ✅)</li>
+      <li>Half Pass, Half Fail → <b class="red">Entropy = 1</b> (Maximum chaos)</li>
+    </ul>
+    <br>
+    <p><b>Goal:</b> Find splits that make groups as <b class="hl">pure as possible</b> (low entropy).</p>
+
+    <div class="entropy-row">
+      <div class="entropy-box pure">
+        <h3 style="color:var(--pass)">Pure Node</h3>
+        <p style="font-size:.8rem;color:var(--muted)">Attendance ≥ 70%</p>
+        <div class="dots">
+          <div class="dot g"></div><div class="dot g"></div>
+          <div class="dot g"></div><div class="dot g"></div><div class="dot g"></div>
+        </div>
+        <p style="font-size:.8rem;color:var(--muted)">All students PASS</p>
+        <div class="entropy-val" style="color:var(--pass)">H = 0</div>
+      </div>
+
+      <div class="entropy-box impure">
+        <h3 style="color:var(--fail)">Impure Node</h3>
+        <p style="font-size:.8rem;color:var(--muted)">Hours ≥ 4</p>
+        <div class="dots">
+          <div class="dot g"></div><div class="dot g"></div><div class="dot r"></div>
+          <div class="dot g"></div><div class="dot r"></div>
+        </div>
+        <p style="font-size:.8rem;color:var(--muted)">Mixed result</p>
+        <div class="entropy-val" style="color:var(--fail)">H = High</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🧮 The Formula</h2>
+    <p>For a node with proportion p of one class and q of the other:</p>
+    <div class="formula">Entropy(node) = −p·log₂(p) − q·log₂(q)
+
+Example: 3 Pass, 2 Fail (total 5 students)
+  p(Pass) = 3/5 = 0.6
+  p(Fail) = 2/5 = 0.4
+
+H = −0.6·log₂(0.6) − 0.4·log₂(0.4)
+H ≈ 0.971   ← quite mixed</div>
+    <p>Don't memorize the formula. Remember the concept: <b class="hl">lower entropy = purer group = better split.</b></p>
+  </div>
+
+  <div class="card">
+    <h2>💡 Analogy</h2>
+    <p>Imagine a bag of colored balls.</p>
+    <ul>
+      <li><b class="grn">All green balls</b> → you know exactly what you'll pick → Entropy 0</li>
+      <li><b class="hl">Half green, half red</b> → total surprise → Entropy 1</li>
+    </ul>
+    <br>
+    <p>A good split creates bags where you're <b class="hl">not surprised</b> by what you pull out.</p>
+  </div>
+</div>
+
+<!-- SECTION 3 -->
+<div class="section" id="infogain">
+  <div class="card">
+    <h2>📈 Information Gain — Picking the Root Node</h2>
+    <p>After splitting on a feature, how much did entropy <b class="hl">drop</b>? That drop is the <b class="hl">Information Gain</b>.</p>
+    <div class="formula">Info Gain = Entropy(before split) − Weighted Entropy(after split)
+
+Higher Info Gain = Better feature to split on first</div>
+    <p>We calculate this for <b class="blu">every feature</b>, then pick the <b class="hl">winner</b>.</p>
+  </div>
+
+  <div class="card">
+    <h2>🏆 Race: Which Feature Wins?</h2>
+    <p>The algorithm tests all 3 features on our 5 students:</p>
+    <div class="ig-grid">
+      <div class="ig-card winner">
+        <h4>Attendance ≥ 70?</h4>
+        <div class="dots" style="justify-content:center">
+          <div class="dot g"></div><div class="dot g"></div><div class="dot g"></div>
+          <span style="color:var(--muted);font-size:.9rem;align-self:center">|</span>
+          <div class="dot r"></div><div class="dot r"></div>
+        </div>
+        <p style="font-size:.78rem;color:var(--muted);margin-bottom:6px">Pure groups!</p>
+        <div class="score high">HIGH ⭐</div>
+        <p style="font-size:.75rem;color:var(--gold);margin-top:4px">ROOT NODE</p>
+      </div>
+
+      <div class="ig-card">
+        <h4>Hours ≥ 4?</h4>
+        <div class="dots" style="justify-content:center">
+          <div class="dot g"></div><div class="dot g"></div><div class="dot r"></div>
+          <span style="color:var(--muted);font-size:.9rem;align-self:center">|</span>
+          <div class="dot g"></div><div class="dot r"></div>
+        </div>
+        <p style="font-size:.78rem;color:var(--muted);margin-bottom:6px">Mixed groups</p>
+        <div class="score med">MED</div>
+      </div>
+
+      <div class="ig-card">
+        <h4>Prev.Marks ≥ 55?</h4>
+        <div class="dots" style="justify-content:center">
+          <div class="dot g"></div><div class="dot g"></div><div class="dot r"></div>
+          <span style="color:var(--muted);font-size:.9rem;align-self:center">|</span>
+          <div class="dot r"></div><div class="dot g"></div>
+        </div>
+        <p style="font-size:.78rem;color:var(--muted);margin-bottom:6px">Mixed groups</p>
+        <div class="score med">MED</div>
+      </div>
+    </div>
+    <br>
+    <p><b class="hl">Attendance</b> wins — it creates the two purest groups. So it becomes the <b class="hl">Root Node</b>.</p>
+  </div>
+
+  <div class="card">
+    <h2>🔄 The Loop — How We Move to the Next Node</h2>
+    <p>After the root node splits the data, each branch gets its own <b class="hl">subset of students</b>. The exact same process repeats on that subset:</p>
+    <ul>
+      <li>Calculate entropy of the current branch's group</li>
+      <li>Test every remaining feature on that group</li>
+      <li>Pick the feature with highest Info Gain</li>
+      <li>Split again → new nodes</li>
+      <li>Stop when a group is <b class="hl">pure</b> (all Pass or all Fail)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- SECTION 4 -->
+<div class="section" id="tree">
+  <div class="card">
+    <h2>🌳 Building the Tree — Level by Level</h2>
+
+    <div class="tree-wrap" style="margin-top:28px">
+      <div class="step-pill">
+        <div class="step-num">1</div>
+        <span class="step-text">Root Node — highest Info Gain across all features</span>
+      </div>
+      <div class="tree-node root">Attendance ≥ 70?</div>
+      <div class="connector"></div>
+
+      <div class="tree-branches">
+        <div class="branch">
+          <div class="branch-label no">↙ NO</div>
+          <div class="tree-node leaf-fail">❌ FAIL<br><small style="font-weight:400;font-size:.75rem">Students A, D</small></div>
+          <br>
+          <div style="font-size:.78rem;color:var(--pass);text-align:center">Entropy = 0<br>Pure! Stop here.</div>
+        </div>
+
+        <div class="branch">
+          <div class="branch-label yes">↘ YES</div>
+          <div class="tree-node" style="border-color:var(--gold);color:var(--gold)">Hours ≥ 4?</div>
+          <div style="font-size:.78rem;color:var(--muted);text-align:center;margin:4px 0">B, C, E still mixed<br>→ Split again!</div>
+          <div class="connector"></div>
+
+          <div style="display:flex;gap:clamp(12px,4vw,40px);align-items:flex-start">
+            <div class="branch">
+              <div class="branch-label no" style="font-size:.75rem">↙ NO</div>
+              <div class="tree-node leaf-fail">❌ FAIL</div>
+            </div>
+            <div class="branch">
+              <div class="branch-label yes" style="font-size:.75rem">↘ YES</div>
+              <div class="tree-node leaf-pass">✅ PASS<br><small style="font-weight:400;font-size:.75rem">B, C, E</small></div>
+              <div style="font-size:.75rem;color:var(--pass);text-align:center;margin-top:4px">Entropy = 0<br>Pure! Stop.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📋 The Tree as Code</h2>
+    <p>The whole tree is literally just if-else:</p>
+    <div class="formula">if attendance >= 70:
+    if hours >= 4:
+        return "PASS"  ✅
+    else:
+        return "FAIL"  ❌
+else:
+    return "FAIL"  ❌</div>
+    <p>No magic. Just structured questions learned from data. Scores <b class="hl">100% on training data</b>.</p>
+  </div>
+
+  <div class="card">
+    <h2>⚠️ But Is It Too Perfect?</h2>
+    <p>100% on <b class="hl">training data</b> sounds great — but the tree might have <b class="red">memorized</b> these 5 students instead of learning general rules. This is <b class="red">Overfitting</b>.</p>
+    <br>
+    <p>Solution: Limit tree depth, require minimum samples per split, or use a <b class="hl">Random Forest</b> (many trees vote together).</p>
+  </div>
+</div>
+
+<!-- SECTION 5 -->
+<div class="section" id="predict">
+  <div class="card">
+    <h2>🔮 Try the Tree — Predict a New Student</h2>
+    <p>Adjust the sliders and see the tree's decision step by step.</p>
+
+    <div class="predictor">
+      <div class="input-group">
+        <label>Attendance %</label>
+        <input type="range" id="att" min="0" max="100" value="65" oninput="updateVal('att','attVal')">
+        <div class="val" id="attVal">65%</div>
+      </div>
+      <div class="input-group">
+        <label>Study Hours/day</label>
+        <input type="range" id="hrs" min="0" max="12" value="3" oninput="updateVal('hrs','hrsVal')">
+        <div class="val" id="hrsVal">3 hrs</div>
+      </div>
+      <button class="predict-btn" onclick="predict()">🌳 Run the Decision Tree</button>
+      <div class="result-box" id="resultBox"></div>
+      <div class="steps-box" id="stepsBox"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🗺️ Decision Map</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;font-size:.85rem;">
+      <div style="background:rgba(239,68,68,.1);border:1px solid var(--fail);border-radius:10px;padding:14px">
+        <b class="red">❌ FAIL if:</b>
+        <ul style="margin-top:8px;color:#c8cad4">
+          <li>Attendance &lt; 70% → always Fail</li>
+          <li>Attendance ≥ 70% BUT Hours &lt; 4</li>
+        </ul>
+      </div>
+      <div style="background:rgba(34,197,94,.1);border:1px solid var(--pass);border-radius:10px;padding:14px">
+        <b class="grn">✅ PASS if:</b>
+        <ul style="margin-top:8px;color:#c8cad4">
+          <li>Attendance ≥ 70% AND Hours ≥ 4</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🧠 Key Takeaways</h2>
+    <ul>
+      <li><b class="hl">Entropy</b> measures how mixed (impure) a group is</li>
+      <li><b class="hl">Information Gain</b> = entropy drop after a split</li>
+      <li><b class="hl">Root Node</b> = feature with highest Info Gain on full data</li>
+      <li><b class="hl">Next nodes</b> = same process on each branch's subset</li>
+      <li><b class="hl">Stop</b> when a group is pure or max depth is reached</li>
+      <li>Final result = a chain of if-else rules</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  function show(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const idx = ['intro','entropy','infogain','tree','predict'].indexOf(id);
+    document.querySelectorAll('.tab')[idx].classList.add('active');
+  }
+
+  function updateVal(rangeId, labelId) {
+    const v = document.getElementById(rangeId).value;
+    document.getElementById(labelId).textContent = rangeId === 'att' ? v + '%' : v + ' hrs';
+  }
+
+  function predict() {
+    const att = parseInt(document.getElementById('att').value);
+    const hrs = parseInt(document.getElementById('hrs').value);
+
+    let result, steps;
+
+    steps = "Step 1: Check Attendance >= 70?\n";
+    steps += "        Your attendance: " + att + "% ... " + (att >= 70 ? "YES ✓" : "NO ✗") + "\n\n";
+
+    if (att >= 70) {
+      steps += "Step 2: Check Study Hours >= 4?\n";
+      steps += "        Your hours: " + hrs + "/day ... " + (hrs >= 4 ? "YES ✓" : "NO ✗") + "\n\n";
+      if (hrs >= 4) {
+        result = 'pass';
+        steps += "Decision: PASS ✅\n(Attendance OK + Hours OK)";
+      } else {
+        result = 'fail';
+        steps += "Decision: FAIL ❌\n(Attendance OK but Hours too low)";
+      }
+    } else {
+      result = 'fail';
+      steps += "Attendance too low. No need to check other features.\n\nDecision: FAIL ❌";
+    }
+
+    const rb = document.getElementById('resultBox');
+    const sb = document.getElementById('stepsBox');
+    rb.className = 'result-box show ' + result;
+    rb.textContent = result === 'pass' ? '✅ Predicted: PASS' : '❌ Predicted: FAIL';
+    sb.className = 'steps-box show';
+    sb.textContent = steps;
+  }
+</script>
+
+</body>
+</html>
