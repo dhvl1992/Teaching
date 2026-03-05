@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KNN — The Visual Lesson</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #181c27;
+    --border: #2a2f3f;
+    --pass: #22c55e;
+    --fail: #ef4444;
+    --gold: #f59e0b;
+    --blue: #60a5fa;
+    --purple: #a78bfa;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  header {
+    text-align: center;
+    padding: 32px 16px 16px;
+  }
+
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.6rem, 6vw, 3.5rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #a78bfa, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+
+  header p { margin-top: 8px; color: var(--muted); font-size: 0.95rem; }
+
+  .tabs {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all .2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .tab.active, .tab:hover {
+    background: var(--purple);
+    color: #0f1117;
+    border-color: var(--purple);
+  }
+
+  .section { display: none; padding: 16px; max-width: 900px; margin: 0 auto; }
+  .section.active { display: block; animation: fadeUp .35s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: clamp(16px, 4vw, 28px);
+    margin-bottom: 16px;
+  }
+
+  .card h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+    color: var(--purple);
+  }
+
+  .card p, .card li { line-height: 1.7; color: #c8cad4; font-size: 0.95rem; }
+  .card ul { padding-left: 20px; margin-top: 8px; }
+  .card li { margin-bottom: 6px; }
+
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 12px;
+    border-radius: 8px;
+  }
+
+  table {
+    width: 100%;
+    min-width: 360px;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  th {
+    background: #1e2334;
+    padding: 10px 12px;
+    text-align: left;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: .6px;
+    color: var(--purple);
+    text-transform: uppercase;
+  }
+
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: #c8cad4; }
+  tr:hover td { background: #1e2334; }
+
+  .pass-badge { color: var(--pass); font-weight: 700; }
+  .fail-badge { color: var(--fail); font-weight: 700; }
+
+  .formula {
+    background: #1e2334;
+    border-left: 4px solid var(--purple);
+    padding: 14px 16px;
+    border-radius: 0 12px 12px 0;
+    margin: 16px 0;
+    font-family: 'Courier New', monospace;
+    font-size: clamp(0.75rem, 2.5vw, 0.88rem);
+    color: #c4b5fd;
+    line-height: 1.9;
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+
+  /* ANALOGY VISUAL */
+  .crowd {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px 0;
+    align-items: center;
+  }
+
+  .person {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 1.3rem;
+    border: 2px solid transparent;
+    flex-shrink: 0;
+  }
+
+  .person.pass-p { background: rgba(34,197,94,.15); border-color: var(--pass); }
+  .person.fail-p { background: rgba(239,68,68,.15); border-color: var(--fail); }
+  .person.new-p  { background: rgba(167,139,250,.2); border-color: var(--purple); animation: pulse 1.5s infinite; }
+
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(167,139,250,.4); }
+    50%      { box-shadow: 0 0 0 8px rgba(167,139,250,0); }
+  }
+
+  /* DISTANCE CARDS */
+  .dist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .dist-card {
+    border-radius: 12px;
+    padding: 14px;
+    border: 1.5px solid var(--border);
+    text-align: center;
+    background: #181c27;
+    transition: transform .2s;
+  }
+
+  .dist-card:hover { transform: translateY(-3px); }
+
+  .dist-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--muted);
+  }
+
+  .dist-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 6px 0;
+  }
+
+  .dist-card .rank {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .nearest { border-color: var(--gold); background: rgba(245,158,11,.07); }
+  .nearest h4 { color: var(--gold); }
+
+  /* VOTE VISUAL */
+  .vote-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 16px 0;
+    align-items: stretch;
+  }
+
+  .vote-box {
+    flex: 1;
+    min-width: 120px;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    border: 2px solid;
+  }
+
+  .vote-box.pass-v { border-color: var(--pass); background: rgba(34,197,94,.08); }
+  .vote-box.fail-v { border-color: var(--fail); background: rgba(239,68,68,.08); }
+
+  .vote-box h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+
+  .vote-count {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+  }
+
+  /* K SELECTOR */
+  .k-selector {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 14px 0;
+  }
+
+  .k-btn {
+    width: 48px; height: 48px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all .2s;
+  }
+
+  .k-btn.active, .k-btn:hover {
+    border-color: var(--purple);
+    background: rgba(167,139,250,.15);
+    color: var(--purple);
+  }
+
+  /* SCATTER PLOT */
+  #scatterCanvas {
+    width: 100%;
+    max-width: 500px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: #1a1e2e;
+    touch-action: none;
+  }
+
+  /* INTERACTIVE PREDICTOR */
+  .predictor {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  @media(max-width: 480px) {
+    .predictor { grid-template-columns: 1fr; }
+  }
+
+  .input-group label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    margin-bottom: 6px;
+  }
+
+  .input-group input[type=range] { width: 100%; accent-color: var(--purple); }
+
+  .input-group .val {
+    text-align: right;
+    font-size: 0.85rem;
+    color: var(--blue);
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  .k-row {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .k-row label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    color: var(--purple);
+    text-transform: uppercase;
+    letter-spacing: .6px;
+  }
+
+  .predict-btn {
+    grid-column: 1 / -1;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: var(--purple);
+    color: #0f1117;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+
+  .predict-btn:hover { opacity: .85; }
+
+  .result-box {
+    grid-column: 1 / -1;
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    display: none;
+  }
+
+  .result-box.show { display: block; animation: fadeUp .3s ease; }
+  .result-box.pass { background: rgba(34,197,94,.15); border: 2px solid var(--pass); color: var(--pass); }
+  .result-box.fail { background: rgba(239,68,68,.15); border: 2px solid var(--fail); color: var(--fail); }
+
+  .steps-box {
+    grid-column: 1 / -1;
+    font-size: 0.83rem;
+    color: #c4b5fd;
+    line-height: 1.9;
+    display: none;
+    background: #1e2334;
+    border-radius: 8px;
+    padding: 14px;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+
+  .steps-box.show { display: block; }
+
+  /* NEIGHBOR LIST */
+  .neighbor-list {
+    grid-column: 1 / -1;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .neighbor-list.show { display: flex; }
+
+  .neighbor-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #1e2334;
+    border-radius: 10px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .neighbor-row.selected { border-color: var(--gold); }
+  .neighbor-row .n-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; min-width: 28px; }
+  .neighbor-row .n-dist { color: var(--muted); font-size: 0.82rem; flex: 1; }
+  .neighbor-row .n-badge { font-size: 0.8rem; font-weight: 700; }
+
+  /* STEP PILL */
+  .step-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #1e2334;
+    border-radius: 999px;
+    padding: 4px 14px 4px 4px;
+    margin-bottom: 14px;
+  }
+
+  .step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--purple);
+    color: #0f1117;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    display: grid;
+    place-items: center;
+  }
+
+  .step-text { font-size: 0.82rem; font-weight: 500; color: var(--muted); }
+
+  /* COMPARE TABLE */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .compare-card {
+    border-radius: 12px;
+    padding: 16px;
+    border: 1.5px solid var(--border);
+    background: #181c27;
+  }
+
+  .compare-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: var(--gold);
+  }
+
+  .compare-card li { font-size: 0.85rem; margin-bottom: 5px; }
+
+  b.hl  { color: var(--gold); }
+  b.pur { color: var(--purple); }
+  b.blu { color: var(--blue); }
+  b.grn { color: var(--pass); }
+  b.red { color: var(--fail); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>K-Nearest Neighbors</h1>
+  <p>Same students. Different algorithm. No training — just memory.</p>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="show('intro')">1 · The Idea</div>
+  <div class="tab" onclick="show('distance')">2 · Distance</div>
+  <div class="tab" onclick="show('voting')">3 · K &amp; Voting</div>
+  <div class="tab" onclick="show('walkthru')">4 · Walkthrough</div>
+  <div class="tab" onclick="show('predict')">5 · Try It!</div>
+</div>
+
+<!-- ========== SECTION 1 ========== -->
+<div class="section active" id="intro">
+
+  <div class="card">
+    <h2>🧠 The Big Idea</h2>
+    <p>KNN asks one simple question: <b class="hl">"Who are your closest neighbors, and what are they?"</b></p>
+    <br>
+    <p>No formulas during training. No tree to build. It just <b class="pur">memorizes all the data</b> and when a new student appears, it finds the K most similar students already seen — and takes a <b class="hl">majority vote</b>.</p>
+    <br>
+    <p>If most of your K neighbors passed → <b class="grn">you pass</b>.<br>
+    If most failed → <b class="red">you fail</b>.</p>
+  </div>
+
+  <div class="card">
+    <h2>👥 Analogy — Birds of a Feather</h2>
+    <p>You're new to a city. You want to know what neighborhood you're in. Instead of a map, you just look at the <b class="hl">3 nearest houses</b>.</p>
+    <br>
+    <div class="crowd">
+      <div class="person pass-p">🏠</div>
+      <div class="person pass-p">🏠</div>
+      <div class="person fail-p">🏚</div>
+      <div class="person new-p">❓</div>
+      <div class="person pass-p">🏠</div>
+      <div class="person fail-p">🏚</div>
+      <div class="person pass-p">🏠</div>
+    </div>
+    <p>The <b class="pur">❓ new house</b> looks at its 3 nearest neighbors: 2 nice 🏠, 1 rundown 🏚.<br>
+    Majority says → <b class="grn">nice neighborhood!</b></p>
+    <br>
+    <p>That's exactly how KNN classifies students.</p>
+  </div>
+
+  <div class="card">
+    <h2>📊 Same 5 Students — Same Data</h2>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Study Hrs</th>
+          <th>Attendance %</th>
+          <th>Prev. Marks</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><b>A</b></td><td>2</td><td>60</td><td>45</td><td class="fail-badge">Fail</td></tr>
+        <tr><td><b>B</b></td><td>5</td><td>75</td><td>60</td><td class="pass-badge">Pass</td></tr>
+        <tr><td><b>C</b></td><td>8</td><td>90</td><td>80</td><td class="pass-badge">Pass</td></tr>
+        <tr><td><b>D</b></td><td>1</td><td>50</td><td>35</td><td class="fail-badge">Fail</td></tr>
+        <tr><td><b>E</b></td><td>6</td><td>80</td><td>70</td><td class="pass-badge">Pass</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <br>
+    <p>KNN stores this entire table. At prediction time, a new student walks in and the algorithm finds their <b class="hl">K closest matches</b> from this table.</p>
+  </div>
+
+  <div class="card">
+    <h2>⚔️ KNN vs Decision Tree — Quick Difference</h2>
+    <div class="compare-grid">
+      <div class="compare-card">
+        <h4>🌳 Decision Tree</h4>
+        <ul>
+          <li>Builds rules during training</li>
+          <li>Learns: "If attendance ≥ 70..."</li>
+          <li>Fast at prediction time</li>
+          <li>Explains its reasoning</li>
+        </ul>
+      </div>
+      <div class="compare-card" style="border-color:var(--purple)">
+        <h4>🔵 KNN</h4>
+        <ul>
+          <li><b class="pur">No training phase</b> — just stores data</li>
+          <li>Looks up neighbors at prediction time</li>
+          <li>Slower for large datasets</li>
+          <li>Simple but powerful</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========== SECTION 2 ========== -->
+<div class="section" id="distance">
+
+  <div class="card">
+    <h2>📏 How Do We Measure "Closeness"?</h2>
+    <p>We need a number to express how similar two students are. The most common way: <b class="hl">Euclidean Distance</b> — the straight-line distance between two points in feature space.</p>
+    <div class="formula">Distance(A, B) = √[(x₁−x₂)² + (y₁−y₂)² + (z₁−z₂)² + ...]
+
+Each feature becomes one dimension.
+Closer distance = more similar students.</div>
+    <p>Think of it as the ruler between two dots on a graph. <b class="hl">Shorter ruler = more similar.</b></p>
+  </div>
+
+  <div class="card">
+    <h2>🆕 New Student X Arrives</h2>
+    <p>A new student walks in:</p>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Student</th><th>Study Hrs</th><th>Attendance %</th><th>Prev. Marks</th><th>Result</th></tr>
+      </thead>
+      <tbody>
+        <tr style="background:rgba(167,139,250,.07)">
+          <td><b style="color:var(--purple)">X (new)</b></td>
+          <td><b style="color:var(--purple)">4</b></td>
+          <td><b style="color:var(--purple)">70</b></td>
+          <td><b style="color:var(--purple)">55</b></td>
+          <td style="color:var(--muted)">???</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <br>
+    <p>We calculate the distance from X to <b class="hl">every student in our data</b>. Closest ones become the neighbors.</p>
+  </div>
+
+  <div class="card">
+    <h2>🧮 Calculate Distance: X to Each Student</h2>
+    <p>Using all 3 features (hours, attendance, marks):</p>
+    <div class="formula">X = (4, 70, 55)
+
+Distance(X → A) = √[(4−2)² + (70−60)² + (55−45)²]
+               = √[4 + 100 + 100]
+               = √204 ≈ <b>14.28</b>
+
+Distance(X → B) = √[(4−5)² + (70−75)² + (55−60)²]
+               = √[1 + 25 + 25]
+               = √51  ≈ <b>7.14</b>  ← closest!
+
+Distance(X → C) = √[(4−8)² + (70−90)² + (55−80)²]
+               = √[16 + 400 + 625]
+               = √1041 ≈ <b>32.26</b>
+
+Distance(X → D) = √[(4−1)² + (70−50)² + (55−35)²]
+               = √[9 + 400 + 400]
+               = √809  ≈ <b>28.44</b>
+
+Distance(X → E) = √[(4−6)² + (70−80)² + (55−70)²]
+               = √[4 + 100 + 225]
+               = √329  ≈ <b>18.14</b></div>
+  </div>
+
+  <div class="card">
+    <h2>🏅 Ranked by Closeness</h2>
+    <div class="dist-grid">
+      <div class="dist-card nearest">
+        <h4>#1 Nearest</h4>
+        <div class="dist-val" style="color:var(--gold)">B</div>
+        <div style="font-size:.85rem;color:var(--pass);font-weight:700;margin:4px 0">Pass</div>
+        <div class="rank">dist: 7.14</div>
+      </div>
+      <div class="dist-card" style="border-color:#60a5fa55">
+        <h4>#2 Nearest</h4>
+        <div class="dist-val" style="color:var(--blue)">A</div>
+        <div style="font-size:.85rem;color:var(--fail);font-weight:700;margin:4px 0">Fail</div>
+        <div class="rank">dist: 14.28</div>
+      </div>
+      <div class="dist-card">
+        <h4>#3 Nearest</h4>
+        <div class="dist-val" style="color:var(--muted)">E</div>
+        <div style="font-size:.85rem;color:var(--pass);font-weight:700;margin:4px 0">Pass</div>
+        <div class="rank">dist: 18.14</div>
+      </div>
+      <div class="dist-card">
+        <h4>#4</h4>
+        <div class="dist-val" style="color:var(--muted)">D</div>
+        <div style="font-size:.85rem;color:var(--fail);font-weight:700;margin:4px 0">Fail</div>
+        <div class="rank">dist: 28.44</div>
+      </div>
+      <div class="dist-card">
+        <h4>#5 Farthest</h4>
+        <div class="dist-val" style="color:var(--muted)">C</div>
+        <div style="font-size:.85rem;color:var(--pass);font-weight:700;margin:4px 0">Pass</div>
+        <div class="rank">dist: 32.26</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========== SECTION 3 ========== -->
+<div class="section" id="voting">
+
+  <div class="card">
+    <h2>🗳️ What is K?</h2>
+    <p>K is the number of nearest neighbors that <b class="hl">vote</b> on the prediction. You choose K before running the algorithm.</p>
+    <br>
+    <ul>
+      <li><b class="pur">K = 1</b> → only the single closest neighbor decides (can be noisy)</li>
+      <li><b class="pur">K = 3</b> → top 3 neighbors vote (more stable)</li>
+      <li><b class="pur">K = 5</b> → top 5 neighbors vote (smoother, may miss patterns)</li>
+    </ul>
+    <br>
+    <p><b class="hl">Odd K is preferred</b> to avoid tie votes (e.g. 2 vs 2).</p>
+  </div>
+
+  <div class="card">
+    <h2>🗳️ Voting with K=3 — For Student X</h2>
+    <p>We pick the <b class="hl">3 nearest neighbors</b>: B, A, E</p>
+    <div class="vote-row">
+      <div class="vote-box pass-v">
+        <h3 style="color:var(--pass)">✅ PASS votes</h3>
+        <div class="vote-count" style="color:var(--pass)">2</div>
+        <p style="font-size:.82rem;color:var(--muted);margin-top:6px">B (dist 7.14)<br>E (dist 18.14)</p>
+      </div>
+      <div class="vote-box fail-v">
+        <h3 style="color:var(--fail)">❌ FAIL votes</h3>
+        <div class="vote-count" style="color:var(--fail)">1</div>
+        <p style="font-size:.82rem;color:var(--muted);margin-top:6px">A (dist 14.28)</p>
+      </div>
+    </div>
+    <p><b class="grn">Majority = PASS</b> → Student X is predicted to Pass! 🎉</p>
+  </div>
+
+  <div class="card">
+    <h2>⚠️ How K Changes the Answer</h2>
+    <p>With our 5 students, let's see what happens at different K values for Student X:</p>
+    <br>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>K</th><th>Neighbors Used</th><th>Pass Votes</th><th>Fail Votes</th><th>Prediction</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b style="color:var(--purple)">K=1</b></td><td>B</td><td>1</td><td>0</td><td class="pass-badge">Pass ✅</td></tr>
+        <tr><td><b style="color:var(--purple)">K=3</b></td><td>B, A, E</td><td>2</td><td>1</td><td class="pass-badge">Pass ✅</td></tr>
+        <tr><td><b style="color:var(--purple)">K=5</b></td><td>B, A, E, D, C</td><td>3</td><td>2</td><td class="pass-badge">Pass ✅</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <br>
+    <p>In this case, all K values agree. But with different data, a wrong K can flip the result — so <b class="hl">choosing K matters</b>. Common approach: try multiple K values and pick the one with best accuracy on test data.</p>
+  </div>
+
+  <div class="card">
+    <h2>📐 Feature Scaling — A Hidden Danger</h2>
+    <p>Look at our features: <b class="hl">Hours (1–8)</b>, <b class="hl">Attendance (50–90)</b>, <b class="hl">Marks (35–80)</b>.</p>
+    <br>
+    <p>Attendance has much bigger numbers. So small differences in attendance <b class="red">dominate</b> the distance calculation, drowning out study hours.</p>
+    <br>
+    <p>Solution: <b class="hl">Normalize</b> all features to the same scale (0 to 1) before computing distances. This gives each feature an equal voice.</p>
+    <div class="formula">Normalized value = (value − min) / (max − min)
+
+Hours: min=1, max=8 → X's 4 hrs = (4−1)/(8−1) = 0.43
+Attendance: min=50, max=90 → X's 70% = (70−50)/(90−50) = 0.50</div>
+  </div>
+
+</div>
+
+<!-- ========== SECTION 4 ========== -->
+<div class="section" id="walkthru">
+
+  <div class="card">
+    <h2>🚶 Full Walkthrough — Step by Step</h2>
+    <p>New student <b class="pur">X = (4 hrs, 70%, 55 marks)</b>. We use <b class="hl">K = 3</b>.</p>
+  </div>
+
+  <div class="card">
+    <div class="step-pill"><div class="step-num">1</div><span class="step-text">Store all training data (no model built)</span></div>
+    <h2>📦 Training Phase</h2>
+    <p>KNN has the <b class="hl">simplest training phase of any algorithm</b> — there is no training. You just store the 5 rows of student data in memory. That's it.</p>
+    <div class="formula">Training KNN = storing data
+Time: O(1)  ← instant</div>
+    <p>The real work happens at prediction time.</p>
+  </div>
+
+  <div class="card">
+    <div class="step-pill"><div class="step-num">2</div><span class="step-text">New student arrives — compute all distances</span></div>
+    <h2>📏 Compute Distances</h2>
+    <p>Student X arrives. Calculate distance from X to <b class="hl">every stored student</b>:</p>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Student</th><th>Result</th><th>Distance from X</th><th>Rank</th></tr>
+      </thead>
+      <tbody>
+        <tr style="background:rgba(245,158,11,.07)"><td><b>B</b></td><td class="pass-badge">Pass</td><td>7.14</td><td style="color:var(--gold);font-weight:700">🥇 #1</td></tr>
+        <tr style="background:rgba(96,165,250,.05)"><td><b>A</b></td><td class="fail-badge">Fail</td><td>14.28</td><td style="color:var(--blue);font-weight:700">🥈 #2</td></tr>
+        <tr style="background:rgba(96,165,250,.05)"><td><b>E</b></td><td class="pass-badge">Pass</td><td>18.14</td><td style="color:var(--blue);font-weight:700">🥉 #3</td></tr>
+        <tr><td><b>D</b></td><td class="fail-badge">Fail</td><td>28.44</td><td style="color:var(--muted)">#4</td></tr>
+        <tr><td><b>C</b></td><td class="pass-badge">Pass</td><td>32.26</td><td style="color:var(--muted)">#5</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-pill"><div class="step-num">3</div><span class="step-text">Pick K=3 nearest neighbors</span></div>
+    <h2>🎯 Select the Neighbors</h2>
+    <p>Take the top 3: <b class="hl">B, A, E</b>. Ignore D and C — they're too far away.</p>
+    <br>
+    <div class="crowd">
+      <div class="person new-p" title="Student X">X</div>
+      <span style="color:var(--muted);font-size:1.2rem">→</span>
+      <div class="person pass-p" title="B: Pass">B</div>
+      <div class="person fail-p" title="A: Fail">A</div>
+      <div class="person pass-p" title="E: Pass">E</div>
+    </div>
+    <p style="font-size:.85rem;color:var(--muted)">Green = Pass, Red = Fail</p>
+  </div>
+
+  <div class="card">
+    <div class="step-pill"><div class="step-num">4</div><span class="step-text">Majority vote → final prediction</span></div>
+    <h2>🗳️ Vote & Decide</h2>
+    <div class="formula">B → PASS ✅
+A → FAIL ❌
+E → PASS ✅
+
+PASS: 2 votes
+FAIL: 1 vote
+
+Majority = PASS → Student X is predicted: PASS ✅</div>
+    <p>The decision is made. No formula was "learned" — we just asked: <b class="hl">who are the most similar people I've seen before?</b></p>
+  </div>
+
+  <div class="card">
+    <h2>🧮 KNN as Code</h2>
+    <div class="formula">def predict_knn(new_student, data, k=3):
+
+    # Step 1: calculate distance to every student
+    distances = []
+    for student in data:
+        d = euclidean_distance(new_student, student)
+        distances.append((d, student.result))
+
+    # Step 2: sort by distance, pick K nearest
+    distances.sort()
+    neighbors = distances[:k]
+
+    # Step 3: majority vote
+    pass_votes = sum(1 for _, r in neighbors if r == "Pass")
+    fail_votes = k - pass_votes
+
+    return "Pass" if pass_votes > fail_votes else "Fail"</div>
+  </div>
+
+</div>
+
+<!-- ========== SECTION 5 ========== -->
+<div class="section" id="predict">
+
+  <div class="card">
+    <h2>🔮 Try KNN — Predict a New Student</h2>
+    <p>Set the student's features and K value. See which neighbors are chosen and how they vote.</p>
+
+    <div class="predictor">
+      <div class="input-group">
+        <label>Study Hours/day</label>
+        <input type="range" id="hrs" min="0" max="12" value="4" oninput="updateVal('hrs','hrsVal'); runKNN()">
+        <div class="val" id="hrsVal">4 hrs</div>
+      </div>
+      <div class="input-group">
+        <label>Attendance %</label>
+        <input type="range" id="att" min="0" max="100" value="70" oninput="updateVal('att','attVal'); runKNN()">
+        <div class="val" id="attVal">70%</div>
+      </div>
+      <div class="input-group">
+        <label>Previous Marks</label>
+        <input type="range" id="mrk" min="0" max="100" value="55" oninput="updateVal('mrk','mrkVal'); runKNN()">
+        <div class="val" id="mrkVal">55</div>
+      </div>
+      <div class="input-group" style="display:flex;flex-direction:column;justify-content:flex-end">
+        <label>K (neighbors)</label>
+        <div class="k-selector" style="margin:0;margin-top:8px">
+          <button class="k-btn" onclick="setK(1)" id="kb1">1</button>
+          <button class="k-btn active" onclick="setK(3)" id="kb3">3</button>
+          <button class="k-btn" onclick="setK(5)" id="kb5">5</button>
+        </div>
+      </div>
+
+      <div class="result-box" id="resultBox"></div>
+      <div class="neighbor-list" id="neighborList"></div>
+      <div class="steps-box" id="stepsBox"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🧠 Key Takeaways</h2>
+    <ul>
+      <li><b class="pur">No training</b> — KNN stores data, learns nothing in advance</li>
+      <li><b class="hl">Distance</b> measures how similar two students are</li>
+      <li><b class="hl">K</b> controls how many neighbors vote</li>
+      <li><b class="grn">Majority vote</b> of K neighbors = final prediction</li>
+      <li><b class="red">Feature scaling</b> is critical — big numbers dominate distance</li>
+      <li>Slower than Decision Tree at prediction time (checks all stored data)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>⚔️ Decision Tree vs KNN — When to Use Which?</h2>
+    <div class="compare-grid">
+      <div class="compare-card">
+        <h4>🌳 Use Decision Tree when...</h4>
+        <ul>
+          <li>You need to <b class="hl">explain</b> the decision</li>
+          <li>Fast predictions on large data</li>
+          <li>Features have clear thresholds</li>
+        </ul>
+      </div>
+      <div class="compare-card" style="border-color:var(--purple)">
+        <h4>🔵 Use KNN when...</h4>
+        <ul>
+          <li>Data has <b class="pur">complex boundaries</b></li>
+          <li>Dataset is small</li>
+          <li>You want a quick baseline</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Training data
+  const students = [
+    { name: 'A', hrs: 2, att: 60, mrk: 45, result: 'Fail' },
+    { name: 'B', hrs: 5, att: 75, mrk: 60, result: 'Pass' },
+    { name: 'C', hrs: 8, att: 90, mrk: 80, result: 'Pass' },
+    { name: 'D', hrs: 1, att: 50, mrk: 35, result: 'Fail' },
+    { name: 'E', hrs: 6, att: 80, mrk: 70, result: 'Pass' },
+  ];
+
+  let currentK = 3;
+
+  function show(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const idx = ['intro','distance','voting','walkthru','predict'].indexOf(id);
+    document.querySelectorAll('.tab')[idx].classList.add('active');
+  }
+
+  function updateVal(rangeId, labelId) {
+    const v = parseInt(document.getElementById(rangeId).value);
+    const labels = { hrs: v + ' hrs', att: v + '%', mrk: v + '' };
+    document.getElementById(labelId).textContent = labels[rangeId];
+  }
+
+  function setK(k) {
+    currentK = k;
+    document.querySelectorAll('.k-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('kb' + k).classList.add('active');
+    runKNN();
+  }
+
+  function euclidean(a, b) {
+    return Math.sqrt(
+      Math.pow(a.hrs - b.hrs, 2) +
+      Math.pow(a.att - b.att, 2) +
+      Math.pow(a.mrk - b.mrk, 2)
+    );
+  }
+
+  function runKNN() {
+    const hrs = parseInt(document.getElementById('hrs').value);
+    const att = parseInt(document.getElementById('att').value);
+    const mrk = parseInt(document.getElementById('mrk').value);
+    const newStudent = { hrs, att, mrk };
+
+    // Compute distances
+    const ranked = students.map(s => ({
+      ...s,
+      dist: euclidean(newStudent, s)
+    })).sort((a, b) => a.dist - b.dist);
+
+    const neighbors = ranked.slice(0, currentK);
+    const passVotes = neighbors.filter(n => n.result === 'Pass').length;
+    const failVotes = currentK - passVotes;
+    const prediction = passVotes > failVotes ? 'pass' : 'fail';
+
+    // Result box
+    const rb = document.getElementById('resultBox');
+    rb.className = 'result-box show ' + prediction;
+    rb.textContent = prediction === 'pass' ? '✅ Predicted: PASS' : '❌ Predicted: FAIL';
+
+    // Neighbor list
+    const nl = document.getElementById('neighborList');
+    nl.className = 'neighbor-list show';
+    nl.innerHTML = '<p style="font-size:.8rem;color:var(--muted);margin-bottom:6px;font-family:\'Syne\',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.5px">Top ' + currentK + ' Neighbors</p>';
+    neighbors.forEach((n, i) => {
+      const row = document.createElement('div');
+      row.className = 'neighbor-row selected';
+      row.style.borderColor = n.result === 'Pass' ? 'var(--pass)' : 'var(--fail)';
+      row.innerHTML = `
+        <div class="n-name">${n.name}</div>
+        <div class="n-dist">dist: ${n.dist.toFixed(2)} | hrs:${n.hrs} att:${n.att} mrk:${n.mrk}</div>
+        <div class="n-badge ${n.result === 'Pass' ? 'pass-badge' : 'fail-badge'}">${n.result === 'Pass' ? '✅ Pass' : '❌ Fail'}</div>
+      `;
+      nl.appendChild(row);
+    });
+
+    // Steps
+    let steps = `New Student: hrs=${hrs}, att=${att}, mrk=${mrk}\nK = ${currentK}\n\n`;
+    steps += `All distances:\n`;
+    ranked.forEach(s => {
+      steps += `  ${s.name} → ${s.dist.toFixed(2)}  (${s.result})\n`;
+    });
+    steps += `\nTop ${currentK} neighbors: ${neighbors.map(n=>n.name).join(', ')}\n`;
+    steps += `Pass votes: ${passVotes}  |  Fail votes: ${failVotes}\n`;
+    steps += `\nDecision: ${prediction.toUpperCase()} ${prediction === 'pass' ? '✅' : '❌'}`;
+
+    const sb = document.getElementById('stepsBox');
+    sb.className = 'steps-box show';
+    sb.textContent = steps;
+  }
+
+  // Run on load
+  runKNN();
+</script>
+
+</body>
+</html>
