@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naive Bayes — The Visual Lesson</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #181c27;
+    --border: #2a2f3f;
+    --pass: #22c55e;
+    --fail: #ef4444;
+    --gold: #f59e0b;
+    --blue: #60a5fa;
+    --teal: #2dd4bf;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  header { text-align: center; padding: 32px 16px 16px; }
+
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.6rem, 6vw, 3.5rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #2dd4bf, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+
+  header p { margin-top: 8px; color: var(--muted); font-size: 0.95rem; }
+
+  .tabs {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all .2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .tab.active, .tab:hover {
+    background: var(--teal);
+    color: #0f1117;
+    border-color: var(--teal);
+  }
+
+  .section { display: none; padding: 16px; max-width: 900px; margin: 0 auto; }
+  .section.active { display: block; animation: fadeUp .35s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: clamp(16px, 4vw, 28px);
+    margin-bottom: 16px;
+  }
+
+  .card h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+    color: var(--teal);
+  }
+
+  .card p, .card li { line-height: 1.7; color: #c8cad4; font-size: 0.95rem; }
+  .card ul { padding-left: 20px; margin-top: 8px; }
+  .card li { margin-bottom: 6px; }
+
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 12px;
+    border-radius: 8px;
+  }
+
+  table {
+    width: 100%;
+    min-width: 340px;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  th {
+    background: #1e2334;
+    padding: 10px 12px;
+    text-align: left;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: .6px;
+    color: var(--teal);
+    text-transform: uppercase;
+  }
+
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: #c8cad4; }
+  tr:hover td { background: #1e2334; }
+  .pass-badge { color: var(--pass); font-weight: 700; }
+  .fail-badge { color: var(--fail); font-weight: 700; }
+
+  .formula {
+    background: #1e2334;
+    border-left: 4px solid var(--teal);
+    padding: 14px 16px;
+    border-radius: 0 12px 12px 0;
+    margin: 16px 0;
+    font-family: 'Courier New', monospace;
+    font-size: clamp(0.72rem, 2.3vw, 0.88rem);
+    color: #99f6e4;
+    line-height: 2;
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+
+  /* BAYES VISUAL */
+  .bayes-visual {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 16px 0;
+  }
+
+  .bayes-box {
+    flex: 1;
+    min-width: 130px;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    border: 2px solid var(--border);
+    background: #1e2334;
+  }
+
+  .bayes-box h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 8px;
+    color: var(--muted);
+  }
+
+  .bayes-box .big {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
+
+  .bayes-box .sub { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+  /* PROB BARS */
+  .prob-row { margin: 10px 0; }
+
+  .prob-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    margin-bottom: 4px;
+    color: #c8cad4;
+  }
+
+  .prob-bar-bg {
+    background: #1e2334;
+    border-radius: 999px;
+    height: 10px;
+    overflow: hidden;
+  }
+
+  .prob-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width .5s ease;
+  }
+
+  /* CALC CARDS */
+  .calc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .calc-card {
+    border-radius: 12px;
+    padding: 16px;
+    border: 1.5px solid var(--border);
+    background: #181c27;
+  }
+
+  .calc-card.pass-c { border-color: var(--pass); background: rgba(34,197,94,.06); }
+  .calc-card.fail-c { border-color: var(--fail); background: rgba(239,68,68,.06); }
+
+  .calc-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+
+  .calc-card .line {
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    color: #99f6e4;
+    line-height: 1.9;
+  }
+
+  .final-score {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* WINNER BANNER */
+  .winner-banner {
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    border: 2px solid var(--pass);
+    background: rgba(34,197,94,.08);
+    margin-top: 16px;
+  }
+
+  .winner-banner h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--pass);
+  }
+
+  /* STEP PILL */
+  .step-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #1e2334;
+    border-radius: 999px;
+    padding: 4px 14px 4px 4px;
+    margin-bottom: 14px;
+  }
+
+  .step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--teal);
+    color: #0f1117;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    display: grid;
+    place-items: center;
+  }
+
+  .step-text { font-size: 0.82rem; color: var(--muted); }
+
+  /* PREDICTOR */
+  .predictor {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  @media(max-width: 480px) { .predictor { grid-template-columns: 1fr; } }
+
+  .input-group label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    color: var(--teal);
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    margin-bottom: 6px;
+  }
+
+  .input-group input[type=range] { width: 100%; accent-color: var(--teal); }
+
+  .input-group .val {
+    text-align: right;
+    font-size: 0.85rem;
+    color: var(--blue);
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  .predict-btn {
+    grid-column: 1 / -1;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: var(--teal);
+    color: #0f1117;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+
+  .predict-btn:hover { opacity: .85; }
+
+  .result-box {
+    grid-column: 1 / -1;
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    display: none;
+  }
+
+  .result-box.show { display: block; animation: fadeUp .3s ease; }
+  .result-box.pass { background: rgba(34,197,94,.15); border: 2px solid var(--pass); color: var(--pass); }
+  .result-box.fail { background: rgba(239,68,68,.15); border: 2px solid var(--fail); color: var(--fail); }
+
+  .steps-box {
+    grid-column: 1 / -1;
+    font-size: 0.82rem;
+    color: #99f6e4;
+    line-height: 2;
+    display: none;
+    background: #1e2334;
+    border-radius: 8px;
+    padding: 14px;
+    font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+
+  .steps-box.show { display: block; }
+
+  .compare-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .compare-card {
+    border-radius: 12px;
+    padding: 16px;
+    border: 1.5px solid var(--border);
+    background: #181c27;
+  }
+
+  .compare-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: var(--gold);
+  }
+
+  .compare-card li { font-size: 0.85rem; margin-bottom: 5px; }
+
+  b.hl  { color: var(--gold); }
+  b.tel { color: var(--teal); }
+  b.blu { color: var(--blue); }
+  b.grn { color: var(--pass); }
+  b.red { color: var(--fail); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Naïve Bayes</h1>
+  <p>Same students. This time we use probability — not rules, not distance.</p>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="show('intro')">1 · The Idea</div>
+  <div class="tab" onclick="show('bayes')">2 · Bayes Theorem</div>
+  <div class="tab" onclick="show('probs')">3 · Count Probs</div>
+  <div class="tab" onclick="show('walkthru')">4 · Walkthrough</div>
+  <div class="tab" onclick="show('predict')">5 · Try It!</div>
+</div>
+
+<!-- ========== SECTION 1 ========== -->
+<div class="section active" id="intro">
+
+  <div class="card">
+    <h2>🧠 The Big Idea</h2>
+    <p>Naïve Bayes asks: <b class="hl">"Given what I know about this student, which outcome is more probable — Pass or Fail?"</b></p>
+    <br>
+    <p>It calculates <b class="tel">two probabilities</b> — one for Pass, one for Fail — and picks the <b class="hl">higher one</b>. That's the prediction.</p>
+    <br>
+    <p>Unlike KNN (measure distance) or Decision Tree (learn rules), Naïve Bayes works entirely with <b class="hl">probability math</b> learned from the data.</p>
+  </div>
+
+  <div class="card">
+    <h2>☂️ Analogy — The Weather Doctor</h2>
+    <p>A doctor sees you and asks: "Does it hurt? Any fever? Cough?"</p>
+    <br>
+    <p>She doesn't measure how far you are from other patients. She doesn't follow a flowchart. She thinks:</p>
+    <br>
+    <p><i style="color:#c8cad4">"Given this combination of symptoms, what is the <b class="hl">probability</b> of flu vs cold? Which is higher?"</i></p>
+    <br>
+    <p>She picks the most probable diagnosis. That's Naïve Bayes — a <b class="tel">probability doctor</b>.</p>
+  </div>
+
+  <div class="card">
+    <h2>📊 Same 5 Students — We Add Categories</h2>
+    <p>Naïve Bayes works best with <b class="hl">categories</b>. We convert our numbers into buckets:</p>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Hours</th>
+          <th>Attendance</th>
+          <th>Marks</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><b>A</b></td><td style="color:#f87171">Low (2)</td><td style="color:#f87171">Low (60)</td><td style="color:#f87171">Low (45)</td><td class="fail-badge">Fail</td></tr>
+        <tr><td><b>B</b></td><td style="color:#86efac">High (5)</td><td style="color:#86efac">High (75)</td><td style="color:#86efac">High (60)</td><td class="pass-badge">Pass</td></tr>
+        <tr><td><b>C</b></td><td style="color:#86efac">High (8)</td><td style="color:#86efac">High (90)</td><td style="color:#86efac">High (80)</td><td class="pass-badge">Pass</td></tr>
+        <tr><td><b>D</b></td><td style="color:#f87171">Low (1)</td><td style="color:#f87171">Low (50)</td><td style="color:#f87171">Low (35)</td><td class="fail-badge">Fail</td></tr>
+        <tr><td><b>E</b></td><td style="color:#86efac">High (6)</td><td style="color:#86efac">High (80)</td><td style="color:#86efac">High (70)</td><td class="pass-badge">Pass</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <br>
+    <p style="font-size:.85rem;color:var(--muted)">Rule: Hours ≥ 4 = High, else Low &nbsp;|&nbsp; Attendance ≥ 70 = High, else Low &nbsp;|&nbsp; Marks ≥ 55 = High, else Low</p>
+  </div>
+
+  <div class="card">
+    <h2>⚔️ Three Algorithms — One Dataset</h2>
+    <div class="compare-grid">
+      <div class="compare-card">
+        <h4>🌳 Decision Tree</h4>
+        <ul>
+          <li>Builds if-else rules</li>
+          <li>Uses entropy + info gain</li>
+          <li>Picks the best split</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h4>🔵 KNN</h4>
+        <ul>
+          <li>Stores all data</li>
+          <li>Measures distance</li>
+          <li>Majority vote of neighbors</li>
+        </ul>
+      </div>
+      <div class="compare-card" style="border-color:var(--teal)">
+        <h4 style="color:var(--teal)">🎲 Naïve Bayes</h4>
+        <ul>
+          <li>Counts probabilities</li>
+          <li>Uses Bayes' theorem</li>
+          <li>Picks highest probability</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========== SECTION 2 ========== -->
+<div class="section" id="bayes">
+
+  <div class="card">
+    <h2>📐 Bayes' Theorem</h2>
+    <p>The core formula. Don't panic — we'll break it down word by word.</p>
+    <div class="formula">P(Class | Features) = P(Features | Class) × P(Class)
+                          ─────────────────────────────
+                                  P(Features)
+
+In plain English:
+"Probability of this class, GIVEN these features"
+= How often features appear in this class × How common is this class
+  ──────────────────────────────────────────────────────────────────
+                     How common are these features overall</div>
+    <p>We calculate this for <b class="grn">Pass</b> and for <b class="red">Fail</b>. Whichever is bigger — that's the answer.</p>
+    <br>
+    <p><b class="hl">Good news:</b> Since P(Features) is the same for both, we can skip it! We just compare the numerators.</p>
+  </div>
+
+  <div class="card">
+    <h2>🔤 Each Term Explained</h2>
+
+    <div class="bayes-visual">
+      <div class="bayes-box">
+        <h4>P(Class)</h4>
+        <div class="big" style="color:var(--teal)">Prior</div>
+        <div class="sub">How common is Pass or Fail overall?<br>e.g. 3/5 = 60% pass</div>
+      </div>
+      <div class="bayes-box">
+        <h4>P(Feature | Class)</h4>
+        <div class="big" style="color:var(--gold)">Likelihood</div>
+        <div class="sub">Among Pass students, how many had High Hours?<br>e.g. 3/3 = 100%</div>
+      </div>
+      <div class="bayes-box">
+        <h4>P(Class | Features)</h4>
+        <div class="big" style="color:var(--pass)">Posterior</div>
+        <div class="sub">What we want!<br>Probability of Pass GIVEN the student's features</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🤔 Why "Naïve"?</h2>
+    <p>Because it makes a <b class="hl">naïve assumption</b>: all features are <b class="tel">independent</b> of each other.</p>
+    <br>
+    <p>In reality, students who study more also tend to have higher marks. The two are <i>correlated</i>. But Naïve Bayes <b class="red">ignores that</b> and treats each feature as if it has nothing to do with the others.</p>
+    <br>
+    <p>This lets us multiply the probabilities together:</p>
+    <div class="formula">P(Hours=High AND Att=High AND Marks=High | Pass)
+= P(Hours=High | Pass) × P(Att=High | Pass) × P(Marks=High | Pass)</div>
+    <p>Surprisingly, this naïve simplification <b class="hl">still works very well</b> in practice — especially for text classification like spam detection.</p>
+  </div>
+
+</div>
+
+<!-- ========== SECTION 3 ========== -->
+<div class="section" id="probs">
+
+  <div class="card">
+    <h2>📊 Step 1 — Count the Classes (Prior Probability)</h2>
+    <p>From our 5 students, how many Passed and Failed?</p>
+    <div class="bayes-visual">
+      <div class="bayes-box" style="border-color:var(--pass)">
+        <h4>Pass</h4>
+        <div class="big" style="color:var(--pass)">3/5</div>
+        <div class="sub">B, C, E → P(Pass) = 0.60</div>
+      </div>
+      <div class="bayes-box" style="border-color:var(--fail)">
+        <h4>Fail</h4>
+        <div class="big" style="color:var(--fail)">2/5</div>
+        <div class="sub">A, D → P(Fail) = 0.40</div>
+      </div>
+    </div>
+    <p>These are the <b class="hl">prior probabilities</b> — our starting belief before seeing any features.</p>
+  </div>
+
+  <div class="card">
+    <h2>📊 Step 2 — Count Feature Likelihoods</h2>
+    <p>For each feature value, we count: <b class="hl">how often does it appear within each class?</b></p>
+    <br>
+    <p><b class="grn">Among the 3 Pass students (B, C, E):</b></p>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Feature</th><th>Value</th><th>Count</th><th>Probability</th></tr></thead>
+      <tbody>
+        <tr><td>Hours</td><td style="color:#86efac">High</td><td>3 of 3</td><td class="pass-badge">3/3 = 1.00</td></tr>
+        <tr><td>Hours</td><td style="color:#f87171">Low</td><td>0 of 3</td><td style="color:var(--muted)">0/3 = 0.00 *</td></tr>
+        <tr><td>Attendance</td><td style="color:#86efac">High</td><td>3 of 3</td><td class="pass-badge">3/3 = 1.00</td></tr>
+        <tr><td>Attendance</td><td style="color:#f87171">Low</td><td>0 of 3</td><td style="color:var(--muted)">0/3 = 0.00 *</td></tr>
+        <tr><td>Marks</td><td style="color:#86efac">High</td><td>3 of 3</td><td class="pass-badge">3/3 = 1.00</td></tr>
+        <tr><td>Marks</td><td style="color:#f87171">Low</td><td>0 of 3</td><td style="color:var(--muted)">0/3 = 0.00 *</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <br>
+    <p><b class="red">Among the 2 Fail students (A, D):</b></p>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Feature</th><th>Value</th><th>Count</th><th>Probability</th></tr></thead>
+      <tbody>
+        <tr><td>Hours</td><td style="color:#86efac">High</td><td>0 of 2</td><td style="color:var(--muted)">0/2 = 0.00 *</td></tr>
+        <tr><td>Hours</td><td style="color:#f87171">Low</td><td>2 of 2</td><td class="fail-badge">2/2 = 1.00</td></tr>
+        <tr><td>Attendance</td><td style="color:#86efac">High</td><td>0 of 2</td><td style="color:var(--muted)">0/2 = 0.00 *</td></tr>
+        <tr><td>Attendance</td><td style="color:#f87171">Low</td><td>2 of 2</td><td class="fail-badge">2/2 = 1.00</td></tr>
+        <tr><td>Marks</td><td style="color:#86efac">High</td><td>0 of 2</td><td style="color:var(--muted)">0/2 = 0.00 *</td></tr>
+        <tr><td>Marks</td><td style="color:#f87171">Low</td><td>2 of 2</td><td class="fail-badge">2/2 = 1.00</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <br>
+    <p style="font-size:.83rem;color:var(--muted)">* Zero probabilities would kill the entire calculation (multiplying by 0). Fix: use <b class="hl">Laplace Smoothing</b> — add 1 to every count. See Tab 4.</p>
+  </div>
+
+  <div class="card">
+    <h2>💊 Laplace Smoothing — Fixing Zeros</h2>
+    <p>When a feature value never appeared in a class, P = 0, which zeros out the whole calculation. The fix: <b class="hl">add 1 to every count</b> and add the number of possible values to the denominator.</p>
+    <div class="formula">Without smoothing:  P(Hours=Low | Pass) = 0/3 = 0   ← dangerous!
+
+With Laplace (+1):  P(Hours=Low | Pass) = (0+1)/(3+2) = 1/5 = 0.20
+                    P(Hours=High| Pass) = (3+1)/(3+2) = 4/5 = 0.80
+                    P(Hours=Low | Fail) = (2+1)/(2+2) = 3/4 = 0.75
+                    P(Hours=High| Fail) = (0+1)/(2+2) = 1/4 = 0.25
+
+(+2 in denominator because Hours has 2 possible values: High, Low)</div>
+  </div>
+
+</div>
+
+<!-- ========== SECTION 4 ========== -->
+<div class="section" id="walkthru">
+
+  <div class="card">
+    <h2>🚶 Full Walkthrough — Predict Student X</h2>
+    <p>New student <b class="tel">X = Hours: High (4), Attendance: High (70), Marks: High (55)</b></p>
+    <br>
+    <p>We calculate the Naïve Bayes score for <b class="grn">Pass</b> and for <b class="red">Fail</b>, then compare.</p>
+  </div>
+
+  <div class="card">
+    <div class="step-pill"><div class="step-num">1</div><span class="step-text">Prior probabilities from training data</span></div>
+    <h2>📦 Prior Probabilities</h2>
+    <div class="formula">Total students = 5
+Pass students  = 3  →  P(Pass) = 3/5 = 0.60
+Fail students  = 2  →  P(Fail) = 2/5 = 0.40</div>
+  </div>
+
+  <div class="card">
+    <div class="step-pill"><div class="step-num">2</div><span class="step-text">Likelihood of each feature (with Laplace smoothing)</span></div>
+    <h2>🔢 Feature Likelihoods</h2>
+    <p>Student X has: <b class="hl">Hours=High, Attendance=High, Marks=High</b></p>
+    <div class="calc-grid">
+      <div class="calc-card pass-c">
+        <h4 style="color:var(--pass)">Given PASS</h4>
+        <div class="line">P(Hours=High | Pass)
+= (3+1)/(3+2) = 4/5 = 0.80
+
+P(Att=High | Pass)
+= (3+1)/(3+2) = 4/5 = 0.80
+
+P(Marks=High | Pass)
+= (3+1)/(3+2) = 4/5 = 0.80</div>
+      </div>
+      <div class="calc-card fail-c">
+        <h4 style="color:var(--fail)">Given FAIL</h4>
+        <div class="line">P(Hours=High | Fail)
+= (0+1)/(2+2) = 1/4 = 0.25
+
+P(Att=High | Fail)
+= (0+1)/(2+2) = 1/4 = 0.25
+
+P(Marks=High | Fail)
+= (0+1)/(2+2) = 1/4 = 0.25</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-pill"><div class="step-num">3</div><span class="step-text">Multiply everything together</span></div>
+    <h2>✖️ Naïve Bayes Score</h2>
+    <p>Multiply all likelihoods × prior. Compare the two scores.</p>
+    <div class="calc-grid">
+      <div class="calc-card pass-c">
+        <h4 style="color:var(--pass)">Score for PASS</h4>
+        <div class="line">P(Pass) × P(H|Pass) × P(A|Pass) × P(M|Pass)
+
+= 0.60 × 0.80 × 0.80 × 0.80</div>
+        <div class="final-score" style="color:var(--pass)">= 0.3072</div>
+      </div>
+      <div class="calc-card fail-c">
+        <h4 style="color:var(--fail)">Score for FAIL</h4>
+        <div class="line">P(Fail) × P(H|Fail) × P(A|Fail) × P(M|Fail)
+
+= 0.40 × 0.25 × 0.25 × 0.25</div>
+        <div class="final-score" style="color:var(--fail)">= 0.00625</div>
+      </div>
+    </div>
+
+    <div class="winner-banner">
+      <h3>✅ PASS wins! (0.3072 &gt; 0.00625)</h3>
+      <p style="color:#c8cad4;font-size:.9rem;margin-top:8px">Pass score is ~49× larger → Student X is predicted: <b style="color:var(--pass)">PASS</b></p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-pill"><div class="step-num">4</div><span class="step-text">Optional — convert to real probabilities</span></div>
+    <h2>📊 Normalize to Get Real Probabilities</h2>
+    <p>To get actual probabilities (not just scores), divide each by the total:</p>
+    <div class="formula">Total = 0.3072 + 0.00625 = 0.31345
+
+P(Pass | X) = 0.3072  / 0.31345 ≈ 0.980  →  98%
+P(Fail | X) = 0.00625 / 0.31345 ≈ 0.020  →   2%
+
+Prediction: PASS with 98% confidence ✅</div>
+  </div>
+
+  <div class="card">
+    <h2>🧮 As Code</h2>
+    <div class="formula">def naive_bayes(new_student, data):
+
+    classes = ["Pass", "Fail"]
+    scores  = {}
+
+    for cls in classes:
+        subset = [s for s in data if s.result == cls]
+
+        # Prior: how common is this class?
+        prior = len(subset) / len(data)
+
+        # Likelihood: for each feature, count with Laplace
+        likelihood = 1.0
+        for feature in new_student.features:
+            count  = sum(1 for s in subset if s[feature] == new_student[feature])
+            n_vals = 2   # High or Low (number of possible values)
+            prob   = (count + 1) / (len(subset) + n_vals)
+            likelihood *= prob
+
+        scores[cls] = prior * likelihood
+
+    return max(scores, key=scores.get)   # class with highest score</div>
+  </div>
+
+</div>
+
+<!-- ========== SECTION 5 ========== -->
+<div class="section" id="predict">
+
+  <div class="card">
+    <h2>🔮 Try Naïve Bayes — Predict a New Student</h2>
+    <p>Adjust the sliders. The algorithm shows you both probability scores in real time.</p>
+
+    <div class="predictor">
+      <div class="input-group">
+        <label>Study Hours/day</label>
+        <input type="range" id="hrs" min="0" max="12" value="4" oninput="updateVal('hrs','hrsVal'); runNB()">
+        <div class="val" id="hrsVal">4 hrs</div>
+      </div>
+      <div class="input-group">
+        <label>Attendance %</label>
+        <input type="range" id="att" min="0" max="100" value="70" oninput="updateVal('att','attVal'); runNB()">
+        <div class="val" id="attVal">70%</div>
+      </div>
+      <div class="input-group" style="grid-column:1/-1">
+        <label>Previous Marks</label>
+        <input type="range" id="mrk" min="0" max="100" value="55" oninput="updateVal('mrk','mrkVal'); runNB()">
+        <div class="val" id="mrkVal">55</div>
+      </div>
+
+      <div class="result-box" id="resultBox"></div>
+      <div class="steps-box" id="stepsBox"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>📊 Probability Bars</h2>
+    <div id="probBars">
+      <div class="prob-row">
+        <div class="prob-label"><span>✅ P(Pass)</span><span id="passLabel">—</span></div>
+        <div class="prob-bar-bg"><div class="prob-bar-fill" id="passBar" style="width:0%;background:var(--pass)"></div></div>
+      </div>
+      <div class="prob-row" style="margin-top:14px">
+        <div class="prob-label"><span>❌ P(Fail)</span><span id="failLabel">—</span></div>
+        <div class="prob-bar-bg"><div class="prob-bar-fill" id="failBar" style="width:0%;background:var(--fail)"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🧠 Key Takeaways</h2>
+    <ul>
+      <li><b class="tel">Prior</b> = how common is each class in the training data</li>
+      <li><b class="hl">Likelihood</b> = how often does each feature value appear in each class</li>
+      <li><b class="tel">Posterior</b> = prior × all likelihoods multiplied together</li>
+      <li>Pick the class with the <b class="hl">highest posterior score</b></li>
+      <li><b class="red">Laplace Smoothing</b> prevents zero probabilities from killing the result</li>
+      <li>"Naïve" = assumes all features are <b class="hl">independent</b> (simplification that works surprisingly well)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>🔁 All Three Algorithms — Same Student X</h2>
+    <div class="compare-grid">
+      <div class="compare-card">
+        <h4>🌳 Decision Tree</h4>
+        <ul>
+          <li>Checked Attendance ≥ 70? → YES</li>
+          <li>Checked Hours ≥ 4? → YES</li>
+          <li><b class="grn">→ PASS</b></li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h4>🔵 KNN (K=3)</h4>
+        <ul>
+          <li>Nearest: B (Pass), A (Fail), E (Pass)</li>
+          <li>Vote: 2 Pass, 1 Fail</li>
+          <li><b class="grn">→ PASS</b></li>
+        </ul>
+      </div>
+      <div class="compare-card" style="border-color:var(--teal)">
+        <h4 style="color:var(--teal)">🎲 Naïve Bayes</h4>
+        <ul>
+          <li>Score Pass: 0.307</li>
+          <li>Score Fail: 0.006</li>
+          <li><b class="grn">→ PASS (98%)</b></li>
+        </ul>
+      </div>
+    </div>
+    <br>
+    <p style="font-size:.88rem;color:var(--muted)">All three algorithms agree on Student X. They'll disagree more on edge cases — that's where algorithm choice matters.</p>
+  </div>
+
+</div>
+
+<script>
+  // Training data — categorical
+  const students = [
+    { name:'A', hrs:'Low',  att:'Low',  mrk:'Low',  result:'Fail' },
+    { name:'B', hrs:'High', att:'High', mrk:'High', result:'Pass' },
+    { name:'C', hrs:'High', att:'High', mrk:'High', result:'Pass' },
+    { name:'D', hrs:'Low',  att:'Low',  mrk:'Low',  result:'Fail' },
+    { name:'E', hrs:'High', att:'High', mrk:'High', result:'Pass' },
+  ];
+
+  function show(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const idx = ['intro','bayes','probs','walkthru','predict'].indexOf(id);
+    document.querySelectorAll('.tab')[idx].classList.add('active');
+  }
+
+  function updateVal(rangeId, labelId) {
+    const v = parseInt(document.getElementById(rangeId).value);
+    const map = { hrs: v + ' hrs', att: v + '%', mrk: v + '' };
+    document.getElementById(labelId).textContent = map[rangeId];
+  }
+
+  function categorize(hrs, att, mrk) {
+    return {
+      hrs: hrs >= 4 ? 'High' : 'Low',
+      att: att >= 70 ? 'High' : 'Low',
+      mrk: mrk >= 55 ? 'High' : 'Low',
+    };
+  }
+
+  function laplace(count, classTotal, nValues) {
+    return (count + 1) / (classTotal + nValues);
+  }
+
+  function runNB() {
+    const hrs = parseInt(document.getElementById('hrs').value);
+    const att = parseInt(document.getElementById('att').value);
+    const mrk = parseInt(document.getElementById('mrk').value);
+    const cat = categorize(hrs, att, mrk);
+
+    const classes = ['Pass', 'Fail'];
+    const scores = {};
+    const details = {};
+
+    classes.forEach(cls => {
+      const subset = students.filter(s => s.result === cls);
+      const n = subset.length;
+      const prior = n / students.length;
+
+      const features = ['hrs', 'att', 'mrk'];
+      const labels   = { hrs: 'Hours', att: 'Attendance', mrk: 'Marks' };
+      let likelihood = 1;
+      const featureLines = [];
+
+      features.forEach(f => {
+        const val   = cat[f];
+        const count = subset.filter(s => s[f] === val).length;
+        const prob  = laplace(count, n, 2);
+        likelihood *= prob;
+        featureLines.push(`  P(${labels[f]}=${val} | ${cls}) = (${count}+1)/(${n}+2) = ${prob.toFixed(3)}`);
+      });
+
+      scores[cls] = prior * likelihood;
+      details[cls] = { prior, likelihood, lines: featureLines };
+    });
+
+    const total = scores['Pass'] + scores['Fail'];
+    const pPass = scores['Pass'] / total;
+    const pFail = scores['Fail'] / total;
+    const prediction = pPass > pFail ? 'pass' : 'fail';
+
+    // Result box
+    const rb = document.getElementById('resultBox');
+    rb.className = 'result-box show ' + prediction;
+    rb.textContent = prediction === 'pass'
+      ? `✅ PASS  (${(pPass*100).toFixed(1)}% confidence)`
+      : `❌ FAIL  (${(pFail*100).toFixed(1)}% confidence)`;
+
+    // Prob bars
+    document.getElementById('passBar').style.width = (pPass * 100).toFixed(1) + '%';
+    document.getElementById('failBar').style.width = (pFail * 100).toFixed(1) + '%';
+    document.getElementById('passLabel').textContent = (pPass * 100).toFixed(1) + '%';
+    document.getElementById('failLabel').textContent = (pFail * 100).toFixed(1) + '%';
+
+    // Steps
+    let steps = `Input: hrs=${hrs}(${cat.hrs}), att=${att}(${cat.att}), mrk=${mrk}(${cat.mrk})\n\n`;
+
+    classes.forEach(cls => {
+      const d = details[cls];
+      steps += `── ${cls.toUpperCase()} ──\n`;
+      steps += `Prior P(${cls}) = ${d.prior.toFixed(3)}\n`;
+      steps += `Likelihoods:\n${d.lines.join('\n')}\n`;
+      steps += `Score = ${d.prior.toFixed(3)} × ${d.likelihood.toFixed(5)} = ${scores[cls].toFixed(6)}\n\n`;
+    });
+
+    steps += `Normalized:\n`;
+    steps += `  P(Pass | X) = ${(pPass*100).toFixed(1)}%\n`;
+    steps += `  P(Fail | X) = ${(pFail*100).toFixed(1)}%\n\n`;
+    steps += `Decision: ${prediction.toUpperCase()} ${prediction === 'pass' ? '✅' : '❌'}`;
+
+    const sb = document.getElementById('stepsBox');
+    sb.className = 'steps-box show';
+    sb.textContent = steps;
+  }
+
+  // Run on load
+  runNB();
+</script>
+
+</body>
+</html>
